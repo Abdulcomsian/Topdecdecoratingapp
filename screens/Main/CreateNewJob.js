@@ -8,9 +8,13 @@ import {
   ScrollView,
 } from "react-native";
 import { Text } from "native-base";
+import { useDispatch, useSelector, connect } from "react-redux";
+import { createNewJobCreation } from "../../Redux/action/auth/authActionTypes";
 
 var plus = require("../../assets/authScreen/plus.png");
-const NewJob = ({ props, navigation }) => {
+const NewJob = ( props) => {
+  const { navigation } = props;
+  const [token,setToken]=useState(props.token)
   const [data, setData] = useState({
     qty: "",
     description: "",
@@ -34,15 +38,15 @@ const NewJob = ({ props, navigation }) => {
       setdynamicInput(preData)
       
   }
-      console.log(dynamicInput)
+    console.log(dynamicInput)
   const newJob = () =>{
-    console.log("Name :",constructorName)
-    console.log("Project Name :",projectName)
-    console.log("Week Project :",weekProject)
-    console.log("Assign Supervisor :",assignSupervisor)
-    console.log("Start Date :",startDate)
-    console.log(dynamicInput.description)
-
+    // console.log("Name :",constructorName)
+    // console.log("Project Name :",projectName)
+    // console.log("Week Project :",weekProject)
+    // console.log("Assign Supervisor :",assignSupervisor)
+    // console.log("Start Date :",startDate)
+    // console.log(dynamicInput)
+    props.createNewJobHandler(constructorName,projectName,weekProject,assignSupervisor,startDate,dynamicInput,token);
   }
   return (
     <View style={styles.mainContainer}>
@@ -144,25 +148,34 @@ const NewJob = ({ props, navigation }) => {
             </View>
             
             <View style={styles.btnContainer}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity
+            </TouchableOpacity> */}
+            <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => newJob()}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             </View>
             </View>
       </ScrollView>
     </View>
   );
 };
-export default NewJob;
+const mapStateToProps = (state) => ({
+  token : state.auth.token,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createNewJobHandler: (constructorName,projectName,weekProject,assignSupervisor,startDate,dynamicInput,token) =>
+    dispatch(
+      createNewJobCreation(constructorName,projectName,weekProject,assignSupervisor,startDate,dynamicInput,token)
+    ),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(NewJob);
 const styles = StyleSheet.create({
   mainContainer: {
     height: "100%",

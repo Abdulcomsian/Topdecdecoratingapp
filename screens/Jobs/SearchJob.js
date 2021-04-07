@@ -1,23 +1,61 @@
 import React,{useState} from 'react';
-import { View,StyleSheet,TouchableOpacity} from 'react-native';
+import { View,StyleSheet,TouchableOpacity,TextInput} from 'react-native';
 import {Text} from 'native-base';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const SearchJob = ({props,navigation}) =>{
+
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+      };
+    
+      const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+      };
+    
+      const showDatepicker = () => {
+        showMode('date');
+      };
+    
+      const showTimepicker = () => {
+        showMode('time');
+      };
     return(
         <View style={styles.mainContainer}>
+            {show && 
+                        <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChange}
+                        />
+                    }
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Search Jobs</Text>
                 <Text style={{textAlign:'center',fontFamily:'poppins-regular',fontSize:14}}>Search a job by either reference ID or Date job created</Text>
             </View>
             <View style={styles.searchByView}>
-                <TouchableOpacity style={styles.commonBtn}>
-                    <Text style={styles.commonText}>Enter ref id</Text>
-                </TouchableOpacity>
+                <View style={styles.inputFieldContainer}>
+                    <TextInput
+                        style={styles.inputField}
+                        placeholder={"Enter Ref ID"}
+                    />
+                </View>
                 <Text style={{justifyContent:'center',textAlign:'center',marginBottom:20,fontFamily:'poppins-medium',}}>OR</Text>
-                <TouchableOpacity style={styles.commonBtn}>
-                    <Text style={styles.commonText}>Date:</Text>
-                </TouchableOpacity>
+                <View style={styles.inputFieldContainer}>
+                    <TouchableOpacity Press={()=>showDatepicker()}>
+                        <Text>Pick Date</Text>
+                    </TouchableOpacity>
+                    
+                </View>
             </View>
             <View style={styles.footerBtnView}>
                 <TouchableOpacity style={styles.commonBtn}>
@@ -72,4 +110,14 @@ const styles = StyleSheet.create({
         width:'100%',
         padding: 20,
      },
+     inputField:{
+        height:52,
+        width:'100%',
+        borderBottomWidth:1,
+        borderBottomColor:'#96A8B2',
+        padding:5,
+        fontSize:16,
+        color:'#96A8B2',
+        fontFamily:'poppins-regular'
+    },
 })

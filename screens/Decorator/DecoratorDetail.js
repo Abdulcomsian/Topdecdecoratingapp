@@ -1,13 +1,23 @@
 import React,{useState} from 'react';
 import { View,StyleSheet,Image,CheckBox,TouchableOpacity,ScrollView} from 'react-native';
-import {Text} from 'native-base';
+import {Button, Text} from 'native-base';
+import { TextInput } from 'react-native-gesture-handler';
+import * as ImagePicker from "expo-image-picker";
 
 var rightArrow=require('../../assets/authScreen/right.png')
-const DecoratorDetails = ({props,navigation}) =>{
+const DecoratorDetails = (props) =>{
+    const { navigation } = props;
+
     const[check,setCheck]=useState({
         approved:true,
         disApproved:false
     })
+    const [decoratorName,setDecoratorName]=useState('')
+    const [decoratorEmail,setDecoratorEmail]=useState('')
+    const [decoratorNumber,setDecoratorNumber]=useState('')
+    const [photoID,setPhotoID]=useState('')
+    const [cscsFront,setCscsFront]=useState('')
+    const [cscsBack,setCscsBack]=useState('')
     const checkedValue = (value) =>{
         if(value=="approved"){
             setCheck({disApproved:false,approved:true})
@@ -16,6 +26,7 @@ const DecoratorDetails = ({props,navigation}) =>{
             setCheck({disApproved:true,approved:false})
         }
     }
+   
     return(
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
@@ -30,23 +41,37 @@ const DecoratorDetails = ({props,navigation}) =>{
             <View style={styles.formConatiner}>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Name:</Text>
-                    <Text style={styles.detailItem}>Toby</Text>
+                    <TextInput 
+                        style={styles.detailItemInput}
+                    />
                 </View>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Email:</Text>
-                    <Text style={styles.detailItem}>Toby@example.com</Text>
+                    <TextInput 
+                        style={styles.detailItemInput}
+                    />
                 </View>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Number:</Text>
-                    <Text style={styles.detailItem}>0123456789</Text>
+                    <TextInput 
+                        style={styles.detailItemInput}
+                    />
                 </View>
                 <View style={styles.inputFieldContainer}>
-                    <Text style={styles.decoratorTitle}>Photo Id:</Text>
-                    <Text style={styles.detailItem}>2356</Text>
+                    <Text style={styles.decoratorTitle}>Photo ID:</Text>
+                        <Image style={styles.thumbnail} source={{ uri: photoID.localUri }}/>
+                        
                 </View>
                 <View style={styles.inputFieldContainer}>
-                    <Text style={styles.decoratorTitle}>CSCS Card:</Text>
-                    <Text style={styles.detailItem}>00326565</Text>
+                    <Text style={styles.decoratorTitle}>CSCS Front Card:</Text>
+                    
+                        <Image style={styles.thumbnail} source={{ uri: cscsFront.localUri }}/>
+                        
+                </View>
+                <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>CSCS Back Card:</Text>
+                    <Image style={styles.thumbnail} source={{ uri: cscsBack.localUri }}/>
+                        
                 </View>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Notes Log:</Text>
@@ -115,7 +140,9 @@ const styles = StyleSheet.create({
     inputFieldContainer:{
         height:60,
         width:'100%',
-        flexDirection:'row'
+        flexDirection:'row',
+        alignItems:'center'
+
     },
     inputField:{
         height:52,
@@ -150,5 +177,25 @@ const styles = StyleSheet.create({
     checkText:{
         fontFamily:'poppins-regular',
         fontSize:12
-    }
+    },
+    detailItemInput:{
+        width:'60%',
+        borderBottomWidth:1,
+        borderBottomColor:'#96A8B2',
+        fontSize:16,
+        color:'#96A8B2',
+        fontFamily:'poppins-regular'
+    },
+    selectFileBtn: {
+        borderWidth: 1,
+        marginLeft: 30,
+        justifyContent: "center",
+        borderRadius: 6,
+        padding: 5,
+      },
+      thumbnail: {
+        width: 50,
+        height: 50,
+        resizeMode: "contain",
+      },
 });

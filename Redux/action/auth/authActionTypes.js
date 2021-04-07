@@ -1,6 +1,8 @@
 import * as Actions  from "../../actionTypes";
 import axios from 'axios';
 
+
+
 var base_url="https://airtimetesting.airtime4u.com/public/tajs/public/api/"
 export const adminLogin = (email, password)  => {
     return async (dispatch, getState) =>{
@@ -80,3 +82,52 @@ export const createSupervisor = (name,email,password,phone,token)  => {
       }
   }
 }; 
+export const createNewJobCreation = (contractor,project,weeks,supervisor_id,start_date,jobSummary,token) =>{
+  return async (dispatch, getState) =>{
+    try{
+      // console.log("Name :",contractor)
+      // console.log("Project Name :",project)
+      // console.log("Week Project :",weeks)
+      // console.log("Assign Supervisor :",supervisor_id)
+      // console.log("Start Date :",start_date)
+      // console.log(jobSummary)
+      // console.log("Create New Job")
+      const body = { contractor,project,weeks,supervisor_id,start_date,jobSummary }
+      const request = await axios(base_url+'admin/create/job',{
+          method:'POST',
+          headers: {
+            'authorization': 'Bearer '+token,
+          },
+          data:body,
+      });
+      const response=request.data;
+      console.log(response)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+}
+export const searchSupervisor = (supervisorName,supervisorId,supervisorEmail) =>{
+  return async (dispatch, getState) =>{
+    try{
+      console.log("Supervisor Name :",supervisorName)
+      console.log("Supervisor ID :",supervisorId)
+      console.log("Supervisor Email :",supervisorEmail)
+    }
+    catch(err){
+      throw new Error(err.message)
+    }
+}
+}
+
+export const searchDecorator = (id) =>{
+  return async (dispatch, getState) =>{
+    try{
+      console.log("search Decorator ID :",id)
+    }
+    catch(err){
+      throw new Error(err.message)
+    }
+}
+}

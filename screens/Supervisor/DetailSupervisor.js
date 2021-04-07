@@ -2,9 +2,18 @@ import React,{useState} from 'react';
 import { View,StyleSheet,Image,CheckBox,TouchableOpacity,ScrollView} from 'react-native';
 import {Text} from 'native-base';
 import { TextInput } from 'react-native-gesture-handler';
+import { useDispatch, useSelector, connect } from "react-redux";
+
 
 var rightArrow=require('../../assets/authScreen/right.png')
-const SupervisorDetails = ({props,navigation}) =>{
+const SupervisorDetails = (props) =>{
+    const { navigation } = props;
+    const [supervisorName,setSupervisorName]=useState("Hamza")
+    const [supervisorEmail,setSupervisorEmail]=useState("alamhamza18@gamil.com")
+    const [number,setNumber]=useState("03359853140")
+    const [password,setPassword]=useState("0123456789")
+
+
     const[check,setCheck]=useState({
         approved:true,
         disApproved:false
@@ -16,6 +25,15 @@ const SupervisorDetails = ({props,navigation}) =>{
         else if(value=="disapproved"){
             setCheck({disApproved:true,approved:false})
         }
+    }
+
+    const updateSupervisor = () =>{
+        console.log("Name :",supervisorName)
+        console.log("Email :",supervisorEmail)
+        console.log("Number :",number)
+        console.log("Passwrod :",password)
+        console.log("Check :",check)
+
     }
     return(
         <View style={styles.mainContainer}>
@@ -31,19 +49,35 @@ const SupervisorDetails = ({props,navigation}) =>{
             <View style={styles.formConatiner}>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Name:</Text>
-                    <TextInput style={styles.detailItemInput}>Toby</TextInput>
+                    <TextInput 
+                    style={styles.detailItemInput}
+                    value={supervisorName}
+                    onChangeText={(e)=>setSupervisorName(e)}
+                    />
                 </View>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Email:</Text>
-                    <TextInput style={styles.detailItemInput}>Toby@example.com</TextInput>
+                    <TextInput 
+                        style={styles.detailItemInput}
+                        value={supervisorEmail}
+                        onChangeText={(e)=>setSupervisorEmail(e)}
+                    />
                 </View>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Number:</Text>
-                    <TextInput style={styles.detailItemInput}>0123456789</TextInput>
+                    <TextInput
+                        value={number}
+                        onChangeText={(e)=>setNumber(e)}
+                        style={styles.detailItemInput}
+                    />
                 </View>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Password:</Text>
-                    <TextInput style={styles.detailItemInput}>2356</TextInput>
+                    <TextInput 
+                        style={styles.detailItemInput}
+                        value={password}
+                        onChangeText={(e)=>setPassword(e)}
+                    />
                 </View>
                 <View style={styles.inputFieldContainer}>
                     <Text style={styles.decoratorTitle}>Status:</Text>
@@ -65,7 +99,10 @@ const SupervisorDetails = ({props,navigation}) =>{
                     </View>
                 </View>
                 <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
+                    {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
+                        <Text style={styles.commonText}>Update</Text>
+                    </TouchableOpacity> */}
+                    <TouchableOpacity style={styles.commonBtn} onPress={() => updateSupervisor()}>
                         <Text style={styles.commonText}>Update</Text>
                     </TouchableOpacity>
                 </View>
@@ -74,7 +111,21 @@ const SupervisorDetails = ({props,navigation}) =>{
         </View>
     )
 }
-export default SupervisorDetails;
+const mapStateToProps = (state) => ({
+    token : state.auth.token,
+    name : state.auth.supervisorName,
+    email : state.auth.supervisorEmail,
+    number : state.auth.supervisorNumber,
+    super_password : state.auth.supervisorPassword,
+    super_status : state.auth.supervisorStatus
+  });
+  const mapDispatchToProps = (dispatch) => ({
+    searchSupervisorHandler: (supervisorName,supervisorId,supervisorEmail) =>
+      dispatch(
+        searchSupervisor(supervisorName,supervisorId,supervisorEmail)
+      ),
+  });
+export default connect(mapStateToProps, mapDispatchToProps)(SupervisorDetails);
 const styles = StyleSheet.create({
     mainContainer:{
         height:'100%',

@@ -1,9 +1,19 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View,StyleSheet,Image,TextInput,TouchableOpacity,ScrollView} from 'react-native';
 import {Text} from 'native-base';
+import { searchDecorator } from "../../Redux/action/auth/authActionTypes";
+import { useDispatch, useSelector, connect } from "react-redux";
 
-const SearchDecorator = ({props,navigation}) =>{
+const SearchDecorator = (props) =>{
+    const { navigation } = props;
+    const[decoratorID,setDecoratorID]=useState("")
+
+    const searchDecorator = () =>{
+        console.log("Search Decorator Id :",decoratorID)
+        props.searchDecoratorHandler(decoratorID)
+    }
     return(
+        
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
                 <Text style={styles.refText}>Date: 12-2-2021</Text>
@@ -18,6 +28,8 @@ const SearchDecorator = ({props,navigation}) =>{
                     <TextInput
                         style={styles.inputField}
                         placeholder={"Enter your Decorator ID"}
+                        value={decoratorID}
+                        onChangeText={(e)=>setDecoratorID(e)}
                     />
                 </View>
             </View>
@@ -25,11 +37,24 @@ const SearchDecorator = ({props,navigation}) =>{
                     <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorDetails')}>
                         <Text style={styles.commonText}>Search</Text>
                     </TouchableOpacity>
+                    {/* <TouchableOpacity style={styles.commonBtn} onPress={() => searchDecorator()}>
+                        <Text style={styles.commonText}>Search</Text>
+                    </TouchableOpacity> */}
                 </View>
         </View>
     )
 }
-export default SearchDecorator;
+const mapStateToProps = (state) => ({
+    token : state.auth.token,
+  });
+  const mapDispatchToProps = (dispatch) => ({
+    searchDecoratorHandler: (decoratorID) =>
+      dispatch(
+        searchDecorator(decoratorID)
+      ),
+  });
+export default connect(mapStateToProps, mapDispatchToProps)(SearchDecorator);
+
 const styles = StyleSheet.create({
     mainContainer:{
         height:'100%',

@@ -38,7 +38,7 @@ const LoginScreen = (props) =>{
                     <View style={styles.logoImageContainer}>
                         <Image style={styles.logoImage} source={logo}/>
                     </View>
-                    <Text style={styles.mainBannerText}><Text style={styles.boldText}>Lorem ipsum</Text> dolar</Text>
+                    <Text style={styles.mainBannerText}><Text style={styles.boldText}>Top Dec Decorating </Text> App</Text>
                 </View>
                 <ScrollView>
                 <View style={styles.formConatiner}>

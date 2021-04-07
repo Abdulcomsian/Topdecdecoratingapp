@@ -1,4 +1,5 @@
 import * as Actions from "../actionTypes";
+import { AsyncStorage } from 'react-native';
 
 const initialState = {
     // token: localStorage.getItem("token"),
@@ -6,7 +7,12 @@ const initialState = {
     isLoginMsg: null,
     token: null,
     createSuperVisor: false,
-    createSuperVisorMsg: null
+    createSuperVisorMsg: null,
+    supervisorName: null,
+    supervisorEmail:null,
+    supervisorNumber:null,
+    supervisorPassword:null,
+    supervisorStatus:false
 };
 
 export default (state = initialState, action)=> {
@@ -18,6 +24,7 @@ export default (state = initialState, action)=> {
                     ...state,
                     isLogin: true,
                     token: action.payload.data.split("|")[1],
+                    
                 }
             case Actions.LOGIN_FAIL:
              console.log("LOGIN FAIL")

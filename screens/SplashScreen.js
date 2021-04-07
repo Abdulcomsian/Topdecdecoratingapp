@@ -17,7 +17,7 @@ const SplashScreen = ({props,navigation}) =>{
                     <View style={styles.logoImageContainer}>
                         <Image style={styles.logoImage} source={logo}/>
                     </View>
-                    <Text style={styles.mainBannerText}><Text style={styles.boldText}>Lorem ipsum</Text> dolar</Text>
+                    <Text style={styles.mainBannerText}><Text style={styles.boldText}>Top Dec Decorating </Text> App</Text>
                 </View>
                 <View style={styles.lastContainer}>
                     <Text style={styles.calimText}>Excepteur sint occaecat cupidatat non proident, sunt in culpa</Text>
