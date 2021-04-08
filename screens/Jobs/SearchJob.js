@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import { View,StyleSheet,TouchableOpacity,TextInput} from 'react-native';
 import {Text} from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { event } from 'react-native-reanimated';
 
 const SearchJob = ({props,navigation}) =>{
 
@@ -9,14 +10,18 @@ const SearchJob = ({props,navigation}) =>{
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios');
+       
+        const currentDate = selectedDate;
+        setShow(Platform.OS === 'ios' ? true : false);
+        // setDate(currentDate);
+        console.log(selectedDate)
         setDate(currentDate);
       };
     
       const showMode = (currentMode) => {
         setShow(true);
         setMode(currentMode);
+        
       };
     
       const showDatepicker = () => {
@@ -30,12 +35,12 @@ const SearchJob = ({props,navigation}) =>{
         <View style={styles.mainContainer}>
             {show && 
                         <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode={mode}
-                        is24Hour={true}
-                        display="default"
-                        onChange={onChange}
+                            testID="dateTimePicker"
+                            value={date}
+                            mode={mode}
+                            display="default"
+                            onChange={onChange}
+                            format="DD-MM-YYYY"
                         />
                     }
             <View style={styles.titleContainer}>
@@ -51,10 +56,9 @@ const SearchJob = ({props,navigation}) =>{
                 </View>
                 <Text style={{justifyContent:'center',textAlign:'center',marginBottom:20,fontFamily:'poppins-medium',}}>OR</Text>
                 <View style={styles.inputFieldContainer}>
-                    <TouchableOpacity Press={()=>showDatepicker()}>
-                        <Text>Pick Date</Text>
-                    </TouchableOpacity>
-                    
+                    <View style={styles.inputFieldContainer}>
+                        <Text onPress={()=>showDatepicker()} style={styles.inputField}>{new Date(date).toLocaleDateString()}</Text>
+                    </View>
                 </View>
             </View>
             <View style={styles.footerBtnView}>

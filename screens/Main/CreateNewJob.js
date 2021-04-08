@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -6,25 +6,32 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Text } from "native-base";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { createNewJobCreation } from "../../Redux/action/auth/authActionTypes";
+import axios from "axios";
+import { Picker } from 'native-base';
+
+
 
 var plus = require("../../assets/authScreen/plus.png");
-const NewJob = ( props) => {
+const NewJob = (props) => {
   const { navigation } = props;
-  const [token,setToken]=useState(props.token)
+  const [token, setToken] = useState(props.token);
   const [data, setData] = useState({
     qty: "",
     description: "",
   });
-  const [constructorName,setConstructorName]=useState('');
-  const [projectName,setProjectName]=useState('');
-  const [weekProject,setWeekProject]=useState('');
-  const [assignSupervisor,setAssignSupervisor]=useState('');
-  const [startDate,setStartDate]=useState('');
+  const [constructorName, setConstructorName] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [weekProject, setWeekProject] = useState("");
+  const [assignSupervisor, setAssignSupervisor] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [dynamicInput, setdynamicInput] = useState([]);
+  const [supervisorData, setSupervisorData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const addInput = () => {
     setdynamicInput((oldArray) => [...oldArray, data]);
     setData({
@@ -32,22 +39,56 @@ const NewJob = ( props) => {
       description: "",
     });
   };
-  const updateValue=(key,index,value)=>{
-      let preData=[...dynamicInput]
-      preData[index][key]=value;
-      setdynamicInput(preData)
-      
-  }
-    console.log(dynamicInput)
-  const newJob = () =>{
-    // console.log("Name :",constructorName)
-    // console.log("Project Name :",projectName)
-    // console.log("Week Project :",weekProject)
-    // console.log("Assign Supervisor :",assignSupervisor)
-    // console.log("Start Date :",startDate)
-    // console.log(dynamicInput)
-    props.createNewJobHandler(constructorName,projectName,weekProject,assignSupervisor,startDate,dynamicInput,token);
-  }
+  const [selectedLanguage, setSelectedLanguage] = useState();
+
+  const updateValue = (key, index, value) => {
+    let preData = [...dynamicInput];
+    preData[index][key] = value;
+    setdynamicInput(preData);
+  };
+  const newJob = () => {
+    props.createNewJobHandler(
+      constructorName,
+      projectName,
+      weekProject,
+      assignSupervisor,
+      startDate,
+      dynamicInput,
+      token
+    );
+  };
+  useEffect(() => {
+    try {
+      const body = {};
+      (async () => {
+        setLoading(true);
+        const request = await axios(
+          "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/view/Supervisors",
+          {
+            method: "POST",
+            headers: {
+              authorization: "Bearer " + token,
+            },
+            data: body,
+          }
+        );
+        const response = await request.data.data.user;
+        setSupervisorData(request.data.data.user);
+        setLoading(false);
+        console.log("Supervisor Data:", supervisorData);
+      })();
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading)
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator color="#1073AC" size="small" />
+      </View>
+    );
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
@@ -59,120 +100,157 @@ const NewJob = ( props) => {
         <Text style={styles.titleText}>Input job details</Text>
       </View>
       <ScrollView>
-            <View style={styles.formConatiner}>
-            <View style={styles.inputFieldContainer}>
-                <TextInput
-                style={styles.inputField}
-                placeholder={"Main Contractor Name"}
-                value={constructorName}
-                onChangeText={(e)=>setConstructorName(e)}
-                />
-            </View>
-            <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} 
-                placeholder={"Project Name"} 
-                value={projectName}
-                onChangeText={(e)=>setProjectName(e)}
-                />
-            </View>
-            <View style={styles.inputFieldContainer}>
-                <TextInput
-                style={styles.inputField}
-                placeholder={"Number of weeks for project"}
-                value={weekProject}
-                onChangeText={(e)=>setWeekProject(e)}
-                />
-            </View>
-            <View style={styles.inputFieldContainer}>
-                <TextInput
-                style={styles.inputField}
-                placeholder={"Assign to Supervisor"}
-                value={assignSupervisor}
-                onChangeText={(e)=>setAssignSupervisor(e)}
-                />
-            </View>
-            <View style={styles.inputFieldContainer}>
-                <TextInput
-                style={styles.inputField}
-                placeholder={"Start Date for project"}
-                value={startDate}
-                onChangeText={(e)=>setStartDate(e)}
-                />
-            </View>
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Job Summary</Text>
-            </View>
-            {dynamicInput.length > 0 && (
-                <View style={[styles.dynamicInput,{flexDirection:"column"}]}>
-                  
-                {dynamicInput.map((el, index) => (
-                  
-                    <View style={styles.inputContainer} key={index}>
-                    <TextInput
-                        onChangeText={(txt) => updateValue('qty',index,txt)}
-                        style={styles.quantityInput}
-                        value={el.qty}
-                        placeholder={"Quantity"}
-                    />
-                    <TextInput
-                        onChangeText={(txt) => updateValue('description',index,txt)}
-                        style={styles.descriptionInput}
-                        value={el.description}
-                        placeholder={"Description"}
-                    />
-                    </View>
-                ))}
-                </View>
-            )}
-            <View style={styles.dynamicInput}>
-                <View style={styles.inputContainer}>
-                <TextInput
-                    onChangeText={(txt) => setData({ ...data, qty: txt })}
+        <View style={styles.formConatiner}>
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"Main Contractor Name"}
+              value={constructorName}
+              onChangeText={(e) => setConstructorName(e)}
+            />
+          </View>
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"Project Name"}
+              value={projectName}
+              onChangeText={(e) => setProjectName(e)}
+            />
+          </View>
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"Number of weeks for project"}
+              value={weekProject}
+              onChangeText={(e) => setWeekProject(e)}
+            />
+          </View>
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"Assign to Supervisor"}
+              value={assignSupervisor}
+              onChangeText={(e) => setAssignSupervisor(e)}
+            />
+            {/* <Picker
+              selectedValue={selectedLanguage}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedLanguage(itemValue)
+              }
+            >
+              {supervisorData.map((item, index) => {
+                <Picker.Item label={item.role} value={item.id} key={index} />;
+              })}
+            </Picker> */}
+            <Picker
+                mode="dropdown"
+                // iosIcon={<Icon name="arrow-down" />}
+                style={{ width: undefined }}
+                placeholder="Select your SIM"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={selectedLanguage}
+              >
+                {/* {supervisorData.map((item, index) => (
+                  <Picker.Item label={item.id} value={index} key={index}/>
+                ))} */}
+              </Picker>
+          </View>
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"Start Date for project"}
+              value={startDate}
+              onChangeText={(e) => setStartDate(e)}
+            />
+          </View>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>Job Summary</Text>
+          </View>
+          {dynamicInput.length > 0 && (
+            <View style={[styles.dynamicInput, { flexDirection: "column" }]}>
+              {dynamicInput.map((el, index) => (
+                <View style={styles.inputContainer} key={index}>
+                  <TextInput
+                    onChangeText={(txt) => updateValue("qty", index, txt)}
                     style={styles.quantityInput}
+                    value={el.qty}
                     placeholder={"Quantity"}
-                    value={data.qty}
-                />
-                <TextInput
-                    onChangeText={(txt) => setData({ ...data, description: txt })}
+                  />
+                  <TextInput
+                    onChangeText={(txt) =>
+                      updateValue("description", index, txt)
+                    }
                     style={styles.descriptionInput}
+                    value={el.description}
                     placeholder={"Description"}
-                    value={data.description}
-                />
+                  />
                 </View>
-
-                <View style={styles.addBtn}>
-                <TouchableOpacity onPress={() => addInput()}>
-                    <Image style={styles.plusBtn} source={plus} />
-                </TouchableOpacity>
-                </View>
+              ))}
             </View>
-            
-            <View style={styles.btnContainer}>
-            {/* <TouchableOpacity
+          )}
+          <View style={styles.dynamicInput}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                onChangeText={(txt) => setData({ ...data, qty: txt })}
+                style={styles.quantityInput}
+                placeholder={"Quantity"}
+                value={data.qty}
+              />
+              <TextInput
+                onChangeText={(txt) => setData({ ...data, description: txt })}
+                style={styles.descriptionInput}
+                placeholder={"Description"}
+                value={data.description}
+              />
+            </View>
+
+            <View style={styles.addBtn}>
+              <TouchableOpacity onPress={() => addInput()}>
+                <Image style={styles.plusBtn} source={plus} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.btnContainer}>
+            <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity> */}
-            <TouchableOpacity
-                style={styles.commonBtn}
-                onPress={() => newJob()}
-            >
-                <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity>
-            </View>
-            </View>
+            {/* <TouchableOpacity style={styles.commonBtn} onPress={() => newJob()}>
+              <Text style={styles.commonText}>Save</Text>
+            </TouchableOpacity> */}
+          </View>
+        </View>
       </ScrollView>
     </View>
   );
 };
 const mapStateToProps = (state) => ({
-  token : state.auth.token,
+  token: state.auth.token,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createNewJobHandler: (constructorName,projectName,weekProject,assignSupervisor,startDate,dynamicInput,token) =>
+  createNewJobHandler: (
+    constructorName,
+    projectName,
+    weekProject,
+    assignSupervisor,
+    startDate,
+    dynamicInput,
+    token
+  ) =>
     dispatch(
-      createNewJobCreation(constructorName,projectName,weekProject,assignSupervisor,startDate,dynamicInput,token)
+      createNewJobCreation(
+        constructorName,
+        projectName,
+        weekProject,
+        assignSupervisor,
+        startDate,
+        dynamicInput,
+        token
+      )
     ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(NewJob);
@@ -208,14 +286,14 @@ const styles = StyleSheet.create({
   formConatiner: {
     width: "100%",
     alignItems: "center",
-    paddingLeft:20,
-    paddingRight:20
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   inputFieldContainer: {
     width: "100%",
   },
   inputField: {
-    height: 52,
+    height: 60,
     width: "100%",
     borderBottomWidth: 1,
     borderBottomColor: "#96A8B2",
@@ -291,5 +369,6 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 50,
     height: "15%",
+    marginBottom: 20,
   },
 });

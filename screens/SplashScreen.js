@@ -49,13 +49,14 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     mainBannerText:{
-        fontSize:30,
+        fontSize:25,
         marginTop:60,
         fontFamily:'poppins-regular',
-        color:"#333333"
+        color:"#333333",
+        textAlign:"center"
     },
     boldText:{
-        fontSize:30,
+        fontSize:25,
         fontFamily:'poppins-bold',
     },
     iconImg:{

@@ -85,13 +85,6 @@ export const createSupervisor = (name,email,password,phone,token)  => {
 export const createNewJobCreation = (contractor,project,weeks,supervisor_id,start_date,jobSummary,token) =>{
   return async (dispatch, getState) =>{
     try{
-      // console.log("Name :",contractor)
-      // console.log("Project Name :",project)
-      // console.log("Week Project :",weeks)
-      // console.log("Assign Supervisor :",supervisor_id)
-      // console.log("Start Date :",start_date)
-      // console.log(jobSummary)
-      // console.log("Create New Job")
       const body = { contractor,project,weeks,supervisor_id,start_date,jobSummary }
       const request = await axios(base_url+'admin/create/job',{
           method:'POST',

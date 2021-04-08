@@ -14,8 +14,8 @@ var lock=require('../../assets/authScreen/lock.png')
 const LoginScreen = (props) =>{
     const {navigation}=props;
    // const dispatch = useDispatch()
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('admin@accrualgroup.com')
+    const [password, setPassword] = useState('asdfghjkl')
 
     const postSignInHandler = ()=>{
         try{
@@ -137,13 +137,14 @@ const styles = StyleSheet.create({
         
     },
     mainBannerText:{
-        fontSize:30,
+        fontSize:25,
         marginTop:60,
         fontFamily:'poppins-regular',
-        color:"#333333"
+        color:"#333333",
+        textAlign:"center"
     },
     boldText:{
-        fontSize:30,
+        fontSize:25,
         fontFamily:'poppins-bold',
     },
     inputField:{
