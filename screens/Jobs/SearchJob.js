@@ -2,20 +2,24 @@ import React,{useState} from 'react';
 import { View,StyleSheet,TouchableOpacity,TextInput} from 'react-native';
 import {Text} from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { event } from 'react-native-reanimated';
+import { searchJob } from "../../Redux/action/auth/authActionTypes";
+import { connect } from "react-redux";
 
-const SearchJob = ({props,navigation}) =>{
-
+const SearchJob = (props) =>{
+    const { navigation } = props;
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const [refID,setRefID] = useState("")
+    const [changeDate,setChnageDate]=useState(false)
+    const [token,setToken] = useState(props.token)
     const onChange = (event, selectedDate) => {
-       
         const currentDate = selectedDate;
         setShow(Platform.OS === 'ios' ? true : false);
         // setDate(currentDate);
         console.log(selectedDate)
-        setDate(currentDate);
+        setDate(new Date(currentDate).toLocaleDateString());
+        setChnageDate(true)
       };
     
       const showMode = (currentMode) => {
@@ -28,9 +32,29 @@ const SearchJob = ({props,navigation}) =>{
         showMode('date');
       };
     
-      const showTimepicker = () => {
-        showMode('time');
-      };
+      const searchJob = () =>{
+        console.log(date)
+        if(refID){
+            if(changeDate){
+                console.log("Changed Date with Ref ID")
+                props.searchJobHandler(refID,date,token)
+            }
+            else{
+                console.log("Just Ref ID")
+                setDate(null)
+                console.log(date)
+                //props.searchJobHandler(refID,date,token)
+                setDate(new Date())
+            }
+        }
+        else{
+            if(changeDate){
+                console.log("Just Date")
+                props.searchJobHandler(refID,date,token)
+            }
+        }
+      }
+
     return(
         <View style={styles.mainContainer}>
             {show && 
@@ -52,9 +76,11 @@ const SearchJob = ({props,navigation}) =>{
                     <TextInput
                         style={styles.inputField}
                         placeholder={"Enter Ref ID"}
+                        value={refID}
+                        onChangeText={(e)=>setRefID(e)}
                     />
                 </View>
-                <Text style={{justifyContent:'center',textAlign:'center',marginBottom:20,fontFamily:'poppins-medium',}}>OR</Text>
+                <Text style={{justifyContent:'center',textAlign:'center',fontFamily:'poppins-medium',marginTop:20}}>OR</Text>
                 <View style={styles.inputFieldContainer}>
                     <View style={styles.inputFieldContainer}>
                         <Text onPress={()=>showDatepicker()} style={styles.inputField}>{new Date(date).toLocaleDateString()}</Text>
@@ -62,14 +88,27 @@ const SearchJob = ({props,navigation}) =>{
                 </View>
             </View>
             <View style={styles.footerBtnView}>
-                <TouchableOpacity style={styles.commonBtn}>
-                    <Text style={styles.commonText}>Save</Text>
+                {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DetailJob')}>
+                    <Text style={styles.commonText}>Search</Text>
+                </TouchableOpacity> */}
+                <TouchableOpacity style={styles.commonBtn} onPress={() => searchJob(this)}>
+                    <Text style={styles.commonText}>Search</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
-export default SearchJob;
+const mapStateToProps = (state) => ({
+    token : state.auth.token,
+  });
+  const mapDispatchToProps = (dispatch) => ({
+    searchJobHandler: (refID,date,token) =>
+      dispatch(
+        searchJob(refID,date,token)
+      ),
+  });
+export default connect(mapStateToProps, mapDispatchToProps)(SearchJob);
+
 const styles = StyleSheet.create({
     mainContainer:{
         height:'100%',

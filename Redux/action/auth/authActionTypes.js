@@ -94,7 +94,18 @@ export const createNewJobCreation = (contractor,project,weeks,supervisor_id,star
           data:body,
       });
       const response=request.data;
-      console.log(response)
+      if(response.success==true){
+        dispatch ({
+          type: Actions.CREATE_NEW_JOB_SUCCESS,
+          payload: response
+        })
+      }
+      else{
+        dispatch ({
+          type: Actions.CREATE_NEW_JOB_FAIL,
+          payload: response
+        })
+      }
     }
     catch(err){
       console.log(err)
@@ -113,7 +124,6 @@ export const searchSupervisor = (supervisorName,supervisorId,supervisorEmail) =>
     }
 }
 }
-
 export const searchDecorator = (id) =>{
   return async (dispatch, getState) =>{
     try{
@@ -123,4 +133,25 @@ export const searchDecorator = (id) =>{
       throw new Error(err.message)
     }
 }
+}
+export const searchJob = (reference_number,date,token) =>{
+  return async (dispatch, getState) =>{
+    try{
+      console.log(date)
+      const body = { reference_number,date }
+      const request = await axios(base_url+'admin/search/job/refid',{
+          method:'POST',
+          headers: {
+            'authorization': 'Bearer '+token,
+          },
+          data:body,
+      });
+      const response=request.data;
+      console.log(response)
+    }
+    catch(err){
+      console.log(err)
+    }
+}
+  
 }

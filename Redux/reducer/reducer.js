@@ -12,7 +12,9 @@ const initialState = {
     supervisorEmail:null,
     supervisorNumber:null,
     supervisorPassword:null,
-    supervisorStatus:false
+    supervisorStatus:false,
+    isJob:false,
+    isJobMsg:null
 };
 
 export default (state = initialState, action)=> {
@@ -45,6 +47,20 @@ export default (state = initialState, action)=> {
                     ...state,
                     createSuperVisor: false,
                     createSuperVisorMsg : action.payload.message.email
+                }
+            case Actions.CREATE_NEW_JOB_SUCCESS:
+             console.log("CREATE_NEW_JOB_SUCCESS")
+                return{
+                    ...state,
+                    isJob: true,
+                    isJobMsg : action.payload.message
+                }
+            case Actions.CREATE_NEW_JOB_FAIL:
+             console.log("CREATE_NEW_JOB_FAIL")
+                return{
+                    ...state,
+                    isJob: false,
+                    isJobMsg : action.payload.message
                 }
             default:
             return state;

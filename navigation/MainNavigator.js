@@ -13,6 +13,7 @@ import SelectSummaryDetail from '../screens/Main/SelectSummaryDetail'
 import ViewJob from '../screens/Jobs/ViewJobs'
 import SelectProject from '../screens/Jobs/SelectProject'
 import SearchJob from '../screens/Jobs/SearchJob'
+import DetailJob from '../screens/Jobs/DetailJob'
 import CreateDecorataor from '../screens/Decorator/CreateDecorator'
 import SearchDecorator from '../screens/Decorator/SearchDecorator'
 import DecoratorDetails from '../screens/Decorator/DecoratorDetail'
@@ -507,6 +508,13 @@ export default function MainNavigator({ navigation, route }) {
                     headerShown: false,
                 }}
             />
+            <Stack.Screen
+                name="DetailJob"
+                component={DetailJob}
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Stack.Navigator>
     );
 }
@@ -977,6 +985,15 @@ function getHeaderTitle(route) {
                         },  
                         headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
                             headerTitle:"Working at Height Equipment"
+                        };
+        case 'DetailJob':
+            return { headerShown: true,
+                        headerTintColor: '#fff',
+                        headerStyle: {
+                        backgroundColor: '#1073AC',
+                        },  
+                        headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
+                            headerTitle:"Detail Job"
                         };
                                    
     }
