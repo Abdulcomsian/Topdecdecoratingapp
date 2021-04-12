@@ -13,11 +13,12 @@ const SearchJob = (props) =>{
     const [refID,setRefID] = useState("")
     const [changeDate,setChnageDate]=useState(false)
     const [token,setToken] = useState(props.token)
+    const [basedText,setBasedText] = useState("")
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(Platform.OS === 'ios' ? true : false);
         // setDate(currentDate);
-        console.log(selectedDate)
+        // console.log(selectedDate)
         setDate(new Date(currentDate).toLocaleDateString());
         setChnageDate(true)
       };
@@ -33,16 +34,19 @@ const SearchJob = (props) =>{
       };
     
       const searchJob = () =>{
+        
+        console.log("Show Value :",show)    
         console.log(date)
         if(refID){
             if(changeDate){
                 console.log("Changed Date with Ref ID")
-                props.searchJobHandler(refID,date,token)
+                setBasedText("Changed Date with Ref ID")
+                props.navigation.navigate('DetailJob',{selectedDate:date,refernceNum:refID,basedText:basedText,token:token})
+                //props.searchJobHandler(refID,date,token)
             }
             else{
-                console.log("Just Ref ID")
-                setDate(null)
-                console.log(date)
+                setBasedText("Just Ref ID")
+                props.navigation.navigate('DetailJob',{selectedDate:"",refernceNum:refID,basedText:basedText,token:token})
                 //props.searchJobHandler(refID,date,token)
                 setDate(new Date())
             }
@@ -50,7 +54,9 @@ const SearchJob = (props) =>{
         else{
             if(changeDate){
                 console.log("Just Date")
-                props.searchJobHandler(refID,date,token)
+                setBasedText("Just Date")
+                props.navigation.navigate('DetailJob',{selectedDate:date,refernceNum:refID,basedText:basedText})
+               // props.searchJobHandler(refID,date,token)
             }
         }
       }
@@ -65,6 +71,7 @@ const SearchJob = (props) =>{
                             display="default"
                             onChange={onChange}
                             format="DD-MM-YYYY"
+                            placeholder="Select Date"
                         />
                     }
             <View style={styles.titleContainer}>
@@ -88,7 +95,7 @@ const SearchJob = (props) =>{
                 </View>
             </View>
             <View style={styles.footerBtnView}>
-                {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DetailJob')}>
+                {/* <TouchableOpacity style={styles.commonBtn}  onPress={() => navigation.navigate('DetailJob',{date:date,referenceId:refID})}>
                     <Text style={styles.commonText}>Search</Text>
                 </TouchableOpacity> */}
                 <TouchableOpacity style={styles.commonBtn} onPress={() => searchJob(this)}>
