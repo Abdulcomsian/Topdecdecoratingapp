@@ -23,36 +23,45 @@ const CreateDecorataor = (props) => {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
   const [token,setToken]=useState(props.token)
-
+ 
   const postCreateDecortor = () => {
+   
     console.log(email);
     try {
       let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
       if (regEmail.test(email) === false) {
-        console.log("Email is Not Correct");
+        alert("Email is Not Correct");
         setEmail(email);
         return false;
       } else {
         setEmail(email);
         console.log("Email is Correct");
         if (regPass.test(password) === false) {
-          console.log("Password is Not Correct");
+          alert("Password is Not Correct");
           setPassword(password);
           return false;
         } else {
+          let frmData = new FormData();
+          frmData.append('avatar', {
+            uri: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),
+            name: Math.random(0, 1000).toString(),
+            type: 'image/png', // it may be necessary in Android.
+          });
+          console.log(frmData)
           console.log("Password is Correct");
-          props.createDecoratorHandler(
-            name,
-            lastName,
-            email,
-            photoID.localUri,
-            cscsFront.localUri,
-            cscsBack.localUri,
-            number,
-            password,
-            token
-          );
+          // props.createDecoratorHandler(
+          //   name,
+          //   lastName,
+          //   formData,
+          //   cscsFront.localUri,
+          //   cscsBack.localUri,
+          //   email,
+          //   number,
+          //   password,
+          //   token
+          // );
+          return true;
         }
       }
      
@@ -72,7 +81,7 @@ const CreateDecorataor = (props) => {
       if (pickerResult.cancelled === true) {
         return;
       }
-
+      console.log("Piceker Result :",pickerResult)
       setPhotoID({ localUri: pickerResult.uri });
     } else if (type == "cscsFront") {
       let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();

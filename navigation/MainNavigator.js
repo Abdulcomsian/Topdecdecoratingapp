@@ -14,6 +14,7 @@ import ViewJob from '../screens/Jobs/ViewJobs'
 import SelectProject from '../screens/Jobs/SelectProject'
 import SearchJob from '../screens/Jobs/SearchJob'
 import DetailJob from '../screens/Jobs/DetailJob'
+import ListSupervisor from '../screens/Supervisor/ListSupervisor'
 import CreateDecorataor from '../screens/Decorator/CreateDecorator'
 import SearchDecorator from '../screens/Decorator/SearchDecorator'
 import DecoratorDetails from '../screens/Decorator/DecoratorDetail'
@@ -515,6 +516,13 @@ export default function MainNavigator({ navigation, route }) {
                     headerShown: false,
                 }}
             />
+            <Stack.Screen
+                name="ListSupervisor"
+                component={ListSupervisor}
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Stack.Navigator>
     );
 }
@@ -994,6 +1002,15 @@ function getHeaderTitle(route) {
                         },  
                         headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
                             headerTitle:"Detail Job"
+                        };
+        case 'ListSupervisor':
+            return { headerShown: true,
+                        headerTintColor: '#fff',
+                        headerStyle: {
+                        backgroundColor: '#1073AC',
+                        },  
+                        headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
+                            headerTitle:"List Of Supervisor"
                         };
                                    
     }

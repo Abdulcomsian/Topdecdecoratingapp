@@ -7,10 +7,12 @@ import { useDispatch, useSelector, connect } from "react-redux";
 const SearchDecorator = (props) =>{
     const { navigation } = props;
     const[decoratorID,setDecoratorID]=useState("")
+    const [token,setToken] = useState(props.token)
 
     const searchDecorator = () =>{
         console.log("Search Decorator Id :",decoratorID)
-        props.searchDecoratorHandler(decoratorID)
+        console.log("Token :",token)
+        props.searchDecoratorHandler(decoratorID,token)
     }
     return(
         
@@ -34,7 +36,7 @@ const SearchDecorator = (props) =>{
                 </View>
             </View>
             <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorDetails')}>
+                    <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorDetails',{id:decoratorID,token:token})}>
                         <Text style={styles.commonText}>Search</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity style={styles.commonBtn} onPress={() => searchDecorator()}>
@@ -48,9 +50,9 @@ const mapStateToProps = (state) => ({
     token : state.auth.token,
   });
   const mapDispatchToProps = (dispatch) => ({
-    searchDecoratorHandler: (decoratorID) =>
+    searchDecoratorHandler: (decoratorID,token) =>
       dispatch(
-        searchDecorator(decoratorID)
+        searchDecorator(decoratorID,token)
       ),
   });
 export default connect(mapStateToProps, mapDispatchToProps)(SearchDecorator);

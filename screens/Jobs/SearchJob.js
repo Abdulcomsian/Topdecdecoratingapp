@@ -55,7 +55,7 @@ const SearchJob = (props) =>{
             if(changeDate){
                 console.log("Just Date")
                 setBasedText("Just Date")
-                props.navigation.navigate('DetailJob',{selectedDate:date,refernceNum:refID,basedText:basedText})
+                props.navigation.navigate('DetailJob',{selectedDate:date,refernceNum:refID,basedText:basedText,token:token})
                // props.searchJobHandler(refID,date,token)
             }
         }

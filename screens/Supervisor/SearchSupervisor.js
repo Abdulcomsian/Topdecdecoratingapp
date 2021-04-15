@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { View,StyleSheet,Image,TextInput,TouchableOpacity,ScrollView} from 'react-native';
 import {Text} from 'native-base';
 import { searchSupervisor } from "../../Redux/action/auth/authActionTypes";
@@ -9,25 +9,33 @@ const SearchSupervisor = (props) =>{
     const [supervisorName,setSupervisorName]=useState('');
     const [supervisorId,setSupervisorId]=useState('');
     const [supervisorEmail,setSupervisorEmail]=useState('');
+    const [token,setToken]=useState(props.token);
     
     const searchSupervisor = () =>{
         try {
             let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if(supervisorEmail==''){
+                // console.log("Supervisor Name :",supervisorName)
+                // console.log("Supervisor ID :",supervisorId)
+                // console.log("Supervisor Email :",supervisorEmail)
+                props.searchSupervisorHandler(supervisorId,supervisorName,supervisorEmail,token);
+            }
+            else{
             if (regEmail.test(supervisorEmail) === false) {
-              console.log("Email is Not Correct");
+              alert("Email is Not Correct");
               setSupervisorEmail(supervisorEmail);
               return false;
             } else {
                 setSupervisorEmail(supervisorEmail);
                 console.log("Email is Correct");
-                props.searchSupervisorHandler(supervisorName,supervisorId,supervisorEmail);
-
+                props.searchSupervisorHandler(supervisorId,supervisorName,supervisorEmail,token);
             }
-           
+        }
           } catch (err) {
             console.log(err.message);
           }
     }
+    
     return(
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
@@ -65,7 +73,7 @@ const SearchSupervisor = (props) =>{
                 </View>
             </View>
             <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DetailSupervisor')}>
+                    <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('ListSupervisor',{id:supervisorId,name:supervisorName,email:supervisorEmail})}>
                         <Text style={styles.commonText}>Search</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity style={styles.commonBtn} onPress={() => searchSupervisor()}>
@@ -79,9 +87,9 @@ const mapStateToProps = (state) => ({
     token : state.auth.token,
   });
   const mapDispatchToProps = (dispatch) => ({
-    searchSupervisorHandler: (supervisorName,supervisorId,supervisorEmail) =>
+    searchSupervisorHandler: (supervisorName,supervisorId,supervisorEmail,token) =>
       dispatch(
-        searchSupervisor(supervisorName,supervisorId,supervisorEmail)
+        searchSupervisor(supervisorName,supervisorId,supervisorEmail,token)
       ),
   });
 export default connect(mapStateToProps, mapDispatchToProps)(SearchSupervisor);
@@ -122,7 +130,6 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     inputFieldContainer:{
-        height:"15%",
         width:'100%',
     },
     inputField:{
@@ -148,7 +155,8 @@ const styles = StyleSheet.create({
         alignItems:'center',
         borderRadius:14,
         borderWidth:3,
-        borderColor:'#1073AC'
+        borderColor:'#1073AC',
+        marginBottom:80
     },
     commonText:{
         color:'#1073AC',

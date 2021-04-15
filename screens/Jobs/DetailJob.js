@@ -17,13 +17,14 @@ const DetailJob = (props) =>{
     const [supervisorID,setSupervisorID] = useState("")
     const [weeks,setWeeks] = useState("")
     const [jobData, setJobData] = useState([]);
+    const [showView,setShowView] = useState(false)
 
-    console.log("Selected Date :",date)
+    console.log("Slected Date :",date)
     console.log("Refernce Number :",reference_number)
-    console.log("Token :",token)
+
     useEffect(() => {
         try {
-          const body = {date,reference_number,token};
+          const body = {reference_number,date,token};
           (async () => {
             setLoading(true);
             const request = await axios(
@@ -36,10 +37,17 @@ const DetailJob = (props) =>{
                 data: body,
               }
             );
-            const response = await request.data.data.user;
+            const response = await request.data.success;
             console.log(response);
-            setJobData(request.data.data.user)
-            setLoading(false);
+            if(response){
+                setJobData(request.data.data.user)
+                setLoading(false);
+                setShowView(true)
+            }
+            else{
+                setLoading(false);
+                setShowView(false)
+            }
           })();
         } catch (err) {
             console.log("Error")
@@ -66,34 +74,41 @@ const DetailJob = (props) =>{
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Job Details</Text>
             </View>
-            <ScrollView style={{height:'100%',width:'100%'}}>
+            {showView ? 
+                <ScrollView style={{height:'100%',width:'100%'}}>
             
-            {jobData.map((item,index)=>(
-                <View style={styles.formConatiner} key={index}>
-                    <View style={styles.inputFieldContainer}>
-                        <Text style={styles.decoratorTitle}>Contructor Name:</Text>
-                        <Text style={{width:"50%",textAlign:"center"}}>{item.contractor}</Text>
+                {jobData.map((item,index)=>(
+                    <View style={styles.formConatiner} key={index}>
+                        <View style={styles.inputFieldContainer}>
+                            <Text style={styles.decoratorTitle}>Contructor Name:</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{item.contractor}</Text>
+                        </View>
+                        <View style={styles.inputFieldContainer}>
+                            <Text style={styles.decoratorTitle}>Project Name:</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{item.project}</Text>
+                        </View>
+                        <View style={styles.inputFieldContainer}>
+                            <Text style={styles.decoratorTitle}>Start Date:</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{item.start_date}</Text>
+                        </View>
+                        <View style={styles.inputFieldContainer}>
+                            <Text style={styles.decoratorTitle}>Supervisor ID:</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{item.supervisor_id}</Text>
+                        </View>
+                        <View style={styles.inputFieldContainer}>
+                            <Text style={styles.decoratorTitle}>No of Weeks:</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{item.weeks}</Text>
+                        </View>
+                        <View style={{width:"100%",height:2,backgroundColor:"#000"}}></View>
                     </View>
-                    <View style={styles.inputFieldContainer}>
-                        <Text style={styles.decoratorTitle}>Project Name:</Text>
-                        <Text style={{width:"50%",textAlign:"center"}}>{item.project}</Text>
-                    </View>
-                    <View style={styles.inputFieldContainer}>
-                        <Text style={styles.decoratorTitle}>Start Date:</Text>
-                        <Text style={{width:"50%",textAlign:"center"}}>{item.start_date}</Text>
-                    </View>
-                    <View style={styles.inputFieldContainer}>
-                        <Text style={styles.decoratorTitle}>Supervisor ID:</Text>
-                        <Text style={{width:"50%",textAlign:"center"}}>{item.supervisor_id}</Text>
-                    </View>
-                    <View style={styles.inputFieldContainer}>
-                        <Text style={styles.decoratorTitle}>No of Weeks:</Text>
-                        <Text style={{width:"50%",textAlign:"center"}}>{item.weeks}</Text>
-                    </View>
-                    <View style={{width:"100%",height:2,backgroundColor:"#000"}}></View>
+                ))}
+                </ScrollView>
+                :
+                <View style={{justifyContent:"center",alignItems:"center",width:"100%",height:"85%"}}>
+                    <Text>Sorry No Data Found !</Text>
                 </View>
-            ))}
-            </ScrollView>
+            }
+            
         </View>
     )
       }
@@ -106,7 +121,7 @@ const styles = StyleSheet.create({
         width:'100%',
     },
     dateTimeContainer:{
-        height:40,
+        height:"5%",
         width:'100%',
         flexDirection:'row',
         justifyContent:'space-between',
@@ -118,7 +133,7 @@ const styles = StyleSheet.create({
         fontFamily:'poppins-medium'
     },
     titleContainer:{
-        height:30,
+        height:"10%",
         width:'100%',
         justifyContent:'center',
         alignItems:'center',

@@ -14,7 +14,11 @@ const initialState = {
     supervisorPassword:null,
     supervisorStatus:false,
     isJob:false,
-    isJobMsg:null
+    isJobMsg:null,
+    createDecorator: false,
+    createDecoratorMsg: null,
+    isSeacrh: false,
+    supervisorArray : []
 };
 
 export default (state = initialState, action)=> {
@@ -61,6 +65,27 @@ export default (state = initialState, action)=> {
                     ...state,
                     isJob: false,
                     isJobMsg : action.payload.message
+                }
+            case Actions.CREATE_DECORATOR_SUCSESS:
+             console.log("CREATE_DECORATOR_SUCSESS")
+                return{
+                    ...state,
+                    createDecorator: true,
+                    createDecoratorMsg : action.payload.message
+                }
+            case Actions.CREATE_NEW_JOB_FAIL:
+             console.log("CREATE_NEW_JOB_FAIL")
+                return{
+                    ...state,
+                    icreateDecorator: false,
+                    createDecoratorMsg : action.payload.message
+                }
+            case Actions.SEARCH_SUPERVISOR_SUCCESS:
+             console.log("SEARCH_SUPERVISOR_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSeacrh: true,
+                    supervisorArray : action.payload
                 }
             default:
             return state;
