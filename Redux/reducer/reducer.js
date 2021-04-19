@@ -18,7 +18,15 @@ const initialState = {
     createDecorator: false,
     createDecoratorMsg: null,
     isSeacrh: false,
-    supervisorArray : []
+    supervisorArray : [],
+    isUpdate:true,
+    isUpdateMsg:null,
+    isSuccess:true,
+    isSuccessMsg:null,
+    isCode:null,
+    isValidateUserID:null,
+    isResetSucces: false,
+    isResetMsg:null
 };
 
 export default (state = initialState, action)=> {
@@ -29,6 +37,7 @@ export default (state = initialState, action)=> {
                 return{
                     ...state,
                     isLogin: true,
+                    isLoginMsg: action.payload.message,
                     token: action.payload.data.split("|")[1],
                     
                 }
@@ -37,6 +46,7 @@ export default (state = initialState, action)=> {
                 return{
                     ...state,
                     isLogin: false,
+                    isLoginMsg: action.payload.message,
                 }
             case Actions.CREATE_SUPERVISOR_SUCSESS:
              console.log("CREATE SUPERVISOR")
@@ -86,6 +96,49 @@ export default (state = initialState, action)=> {
                     ...state,
                     isSeacrh: true,
                     supervisorArray : action.payload
+                }
+            case Actions.UPDATE_SUPERVISOR_SUCCESS:
+             console.log("UPDATE_SUPERVISOR_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isUpdate: true,
+                    isUpdateMsg : action.payload.message
+                }
+            case Actions.FORGOT_EMAIL_CHECK_SUCCESS:
+             console.log("FORGOT_EMAIL_CHECK_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                    isCode : action.payload.data.user
+                }
+            case Actions.CODE_VALIDATE_SUCCESS:
+             console.log("CODE_VALIDATE_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isValidateUserID : action.payload,
+                }
+            case Actions.FORGOT_EMAIL_CHECK_FAIL:
+             console.log("FORGOT_EMAIL_CHECK_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isValidateUserID : action.payload,
+                }
+            case Actions.RESET_PASSWORD_SUCCESS:
+             console.log("RESET_PASSWORD_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isResetSucces: true,
+                    isResetMsg : action.payload.message,
+                }
+            case Actions.RESET_PASSWORD_FAIL:
+             console.log("RESET_PASSWORD_FAIL",action.payload)
+                return{
+                    ...state,
+                    isResetSucces: false,
+                    isResetMsg : action.payload.message,
                 }
             default:
             return state;

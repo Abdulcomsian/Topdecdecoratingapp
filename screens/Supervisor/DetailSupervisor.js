@@ -1,124 +1,61 @@
 import React, { useState, useEffect } from "react";
-import { View,StyleSheet,Image,CheckBox,TouchableOpacity,ScrollView,ActivityIndicator,Dimensions} from 'react-native';
+import { View,StyleSheet,CheckBox,TouchableOpacity,ScrollView} from 'react-native';
 import {Text} from 'native-base';
 import { TextInput } from 'react-native-gesture-handler';
-import { useDispatch, useSelector, connect } from "react-redux";
-import axios from "axios";
+import { connect } from "react-redux";
+import {updateSupervisor} from '../../Redux/action/auth/authActionTypes';
 
 var rightArrow=require('../../assets/authScreen/right.png')
 const SupervisorDetails = (props) =>{
-    const { navigation,token } = props;
+    const { navigation,token,isUpdate,isUpdateMsg} = props;
     const {name,email,id,userData} = props.route.params;
-    const [supervisorName,setSupervisorName]=useState("")
-    const [supervisorEmail,setSupervisorEmail]=useState("")
-    const [number,setNumber]=useState("")
     const [password,setPassword]=useState("")
-    const [loading, setLoading] = useState(false);
-    const [supervisorData,setSupervisorData] = useState([])
-    const [showView,setShowView] = useState(false)
-    const [status,setStatus] = useState(false)
+    const [supervisorData,setSupervisorData] = useState(userData)
+    const [status,setStatus] = useState("")
 
     
-    
-    // useEffect(() => {
-    //     try {
-    //       const body = {id,name,email};
-    //       (async () => {
-    //         setLoading(true);
-    //         const request = await axios(
-    //           "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/search/supervisor",
-    //           {
-    //             method: "POST",
-    //             headers: {
-    //               authorization: "Bearer " + token,
-    //             },
-    //             data: body,
-    //           }
-    //         );
-    //         const response = await request.data;
-    //         //console.log(response);
-    //         if(response.success){
-
-    //             setSupervisorData(response.data.user)
-    //             setCheck({...check,approved:response.data.user.status==="1" ? true : false,disApproved:response.data.user.status==="0" ? true : false})
-    //             setLoading(false);
-    //             setShowView(true)
-    //         } 
-    //         else{
-    //             setLoading(false);
-    //             setShowView(false)
-    //         }
-    //       })();
-    //     } catch (err) {
-    //         console.log("Error")
-    //         console.log(err.message);
-    //         setLoading(false);
-    //     }
-        
-       
-    //   }, []);
-    useEffect(() => {
-       
-        if(userData){
-            setSupervisorData([userData])
-            setShowView(true)
-        }
-        else{
-            setShowView(false)
-        }
-    },[])
-    const[check,setCheck]=useState({
-        approved:true,
-        disApproved:false
-    })
-    const checkedValue = (value,index) =>{
-        console.log(value,index)
-        let tempData=[...supervisorData];
-        console.log(tempData);
+    const checkedValue = (value) =>{
         if(value=="approved"){
-            tempData[index].status="1"
-            setStatus(true)
-            //setCheck({disApproved:false,approved:true})
+            setStatus("1")
+            setSupervisorData({...supervisorData,status:"1"})
         }
         else if(value=="disapproved"){
-            tempData[index].status="0"
-            setStatus(false)
-            //setCheck({disApproved:true,approved:false})
+            setStatus("0")
+            setSupervisorData({...supervisorData,status:"0"})
         }
-        setSupervisorData(tempData)
+        
     }
 
     const updateSupervisor = () =>{
-        setSupervisorName(supervisorData[0].name)
-        setSupervisorEmail(supervisorData[0].email)
-        setNumber(supervisorData[0].phone)
-
-        console.log("Name :",supervisorName)
-        console.log("Email :",supervisorEmail)
-        console.log("Number :",number)
-        console.log("Password :",password)
-        if(status){
-            console.log("Status",status)
+        try{
+            props.updateSupervisorHandler(supervisorData.id,supervisorData.email,supervisorData.name,supervisorData.number,status,token)
         }
-        else{
-            console.log("Status",status)
+        catch(err){
+            alert(err.message)
         }
+        
     }
     const handleSupervisorName = (value) =>{
-        let tempData=[...supervisorData];
-        tempData[0].name=value
-        setSupervisorData(tempData)
-    }
-    const handleEmail = (value) =>{
-        let tempData=[...supervisorData];
-        tempData[0].email=value
-        setSupervisorData(tempData)
+        setSupervisorData({...supervisorData,name:value})
     }
     const handlePhone = (value) =>{
-        let tempData=[...supervisorData];
-        tempData[0].phone=value
-        setSupervisorData(tempData)
+        setSupervisorData({...supervisorData,phone:value})
     }
+
+    useEffect (() =>{
+        if(isUpdate){
+            if(isUpdateMsg){
+                alert(isUpdateMsg)
+                props.navigation.navigate("SearchSupervisor")
+            }
+        }
+        else
+       { 
+        if(isUpdateMsg){
+            alert(isUpdateMsg)
+        }
+       }
+    },[isUpdateMsg])
     return(
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
@@ -129,40 +66,27 @@ const SupervisorDetails = (props) =>{
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Supervisor Detail</Text>
             </View>
-            {showView ? 
                 <ScrollView contentContainerStyle={{width:'100%'}}>
-                    {supervisorData.map((item,index)=>(
-                        <View style={styles.formConatiner} key={index}>
+              
+                        <View style={styles.formConatiner}>
                             <View style={styles.inputFieldContainer}>
                                 <Text style={styles.decoratorTitle}>Name:</Text>
                                 <TextInput 
                                 style={styles.detailItemInput}
-                                value={item.name}
+                                value={supervisorData.name}
                                 onChangeText={(e)=>handleSupervisorName(e)}
                                 />
                             </View>
                             <View style={styles.inputFieldContainer}>
                                 <Text style={styles.decoratorTitle}>Email:</Text>
-                                <TextInput 
-                                    style={styles.detailItemInput}
-                                    value={item.email}
-                                    onChangeText={(e)=>handleEmail(e)}
-                                />
+                                <Text style={styles.detailItemInput}>{supervisorData.email}</Text>
                             </View>
                             <View style={styles.inputFieldContainer}>
                                 <Text style={styles.decoratorTitle}>Number:</Text>
                                 <TextInput
-                                    value={item.phone}
+                                    value={supervisorData.phone}
                                     onChangeText={(e)=>handlePhone(e)}
                                     style={styles.detailItemInput}
-                                />
-                            </View>
-                            <View style={styles.inputFieldContainer}>
-                                <Text style={styles.decoratorTitle}>Password:</Text>
-                                <TextInput 
-                                    style={styles.detailItemInput}
-                                    value={password}
-                                    onChangeText={(e)=>setPassword(e)}
                                 />
                             </View>
                             <View style={styles.inputFieldContainer}>
@@ -170,47 +94,44 @@ const SupervisorDetails = (props) =>{
                                 <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                                     <View style={styles.chekboxText}>
                                         <CheckBox
-                                            value={item.status==="1" ? true:false}
-                                            onValueChange={() => checkedValue("approved",index)}
+                                            value={supervisorData.status==="1" ? true:false}
+                                            onValueChange={() => checkedValue("approved")}
                                         />
                                         <Text style={styles.checkText}>Approved</Text>
                                     </View>
                                     <View style={styles.chekboxText}>
                                         <CheckBox
-                                             value={item.status==="0" ? true:false}
-                                            onValueChange={() => checkedValue("disapproved",index)}
+                                             value={supervisorData.status==="0" ? true:false}
+                                            onValueChange={() => checkedValue("disapproved")}
                                         />
                                         <Text style={styles.checkText}>Dis-Approved</Text>
                                     </View>
                                 </View>
                             </View>
                             <View style={styles.btnContainer}>
-                                {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
+                                 {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
                                     <Text style={styles.commonText}>Update</Text>
-                                </TouchableOpacity> */}
-                                <TouchableOpacity style={styles.commonBtn} onPress={() => updateSupervisor(bind(this))}>
+                                </TouchableOpacity>  */}
+                                <TouchableOpacity style={styles.commonBtn} onPress={() => updateSupervisor()}>
                                     <Text style={styles.commonText}>Update</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    ))}
+              
             </ScrollView>
-            : 
-            <View style={{justifyContent:"center",alignItems:"center",width:"100%",height:"85%"}}>
-                <Text>Sorry No Data Found !</Text>
-            </View>
-            }
             
         </View>
     )
 }
 const mapStateToProps = (state) => ({
     token : state.auth.token,
+    isUpdate : state.auth.isUpdate,
+    isUpdateMsg : state.auth.isUpdateMsg
   });
   const mapDispatchToProps = (dispatch) => ({
-    searchSupervisorHandler: () =>
+    updateSupervisorHandler: (id,email,name,number,status,token) =>
       dispatch(
-        searchSupervisor()
+        updateSupervisor(id,email,name,number,status,token)
       ),
   });
 export default connect(mapStateToProps, mapDispatchToProps)(SupervisorDetails);

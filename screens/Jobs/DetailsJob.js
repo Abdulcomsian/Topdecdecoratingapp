@@ -4,67 +4,21 @@ import {Text} from 'native-base';
 import axios from "axios";
 
 
-const DetailJob = (props) =>{
+const DetailsJob = (props) =>{
     
     const { navigation } = props; 
     const [loading, setLoading] = useState(false);
     const date = props.route.params.selectedDate;  
     const reference_number = props.route.params.refernceNum;
     const token = props.route.params.token;
-    const [contractorName,setConstructorName] = useState("")
-    const [projectName,setProjectName] = useState("")
-    const [startDate,setStartDate] = useState("")
-    const [supervisorID,setSupervisorID] = useState("")
-    const [weeks,setWeeks] = useState("")
-    const [jobData, setJobData] = useState([]);
-    const [showView,setShowView] = useState(false)
+    const [contractorName,setConstructorName] = useState(props.route.params.searchJobData.contractor)
+    const [projectName,setProjectName] = useState(props.route.params.searchJobData.project)
+    const [startDate,setStartDate] = useState(props.route.params.searchJobData.start_date)
+    const [supervisorID,setSupervisorID] = useState(props.route.params.searchJobData.supervisor_id)
+    const [weeks,setWeeks] = useState(props.route.params.searchJobData.weeks)
 
-    console.log("Slected Date :",date)
-    console.log("Refernce Number :",reference_number)
-
-    useEffect(() => {
-        try {
-          const body = {reference_number,date,token};
-          (async () => {
-            setLoading(true);
-            const request = await axios(
-              "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/search/job/refid",
-              {
-                method: "POST",
-                headers: {
-                  authorization: "Bearer " + token,
-                },
-                data: body,
-              }
-            );
-            const response = await request.data.success;
-            console.log(response);
-            if(response){
-                setJobData(request.data.data.user)
-                setLoading(false);
-                setShowView(true)
-            }
-            else{
-                setLoading(false);
-                setShowView(false)
-            }
-          })();
-        } catch (err) {
-            console.log("Error")
-            console.log(err.message);
-            setLoading(false);
-        }
-        
-       
-      }, []);
-      if (loading) {
-        return (
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <ActivityIndicator color="#1073AC" size="small" />
-          </View>
-        );
-      }
-      else{
+    console.log("Props Data :",props.route.params.searchJobData.contractor)
+    
     return(
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
@@ -74,46 +28,37 @@ const DetailJob = (props) =>{
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Job Details</Text>
             </View>
-            {showView ? 
                 <ScrollView style={{height:'100%',width:'100%'}}>
-            
-                {jobData.map((item,index)=>(
-                    <View style={styles.formConatiner} key={index}>
+                    <View style={styles.formConatiner}>
                         <View style={styles.inputFieldContainer}>
                             <Text style={styles.decoratorTitle}>Contructor Name:</Text>
-                            <Text style={{width:"50%",textAlign:"center"}}>{item.contractor}</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{contractorName}</Text>
                         </View>
                         <View style={styles.inputFieldContainer}>
                             <Text style={styles.decoratorTitle}>Project Name:</Text>
-                            <Text style={{width:"50%",textAlign:"center"}}>{item.project}</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{projectName}</Text>
                         </View>
                         <View style={styles.inputFieldContainer}>
                             <Text style={styles.decoratorTitle}>Start Date:</Text>
-                            <Text style={{width:"50%",textAlign:"center"}}>{item.start_date}</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{startDate}</Text>
                         </View>
                         <View style={styles.inputFieldContainer}>
                             <Text style={styles.decoratorTitle}>Supervisor ID:</Text>
-                            <Text style={{width:"50%",textAlign:"center"}}>{item.supervisor_id}</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{supervisorID}</Text>
                         </View>
                         <View style={styles.inputFieldContainer}>
                             <Text style={styles.decoratorTitle}>No of Weeks:</Text>
-                            <Text style={{width:"50%",textAlign:"center"}}>{item.weeks}</Text>
+                            <Text style={{width:"50%",textAlign:"center"}}>{weeks}</Text>
                         </View>
-                        <View style={{width:"100%",height:2,backgroundColor:"#000"}}></View>
+                        <TouchableOpacity style={styles.commonBtn}  onPress={()=>props.navigation.goBack()}>
+                            <Text style={styles.commonText}>Go Back</Text>
+                        </TouchableOpacity>
                     </View>
-                ))}
                 </ScrollView>
-                :
-                <View style={{justifyContent:"center",alignItems:"center",width:"100%",height:"85%"}}>
-                    <Text>Sorry No Data Found !</Text>
-                </View>
-            }
-            
         </View>
     )
-      }
 }
-export default DetailJob;
+export default DetailsJob;
 
 const styles = StyleSheet.create({
     mainContainer:{

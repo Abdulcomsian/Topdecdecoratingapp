@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View,StyleSheet,Image,CheckBox,TouchableOpacity,ScrollView,ActivityIndicator,Dimensions} from 'react-native';
 import {Text} from 'native-base';
-import { TextInput } from 'react-native-gesture-handler';
-import { useDispatch, useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import axios from "axios";
 
 var rightArrow = require("../../assets/authScreen/right.png");
@@ -30,7 +29,6 @@ const ListSupervisor = (props) => {
           }
         );
         const response = await request.data;
-        console.log(response);
         if (response.success) {
           setSupervisorData(response.data.user);
           setLoading(false);

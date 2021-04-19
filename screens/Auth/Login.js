@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { View,StyleSheet,Image,TextInput,TouchableOpacity,ScrollView } from 'react-native';
 import {Text} from 'native-base';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -12,7 +12,7 @@ var user=require('../../assets/authScreen/icon.png')
 var lock=require('../../assets/authScreen/lock.png')
 
 const LoginScreen = (props) =>{
-    const {navigation}=props;
+    const {navigation,isLogin,isLoginMsg}=props;
    // const dispatch = useDispatch()
     const [email, setEmail] = useState('admin@accrualgroup.com')
     const [password, setPassword] = useState('asdfghjkl')
@@ -22,15 +22,24 @@ const LoginScreen = (props) =>{
             props.loginHandler(email,password);
         }
           catch(err){
-            console.log(err.message);
+            alert(err.message)
           }
     }
-    if(props.isLogin){
-        alert("User Login")
-        props.navigation.navigate('MainScreen')
-    }
-    else
-   { }
+    useEffect (() =>{
+        if(isLogin){
+            if(isLoginMsg){
+                alert(isLoginMsg)
+                props.navigation.navigate('MainScreen')
+            }
+        }
+        else
+       { 
+        if(isLoginMsg){
+            alert(isLoginMsg)
+        }
+       }
+    },[isLoginMsg])
+    
        return(
             <View style={styles.mainContainer}>
                 

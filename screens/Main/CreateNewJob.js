@@ -50,15 +50,15 @@ const NewJob = (props) => {
   };
   const newJob = () => {
     console.log(date)
-    // props.createNewJobHandler(
-    //   constructorName,
-    //   projectName,
-    //   weekProject,
-    //   selectedValue,
-    //   date,
-    //   dynamicInput,
-    //   token
-    // );
+    props.createNewJobHandler(
+      constructorName,
+      projectName,
+      weekProject,
+      selectedValue,
+      date,
+      dynamicInput,
+      token
+    );
   };
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;

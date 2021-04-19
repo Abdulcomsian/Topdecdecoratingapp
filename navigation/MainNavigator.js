@@ -13,7 +13,8 @@ import SelectSummaryDetail from '../screens/Main/SelectSummaryDetail'
 import ViewJob from '../screens/Jobs/ViewJobs'
 import SelectProject from '../screens/Jobs/SelectProject'
 import SearchJob from '../screens/Jobs/SearchJob'
-import DetailJob from '../screens/Jobs/DetailJob'
+import AllJobs from '../screens/Jobs/AllJobs'
+import DetailsJob from '../screens/Jobs/DetailsJob'
 import ListSupervisor from '../screens/Supervisor/ListSupervisor'
 import CreateDecorataor from '../screens/Decorator/CreateDecorator'
 import SearchDecorator from '../screens/Decorator/SearchDecorator'
@@ -56,6 +57,7 @@ import Tbtfire from '../screens/Form/HealthSafety/TBT_Fire'
 import Tbtslip from '../screens/Form/HealthSafety/TBT_Slip'
 import Covid from '../screens/Form/HealthSafety/Covid'
 import Tbtform from '../components/common/tbtFrom'
+import ListView from '../components/common/listView'
 import Tbthouse from '../screens/Form/HealthSafety/TBT_HouseKeeping'
 import Tbtmobile from '../screens/Form/HealthSafety/TBT_MobileElevated'
 import Tbtrespiratory from '../screens/Form/HealthSafety/TBT_RespiratoryProtection'
@@ -447,6 +449,13 @@ export default function MainNavigator({ navigation, route }) {
                 }}
             />
             <Stack.Screen
+                name="ListView"
+                component={ListView}
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
                 name="Tbthouse"
                 component={Tbthouse}
                 options={{
@@ -510,8 +519,15 @@ export default function MainNavigator({ navigation, route }) {
                 }}
             />
             <Stack.Screen
-                name="DetailJob"
-                component={DetailJob}
+                name="AllJobs"
+                component={AllJobs}
+                options={{
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="DetailsJob"
+                component={DetailsJob}
                 options={{
                     headerShown: false,
                 }}
@@ -994,7 +1010,16 @@ function getHeaderTitle(route) {
                         headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
                             headerTitle:"Working at Height Equipment"
                         };
-        case 'DetailJob':
+        case 'AllJobs':
+            return { headerShown: true,
+                        headerTintColor: '#fff',
+                        headerStyle: {
+                        backgroundColor: '#1073AC',
+                        },  
+                        headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
+                            headerTitle:"All Jobs"
+                        };
+        case 'DetailsJob':
             return { headerShown: true,
                         headerTintColor: '#fff',
                         headerStyle: {

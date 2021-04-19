@@ -41,12 +41,12 @@ const SearchJob = (props) =>{
             if(changeDate){
                 console.log("Changed Date with Ref ID")
                 setBasedText("Changed Date with Ref ID")
-                props.navigation.navigate('DetailJob',{selectedDate:date,refernceNum:refID,basedText:basedText,token:token})
+                props.navigation.navigate('AllJobs',{selectedDate:date,refernceNum:refID,basedText:basedText,token:token})
                 //props.searchJobHandler(refID,date,token)
             }
             else{
                 setBasedText("Just Ref ID")
-                props.navigation.navigate('DetailJob',{selectedDate:"",refernceNum:refID,basedText:basedText,token:token})
+                props.navigation.navigate('AllJobs',{selectedDate:"",refernceNum:refID,basedText:basedText,token:token})
                 //props.searchJobHandler(refID,date,token)
                 setDate(new Date())
             }
@@ -55,7 +55,7 @@ const SearchJob = (props) =>{
             if(changeDate){
                 console.log("Just Date")
                 setBasedText("Just Date")
-                props.navigation.navigate('DetailJob',{selectedDate:date,refernceNum:refID,basedText:basedText,token:token})
+                props.navigation.navigate('AllJobs',{selectedDate:date,refernceNum:refID,basedText:basedText,token:token})
                // props.searchJobHandler(refID,date,token)
             }
         }
