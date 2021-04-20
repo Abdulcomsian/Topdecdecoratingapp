@@ -43,9 +43,6 @@ const PlotDetails = ({props,navigation}) =>{
             {tickSign:tick,text:"Quality Inssurance",chekecd:false,url:"QualityInssurance"},
             {tickSign:tick,text:"Remedial Wrok Sheet",chekecd:false,url:"RemedialWork"},
             {tickSign:tick,text:"Scope",chekecd:false,url:"Scope"},
-            {tickSign:tick,text:"Quality Assurance",chekecd:false},
-            {tickSign:tick,text:"Handover Sheet",chekecd:false},
-            
         ]);
         const checkedForm = (index) =>{
             

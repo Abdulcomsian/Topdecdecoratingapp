@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Text } from "native-base";
-import { useDispatch, useSelector, connect } from "react-redux";
+import { connect } from "react-redux";
 import { createNewJobCreation } from "../../Redux/action/auth/authActionTypes";
 import axios from "axios";
 import { Picker } from "native-base";
@@ -261,18 +261,18 @@ const NewJob = (props) => {
             </View>
 
             <View style={styles.btnContainer}>
-              {/* <TouchableOpacity
+              <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity> */}
-              <TouchableOpacity
+            </TouchableOpacity>
+              {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={()=>newJob(this)}
               >
                 <Text style={styles.commonText}>Save</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </ScrollView>

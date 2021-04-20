@@ -60,13 +60,13 @@ export const emailLink = (email) => {
 export const codeValidate = (code) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Code :",code);
+      console.log("Code :", code);
       const body = { code };
       const request = await axios(base_url + "code_validate", {
         method: "POST",
         data: body,
       });
-      const response = request.data; 
+      const response = request.data;
       console.log(response.data.user[0].id);
       if (response.success == true) {
         dispatch({
@@ -84,10 +84,10 @@ export const codeValidate = (code) => {
     }
   };
 };
-export const resetPassword = (id,password) => {
+export const resetPassword = (id, password) => {
   return async (dispatch, getState) => {
     try {
-      const body = { id,password };
+      const body = { id, password };
       const request = await axios(base_url + "newpassword_user", {
         method: "POST",
         data: body,
@@ -137,7 +137,7 @@ export const createNewJobCreation = (
         data: body,
       });
       const response = request.data;
-      console.log(response)
+      console.log(response);
       if (response.success == true) {
         dispatch({
           type: Actions.CREATE_NEW_JOB_SUCCESS,
@@ -324,6 +324,138 @@ export const updateSupervisor = (id, email, name, number, status, token) => {
           payload: response,
         });
       }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertHandOverForm = () => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Insert !");
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertMakeReadyForm = (
+  clientName,
+  projectName,
+  block,
+  sheetNo,
+  pageOff,
+  plotNumber,
+  reason,
+  dateWritten,
+  dateIssue,
+  dynamicInput,
+  supervisorName,
+  dateComplete,
+  agentName,
+  todayDate
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Client Name :", clientName);
+      console.log("Project Name :", projectName);
+      console.log("Block :", block);
+      console.log("Sheet Number :", sheetNo);
+      console.log("Page Off :", pageOff);
+      console.log("Plot Number :", plotNumber);
+      console.log("Reason :", reason);
+      console.log("Date Written :", dateWritten);
+      console.log("Dynamic Input :", dynamicInput);
+      console.log("Supervisor Name :", supervisorName);
+      console.log("Completed Date :", dateComplete);
+      console.log("Agent Name :", agentName);
+      console.log("Today Date :", todayDate);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertSnaggingForm = (
+  block,
+  plotNumber,
+  dateIssue,
+  dateComplete,
+  wrrantySnagging,
+  painterName,
+  noOfPage,
+  dynamicSnagInput,
+  dateSnaggingIssue,
+  dateSnaggingComplete,
+  totalHours,
+  dynamicSnagCompletedInput
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Block :", block);
+      console.log("Plot Number :", plotNumber);
+      console.log("Date Issue :", dateIssue);
+      console.log("Completed Date :", dateComplete);
+      console.log("Wrannty Snagging :", wrrantySnagging);
+      console.log("Painter Name :", painterName);
+      console.log("No of Pages :", noOfPage);
+      console.log("Snagging Issue By :", dateSnaggingIssue);
+      console.log("Snagging Completed By :", dateSnaggingComplete);
+      console.log("Total Hours :", totalHours);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertRemedialForm = (
+  contructorName,
+  projectName,
+  operative,
+  sheetNumber,
+  pageOff,
+  block,
+  plotNumber,
+  dateIssue,
+  instructionNumber,
+  reasonWork,
+  dynamicInput,
+  totalHours,
+  supervisorName,
+  dateSupervisor,
+  managerName,
+  dateManager
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Contructor Name :", contructorName);
+      console.log("Project Name :", projectName);
+      console.log("Operative :", operative);
+      console.log("Sheet Number :", sheetNumber);
+      console.log("No of Pages :", pageOff);
+      console.log("Block :", block);
+      console.log("Plot Number :", plotNumber);
+      console.log("Date Issue :", dateIssue);
+      console.log("Instructor Number :", instructionNumber);
+      console.log("Reason Work :", reasonWork);
+      console.log("Dynamic Input :", dynamicInput);
+      console.log("Total Hours :", totalHours);
+      console.log("Supervisor Name :", supervisorName);
+      console.log("Supervisor Date :", dateSupervisor);
+      console.log("Manager Name :", managerName);
+      console.log("Manager Date :", dateManager);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertScopeForm = (
+  dynamicInput,painterName,plotNumber,type,date
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Dynamic Input :", dynamicInput);
+      console.log("Painter Name :", painterName);
+      console.log("Plot Number :", plotNumber);
+      console.log("Type :", type);
+      console.log("Date :", date);
     } catch (err) {
       throw new Error(err.message);
     }
