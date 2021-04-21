@@ -26,8 +26,6 @@ const NewJob = (props) => {
   const [constructorName, setConstructorName] = useState("");
   const [projectName, setProjectName] = useState("");
   const [weekProject, setWeekProject] = useState("");
-  const [assignSupervisor, setAssignSupervisor] = useState("");
-  const [startDate, setStartDate] = useState("");
   const [dynamicInput, setdynamicInput] = useState([]);
   const [supervisorData, setSupervisorData] = useState([]);
   const [loading, setLoading] = useState(false);

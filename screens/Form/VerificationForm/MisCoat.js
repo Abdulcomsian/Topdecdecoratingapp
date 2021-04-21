@@ -1,15 +1,51 @@
 import React,{useState} from 'react';
 import { View,StyleSheet,Image,TouchableOpacity,TextInput,ScrollView} from 'react-native';
 import {Text} from 'native-base';
+import { insertMiscoat } from "../../../Redux/action/auth/authActionTypes";
+import { connect } from "react-redux";
 
 var plus=require('../../../assets/authScreen/plus.png')
-const MistCoat = () =>{
-    
-    const [decorationRow,setDecorationRow]=useState([]);
-
+const MistCoat = (props) =>{
+    const { navigation } = props;
+    const [dynamicInput, setdynamicInput] = useState([]);
+    const [mainContructor, setMainContructor] = useState([])
+    const [projectName, setProjectName] = useState([])
+    const [data, setData] = useState({
+        name: "",
+        block: "",
+        level: "",
+        plotArea: "",
+        bedRooms: "",
+        price: "",
+        days: "",
+        date: "",
+        completionDate: "",
+      });
     const addDecorationRow = () =>{
-        setDecorationRow(oldArray=>[...oldArray,{name:"",block:"",level:"",rooms:"",price:"",plot:"",days:"",date:"",cdate:""}])
+        setdynamicInput((oldArray) => [...oldArray, data]);
+        setData({name: "",
+        block: "",
+        level: "",
+        plotArea: "",
+        bedRooms: "",
+        price: "",
+        days: "",
+        date: "",
+        completionDate: "",})
     }
+    const updateValue = (key, index, value) => {
+        let preData = [...dynamicInput];
+        preData[index][key] = value;
+        setdynamicInput(preData);
+      };
+      const mistCoatFormInsert = () =>{
+          if(dynamicInput!="" && mainContructor!="" && projectName!=""){
+            props.createMisCoatHandler(mainContructor,projectName,dynamicInput)
+          } else {
+            alert("Please Insert All Fields CareFully !");
+            return false;
+          }
+      }
     return(
         <ScrollView style={{height:"100%"}}>
         <View style={styles.mainContainer}>
@@ -18,12 +54,16 @@ const MistCoat = () =>{
             </View>
             <View style={styles.inputFieldContainer}>
                 <TextInput
+                    value={mainContructor}
+                    onChangeText={(e) => setMainContructor(e)}
                     style={styles.inputField}
                     placeholder={"Main Contractor"}
                 />
             </View>
             <View style={styles.inputFieldContainer}>
                 <TextInput
+                value={projectName}
+                onChangeText={(e) => setProjectName(e)}
                     style={styles.inputField}
                     placeholder={"Project"}
                 />
@@ -68,59 +108,77 @@ const MistCoat = () =>{
                             </View>
                         </View>
                         <View style={{flexDirection:'column'}}>
-                        {decorationRow.length>0 &&
-                            decorationRow.map((el,index)=>(
+                        {dynamicInput.length>0 &&
+                            dynamicInput.map((el,index)=>(
                                 <View style={styles.tableBody} key={index}>
                                     <View style={styles.inputBodyContainer}>
                                         <TextInput
+                                            onChangeText={(txt) => updateValue("name", index, txt)}
+                                            value={el.name}
                                             style={styles.bodyTextInput}
                                             placeholder={"Name"}
                                         />
                                     </View>
                                     <View style={styles.inputBodyContainer}>
                                         <TextInput
+                                        onChangeText={(txt) => updateValue("block", index, txt)}
+                                        value={el.block}
                                             style={styles.bodyTextInput}
                                             placeholder={"Block"}
                                         />
                                     </View>
                                     <View style={styles.inputBodyContainer}>
                                         <TextInput
+                                        onChangeText={(txt) => updateValue("level", index, txt)}
+                                        value={el.level}
                                             style={styles.bodyTextInput}
                                             placeholder={"level"}
                                         />
                                     </View>
                                     <View style={styles.inputBodyContainer}>
                                         <TextInput
-                                            style={styles.bodyTextInput}
-                                            placeholder={"Rooms"}
-                                        />
-                                    </View>
-                                    <View style={styles.inputBodyContainer}>
-                                        <TextInput
-                                            style={styles.bodyTextInput}
-                                            placeholder={"Price"}
-                                        />
-                                    </View>
-                                    <View style={styles.inputBodyContainer}>
-                                        <TextInput
+                                        onChangeText={(txt) => updateValue("plotArea", index, txt)}
+                                        value={el.plotArea}
                                             style={styles.bodyTextInput}
                                             placeholder={"Plot"}
                                         />
                                     </View>
                                     <View style={styles.inputBodyContainer}>
                                         <TextInput
+                                        onChangeText={(txt) => updateValue("bedRooms", index, txt)}
+                                        value={el.bedRooms}
                                             style={styles.bodyTextInput}
-                                            placeholder={"Days"}
+                                            placeholder={"Rooms"}
                                         />
                                     </View>
                                     <View style={styles.inputBodyContainer}>
                                         <TextInput
+                                        onChangeText={(txt) => updateValue("itemprice", index, txt)}
+                                        value={el.price}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Price"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => updateValue("days", index, txt)}
+                                        value={el.days}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Day"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => updateValue("date", index, txt)}
+                                        value={el.date}
                                             style={styles.bodyTextInput}
                                             placeholder={"Date"}
                                         />
                                     </View>
                                     <View style={styles.inputBodyContainer}>
                                         <TextInput
+                                        onChangeText={(txt) => updateValue("completionDate", index, txt)}
+                                        value={el.completionDate}
                                             style={styles.bodyTextInput}
                                             placeholder={"Date"}
                                         />
@@ -128,6 +186,97 @@ const MistCoat = () =>{
                                 </View>
                             ))
                         }
+                        <View style={styles.tableBody}>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => setData({ ...data, name: txt })}
+                                        value={data.name}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Name"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                         onChangeText={(txt) => setData({ ...data, block: txt })}
+                                         value={data.block}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Block"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                          onChangeText={(txt) => setData({ ...data, level: txt })}
+                                          value={data.level}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"level"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => setData({ ...data, plotArea: txt })}
+                                        value={data.plotArea}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Rooms"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => setData({ ...data, bedRooms: txt })}
+                                        value={data.bedRooms}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Price"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => setData({ ...data, price: txt })}
+                                        value={data.price}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Plot"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => setData({ ...data, days: txt })}
+                                        value={data.days}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Days"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => setData({ ...data, date: txt })}
+                                        value={data.date}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Date"}
+                                        />
+                                    </View>
+                                    <View style={styles.inputBodyContainer}>
+                                        <TextInput
+                                        onChangeText={(txt) => setData({ ...data, completionDate: txt })}
+                                        value={data.completionDate}
+                                            style={styles.bodyTextInput}
+                                            placeholder={"Date"}
+                                        />
+                                    </View>
+                                </View>
+                                <View
+                                style={{
+                                backgroundColor: "#000",
+                                width: "100%",
+                                height: "2%",
+                                marginBottom: 20,
+                                marginTop: 20,
+                                }}
+                            ></View>
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity
+                                style={styles.commonBtn}
+                                onPress={() => mistCoatFormInsert()}
+                                >
+                                <Text style={styles.commonText}>Save</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </ScrollView>
@@ -136,7 +285,13 @@ const MistCoat = () =>{
         </ScrollView>
     )
 }
-export default MistCoat;
+const mapStateToProps = (state) => ({
+    token: state.auth.token,
+  });
+  const mapDispatchToProps = (dispatch) => ({
+    createMisCoatHandler: (mainContructor,projectName,dynamicInput) => dispatch(insertMiscoat(mainContructor,projectName,dynamicInput)),
+  });
+  export default connect(mapStateToProps, mapDispatchToProps)(MistCoat);
 const styles = StyleSheet.create({
     mainContainer:{
         height:'100%',
@@ -228,4 +383,23 @@ const styles = StyleSheet.create({
         color:'#96A8B2',
         fontFamily:'poppins-regular'
     },
+    btnContainer: {
+        width: "100%",
+        height: "15%",
+        marginBottom: 20,
+      },
+      commonBtn: {
+        height: 50,
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 14,
+        borderWidth: 3,
+        borderColor: "#1073AC",
+      },
+      commonText: {
+        color: "#1073AC",
+        fontSize: 18,
+        fontFamily: "poppins-semiBold",
+      },
 })

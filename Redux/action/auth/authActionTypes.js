@@ -447,7 +447,11 @@ export const insertRemedialForm = (
   };
 };
 export const insertScopeForm = (
-  dynamicInput,painterName,plotNumber,type,date
+  dynamicInput,
+  painterName,
+  plotNumber,
+  type,
+  date
 ) => {
   return async (dispatch, getState) => {
     try {
@@ -456,6 +460,69 @@ export const insertScopeForm = (
       console.log("Plot Number :", plotNumber);
       console.log("Type :", type);
       console.log("Date :", date);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertWorkSheet = (
+  mainContructor,
+  contructorTitle,
+  sheetNo,
+  weekEnd,
+  siteInstructionNo,
+  plotNumber,
+  descriptionWork,
+  dynamicLabourInput,
+  dynamicMaterialInput,
+  dynamicPlantInput,
+  dynamicManagmentInput,
+  managerName,
+  position,
+  date
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Main Contructor :", mainContructor);
+      console.log("Constructor Title :", contructorTitle);
+      console.log("Sheet No :", sheetNo);
+      console.log("Week End :", weekEnd);
+      console.log("Site Instruction Number :", siteInstructionNo);
+      console.log("Plot Number :", plotNumber);
+      console.log("Description Work :", descriptionWork);
+      console.log("Labour Array :", dynamicLabourInput);
+      console.log("Material Array :", dynamicMaterialInput);
+      console.log("Plant Array :", dynamicPlantInput);
+      console.log("Managment Array :", dynamicManagmentInput);
+      console.log("Manager Name :", managerName);
+      console.log("Position :", position);
+      console.log("Today Date :", date);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertDecorationRecord = (
+  dynamicFirstInput,
+  dynamicSeconfInput,
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Dynamic First Input :", dynamicFirstInput);
+      console.log("Dynamic Second Input :", dynamicSeconfInput);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertMiscoat = (
+  mainContructor,projectName,dynamicInput
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Main Contructor :", mainContructor);
+      console.log("Project Name :", projectName);
+      console.log("Dynamic :", dynamicInput);
     } catch (err) {
       throw new Error(err.message);
     }
