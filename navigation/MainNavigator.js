@@ -15,6 +15,7 @@ import SelectProject from '../screens/Jobs/SelectProject'
 import SearchJob from '../screens/Jobs/SearchJob'
 import AllJobs from '../screens/Jobs/AllJobs'
 import DetailsJob from '../screens/Jobs/DetailsJob'
+import TotalSummary from '../screens/Jobs/TotalSummary'
 import ListSupervisor from '../screens/Supervisor/ListSupervisor'
 import CreateDecorataor from '../screens/Decorator/CreateDecorator'
 import SearchDecorator from '../screens/Decorator/SearchDecorator'
@@ -36,6 +37,7 @@ import DayWork from '../screens/Form/VerificationForm/AccurateDayWork'
 import DecorationRecord from '../screens/Form/VerificationForm/DecorationRecord'
 import MisCoat from '../screens/Form/VerificationForm/MisCoat'
 import SiteInstruction from '../screens/Form/VerificationForm/SiteInstruction'
+import VerificationWork from '../screens/Form/VerificationForm/VerificationOfWork'
 import HealthSafety from '../screens/Form/HealthSafety/HealthSafetyDetail'
 import AccidentReport from '../screens/Form/HealthSafety/AccidentReport'
 import CleanUp from '../screens/Form/HealthSafety/CleanUp'
@@ -302,6 +304,13 @@ export default function MainNavigator({ navigation, route }) {
                   }}
             />
             <Stack.Screen
+                name="VerificationWork"
+                component={VerificationWork}
+                options={{
+                    headerShown: false,
+                  }}
+            />
+            <Stack.Screen
                 name="HealthSafety"
                 component={HealthSafety}
                 options={{
@@ -532,6 +541,13 @@ export default function MainNavigator({ navigation, route }) {
                     headerShown: false,
                 }}
             />
+             <Stack.Screen
+                name="TotalSummary"
+                component={TotalSummary}
+                options={{
+                    headerShown: false,
+                }}
+            />
             <Stack.Screen
                 name="ListSupervisor"
                 component={ListSupervisor}
@@ -748,6 +764,15 @@ function getHeaderTitle(route) {
                     },  
                     headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
                         headerTitle:"Site Instruction"
+                    };
+        case 'VerificationWork':
+            return { headerShown: true,
+                        headerTintColor: '#fff',
+                        headerStyle: {
+                        backgroundColor: '#1073AC',
+                    },  
+                    headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
+                        headerTitle:"Verification Of Work"
                     };
         case 'HealthSafety':
             return { headerShown: true,
@@ -1027,6 +1052,15 @@ function getHeaderTitle(route) {
                         },  
                         headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
                             headerTitle:"Detail Job"
+                        };
+        case 'TotalSummary':
+            return { headerShown: true,
+                        headerTintColor: '#fff',
+                        headerStyle: {
+                        backgroundColor: '#1073AC',
+                        },  
+                        headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
+                            headerTitle:"Total Job Summary"
                         };
         case 'ListSupervisor':
             return { headerShown: true,

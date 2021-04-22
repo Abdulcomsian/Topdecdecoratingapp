@@ -259,12 +259,18 @@ const NewJob = (props) => {
             </View>
 
             <View style={styles.btnContainer}>
-              <TouchableOpacity
+            <TouchableOpacity
+                style={styles.commonBtn}
+                onPress={() => navigation.navigate("TotalSummary")}
+            >
+                <Text style={styles.commonText}>Save</Text>
+            </TouchableOpacity>
+              {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
               {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={()=>newJob(this)}

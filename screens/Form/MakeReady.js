@@ -15,7 +15,9 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const MakeReady = ( props ) => {
-    const { navigation } = props;
+  const { navigation } = props;
+  const jobID= Math.floor(Math.random() * 100) + 1;
+  const tabId=props.route.params.tabName
   const [dynamicInput, setdynamicInput] = useState([]);
   const [data, setData] = useState({
     area: "",
@@ -29,19 +31,23 @@ const MakeReady = ( props ) => {
   const [block, setBlock] = useState("");
   const [sheetNo, setSheetNo] = useState("");
   const [pageOff, setPageOff] = useState("");
+  const [pageSecond, setPageSecond] = useState("");
   const [plotNumber, setPlotNumber] = useState("");
   const [reason, setReason] = useState("");
   const [dateWritten, setDateWritten] = useState(new Date());
   const [dateIssue, setDateIssue] = useState(new Date());
   const [supervisorName, setSupervisorName] = useState("");
+  const [supervisorSignature, setSupervisorSignature] = useState("");
   const [dateComplete, setDateComplete] = useState(new Date());
   const [agentName, setAgentName] = useState("");
+  const [agentSignature, setAgentSignature] = useState("");
   const [todayDate, setTodayDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [showIssue, setShowIssue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
   const [showToday, setShowToday] = useState(false);
   const [show, setShow] = useState(false);
+  
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -113,8 +119,8 @@ const MakeReady = ( props ) => {
     setdynamicInput(preData);
   };
   const makeReadyFormInsert = () =>{
-      if(clientName!="" && projectName!="" && block!="" && sheetNo!="" && pageOff!="" && plotNumber && reason!="" && supervisorName!="" && agentName!=""){
-        props.createMakeReadyHandler(clientName,projectName,block,sheetNo,pageOff,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,dateComplete,agentName,todayDate);
+      if(clientName!="" && projectName!="" && block!="" && sheetNo!="" && pageOff!="" && pageSecond !="" && plotNumber && reason!="" && supervisorName!="" && agentName!=""){
+        props.createMakeReadyHandler(clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate);
       }
       else{
         alert("Please Insert All Fields CareFully !")
@@ -196,12 +202,24 @@ const MakeReady = ( props ) => {
                 style={styles.inputField} 
                 placeholder={"Sheet Number"} />
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-                value={pageOff}
-                onChangeText={(e)=>setPageOff(e)}
-                style={styles.inputField} 
-                placeholder={"Page Off"} />
+          <View style={{width:"100%",flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+            <View style={{width:"40%"}}>
+              <TextInput
+                  value={pageOff}
+                  onChangeText={(e)=>setPageOff(e)}
+                  style={styles.inputField} 
+                  placeholder={"Page"} />
+            </View>
+            <Text style={{ color: "#4F4F4F",
+    fontSize: 12,
+    fontFamily: "poppins-semiBold",}}>Off</Text>
+            <View style={{width:"40%"}}>
+              <TextInput
+                  value={pageOff}
+                  onChangeText={(e)=>setPageSecond(e)}
+                  style={styles.inputField} 
+                  placeholder={"Page"} />
+            </View>
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
@@ -431,9 +449,9 @@ const mapStateToProps = (state) => ({
     token: state.auth.token
   });
   const mapDispatchToProps = (dispatch) => ({
-    createMakeReadyHandler: (clientName,projectName,block,sheetNo,pageOff,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,dateComplete,agentName,todayDate) =>
+    createMakeReadyHandler: (clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate) =>
       dispatch(
-        insertMakeReadyForm(clientName,projectName,block,sheetNo,pageOff,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,dateComplete,agentName,todayDate)
+        insertMakeReadyForm(clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate)
       ),
   });
   export default connect(mapStateToProps, mapDispatchToProps)(MakeReady);

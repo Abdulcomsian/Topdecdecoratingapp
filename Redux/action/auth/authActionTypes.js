@@ -121,6 +121,8 @@ export const createNewJobCreation = (
 ) => {
   return async (dispatch, getState) => {
     try {
+      // console.log(contractor)
+      // console.log()
       const body = {
         contractor,
         project,
@@ -137,7 +139,7 @@ export const createNewJobCreation = (
         data: body,
       });
       const response = request.data;
-      console.log(response);
+      //console.log(response);
       if (response.success == true) {
         dispatch({
           type: Actions.CREATE_NEW_JOB_SUCCESS,
@@ -329,25 +331,52 @@ export const updateSupervisor = (id, email, name, number, status, token) => {
     }
   };
 };
-export const insertHandOverForm = () => {
+export const insertHandOverForm = (contractor,project,block,reason,plotNumber,dateWritten,date_isue,supervisor,signature,completed_date,jobSummary,agentName,agentSignature,todayDate,task_id,tab_id,token) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Insert !");
+      console.log("Contructor Name :",contractor)
+      console.log("Project Name :",project)
+      console.log("Block :",block)
+      console.log("Reason :",reason)
+      console.log("Plot No :",plotNumber)
+      console.log("Date Written :",dateWritten)
+      console.log("Date Issue :",date_isue)
+      console.log("Supervsior Name :",supervisor)
+      console.log("Comleted Date :",completed_date)
+      console.log("JobSummary :",jobSummary)
+      console.log("Agent Name :",agentName)
+      console.log("Today Date :",todayDate)
+      console.log("Job ID :",task_id)
+      console.log("Tab Name :",tab_id)
+      console.log("Token :",token)
+
+      const body = { contractor,project,block,reason,plotNumber,dateWritten,date_isue,supervisor,signature,todayDate,agentName,agentSignature,completed_date,task_id,tab_id,jobSummary };
+      const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      console.log("Insert Response :", response);
     } catch (err) {
-      throw new Error(err.message);
+      console.log("Error Response :", err);
+      //throw new Error(err.message);
     }
   };
 };
 export const insertMakeReadyForm = (
-  clientName,
-  projectName,
+  client,
+  project,
   block,
-  sheetNo,
-  pageOff,
+  sheetNumber,
+  page,
+  page2,
   plotNumber,
   reason,
   dateWritten,
-  dateIssue,
+  date_isue,
   dynamicInput,
   supervisorName,
   dateComplete,
@@ -406,21 +435,24 @@ export const insertSnaggingForm = (
   };
 };
 export const insertRemedialForm = (
-  contructorName,
-  projectName,
+  contractor,
+  project,
   operative,
-  sheetNumber,
-  pageOff,
+  sheet_number,
+  page1,
+  page2,
   block,
-  plotNumber,
-  dateIssue,
-  instructionNumber,
-  reasonWork,
+  plot_area_number,
+  data_issue,
+  site_instruction_number,
+  work_reason,
   dynamicInput,
   totalHours,
   supervisorName,
+  supervisorSignature,
   dateSupervisor,
   managerName,
+  managerSignature,
   dateManager
 ) => {
   return async (dispatch, getState) => {
@@ -522,6 +554,20 @@ export const insertMiscoat = (
     try {
       console.log("Main Contructor :", mainContructor);
       console.log("Project Name :", projectName);
+      console.log("Dynamic :", dynamicInput);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertVerificationForm = (
+  projectName,idRef,decoratorName,dynamicInput
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Project Name :", projectName);
+      console.log("Id Ref :", idRef);
+      console.log("Decorator Name :", decoratorName);
       console.log("Dynamic :", dynamicInput);
     } catch (err) {
       throw new Error(err.message);

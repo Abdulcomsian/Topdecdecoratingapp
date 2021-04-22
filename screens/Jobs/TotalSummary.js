@@ -3,21 +3,22 @@ import { View,StyleSheet,Image,TouchableOpacity} from 'react-native';
 import {Text} from 'native-base';
 
 var rightArrow=require('../../assets/authScreen/right.png')
-const SelectProject = ({props,navigation}) =>{
+const TotalSummary = ({props,navigation}) =>{
     const [plotArray,setPlotArray]=useState([
-        {ploatName:"Plot 1",url:"SelectSummary"},
-        {ploatName:"Plot 2",url:"SelectSummary"},
-        {ploatName:"Plot 3",url:"SelectSummary"},
+        {total:"100",itemName:"Plot",url:"SelectProject"},
+        {total:"5",itemName:"Bus",url:"SelectProject"},
+        {total:"20",itemName:"Land",url:"SelectProject"},
     ]);
     return(
         <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Please select a project</Text>
+                <Text style={styles.titleText}>Please select a Job Summary</Text>
             </View>
             <View style={{padding:30}}>
             {plotArray.map((item,index)=>(
                 <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate(item.url)}>
-                    <Text style={styles.commonText}>{item.ploatName}</Text>
+                    <Text style={styles.commonText}>{item.total}</Text>
+                    <Text style={styles.commonText}>{item.itemName}</Text>
                     <Image  source={rightArrow}/>
                 </TouchableOpacity>
             ))}
@@ -25,7 +26,7 @@ const SelectProject = ({props,navigation}) =>{
         </View>
     )
 }
-export default SelectProject;
+export default TotalSummary;
 const styles = StyleSheet.create({
     mainContainer:{
         height:'100%',

@@ -6,7 +6,9 @@ import ViewPager from '@react-native-community/viewpager';
 var tick=require('../../assets/authScreen/check.png')
 var disableTick=require('../../assets/authScreen/disable.png')
 var rightArrow=require('../../assets/authScreen/right.png')
-const PlotDetails = ({props,navigation}) =>{
+const PlotDetails = ( props ) =>{
+    console.log(props)
+    const { navigation,token } = props;
     const [tab, setTab] = useState({
         miscoat: true,
         decoration: false,
@@ -19,16 +21,20 @@ const PlotDetails = ({props,navigation}) =>{
       const _refSnag = useRef(null);
       const [isSelected, setSelection] = useState(false);
       const [checkFlag,setCheckFlag]=useState(false);
+      const [activeTab, setActiveTab] = useState("Miscoat")
 
       const selectTabManually = (tabName) => {
         if (tabName === "Miscoat") {
             _ref.current.setPage(0);
             setIsLeft(1);
+            setActiveTab("Miscoat")
         } else if (tabName === "Decoration") {
             _ref.current.setPage(1);
+            setActiveTab("Decoration")
         } else {
             _ref.current.setPage(2);
             setIsLeft(2);
+            setActiveTab("Sang")
         }
       };
         //updating the top tab states
@@ -89,9 +95,15 @@ const PlotDetails = ({props,navigation}) =>{
                             if (page.nativeEvent.position === 0) {
                             swicthTabChecked("miscoat", "decoration", "snag", true, false, false);
                             setIsLeft(1);
+                            setActiveTab("Miscoat")
                             }
                             else if (page.nativeEvent.position === 1) {
                                 swicthTabChecked("miscoat", "decoration", "snag", false, true, false);
+                                setActiveTab("Decoration")
+                            } 
+                            else {
+                                swicthTabChecked("miscoat", "decoration", "snag", false, false, true);
+                                setActiveTab("Sang")
                             } 
                         }}
                         style={styles.viewPager} initialPage={0}>
@@ -104,7 +116,7 @@ const PlotDetails = ({props,navigation}) =>{
                                                 <Image  source={item.tickSign}/>
                                             </View>
                                             <View style={styles.textArowTrueView}>
-                                                <TouchableOpacity style={styles.textArrow} onPress={() => navigation.navigate(item.url)}>
+                                                <TouchableOpacity style={styles.textArrow} onPress={() => navigation.navigate(item.url,{tabName:activeTab})}>
                                                     <Text style={{color:"#1073AC",marginRight:10,fontFamily:'poppins-semiBold',fontSize:14}}>{item.text}</Text>
                                                     <Image  source={rightArrow}/>
                                                 </TouchableOpacity>

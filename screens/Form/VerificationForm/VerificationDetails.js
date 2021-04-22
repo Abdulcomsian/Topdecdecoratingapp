@@ -25,6 +25,7 @@ const VerificationDetails = ({ props, navigation }) => {
   const _refSnag = useRef(null);
   const [isSelected, setSelection] = useState(false);
   const [checkFlag, setCheckFlag] = useState(false);
+  const [activeTab, setActiveTab] = useState("Miscoat")
 
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
@@ -56,6 +57,12 @@ const VerificationDetails = ({ props, navigation }) => {
       text: "Site Instruction",
       chekecd: false,
       url: "SiteInstruction",
+    },
+    {
+      tickSign: tick,
+      text: "Verification Of Work",
+      chekecd: false,
+      url: "VerificationWork",
     },
   ]);
   const checkedForm = (index) => {
@@ -116,6 +123,7 @@ const VerificationDetails = ({ props, navigation }) => {
                   false
                 );
                 setIsLeft(1);
+                setActiveTab("Miscoat")
               } else if (page.nativeEvent.position === 1) {
                 swicthTabChecked(
                   "miscoat",
@@ -125,6 +133,18 @@ const VerificationDetails = ({ props, navigation }) => {
                   true,
                   false
                 );
+                setActiveTab("Decoration")
+              }
+              else{
+                swicthTabChecked(
+                  "miscoat",
+                  "decoration",
+                  "snag",
+                  false,
+                  false,
+                  true
+                );
+                setActiveTab("Snag")
               }
             }}
             style={styles.viewPager}
@@ -141,7 +161,7 @@ const VerificationDetails = ({ props, navigation }) => {
                       <View style={styles.textArowTrueView}>
                         <TouchableOpacity
                           style={styles.textArrow}
-                          onPress={() => navigation.navigate(item.url)}
+                          onPress={() => navigation.navigate(item.url,{tabName:activeTab}) }
                         >
                           <Text
                             style={{

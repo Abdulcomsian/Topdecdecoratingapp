@@ -26,7 +26,8 @@ const initialState = {
     isCode:null,
     isValidateUserID:null,
     isResetSucces: false,
-    isResetMsg:null
+    isResetMsg:null,
+    isUser: null
 };
 
 export default (state = initialState, action)=> {

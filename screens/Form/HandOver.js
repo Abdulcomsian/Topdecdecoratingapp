@@ -15,7 +15,10 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const HandOverForm = (props) => {
-  const { navigation } = props;
+ 
+  const jobID= Math.floor(Math.random() * 100) + 1;
+  const tabId=props.route.params.tabName
+  const { navigation,token } = props;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [date, setDate] = useState(new Date());
   const [dateIssue, setDateIssue] = useState(new Date());
@@ -29,15 +32,18 @@ const HandOverForm = (props) => {
   const [contructorName, setContructorName] = useState("");
   const [project, setProject] = useState("");
   const [block, setBlock] = useState("");
+  const [reason, setReason] = useState("");
   const [plotNumber, setPlotNumber] = useState("");
   const [supervisorName, setSupervisorName] = useState("");
+  const [supervisorSignature, setSupervisorSignature] = useState("");
   const [agentName, setAgentName] = useState("");
+  const [agentSignature, setAgentSignature] = useState("");
 
   const [data, setData] = useState({
     area: "",
     description: "",
     completed: "",
-    comments: "",
+    comments: ""
   });
   /* Add Dynamic Input value & Add New Row*/
   const addRow = () => {
@@ -98,27 +104,37 @@ const HandOverForm = (props) => {
     setdynamicInput(preData);
   };
   const handOverFormInsert = () => {
-    console.log("Contructor Name :", contructorName);
-    console.log("Project Name :", project);
-    console.log("Block :", block);
-    console.log("Plot Number :", plotNumber);
-    console.log("Date Written :", date);
-    console.log("Date Issue :", dateIssue);
-    console.log("Supervisor Name :", supervisorName);
-    console.log("Date Complte :", dateComplete);
-    console.log("Dynamic Input :", dynamicInput);
-    console.log("Agent Name :", agentName);
-    console.log("Today Date :", todayDate);
+    console.log("HandOver Token :",token)
     if (
       contructorName != "" &&
       project != "" &&
       block != "" &&
+      reason != "" &&
       plotNumber != "" &&
       supervisorName != "" &&
       dynamicInput &&
       agentName != ""
     ) {
-      props.createHandOverHandler();
+      props.createHandOverHandler(
+        contructorName,
+        project,
+        block,
+        reason,
+        plotNumber,
+        date,
+        dateIssue,
+        supervisorName,
+        supervisorSignature,
+        dateComplete,
+        dynamicInput,
+        agentName,
+        agentSignature,
+        todayDate,
+        
+        jobID,
+        tabId,
+        token
+      );
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
@@ -193,6 +209,14 @@ const HandOverForm = (props) => {
               onChangeText={(e) => setBlock(e)}
               style={styles.inputField}
               placeholder={"Block"}
+            />
+          </View>
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              value={reason}
+              onChangeText={(e) => setReason(e)}
+              style={styles.inputField}
+              placeholder={"Reason"}
             />
           </View>
           <View style={styles.inputFieldContainer}>
@@ -409,7 +433,46 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createHandOverHandler: () => dispatch(insertHandOverForm()),
+  createHandOverHandler: (
+    contructorName,
+    project,
+    block,
+    reason,
+    plotNumber,
+    date,
+    dateIssue,
+    supervisorName,
+    supervisorSignature,
+    dateComplete,
+    dynamicInput,
+    agentName,
+    agentSignature,
+    todayDate,
+    tabId,
+    jobID,
+    token
+  ) =>
+    dispatch(
+      insertHandOverForm(
+        contructorName,
+        project,
+        block,
+        reason,
+        plotNumber,
+        date,
+        dateIssue,
+        supervisorName,
+        supervisorSignature,
+        dateComplete,
+        dynamicInput,
+        agentName,
+        agentSignature,
+        todayDate,
+        tabId,
+        jobID,
+        token
+      )
+    ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HandOverForm);
 const styles = StyleSheet.create({

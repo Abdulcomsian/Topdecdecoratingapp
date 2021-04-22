@@ -15,7 +15,9 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const RemedialWork = ( props ) => {
-    const { navigation } = props;
+  const { navigation } = props;
+  const jobID= Math.floor(Math.random() * 100) + 1;
+  const tabId=props.route.params.tabName
   const [data, setData] = useState({
     area: "",
     description: "",
@@ -34,13 +36,16 @@ const RemedialWork = ( props ) => {
   const [operative, setOperative] = useState("");
   const [sheetNumber, setSheetNumber] = useState("");
   const [pageOff, setPageOff] = useState("");
+  const [pageSecond, setPageSecond] = useState("");
   const [block, setBlock] = useState("");
   const [plotNumber, setPlotNumber] = useState("");
   const [instructionNumber, setInstructionNumber] = useState("");
   const [reasonWork, setReasonWork] = useState("");
   const [totalHours, setTotalHours] = useState("");
   const [supervisorName, setSupervisorName] = useState("");
+  const [supervisorSignature, setSupervisorSignature] = useState("");
   const [managerName, setManagerName] = useState("");
+  const [managerSignature, setManagerSignature] = useState("");
 
   /**Issue Date */
   const onIssueChange = (event, selectedDate) => {
@@ -99,6 +104,7 @@ const RemedialWork = ( props ) => {
       operative != "" &&
       sheetNumber != "" &&
       pageOff != "" &&
+      pageSecond !="" &&
       block != "" &&
       plotNumber != "" &&
       instructionNumber != "" &&
@@ -113,6 +119,7 @@ const RemedialWork = ( props ) => {
         operative,
         sheetNumber,
         pageOff,
+        pageSecond,
         block,
         plotNumber,
         dateIssue,
@@ -121,8 +128,10 @@ const RemedialWork = ( props ) => {
         dynamicInput,
         totalHours,
         supervisorName,
+        supervisorSignature,
         dateSupervisor,
         managerName,
+        managerSignature,
         dateManager
       );
     } else {
@@ -199,13 +208,24 @@ const RemedialWork = ( props ) => {
               placeholder={"Sheet Number"}
             />
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={pageOff}
-              onChangeText={(e) => setPageOff(e)}
-              style={styles.inputField}
-              placeholder={"Page Off"}
-            />
+          <View style={{width:"100%",flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
+            <View style={{width:"40%"}}>
+              <TextInput
+                  value={pageOff}
+                  onChangeText={(e)=>setPageOff(e)}
+                  style={styles.inputField} 
+                  placeholder={"Page"} />
+            </View>
+            <Text style={{ color: "#4F4F4F",
+    fontSize: 12,
+    fontFamily: "poppins-semiBold",}}>Off</Text>
+            <View style={{width:"40%"}}>
+              <TextInput
+                  value={pageOff}
+                  onChangeText={(e)=>setPageSecond(e)}
+                  style={styles.inputField} 
+                  placeholder={"Page"} />
+            </View>
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
@@ -424,6 +444,7 @@ const mapDispatchToProps = (dispatch) => ({
     operative,
     sheetNumber,
     pageOff,
+    pageSecond,
     block,
     plotNumber,
     dateIssue,
@@ -432,8 +453,10 @@ const mapDispatchToProps = (dispatch) => ({
     dynamicInput,
     totalHours,
     supervisorName,
+    supervisorSignature,
     dateSupervisor,
     managerName,
+    managerSignature,
     dateManager
   ) =>
     dispatch(
@@ -443,6 +466,7 @@ const mapDispatchToProps = (dispatch) => ({
         operative,
         sheetNumber,
         pageOff,
+        pageSecond,
         block,
         plotNumber,
         dateIssue,
@@ -451,8 +475,10 @@ const mapDispatchToProps = (dispatch) => ({
         dynamicInput,
         totalHours,
         supervisorName,
+        supervisorSignature,
         dateSupervisor,
         managerName,
+        managerSignature,
         dateManager
       )
     ),

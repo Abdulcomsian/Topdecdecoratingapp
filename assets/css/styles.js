@@ -240,5 +240,34 @@ validationView:{
     borderWidth:1,
     marginTop:20,
     padding: 10,
-}
+},
+headerTitleView:{
+    width:"10%",
+    justifyContent:'center',
+    alignItems:"center"
+},
+inputBodyContainer:{
+    width:"9%",
+    justifyContent:'center',
+    alignItems:'center'
+},
+btnContainer: {
+    width: "100%",
+    height: "15%",
+    marginBottom: 20,
+  },
+  commonBtn: {
+    height: 50,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 14,
+    borderWidth: 3,
+    borderColor: "#1073AC",
+  },
+  commonText: {
+    color: "#1073AC",
+    fontSize: 18,
+    fontFamily: "poppins-semiBold",
+  },
 })
