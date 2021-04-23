@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -14,10 +14,10 @@ import { insertRemedialForm } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
-const RemedialWork = ( props ) => {
-  const { navigation } = props;
-  const jobID= Math.floor(Math.random() * 100) + 1;
-  const tabId=props.route.params.tabName
+const RemedialWork = (props) => {
+  const { navigation, token, isSuccessMsg, isSuccess } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [data, setData] = useState({
     area: "",
     description: "",
@@ -104,7 +104,7 @@ const RemedialWork = ( props ) => {
       operative != "" &&
       sheetNumber != "" &&
       pageOff != "" &&
-      pageSecond !="" &&
+      pageSecond != "" &&
       block != "" &&
       plotNumber != "" &&
       instructionNumber != "" &&
@@ -132,13 +132,30 @@ const RemedialWork = ( props ) => {
         dateSupervisor,
         managerName,
         managerSignature,
-        dateManager
+        dateManager,
+        jobID,
+        tabId,
+        token
       );
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
   };
+  useEffect(() => {
+    if(isSuccess){     
+      if(isSuccessMsg){
+          alert(isSuccessMsg)
+          navigation.pop();
+      }
+      }
+      else{
+          if(isSuccessMsg){
+              alert(isSuccessMsg)
+              return false;
+          }
+      }
+  },[isSuccessMsg])
   return (
     <View style={styles.mainContainer}>
       {showIssue && (
@@ -208,23 +225,38 @@ const RemedialWork = ( props ) => {
               placeholder={"Sheet Number"}
             />
           </View>
-          <View style={{width:"100%",flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-            <View style={{width:"40%"}}>
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <View style={{ width: "40%" }}>
               <TextInput
-                  value={pageOff}
-                  onChangeText={(e)=>setPageOff(e)}
-                  style={styles.inputField} 
-                  placeholder={"Page"} />
+                value={pageOff}
+                onChangeText={(e) => setPageOff(e)}
+                style={styles.inputField}
+                placeholder={"Page"}
+              />
             </View>
-            <Text style={{ color: "#4F4F4F",
-    fontSize: 12,
-    fontFamily: "poppins-semiBold",}}>Off</Text>
-            <View style={{width:"40%"}}>
+            <Text
+              style={{
+                color: "#4F4F4F",
+                fontSize: 12,
+                fontFamily: "poppins-semiBold",
+              }}
+            >
+              Off
+            </Text>
+            <View style={{ width: "40%" }}>
               <TextInput
-                  value={pageOff}
-                  onChangeText={(e)=>setPageSecond(e)}
-                  style={styles.inputField} 
-                  placeholder={"Page"} />
+                value={pageSecond}
+                onChangeText={(e) => setPageSecond(e)}
+                style={styles.inputField}
+                placeholder={"Page"}
+              />
             </View>
           </View>
           <View style={styles.inputFieldContainer}>
@@ -436,6 +468,8 @@ const RemedialWork = ( props ) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+    isSuccessMsg: state.auth.isSuccessMsg
 });
 const mapDispatchToProps = (dispatch) => ({
   createRemedialHandler: (
@@ -457,7 +491,10 @@ const mapDispatchToProps = (dispatch) => ({
     dateSupervisor,
     managerName,
     managerSignature,
-    dateManager
+    dateManager,
+    jobID,
+    tabId,
+    token
   ) =>
     dispatch(
       insertRemedialForm(
@@ -479,7 +516,10 @@ const mapDispatchToProps = (dispatch) => ({
         dateSupervisor,
         managerName,
         managerSignature,
-        dateManager
+        dateManager,
+        jobID,
+        tabId,
+        token
       )
     ),
 });

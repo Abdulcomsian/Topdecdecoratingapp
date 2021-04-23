@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -15,10 +15,9 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const HandOverForm = (props) => {
- 
   const jobID= Math.floor(Math.random() * 100) + 1;
   const tabId=props.route.params.tabName
-  const { navigation,token } = props;
+  const { navigation,token, isSuccess, isSuccessMsg } = props;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [date, setDate] = useState(new Date());
   const [dateIssue, setDateIssue] = useState(new Date());
@@ -140,6 +139,20 @@ const HandOverForm = (props) => {
       return false;
     }
   };
+  useEffect(() => {
+    if(isSuccess){     
+      if(isSuccessMsg){
+          alert(isSuccessMsg)
+          navigation.pop();
+      }
+      }
+      else{
+          if(isSuccessMsg){
+              alert(isSuccessMsg)
+              return false;
+          }
+      }
+  },[isSuccessMsg])
   return (
     <View style={styles.mainContainer}>
       {show && (
@@ -431,6 +444,8 @@ const HandOverForm = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg
 });
 const mapDispatchToProps = (dispatch) => ({
   createHandOverHandler: (

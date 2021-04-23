@@ -6,7 +6,7 @@ import { View,StyleSheet,Image,TextInput,TouchableOpacity,ScrollView } from 'rea
 const ProfileView = (props) =>{
     return(
         <View style={styles.mainContainer}>
-            <Text>Decorator Profile</Text>
+            <Text>Supervsior Profile</Text>
         </View>
     )
 }

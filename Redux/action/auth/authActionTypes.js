@@ -8,7 +8,7 @@ export const adminLogin = (email, password) => {
     try {
       console.log(email, password);
       const body = { email, password };
-      const request = await axios(base_url + "admin/login", {
+      const request = await axios(base_url + "login", {
         method: "POST",
         data: body,
       });
@@ -243,7 +243,10 @@ export const searchDecorator = (id, token) => {
 export const createSupervisor = (name, email, password, phone, token) => {
   return async (dispatch, getState) => {
     try {
+
       const body = { email, password, name, phone };
+      console.log("Body :",body);
+      console.log("Token :",token);
       const request = await axios(base_url + "admin/create/supervisor", {
         method: "POST",
         headers: {
@@ -331,35 +334,84 @@ export const updateSupervisor = (id, email, name, number, status, token) => {
     }
   };
 };
-export const insertHandOverForm = (contractor,project,block,reason,plotNumber,dateWritten,date_isue,supervisor,signature,completed_date,jobSummary,agentName,agentSignature,todayDate,task_id,tab_id,token) => {
+export const insertHandOverForm = (
+  contractor,
+  project,
+  block,
+  reason,
+  plotNumber,
+  dateWritten,
+  date_isue,
+  supervisor,
+  signature,
+  completed_date,
+  jobSummary,
+  agentName,
+  agentSignature,
+  todayDate,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Contructor Name :",contractor)
-      console.log("Project Name :",project)
-      console.log("Block :",block)
-      console.log("Reason :",reason)
-      console.log("Plot No :",plotNumber)
-      console.log("Date Written :",dateWritten)
-      console.log("Date Issue :",date_isue)
-      console.log("Supervsior Name :",supervisor)
-      console.log("Comleted Date :",completed_date)
-      console.log("JobSummary :",jobSummary)
-      console.log("Agent Name :",agentName)
-      console.log("Today Date :",todayDate)
-      console.log("Job ID :",task_id)
-      console.log("Tab Name :",tab_id)
-      console.log("Token :",token)
+      // console.log("Contructor Name :",contractor)
+      // console.log("Project Name :",project)
+      // console.log("Block :",block)
+      // console.log("Reason :",reason)
+      // console.log("Plot No :",plotNumber)
+      // console.log("Date Written :",dateWritten)
+      // console.log("Date Issue :",date_isue)
+      // console.log("Supervsior Name :",supervisor)
+      // console.log("Comleted Date :",completed_date)
+      // console.log("JobSummary :",jobSummary)
+      // console.log("Agent Name :",agentName)
+      // console.log("Today Date :",todayDate)
+      // console.log("Job ID :",task_id)
+      // console.log("Tab Name :",tab_id)
+      // console.log("Token :",token)
 
-      const body = { contractor,project,block,reason,plotNumber,dateWritten,date_isue,supervisor,signature,todayDate,agentName,agentSignature,completed_date,task_id,tab_id,jobSummary };
-      const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const body = {
+        contractor,
+        project,
+        block,
+        reason,
+        plotNumber,
+        dateWritten,
+        date_isue,
+        supervisor,
+        signature,
+        todayDate,
+        agentName,
+        agentSignature,
+        completed_date,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insert_handover",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
-      console.log("Insert Response :", response);
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.CREATE_HAND_OVER_SHEET_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_HAND_OVER_SHEET_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       console.log("Error Response :", err);
       //throw new Error(err.message);
@@ -379,27 +431,86 @@ export const insertMakeReadyForm = (
   date_isue,
   dynamicInput,
   supervisorName,
+  signature,
   dateComplete,
   agentName,
-  todayDate
+  agentSignature,
+  todayDate,
+  task_id,
+  tab_id,
+  token
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Client Name :", clientName);
-      console.log("Project Name :", projectName);
-      console.log("Block :", block);
-      console.log("Sheet Number :", sheetNo);
-      console.log("Page Off :", pageOff);
-      console.log("Plot Number :", plotNumber);
-      console.log("Reason :", reason);
-      console.log("Date Written :", dateWritten);
-      console.log("Dynamic Input :", dynamicInput);
-      console.log("Supervisor Name :", supervisorName);
-      console.log("Completed Date :", dateComplete);
-      console.log("Agent Name :", agentName);
-      console.log("Today Date :", todayDate);
+      // console.log("Client Name :", client);
+      // console.log("Project Name :", project);
+      // console.log("Block :", block);
+      // console.log("Sheet Number :", sheetNumber);
+      // console.log("Page 1 :", page);
+      // console.log("Page 2 :", page2);
+      // console.log("Plot Number :", plotNumber);
+      // console.log("Reason :", reason);
+      // console.log("Date Written :", dateWritten);
+      // console.log("Date Issue :", date_isue);
+      // console.log("Dynamic Input :", dynamicInput);
+      // console.log("Supervisor Name :", supervisorName);
+      // console.log("Supervisor Signature :", signature);
+      // console.log("Completed Date :", dateComplete);
+      // console.log("Agent Name :", agentName);
+      // console.log("Agent Signature :", agentSignature);
+      // console.log("Today Date :", todayDate);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab ID :", tab_id);
+      // console.log("Token :", token);
+
+      const body = {
+        client,
+        project,
+        block,
+        sheetNumber,
+        page,
+        page2,
+        reason,
+        dateWritten,
+        date_isue,
+        plotNumber,
+        supervisorName,
+        signature,
+        dateComplete,
+        agentName,
+        agentSignature,
+        todayDate,
+        task_id,
+        tab_id,
+        dynamicInput
+      };
+      
+      const request = await axios(
+        base_url + "supervisor/make/workflow/makeReadySheet",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.CREATE_MAKE_READY_SHEET_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_MAKE_READY_SHEET_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
+      //console.log(err)
     }
   };
 };
@@ -453,26 +564,84 @@ export const insertRemedialForm = (
   dateSupervisor,
   managerName,
   managerSignature,
-  dateManager
+  dateManager,
+  task_id,
+  tab_id,
+  token
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Contructor Name :", contructorName);
-      console.log("Project Name :", projectName);
-      console.log("Operative :", operative);
-      console.log("Sheet Number :", sheetNumber);
-      console.log("No of Pages :", pageOff);
-      console.log("Block :", block);
-      console.log("Plot Number :", plotNumber);
-      console.log("Date Issue :", dateIssue);
-      console.log("Instructor Number :", instructionNumber);
-      console.log("Reason Work :", reasonWork);
-      console.log("Dynamic Input :", dynamicInput);
-      console.log("Total Hours :", totalHours);
-      console.log("Supervisor Name :", supervisorName);
-      console.log("Supervisor Date :", dateSupervisor);
-      console.log("Manager Name :", managerName);
-      console.log("Manager Date :", dateManager);
+      // console.log("Contructor Name :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Operative :", operative);
+      // console.log("Sheet Number :", sheet_number);
+      // console.log("Pages :", page1);
+      // console.log("No of Pages :", page2);
+      // console.log("Block :", block);
+      // console.log("Plot Number :", plot_area_number);
+      // console.log("Date Issue :", data_issue);
+      // console.log("Instructor Number :", site_instruction_number);
+      // console.log("Reason Work :", work_reason);
+      // console.log("Dynamic Input :", dynamicInput);
+      // console.log("Total Hours :", totalHours);
+      // console.log("Supervisor Name :", supervisorName);
+      // console.log("Supervisor Signature :", supervisorSignature);
+      // console.log("Supervisor Date :", dateSupervisor);
+      // console.log("Manager Name :", managerName);
+      // console.log("Manager Signature :", managerSignature);
+      // console.log("Manager Date :", dateManager);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
+
+
+      const body = {
+        contractor,
+        project,
+        sheet_number,
+        page1,
+        page2,
+        block,
+        plot_area_number,
+        operative,
+        data_issue,
+        site_instruction_number,
+        work_reason,
+        supervisorName,
+        supervisorSignature,
+        dateSupervisor,
+        managerName,
+        managerSignature,
+        dateManager,
+        task_id,
+        tab_id,
+        dynamicInput,
+        totalHours
+      };
+      
+      const request = await axios(
+        base_url + "supervisor/insert/workflow/RemendialSheet",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -480,18 +649,59 @@ export const insertRemedialForm = (
 };
 export const insertScopeForm = (
   dynamicInput,
-  painterName,
+  painter,
+  signature,
   plotNumber,
   type,
-  date
+  date,
+  task_id,
+  tab_id,
+  token
 ) => {
   return async (dispatch, getState) => {
     try {
       console.log("Dynamic Input :", dynamicInput);
-      console.log("Painter Name :", painterName);
+      console.log("Painter Name :", painter);
+      console.log("Signature :", signature);
       console.log("Plot Number :", plotNumber);
       console.log("Type :", type);
       console.log("Date :", date);
+      console.log("Job ID :", task_id);
+      console.log("Tab Name :", tab_id);
+      console.log("Token :", token);
+      const body = {
+        signature,
+        date,
+        type,
+        painter,
+        task_id,
+        tab_id,
+        dynamicInput
+      };
+      
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insertScope",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.CREATE_SCOPE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_SCOPE_FORM_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -536,7 +746,7 @@ export const insertWorkSheet = (
 };
 export const insertDecorationRecord = (
   dynamicFirstInput,
-  dynamicSeconfInput,
+  dynamicSeconfInput
 ) => {
   return async (dispatch, getState) => {
     try {
@@ -547,9 +757,7 @@ export const insertDecorationRecord = (
     }
   };
 };
-export const insertMiscoat = (
-  mainContructor,projectName,dynamicInput
-) => {
+export const insertMiscoat = (mainContructor, projectName, dynamicInput) => {
   return async (dispatch, getState) => {
     try {
       console.log("Main Contructor :", mainContructor);
@@ -561,7 +769,10 @@ export const insertMiscoat = (
   };
 };
 export const insertVerificationForm = (
-  projectName,idRef,decoratorName,dynamicInput
+  projectName,
+  idRef,
+  decoratorName,
+  dynamicInput
 ) => {
   return async (dispatch, getState) => {
     try {

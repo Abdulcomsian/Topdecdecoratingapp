@@ -20,11 +20,13 @@ import ListSupervisor from '../screens/Supervisor/ListSupervisor'
 import CreateDecorataor from '../screens/Decorator/CreateDecorator'
 import SearchDecorator from '../screens/Decorator/SearchDecorator'
 import DecoratorDetails from '../screens/Decorator/DecoratorDetail'
+import ProfileDecorator from '../screens/Decorator/ProfileView'
 import ViewNotes from '../screens/Decorator/ViewNotesLog'
 import DecoratorProfile from '../screens/Decorator/DecoratorProfile'
 import CreateSupervisor from '../screens/Supervisor/CreateSupervisor'
 import SearchSupervisor from '../screens/Supervisor/SearchSupervisor'
 import DetailSupervisor from '../screens/Supervisor/DetailSupervisor'
+import ProfileSupervisor from '../screens/Supervisor/ProfileView'
 import SplashScreen from '../screens/SplashScreen'
 import HandOverForm from '../screens/Form/HandOver'
 import MakeReady from '../screens/Form/MakeReady'
@@ -199,6 +201,13 @@ export default function MainNavigator({ navigation, route }) {
                   }}
             />
             <Stack.Screen
+                name="ProfileSupervisor"
+                component={ProfileSupervisor}
+                options={{
+                    headerShown: true,
+                  }}
+            />
+            <Stack.Screen
                 name="ForgetPassword"
                 component={ForgetPassword}
                 options={{
@@ -222,6 +231,13 @@ export default function MainNavigator({ navigation, route }) {
             <Stack.Screen
                 name="DecoratorProfile"
                 component={DecoratorProfile}
+                options={{
+                    headerShown: false,
+                  }}
+            />
+            <Stack.Screen
+                name="ProfileDecorator"
+                component={ProfileDecorator}
                 options={{
                     headerShown: false,
                   }}

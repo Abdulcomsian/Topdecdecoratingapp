@@ -12,7 +12,7 @@ var user=require('../../assets/authScreen/icon.png')
 var lock=require('../../assets/authScreen/lock.png')
 
 const LoginScreen = (props) =>{
-    const {navigation,isLogin,isLoginMsg}=props;
+    const {navigation, isLogin, isLoginMsg, role}=props;
    // const dispatch = useDispatch()
     const [email, setEmail] = useState('admin@accrualgroup.com')
     const [password, setPassword] = useState('asdfghjkl')
@@ -29,7 +29,15 @@ const LoginScreen = (props) =>{
         if(isLogin){
             if(isLoginMsg){
                 alert(isLoginMsg)
-                props.navigation.navigate('MainScreen')
+                if(role=="admin"){
+                    props.navigation.navigate('MainScreen')
+                }
+                else if(role=="decorator"){
+                    props.navigation.navigate('ProfileDecorator')
+                }
+                else{
+                    props.navigation.navigate('ProfileSupervisor')
+                }
             }
         }
         else
@@ -82,6 +90,9 @@ const LoginScreen = (props) =>{
                     <TouchableOpacity style={styles.loginBtn} onPress={() => postSignInHandler()}>
                         <Text style={styles.loginText}>Login</Text>
                     </TouchableOpacity>
+                    {/* <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('SelectSummary')}>
+                        <Text style={styles.loginText}>Login</Text>
+                    </TouchableOpacity> */}
                     <TouchableOpacity onPress={() => navigation.navigate('ForgetPassword')}>
                         <Text style={styles.forgetText}>Forgot Password</Text>
                     </TouchableOpacity>
@@ -98,7 +109,8 @@ const LoginScreen = (props) =>{
 const mapStateToProps = state => ({
     isLogin : state.auth.isLogin,
     isLoginMsg : state.auth.isLoginMsg,
-    token : state.auth.token
+    token : state.auth.token,
+    role: state.auth.role
   });
   
   const mapDispatchToProps=dispatch=>({

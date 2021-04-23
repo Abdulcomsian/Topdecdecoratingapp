@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -14,7 +14,9 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const Scope = (props) => {
-    const { navigation } = props;
+  const { navigation, token, isSuccess, isSuccessMsg } = props;
+  const jobID= Math.floor(Math.random() * 100) + 1;
+  const tabId=props.route.params.tabName
   const [dynamicInput, setdynamicInput] = useState([]);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -22,6 +24,7 @@ const Scope = (props) => {
   const [painterName, setPainterName] = useState("");
   const [plotNumber, setPlotNumber] = useState("");
   const [type, setType] = useState("");
+  const [signature, setSignature] = useState("");
 
   const [data, setData] = useState({
     item: "",
@@ -68,12 +71,26 @@ const Scope = (props) => {
       type != "" &&
       date != ""
     ) {
-      props.createScopeHandler(dynamicInput,painterName,plotNumber,type,date);
+      props.createScopeHandler(dynamicInput,painterName,signature,plotNumber,type,date,jobID,tabId,token);
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
   };
+  useEffect(() => {
+    if(isSuccess){     
+      if(isSuccessMsg){
+          alert(isSuccessMsg)
+          navigation.pop();
+      }
+      }
+      else{
+          if(isSuccessMsg){
+              alert(isSuccessMsg)
+              return false;
+          }
+      }
+  },[isSuccessMsg])
   return (
     <View style={styles.mainContainer}>
       {show && (
@@ -379,9 +396,11 @@ const Scope = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg
 });
 const mapDispatchToProps = (dispatch) => ({
-  createScopeHandler: (dynamicInput,painterName,plotNumber,type,date) => dispatch(insertScopeForm(dynamicInput,painterName,plotNumber,type,date)),
+  createScopeHandler: (dynamicInput,painterName,signature,plotNumber,type,date,jobID,tabId,token) => dispatch(insertScopeForm(dynamicInput,painterName,signature,plotNumber,type,date,jobID,tabId,token)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Scope);
 

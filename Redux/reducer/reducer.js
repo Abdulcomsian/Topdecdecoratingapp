@@ -27,7 +27,8 @@ const initialState = {
     isValidateUserID:null,
     isResetSucces: false,
     isResetMsg:null,
-    isUser: null
+    isUser: null,
+    role:null
 };
 
 export default (state = initialState, action)=> {
@@ -39,6 +40,7 @@ export default (state = initialState, action)=> {
                     ...state,
                     isLogin: true,
                     isLoginMsg: action.payload.message,
+                    role: action.payload.role,
                     token: action.payload.data.split("|")[1],
                     
                 }
@@ -61,7 +63,7 @@ export default (state = initialState, action)=> {
                 return{
                     ...state,
                     createSuperVisor: false,
-                    createSuperVisorMsg : action.payload.message.email
+                    createSuperVisorMsg : action.payload.message
                 }
             case Actions.CREATE_NEW_JOB_SUCCESS:
              console.log("CREATE_NEW_JOB_SUCCESS")
@@ -140,6 +142,62 @@ export default (state = initialState, action)=> {
                     ...state,
                     isResetSucces: false,
                     isResetMsg : action.payload.message,
+                }
+            case Actions.CREATE_HAND_OVER_SHEET_SUCCESS:
+             console.log("CREATE_HAND_OVER_SHEET_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_HAND_OVER_SHEET_FAIL:
+             console.log("CREATE_HAND_OVER_SHEET_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_MAKE_READY_SHEET_SUCCESS:
+             console.log("CREATE_MAKE_READY_SHEET_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_MAKE_READY_SHEET_FAIL:
+             console.log("CREATE_MAKE_READY_SHEET_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS:
+             console.log("CREATE_REMEDIAL_WORK_SHEET_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL:
+             console.log("CREATE_REMEDIAL_WORK_SHEET_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_SCOPE_FORM_SUCCESS:
+             console.log("CREATE_SCOPE_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_SCOPE_FORM_FAIL:
+             console.log("CREATE_SCOPE_FORM_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
                 }
             default:
             return state;

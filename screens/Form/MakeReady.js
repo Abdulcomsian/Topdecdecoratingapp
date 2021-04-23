@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const MakeReady = ( props ) => {
-  const { navigation } = props;
+  const { navigation, token, isSuccess, isSuccessMsg } = props;
   const jobID= Math.floor(Math.random() * 100) + 1;
   const tabId=props.route.params.tabName
   const [dynamicInput, setdynamicInput] = useState([]);
@@ -120,13 +120,27 @@ const MakeReady = ( props ) => {
   };
   const makeReadyFormInsert = () =>{
       if(clientName!="" && projectName!="" && block!="" && sheetNo!="" && pageOff!="" && pageSecond !="" && plotNumber && reason!="" && supervisorName!="" && agentName!=""){
-        props.createMakeReadyHandler(clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate);
+        props.createMakeReadyHandler(clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate,jobID,tabId,token);
       }
       else{
         alert("Please Insert All Fields CareFully !")
         return false;
       }
   }
+  useEffect(() => {
+    if(isSuccess){     
+      if(isSuccessMsg){
+          alert(isSuccessMsg)
+          navigation.pop();
+      }
+      }
+      else{
+          if(isSuccessMsg){
+              alert(isSuccessMsg)
+              return false;
+          }
+      }
+  },[isSuccessMsg])
   return (
     <View style={styles.mainContainer}>
         {show && (
@@ -138,6 +152,7 @@ const MakeReady = ( props ) => {
           onChange={onChange}
           format="DD-MM-YYYY"
         />
+        
       )}
       {showIssue && (
         <DateTimePicker
@@ -215,7 +230,7 @@ const MakeReady = ( props ) => {
     fontFamily: "poppins-semiBold",}}>Off</Text>
             <View style={{width:"40%"}}>
               <TextInput
-                  value={pageOff}
+                  value={pageSecond}
                   onChangeText={(e)=>setPageSecond(e)}
                   style={styles.inputField} 
                   placeholder={"Page"} />
@@ -446,12 +461,14 @@ const MakeReady = ( props ) => {
   );
 };
 const mapStateToProps = (state) => ({
-    token: state.auth.token
+    token: state.auth.token,
+    isSuccess: state.auth.isSuccess,
+    isSuccessMsg: state.auth.isSuccessMsg
   });
   const mapDispatchToProps = (dispatch) => ({
-    createMakeReadyHandler: (clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate) =>
+    createMakeReadyHandler: (clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate,jobID,tabId,token) =>
       dispatch(
-        insertMakeReadyForm(clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate)
+        insertMakeReadyForm(clientName,projectName,block,sheetNo,pageOff,pageSecond,plotNumber,reason,dateWritten,dateIssue,dynamicInput,supervisorName,supervisorSignature,dateComplete,agentName,agentSignature,todayDate,jobID,tabId,token)
       ),
   });
   export default connect(mapStateToProps, mapDispatchToProps)(MakeReady);
