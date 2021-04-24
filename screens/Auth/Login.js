@@ -33,10 +33,10 @@ const LoginScreen = (props) =>{
                     props.navigation.navigate('MainScreen')
                 }
                 else if(role=="decorator"){
-                    props.navigation.navigate('ProfileDecorator')
+                    props.navigation.navigate('DecoratorDetails',{role:"decorator"})
                 }
                 else{
-                    props.navigation.navigate('ProfileSupervisor')
+                    props.navigation.navigate('DetailSupervisor',{role:"supervisor"})
                 }
             }
         }

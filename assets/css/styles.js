@@ -73,14 +73,16 @@ instructionView:{
     paddingTop:20
 },
 checkBoxView:{
-    width:"33.3%"
+    width:"40%"
 },
 numberView:{
-    width:"33.3%"
+    width:"26.7%"
 },
 detailsContactView:{
     width:"100%",
-    flexDirection:"row"
+    flexDirection:"row",
+    justifyContent:"center",
+    alignItems:"center"
 },
 tableHeader:{
     flexDirection:'row',
@@ -131,7 +133,7 @@ tableCheckListBody:{
 },
 bodyTextInput:{
     fontSize:8,
-    width:'100%',
+    width:'90%',
     borderBottomWidth:1,
     borderBottomColor:'#96A8B2',
     padding:5,
@@ -270,4 +272,17 @@ btnContainer: {
     fontSize: 18,
     fontFamily: "poppins-semiBold",
   },
+  parentCheckBox:{
+      width:"33.3%",
+      flexDirection:"row",
+      justifyContent:"center",
+      alignItems:"center"
+  },
+  leftCheckBox:{
+      width:"30%",
+      marginRight:5
+  },
+  rightCheckBox:{
+      width:"70%",
+  }
 })

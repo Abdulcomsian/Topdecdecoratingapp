@@ -1087,6 +1087,15 @@ function getHeaderTitle(route) {
                         headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
                             headerTitle:"List Of Supervisor"
                         };
+        case 'DecoratorDetails':
+            return { headerShown: true,
+                        headerTintColor: '#fff',
+                        headerStyle: {
+                        backgroundColor: '#1073AC',
+                        },  
+                        headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
+                            headerTitle:"Decorator Detail"
+                        };
                                    
     }
 }

@@ -8,23 +8,28 @@ import {updateSupervisor} from '../../Redux/action/auth/authActionTypes';
 var rightArrow=require('../../assets/authScreen/right.png')
 const SupervisorDetails = (props) =>{
     const { navigation,token,isUpdate,isUpdateMsg} = props;
-    const {name,email,id,userData} = props.route.params;
+    //const {name,email,id,userData} = props.route.params;
+    const [role,setRole] = useState(props.route.params.role);
+    console.log(role)
     const [password,setPassword]=useState("")
-    const [supervisorData,setSupervisorData] = useState(userData)
+    //const [supervisorData,setSupervisorData] = useState(userData)
     const [status,setStatus] = useState("")
-
+    const[check,setCheck]=useState({
+        approved:true,
+        disApproved:false
+    })
     
-    const checkedValue = (value) =>{
-        if(value=="approved"){
-            setStatus("1")
-            setSupervisorData({...supervisorData,status:"1"})
-        }
-        else if(value=="disapproved"){
-            setStatus("0")
-            setSupervisorData({...supervisorData,status:"0"})
-        }
+    // const checkedValue = (value) =>{
+    //     if(value=="approved"){
+    //         setStatus("1")
+    //         setSupervisorData({...supervisorData,status:"1"})
+    //     }
+    //     else if(value=="disapproved"){
+    //         setStatus("0")
+    //         setSupervisorData({...supervisorData,status:"0"})
+    //     }
         
-    }
+    // }
 
     const updateSupervisor = () =>{
         try{
@@ -42,20 +47,20 @@ const SupervisorDetails = (props) =>{
         setSupervisorData({...supervisorData,phone:value})
     }
 
-    useEffect (() =>{
-        if(isUpdate){
-            if(isUpdateMsg){
-                alert(isUpdateMsg)
-                props.navigation.navigate("SearchSupervisor")
-            }
-        }
-        else
-       { 
-        if(isUpdateMsg){
-            alert(isUpdateMsg)
-        }
-       }
-    },[isUpdateMsg])
+    // useEffect (() =>{
+    //     if(isUpdate){
+    //         if(isUpdateMsg){
+    //             alert(isUpdateMsg)
+    //             props.navigation.navigate("SearchSupervisor")
+    //         }
+    //     }
+    //     else
+    //    { 
+    //     if(isUpdateMsg){
+    //         alert(isUpdateMsg)
+    //     }
+    //    }
+    // },[isUpdateMsg])
     return(
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
@@ -66,7 +71,7 @@ const SupervisorDetails = (props) =>{
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Supervisor Detail</Text>
             </View>
-                <ScrollView contentContainerStyle={{width:'100%'}}>
+                {/* <ScrollView contentContainerStyle={{width:'100%'}}>
               
                         <View style={styles.formConatiner}>
                             <View style={styles.inputFieldContainer}>
@@ -111,14 +116,118 @@ const SupervisorDetails = (props) =>{
                             <View style={styles.btnContainer}>
                                  {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
                                     <Text style={styles.commonText}>Update</Text>
-                                </TouchableOpacity>  */}
+                                </TouchableOpacity>  \
                                 <TouchableOpacity style={styles.commonBtn} onPress={() => updateSupervisor()}>
                                     <Text style={styles.commonText}>Update</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
               
-            </ScrollView>
+            </ScrollView> */}
+            {role=="supervisor" ?
+            <ScrollView contentContainerStyle={{width:'100%'}}>
+              
+              <View style={styles.formConatiner}>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Name:</Text>
+                      <TextInput 
+                      style={styles.detailItemInput}
+                      value={"Hamza"}
+                      />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Email:</Text>
+                      <Text style={styles.detailItemInput}>{"hamza@gmail.com"}</Text>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Number:</Text>
+                      <TextInput
+                          value={"03359853140"}
+                          style={styles.detailItemInput}
+                      />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Password:</Text>
+                      <TextInput
+                          value={"#######"}
+                          style={styles.detailItemInput}
+                      />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Status:</Text>
+                      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                          <View style={styles.chekboxText}>
+                              <CheckBox
+                                  value={check.approved}
+                                  onValueChange={() => checkedValue("approved")}
+                              />
+                              <Text style={styles.checkText}>Approved</Text>
+                          </View>
+                          <View style={styles.chekboxText}>
+                              <CheckBox
+                                   value={check.disApproved}
+                                  onValueChange={() => checkedValue("disapproved")}
+                              />
+                              <Text style={styles.checkText}>Dis-Approved</Text>
+                          </View>
+                      </View>
+                  </View>
+                  <View style={styles.btnContainer}>
+                       {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
+                          <Text style={styles.commonText}>Update</Text>
+                      </TouchableOpacity>  */}
+                      <TouchableOpacity style={styles.commonBtn} onPress={() => updateSupervisor()}>
+                          <Text style={styles.commonText}>Update</Text>
+                      </TouchableOpacity>
+                  </View>
+              </View>
+    
+  </ScrollView>
+  :
+  <ScrollView contentContainerStyle={{width:'100%'}}>
+              
+              <View style={styles.formConatiner}>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Name:</Text>
+                      <TextInput 
+                      style={styles.detailItemInput}
+                      value={"Hamza"}
+                      />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Email:</Text>
+                      <Text style={styles.detailItemInput}>{"hamza@gmail.com"}</Text>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Number:</Text>
+                      <TextInput
+                          value={"03359853140"}
+                          style={styles.detailItemInput}
+                      />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                      <Text style={styles.decoratorTitle}>Status:</Text>
+                      <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                          <View style={styles.chekboxText}>
+                              <CheckBox
+                                  value={check.approved}
+                                  onValueChange={() => checkedValue("approved")}
+                              />
+                              <Text style={styles.checkText}>Approved</Text>
+                          </View>
+                          <View style={styles.chekboxText}>
+                              <CheckBox
+                                   value={check.disApproved}
+                                  onValueChange={() => checkedValue("disapproved")}
+                              />
+                              <Text style={styles.checkText}>Dis-Approved</Text>
+                          </View>
+                      </View>
+                  </View>
+              </View>
+    
+  </ScrollView>}
+            
             
         </View>
     )
