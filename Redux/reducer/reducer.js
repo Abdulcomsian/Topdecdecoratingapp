@@ -29,7 +29,8 @@ const initialState = {
     isResetMsg:null,
     isUser: null,
     role:null,
-    isUserID: null
+    isUserID: null,
+    isJobId: null
 };
 
 export default (state = initialState, action)=> {
@@ -72,7 +73,8 @@ export default (state = initialState, action)=> {
                 return{
                     ...state,
                     isJob: true,
-                    isJobMsg : action.payload.message
+                    isJobMsg : action.payload.message,
+                    isJobId : action.payload.data.user.id
                 }
             case Actions.CREATE_NEW_JOB_FAIL:
              console.log("CREATE_NEW_JOB_FAIL")
@@ -88,8 +90,8 @@ export default (state = initialState, action)=> {
                     createDecorator: true,
                     createDecoratorMsg : action.payload.message
                 }
-            case Actions.CREATE_NEW_JOB_FAIL:
-             console.log("CREATE_NEW_JOB_FAIL")
+            case Actions.CREATE_DECORATOR_FAIL:
+             console.log("CREATE_DECORATOR_FAIL")
                 return{
                     ...state,
                     icreateDecorator: false,

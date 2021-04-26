@@ -17,7 +17,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var plus = require("../../assets/authScreen/plus.png");
 const NewJob = (props) => {
-  const { navigation } = props;
+  const { navigation, isJobId, isJob, isJobMsg } = props;
   const [token, setToken] = useState(props.token);
   const [data, setData] = useState({
     qty: "",
@@ -48,15 +48,15 @@ const NewJob = (props) => {
   const newJob = () => {
     console.log(date.toLocaleDateString())
     console.log(date.toLocaleTimeString())
-    // props.createNewJobHandler(
-    //   constructorName,
-    //   projectName,
-    //   weekProject,
-    //   selectedValue,
-    //   date,
-    //   dynamicInput,
-    //   token
-    // );
+    props.createNewJobHandler(
+      constructorName,
+      projectName,
+      weekProject,
+      selectedValue,
+      date.toLocaleDateString(),
+      dynamicInput,
+      token
+    );
   };
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -94,15 +94,16 @@ const NewJob = (props) => {
    
   }, []);
   useEffect(() => {
-    if(props.isJob){     
-      if(props.isJobMsg){
-          alert(props.isJobMsg)
-          props.navigation.navigate('SelectSummary')
+    if(isJob){     
+      if(isJobMsg){
+          alert(isJobMsg)
+          console.log("Job Id :",isJobId)
+          props.navigation.navigate('TotalSummary',{jobID: isJobId})
       }
       }
       else{
-          if(props.isJobMsg){
-              alert(props.isJobMsg)
+          if(isJobMsg){
+              alert(isJobMsg)
               return false;
           }
       }
@@ -252,24 +253,24 @@ const NewJob = (props) => {
             </View>
 
             <View style={styles.btnContainer}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("TotalSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
               {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-              {/* <TouchableOpacity
+              <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={()=>newJob(this)}
               >
                 <Text style={styles.commonText}>Save</Text>
-              </TouchableOpacity> */}
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
@@ -280,7 +281,8 @@ const NewJob = (props) => {
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isJob: state.auth.isJob,
-  isJobMsg: state.auth.isJobMsg
+  isJobMsg: state.auth.isJobMsg,
+  isJobId: state.auth.isJobId
 });
 const mapDispatchToProps = (dispatch) => ({
   createNewJobHandler: (

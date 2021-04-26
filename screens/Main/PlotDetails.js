@@ -2,13 +2,14 @@ import React,{useState,useRef} from 'react';
 import { View,StyleSheet,Image,TouchableOpacity,CheckBox} from 'react-native';
 import {Text} from 'native-base';
 import ViewPager from '@react-native-community/viewpager';
+import { connect } from "react-redux";
 
 var tick=require('../../assets/authScreen/check.png')
 var disableTick=require('../../assets/authScreen/disable.png')
 var rightArrow=require('../../assets/authScreen/right.png')
 const PlotDetails = ( props ) =>{
     console.log(props)
-    const { navigation,token } = props;
+    const { navigation,token, isJobId } = props;
     const [tab, setTab] = useState({
         miscoat: true,
         decoration: false,
@@ -63,6 +64,7 @@ const PlotDetails = ( props ) =>{
                 setMiscotArray(preData)
             }
         }
+       
     return(
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
@@ -163,7 +165,13 @@ const PlotDetails = ( props ) =>{
         </View>
     )
 }
-export default PlotDetails;
+const mapStateToProps = (state) => ({
+    token: state.auth.token,
+    isJobId: state.auth.isJobId
+  });
+  const mapDispatchToProps = (dispatch) => ({});
+  export default connect(mapStateToProps, mapDispatchToProps)(PlotDetails);
+
 const styles = StyleSheet.create({
     viewPager: {
         height:'100%',

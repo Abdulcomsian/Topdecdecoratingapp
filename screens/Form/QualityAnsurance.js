@@ -15,8 +15,8 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const QualityInssurance = ( props ) => {
-    const { navigation, token, isSuccessMsg, isSuccess } = props;
-    const jobID = Math.floor(Math.random() * 100) + 1;
+    const { navigation, token, isSuccessMsg, isSuccess, isJobId } = props;
+    const jobID= isJobId;
   const tabId = props.route.params.tabName;
   const [issuranceArray, setInsuraanceArray] = useState([
     {
@@ -592,7 +592,8 @@ const QualityInssurance = ( props ) => {
 const mapStateToProps = (state) => ({
     token: state.auth.token,
     isSuccess: state.auth.isSuccess,
-    isSuccessMsg: state.auth.isSuccessMsg
+    isSuccessMsg: state.auth.isSuccessMsg,
+    isJobId: state.auth.isJobId
   });
   const mapDispatchToProps = (dispatch) => ({
     createAnsuranceHandler: ( projectName,

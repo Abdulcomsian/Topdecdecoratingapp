@@ -14,8 +14,8 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const Scope = (props) => {
-  const { navigation, token, isSuccess, isSuccessMsg } = props;
-  const jobID= Math.floor(Math.random() * 100) + 1;
+  const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
+  const jobID= isJobId;
   const tabId=props.route.params.tabName
   const [dynamicInput, setdynamicInput] = useState([]);
   const [date, setDate] = useState(new Date());
@@ -397,7 +397,8 @@ const Scope = (props) => {
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isSuccess: state.auth.isSuccess,
-  isSuccessMsg: state.auth.isSuccessMsg
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId
 });
 const mapDispatchToProps = (dispatch) => ({
   createScopeHandler: (dynamicInput,painterName,signature,plotNumber,type,date,jobID,tabId,token) => dispatch(insertScopeForm(dynamicInput,painterName,signature,plotNumber,type,date,jobID,tabId,token)),
