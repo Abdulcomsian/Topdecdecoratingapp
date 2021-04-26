@@ -28,7 +28,8 @@ const initialState = {
     isResetSucces: false,
     isResetMsg:null,
     isUser: null,
-    role:null
+    role:null,
+    isUserID: null
 };
 
 export default (state = initialState, action)=> {
@@ -40,8 +41,9 @@ export default (state = initialState, action)=> {
                     ...state,
                     isLogin: true,
                     isLoginMsg: action.payload.message,
-                    role: action.payload.role,
+                    role: action.payload.user.role,
                     token: action.payload.data.split("|")[1],
+                    isUserID: action.payload.user.id
                     
                 }
             case Actions.LOGIN_FAIL:
@@ -194,6 +196,34 @@ export default (state = initialState, action)=> {
                 }
             case Actions.CREATE_SCOPE_FORM_FAIL:
              console.log("CREATE_SCOPE_FORM_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS:
+             console.log("CREATE_PRE_WRRANTY_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_PRE_WRRANTY_FORM_FAIL:
+             console.log("CREATE_PRE_WRRANTY_FORM_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_QUALITY_ANSURANCE_FORM_SUCCESS:
+             console.log("CREATE_QUALITY_ANSURANCE_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL:
+             console.log("CREATE_QUALITY_ANSURANCE_FORM_FAIL",action.payload)
                 return{
                     ...state,
                     isSuccess: false,

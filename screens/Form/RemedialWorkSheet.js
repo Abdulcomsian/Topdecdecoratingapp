@@ -469,7 +469,7 @@ const RemedialWork = (props) => {
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isSuccess: state.auth.isSuccess,
-    isSuccessMsg: state.auth.isSuccessMsg
+  isSuccessMsg: state.auth.isSuccessMsg
 });
 const mapDispatchToProps = (dispatch) => ({
   createRemedialHandler: (

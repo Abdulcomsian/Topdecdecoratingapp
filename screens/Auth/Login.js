@@ -12,7 +12,7 @@ var user=require('../../assets/authScreen/icon.png')
 var lock=require('../../assets/authScreen/lock.png')
 
 const LoginScreen = (props) =>{
-    const {navigation, isLogin, isLoginMsg, role}=props;
+    const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
    // const dispatch = useDispatch()
     const [email, setEmail] = useState('admin@accrualgroup.com')
     const [password, setPassword] = useState('asdfghjkl')
@@ -29,14 +29,14 @@ const LoginScreen = (props) =>{
         if(isLogin){
             if(isLoginMsg){
                 alert(isLoginMsg)
-                if(role=="admin"){
+                if(role=="ADMIN"){
                     props.navigation.navigate('MainScreen')
                 }
-                else if(role=="decorator"){
-                    props.navigation.navigate('DecoratorDetails',{role:"decorator"})
+                else if(role=="DECORATOR"){
+                    props.navigation.navigate('DecoratorDetails',{role:"decorator",id: isUserID})
                 }
                 else{
-                    props.navigation.navigate('DetailSupervisor',{role:"supervisor"})
+                    props.navigation.navigate('DetailSupervisor',{role:"supervisor",id: isUserID})
                 }
             }
         }
@@ -110,7 +110,8 @@ const mapStateToProps = state => ({
     isLogin : state.auth.isLogin,
     isLoginMsg : state.auth.isLoginMsg,
     token : state.auth.token,
-    role: state.auth.role
+    role: state.auth.role,
+    isUserID: state.auth.isUserID
   });
   
   const mapDispatchToProps=dispatch=>({

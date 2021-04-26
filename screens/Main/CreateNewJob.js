@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import { createNewJobCreation } from "../../Redux/action/auth/authActionTypes";
 import axios from "axios";
 import { Picker } from "native-base";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var plus = require("../../assets/authScreen/plus.png");
 const NewJob = (props) => {
@@ -30,7 +30,6 @@ const NewJob = (props) => {
   const [supervisorData, setSupervisorData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const addInput = () => {
     setdynamicInput((oldArray) => [...oldArray, data]);
@@ -47,34 +46,27 @@ const NewJob = (props) => {
     setdynamicInput(preData);
   };
   const newJob = () => {
-    console.log(date)
-    props.createNewJobHandler(
-      constructorName,
-      projectName,
-      weekProject,
-      selectedValue,
-      date,
-      dynamicInput,
-      token
-    );
+    console.log(date.toLocaleDateString())
+    console.log(date.toLocaleTimeString())
+    // props.createNewJobHandler(
+    //   constructorName,
+    //   projectName,
+    //   weekProject,
+    //   selectedValue,
+    //   date,
+    //   dynamicInput,
+    //   token
+    // );
   };
-  const onChange = (event, selectedDate) => {
+  const onChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShow(Platform.OS === "ios" ? true : false);
-    // setDate(currentDate);
-    console.log(selectedDate);
-    setDate(new Date(currentDate).toLocaleDateString());
-    
+    setShow(false);
+    setDate(new Date(currentDate));
   };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
   const showDatepicker = () => {
-    showMode("date");
+    setShow(true)
   };
+  
   useEffect(() => {
     try {
       const body = {};
@@ -124,16 +116,17 @@ const NewJob = (props) => {
   } else {
     return (
       <View style={styles.mainContainer}>
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
+        <DateTimePickerModal
+            isVisible={show}
+            date={date ? date : new Date()}
+            mode={'datetime'}
+            is24Hour={true}
             display="default"
-            onChange={onChange}
-            format="DD-MM-YYYY"
+            onConfirm={(date) => onChange(date)}
+            onCancel={() => setShow(false)}
+            cancelTextIOS="Cancel"
+            confirmTextIOS="Confirm"
           />
-        )}
         <View style={styles.dateTimeContainer}>
           <Text style={styles.refText}>Date: 12-2-2021</Text>
           <Text style={styles.refText}>Ref id: 10099499</Text>

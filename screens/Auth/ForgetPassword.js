@@ -54,7 +54,7 @@ const ForgotPassword = (props) => {
     console.log("Use Code :", userCode);
     if (userCode.length >= 5) {
       if (userCode == isCode) {
-        console.log("Code Match !");
+        alert("Code Match !");
         props.postCodeValidate(userCode);
         //setReset(true)
       }
@@ -101,7 +101,7 @@ const ForgotPassword = (props) => {
         }
       }
     }
-  });
+  },[show,isSuccessMsg]);
   /* Check Validate Code User Exsit or Not */
   useEffect(()=>{
     if(isValidateUserID){
@@ -110,7 +110,7 @@ const ForgotPassword = (props) => {
     else{
       /* If User Not Exist Alert Show */
     }
-  });
+  },[isValidateUserID]);
   /* Reset Password Success Or Not */
   useEffect(() => {
     if(isResetSucces){
@@ -125,7 +125,7 @@ const ForgotPassword = (props) => {
         navigation.navigate("LoginScreen")
       }
     }
-  })
+  },[isValidateUserID,isResetMsg])
   return (
     <View style={styles.mainContainer}>
       <View style={styles.logoContainer}>

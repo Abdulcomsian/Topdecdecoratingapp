@@ -14,6 +14,7 @@ export const adminLogin = (email, password) => {
       });
 
       const response = request.data;
+      // console.log("Role :",response.user.role)
       if (response.success == true) {
         dispatch({
           type: Actions.LOGIN_SUCCESS,
@@ -243,10 +244,9 @@ export const searchDecorator = (id, token) => {
 export const createSupervisor = (name, email, password, phone, token) => {
   return async (dispatch, getState) => {
     try {
-
       const body = { email, password, name, phone };
-      console.log("Body :",body);
-      console.log("Token :",token);
+      console.log("Body :", body);
+      console.log("Token :", token);
       const request = await axios(base_url + "admin/create/supervisor", {
         method: "POST",
         headers: {
@@ -482,9 +482,9 @@ export const insertMakeReadyForm = (
         todayDate,
         task_id,
         tab_id,
-        dynamicInput
+        dynamicInput,
       };
-      
+
       const request = await axios(
         base_url + "supervisor/make/workflow/makeReadySheet",
         {
@@ -516,31 +516,148 @@ export const insertMakeReadyForm = (
 };
 export const insertSnaggingForm = (
   block,
-  plotNumber,
-  dateIssue,
-  dateComplete,
-  wrrantySnagging,
-  painterName,
-  noOfPage,
-  dynamicSnagInput,
-  dateSnaggingIssue,
-  dateSnaggingComplete,
-  totalHours,
-  dynamicSnagCompletedInput
+  plot_number,
+  isue_date,
+  completion_date,
+  pre_w_snagging,
+  painter,
+  No_of_Pages,
+  dynamicInput,
+  snagging_isue_by,
+  completed_by,
+  hour,
+  dynamicInputComplete,
+  task_id,
+  tab_id,
+  token
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Block :", block);
-      console.log("Plot Number :", plotNumber);
-      console.log("Date Issue :", dateIssue);
-      console.log("Completed Date :", dateComplete);
-      console.log("Wrannty Snagging :", wrrantySnagging);
-      console.log("Painter Name :", painterName);
-      console.log("No of Pages :", noOfPage);
-      console.log("Snagging Issue By :", dateSnaggingIssue);
-      console.log("Snagging Completed By :", dateSnaggingComplete);
-      console.log("Total Hours :", totalHours);
+      // console.log("Block :", block);
+      // console.log("Plot Number :", plotNumber);
+      // console.log("Date Issue :", dateIssue);
+      // console.log("Completed Date :", dateComplete);
+      // console.log("Wrannty Snagging :", wrrantySnagging);
+      // console.log("Painter Name :", painterName);
+      // console.log("No of Pages :", noOfPage);
+      // console.log("Snagging Issue By :", dateSnaggingIssue);
+      // console.log("Snagging Completed By :", dateSnaggingComplete);
+      // console.log("Total Hours :", totalHours);
+      // console.log("Dynamic Snagging Input :", dynamicSnagInput);
+      // console.log("Dynamic Snagging Input Complete :", dynamicSnagCompletedInput);
+      // console.log("Job ID :", jobID);
+      // console.log("Tab Name :", tabId);
+      // console.log("Token :", token);
+      const body = {
+        block,
+        plot_number,
+        isue_date,
+        completion_date,
+        pre_w_snagging,
+        painter,
+        snagging_isue_by,
+        completed_by,
+        No_of_Pages,
+        hour,
+        task_id,
+        tab_id,
+        dynamicInput,
+        dynamicInputComplete,
+      };
+
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insertWarenty",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_PRE_WRRANTY_FORM_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
+      console.log("Insert Error Response :", err.message);
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertAnsuranceForm = (
+  project,
+  unit,
+  dynamicInput,
+  dynamicInputcomplete,
+  mc,
+  md,
+  sms,
+  bscs,
+  task_id,
+  tab_id,
+  token
+) => {
+  return async (dispatch, getState) => {
+    try {
+      // console.log("Project Name :", project);
+      // console.log("Unit Plot :", unit);
+      // console.log("Supervisor MC Sign :", mc);
+      // console.log("Supervisor MD Sign :", md);
+      // console.log("Supervisor SMS Sign :", sms);
+      // console.log("Supervisor BSCS Sign :", bscs);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Inssurance Array :", dynamicInput);
+      // console.log("Activity Array :", dynamicInputcomplete);
+      // console.log("Token :", token);
+      const body = {
+        project,
+        unit,
+        mc,
+        md,
+        sms,
+        bscs,
+        task_id,
+        tab_id,
+        dynamicInput,
+        dynamicInputcomplete,
+      };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/quaity",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.CREATE_QUALITY_ANSURANCE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL,
+          payload: response,
+        });
+      }
+    } catch (err) {
+      console.log("Insert Error Response :", err.message);
       throw new Error(err.message);
     }
   };
@@ -594,7 +711,6 @@ export const insertRemedialForm = (
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const body = {
         contractor,
         project,
@@ -616,9 +732,9 @@ export const insertRemedialForm = (
         task_id,
         tab_id,
         dynamicInput,
-        totalHours
+        totalHours,
       };
-      
+
       const request = await axios(
         base_url + "supervisor/insert/workflow/RemendialSheet",
         {
@@ -676,9 +792,9 @@ export const insertScopeForm = (
         painter,
         task_id,
         tab_id,
-        dynamicInput
+        dynamicInput,
       };
-      
+
       const request = await axios(
         base_url + "supervisor/make/workflow/insertScope",
         {

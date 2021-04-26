@@ -1,24 +1,64 @@
 import React, { useState, useEffect } from "react";
-import { View,StyleSheet,CheckBox,TouchableOpacity,ScrollView} from 'react-native';
+import {   ActivityIndicator,
+    View,StyleSheet,CheckBox,TouchableOpacity,ScrollView} from 'react-native';
 import {Text} from 'native-base';
 import { TextInput } from 'react-native-gesture-handler';
 import { connect } from "react-redux";
 import {updateSupervisor} from '../../Redux/action/auth/authActionTypes';
+import axios from "axios";
 
 var rightArrow=require('../../assets/authScreen/right.png')
 const SupervisorDetails = (props) =>{
     const { navigation,token,isUpdate,isUpdateMsg} = props;
-    //const {name,email,id,userData} = props.route.params;
+    const {id} = props.route.params;
+    console.log("User ID :",id)
     const [role,setRole] = useState(props.route.params.role);
     console.log(role)
     const [password,setPassword]=useState("")
     //const [supervisorData,setSupervisorData] = useState(userData)
     const [status,setStatus] = useState("")
+    const [loading, setLoading] = useState(false);
     const[check,setCheck]=useState({
         approved:true,
         disApproved:false
     })
-    
+    const userID = id;
+    const LoginToken = token
+    console.log("Login Token :",LoginToken)
+    useEffect(() => {
+        try {
+          const body = {userID};
+          (async () => {
+            setLoading(true);
+            const request = await axios(
+              "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/search/supervisor",
+              {
+                method: "POST",
+                headers: {
+                  authorization: "Bearer " + LoginToken,
+                },
+                data: body,
+              }
+            );
+            const response = await request.data;
+            console.log(response);
+            // if(response){
+            //     setDecoratorDate(request.data.data.user)
+            //     setLoading(false);
+            //     setShowView(true)
+            // }
+            // else{
+            //     setLoading(false);
+            //     setShowView(false)
+            //     setErrorMsg(request.data.message)
+            // }
+          })();
+        } catch (err) {
+            console.log("Error")
+            console.log(err.message);
+            setLoading(false);
+        }  
+      }, []);
     // const checkedValue = (value) =>{
     //     if(value=="approved"){
     //         setStatus("1")
@@ -61,6 +101,14 @@ const SupervisorDetails = (props) =>{
     //     }
     //    }
     // },[isUpdateMsg])
+    if (loading) {
+        return (
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+            <ActivityIndicator color="#1073AC" size="small" />
+          </View>
+        );
+      }
+      else{
     return(
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
@@ -231,6 +279,7 @@ const SupervisorDetails = (props) =>{
             
         </View>
     )
+                    }
 }
 const mapStateToProps = (state) => ({
     token : state.auth.token,

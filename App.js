@@ -8,13 +8,14 @@ import rootReducer from './Redux/rootReducer';
 import thunk from "redux-thunk";
 import { Provider } from 'react-redux'
 import {createStore,applyMiddleware,compose} from 'redux';
+// import * as SplashScreen from "expo-splash-screen";
 
-// const { store, persistor } = createStore()
 const composeEnhancers = window.REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
-// const store  = createStore(reducer);
+
 const Stack = createStackNavigator();
 export default function App() {
+  // const [isLoadingComplete, setLoadingComplete] = React.useState(false);
         React.useEffect(() => {
           async function loadResourcesAndDataAsync() {
             try {
@@ -27,15 +28,20 @@ export default function App() {
             "poppins-italic": require("./assets/fonts/Poppins-Italic.ttf"),
             "poppins-bold": require("./assets/fonts/poppins-bold.ttf"),
             });
+            // await SplashScreen.preventAutoHideAsync();
           } catch (e) {
             // We might want to provide this error information to an error reporting service //Montserrat-SemiBold
             console.warn(e);
           } finally {
+            setLoadingComplete(true);
+        // await SplashScreen.hideAsync();
           }
         }
         loadResourcesAndDataAsync();
            }, [])
-  return (
+          //  if (!isLoadingComplete) {
+  // else
+          return (
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>

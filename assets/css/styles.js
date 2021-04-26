@@ -122,8 +122,8 @@ inputWitnessBodyContainer:{
 tableBody:{
     width:"100%",
     flexDirection:"row",
-    paddingRight:10,
-    paddingLeft:10,
+    // paddingRight:10,
+    // paddingLeft:10,
 },
 tableCheckListBody:{
     width:"100%",
@@ -187,8 +187,7 @@ headerHarmFulTitleView:{
     width:"16.6%"
 },
 inputHarmFullBodyContainer:{
-    width:"16.6%",
-    paddingLeft:15
+    width:"16.6%"
 },
 headerCheckListTitleView:{
     width:"14.2%"

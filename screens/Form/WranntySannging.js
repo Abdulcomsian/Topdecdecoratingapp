@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -14,8 +14,10 @@ import { insertSnaggingForm } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
-const WrantySannging = ( props ) => {
-    const { navigation } = props;
+const WrantySannging = (props) => {
+  const { navigation, token, isSuccess, isSuccessMsg } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [dateIssue, setDateIssue] = useState(new Date());
   const [dateComplete, setDateComplete] = useState(new Date());
   const [dateSnaggingIssue, setDateSnaggingIssue] = useState(new Date());
@@ -134,13 +136,30 @@ const WrantySannging = ( props ) => {
         dateSnaggingIssue,
         dateSnaggingComplete,
         totalHours,
-        dynamicSnagCompletedInput
+        dynamicSnagCompletedInput,
+        jobID,
+        tabId,
+        token
       );
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
   };
+  useEffect(() => {
+    if(isSuccess){     
+      if(isSuccessMsg){
+          alert(isSuccessMsg)
+          navigation.pop();
+      }
+      }
+      else{
+          if(isSuccessMsg){
+              alert(isSuccessMsg)
+              return false;
+          }
+      }
+  },[isSuccess,isSuccessMsg])
   return (
     <View style={styles.mainContainer}>
       {showIssue && (
@@ -454,6 +473,8 @@ const WrantySannging = ( props ) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg
 });
 const mapDispatchToProps = (dispatch) => ({
   createSnaggingHandler: (
@@ -468,7 +489,10 @@ const mapDispatchToProps = (dispatch) => ({
     dateSnaggingIssue,
     dateSnaggingComplete,
     totalHours,
-    dynamicSnagCompletedInput
+    dynamicSnagCompletedInput,
+    jobID,
+    tabId,
+    token
   ) =>
     dispatch(
       insertSnaggingForm(
@@ -483,7 +507,10 @@ const mapDispatchToProps = (dispatch) => ({
         dateSnaggingIssue,
         dateSnaggingComplete,
         totalHours,
-        dynamicSnagCompletedInput
+        dynamicSnagCompletedInput,
+        jobID,
+        tabId,
+        token
       )
     ),
 });
