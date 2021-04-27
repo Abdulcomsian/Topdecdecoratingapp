@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import { View,Image,TouchableOpacity,TextInput,ScrollView,CheckBox} from 'react-native';
 import {Text} from 'native-base';
 import styles from '../../../assets/css/styles'
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var mainImage=require('../../../assets/authScreen/Accurate-daywork-sheet-docx.png')
 var work=require('../../../assets/authScreen/work.png')
@@ -20,18 +21,15 @@ var weather=require('../../../assets/authScreen/weather.png')
 var plus=require('../../../assets/authScreen/plus.png')
 const DailyBreifingForm = () =>{
 
-    const [data, setData] = useState({
-        hazrd:"",action:"",responsible:""
-      });
+  
     const[hazrdArray,setHazrdArray]=useState([{hazrd:"",action:"",responsible:""}]);
     const addHazrdArray = () =>{
-        setHazrdArray((oldArray) => [...oldArray, data]);
-        setData({hazrd:"",action:"",responsible:""})
+        setHazrdArray((oldArray) => [...oldArray, {hazrd:"",action:"",responsible:""}]);
     }
     const updateValue = (key, index, value) => {
-        let preData = [...dynamicInput];
+        let preData = [...hazrdArray];
         preData[index][key] = value;
-        setdynamicInput(preData);
+        setHazrdArray(preData);
       };
     const [dailyArray,setDailyArray]=useState([
         {title:"Supervision",check:false},
@@ -75,10 +73,15 @@ const DailyBreifingForm = () =>{
         {title:"Feel good and fit for work? ",check:false},
         {title:"Notice any changes to work since the method statement was drafted? ",check:false},
     ])
-    const [operativeArray,setOperativeArray] = useState([])
+    const [operativeArray,setOperativeArray] = useState([{name:"",sign:""}])
     const addOperativeArray = () =>(
         setOperativeArray(oldArray=>[...oldArray,{name:"",sign:""}])
     )
+    const updateOperativeValue = (key, index, value) => {
+        let preData = [...operativeArray];
+        preData[index][key] = value;
+        setOperativeArray(preData);
+      };
     const checkedDailyValue = (key, index) => {
         let preData = [...dailyArray];
         if(preData[index][key]){
@@ -111,8 +114,46 @@ const DailyBreifingForm = () =>{
         }
           setJobSafetyArray(preData);
       };
+      const [date, setDate] = useState(new Date());
+      const [show, setShow] = useState(false);
+      const onChange = (selectedDate) => {
+        const currentDate = selectedDate;
+        setShow(false);
+        setDate(new Date(currentDate));
+      };
+      const showDatepicker = () => {
+        setShow(true)
+      };
+      const [mainContractor, setMainContractor] = useState("")
+      const [projectName, setProjectName] = useState("")
+      const [supervisorName, setSupervisorName] = useState("")
+      const [statementNumber, setStatementNumber] = useState("")
+
+      const dailyBrefilyFormInsert = () =>{
+        console.log("Main Contractor :",mainContractor)
+        console.log("Project Name :",projectName)
+        console.log("Supervisor Name :",supervisorName)
+        console.log("Statment Number :",statementNumber)
+        console.log("Date :",date)
+        console.log("Daily array :",dailyArray)
+        console.log("Job Safe Array :",jobSafetyArray)
+        console.log("Brefily Array :",berifingArray)
+        console.log("Operative Array :",operativeArray)
+        console.log("Hazrd Array :",hazrdArray)
+      }
     return(
         <View style={styles.mainContainer}>
+            <DateTimePickerModal
+                isVisible={show}
+                date={date ? date : new Date()}
+                mode={'date'}
+                is24Hour={true}
+                display="default"
+                onConfirm={(date) => onChange(date)}
+                onCancel={() => setShow(false)}
+                cancelTextIOS="Cancel"
+                confirmTextIOS="Confirm"
+            />
             <View style={{paddingTop:30,justifyContent:'center',alignItems:'center'}}>
                 <Text style={styles.titleText}>Top Dec’s Daily Briefing Form - SAFE START</Text>
             </View>
@@ -122,31 +163,45 @@ const DailyBreifingForm = () =>{
                         <TextInput
                             style={styles.inputField}
                             placeholder={"Main Contractor"}
+                            value={mainContractor}
+              onChangeText={(e) => setMainContractor(e)}
                         />
                     </View>
                     <View style={styles.inputFieldContainer}>
                         <TextInput
                             style={styles.inputField}
                             placeholder={"Project"}
+                            value={projectName}
+              onChangeText={(e) => setProjectName(e)}
                         />
                     </View>
                     <View style={styles.inputFieldContainer}>
                         <TextInput
                             style={styles.inputField}
                             placeholder={"Supervisor"}
+                            value={supervisorName}
+              onChangeText={(e) => setSupervisorName(e)}
                         />
                     </View>
                     <View style={styles.inputFieldContainer}>
                         <TextInput
                             style={styles.inputField}
                             placeholder={"Method statement No"}
+                            value={statementNumber}
+              onChangeText={(e) => setStatementNumber(e)}
                         />
                     </View>
                     <View style={styles.inputFieldContainer}>
-                        <TextInput
-                            style={styles.inputField}
-                            placeholder={"Date"}
-                        />
+                    <Text onPress={()=>showDatepicker()} style={{width: "100%",
+                          width: "100%",
+                          height: 52,
+                          paddingTop: 20,
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          padding: 5}}>{new Date(date).toLocaleDateString()}</Text>
                     </View>
 
                     <View style={{marginTop:20}}>
@@ -284,12 +339,16 @@ const DailyBreifingForm = () =>{
                                                 <TextInput
                                                     style={styles.bodyTextInput}
                                                     placeholder={"HAZARD"}
+                                                    value={item.name}
+                      onChangeText={(txt) => updateOperativeValue("name", index, txt)}
                                                 />
                                             </View>
                                             <View style={styles.inputOprativesBodyContainer}>
                                                 <TextInput
                                                     style={styles.bodyTextInput}
                                                     placeholder={"ACTION"}
+                                                    value={item.sign}
+                      onChangeText={(txt) => updateOperativeValue("sign", index, txt)}
                                                 />
                                             </View>
                                         </View>
@@ -300,6 +359,23 @@ const DailyBreifingForm = () =>{
                                     <Text style={{fontFamily:'poppins-semiBold',fontSize:10,textAlign:'center',marginTop:20}}>Once completed, please place a copy in the Site Folder and send a copy to Top Dec’s head Office. Also, please give a copy to the Site Staff.</Text>
                                 </View>
                     </View>
+                    <View
+            style={{
+              backgroundColor: "#000",
+              width: "100%",
+              height: ".2%",
+              marginBottom: 20,
+              marginTop: 20,
+            }}
+          ></View>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity
+              style={styles.commonBtn}
+              onPress={() => dailyBrefilyFormInsert()}
+            >
+              <Text style={styles.commonText}>Save</Text>
+            </TouchableOpacity>
+          </View>
                 </View>
             </ScrollView>
         </View>
