@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -14,7 +14,9 @@ import { insertDecorationRecord } from "../../../Redux/action/auth/authActionTyp
 
 var plus = require("../../../assets/authScreen/plus.png");
 const DecorationRecord = (props) => {
-    const { navigation } = props;
+    const { navigation, token, isSuccessMsg, isSuccess } = props;
+    const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [dynamicFirstInput, setdynamicFirstInput] = useState([]);
   const [dynamicSecondInput, setdynamicSeconfInput] = useState([]);
 
@@ -22,36 +24,35 @@ const DecorationRecord = (props) => {
     name: "",
     block: "",
     level: "",
-    bedroom: "",
+    bed: "",
     price: "",
-    plotArea: "",
+    plot: "",
     days: "",
-    date: "",
-    completinDate: "",
+    start: "",
+    complete: "",
   });
   const [dataSecondDecoration, setDataSecondDecoration] = useState({
     name: "",
     block: "",
     level: "",
-    bedroom: "",
+    bed: "",
     price: "",
-    plotArea: "",
-    days: "",
-    date: "",
-    completinDate: "",
+    plot: "",
+    start: "",
+    complete: "",
   });
   const addDecorationRow = () => {
     setdynamicFirstInput((oldArray) => [...oldArray, dataFirstDecoration]);
     setDataFirstDecoration({
       name: "",
-      block: "",
-      level: "",
-      bedroom: "",
-      price: "",
-      plotArea: "",
-      days: "",
-      date: "",
-      completinDate: "",
+    block: "",
+    level: "",
+    bed: "",
+    price: "",
+    plot: "",
+    days: "",
+    start: "",
+    complete: "",
     });
   };
   const addDecorationSecondRow = () => {
@@ -60,31 +61,47 @@ const DecorationRecord = (props) => {
       name: "",
       block: "",
       level: "",
-      bedroom: "",
+      bed: "",
       price: "",
-      plotArea: "",
-      date: "",
-      completinDate: "",
+      plot: "",
+      start: "",
+      complete: "",
     });
   };
   const updateFirstValue = (key, index, value) => {
-    let preData = [...dataFirstDecoration];
+    let preData = [...dynamicFirstInput];
     preData[index][key] = value;
-    setDataFirstDecoration(preData);
+    setdynamicFirstInput(preData);
   };
   const updateSecondValue = (key, index, value) => {
-    let preData = [...dataSecondDecoration];
+    let preData = [...dynamicSecondInput];
     preData[index][key] = value;
     setDataSecondDecoration(preData);
   };
   const decorationRecordInsert = () =>{
-      if(dynamicFirstInput && dynamicSecondInput){
-        props.createDecorationRecordHandler(dynamicFirstInput,dynamicSecondInput)
+      if(dynamicFirstInput && dynamicSecondInput && jobID!=="" && tabId!=""){
+        props.createDecorationRecordHandler(dynamicFirstInput,dynamicSecondInput,jobID,tabId,token)
       } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
   } 
+  useEffect(() => {
+    if(isSuccess){     
+      if(isSuccessMsg){
+          console.log("here !")
+          alert(isSuccessMsg)
+          navigation.pop();
+      }
+      }
+      else{
+          if(isSuccessMsg){
+              
+              alert(isSuccessMsg)
+              return false;
+          }
+      }
+  },[isSuccess,isSuccessMsg])
   return (
     <ScrollView style={{ height: "100%" }}>
       <View style={styles.mainContainer}>
@@ -163,9 +180,9 @@ const DecorationRecord = (props) => {
                       <View style={styles.inputBodyContainer}>
                         <TextInput
                           onChangeText={(txt) =>
-                            updateFirstValue("bedroom", index, txt)
+                            updateFirstValue("bed", index, txt)
                           }
-                          value={el.bedroom}
+                          value={el.bed}
                           style={styles.bodyTextInput}
                           placeholder={"Rooms"}
                         />
@@ -183,9 +200,9 @@ const DecorationRecord = (props) => {
                       <View style={styles.inputBodyContainer}>
                         <TextInput
                           onChangeText={(txt) =>
-                            updateFirstValue("plotArea", index, txt)
+                            updateFirstValue("plot", index, txt)
                           }
-                          value={el.plotArea}
+                          value={el.plot}
                           style={styles.bodyTextInput}
                           placeholder={"Plot"}
                         />
@@ -203,9 +220,9 @@ const DecorationRecord = (props) => {
                       <View style={styles.inputBodyContainer}>
                         <TextInput
                           onChangeText={(txt) =>
-                            updateFirstValue("date", index, txt)
+                            updateFirstValue("start", index, txt)
                           }
-                          value={el.date}
+                          value={el.start}
                           style={styles.bodyTextInput}
                           placeholder={"Date"}
                         />
@@ -213,9 +230,9 @@ const DecorationRecord = (props) => {
                       <View style={styles.inputBodyContainer}>
                         <TextInput
                           onChangeText={(txt) =>
-                            updateFirstValue("completinDate", index, txt)
+                            updateFirstValue("complete", index, txt)
                           }
-                          value={el.completinDate}
+                          value={el.complete}
                           style={styles.bodyTextInput}
                           placeholder={"Date"}
                         />
@@ -267,10 +284,10 @@ const DecorationRecord = (props) => {
                       onChangeText={(txt) =>
                         setDataFirstDecoration({
                           ...dataFirstDecoration,
-                          bedroom: txt,
+                          bed: txt,
                         })
                       }
-                      value={dataFirstDecoration.bedroom}
+                      value={dataFirstDecoration.bed}
                       style={styles.bodyTextInput}
                       placeholder={"Rooms"}
                     />
@@ -293,10 +310,10 @@ const DecorationRecord = (props) => {
                       onChangeText={(txt) =>
                         setDataFirstDecoration({
                           ...dataFirstDecoration,
-                          plotArea: txt,
+                          plot: txt,
                         })
                       }
-                      value={dataFirstDecoration.plotArea}
+                      value={dataFirstDecoration.plot}
                       style={styles.bodyTextInput}
                       placeholder={"Plot"}
                     />
@@ -319,10 +336,10 @@ const DecorationRecord = (props) => {
                       onChangeText={(txt) =>
                         setDataFirstDecoration({
                           ...dataFirstDecoration,
-                          date: txt,
+                          start: txt,
                         })
                       }
-                      value={dataFirstDecoration.date}
+                      value={dataFirstDecoration.start}
                       style={styles.bodyTextInput}
                       placeholder={"Date"}
                     />
@@ -332,10 +349,10 @@ const DecorationRecord = (props) => {
                       onChangeText={(txt) =>
                         setDataFirstDecoration({
                           ...dataFirstDecoration,
-                          completinDate: txt,
+                          complete: txt,
                         })
                       }
-                      value={dataFirstDecoration.completinDate}
+                      value={dataFirstDecoration.complete}
                       style={styles.bodyTextInput}
                       placeholder={"Date"}
                     />
@@ -427,9 +444,9 @@ const DecorationRecord = (props) => {
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
                           onChangeText={(txt) =>
-                            updateSecondValue("bedroom", index, txt)
+                            updateSecondValue("bed", index, txt)
                           }
-                          value={el.bedroom}
+                          value={el.bed}
                           style={styles.bodyTextInput}
                           placeholder={"Rooms"}
                         />
@@ -447,9 +464,9 @@ const DecorationRecord = (props) => {
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
                           onChangeText={(txt) =>
-                            updateSecondValue("plotArea", index, txt)
+                            updateSecondValue("plot", index, txt)
                           }
-                          value={el.plotArea}
+                          value={el.plot}
                           style={styles.bodyTextInput}
                           placeholder={"Plot"}
                         />
@@ -457,9 +474,9 @@ const DecorationRecord = (props) => {
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
                           onChangeText={(txt) =>
-                            updateSecondValue("date", index, txt)
+                            updateSecondValue("start", index, txt)
                           }
-                          value={el.date}
+                          value={el.start}
                           style={styles.bodyTextInput}
                           placeholder={"Date"}
                         />
@@ -467,9 +484,9 @@ const DecorationRecord = (props) => {
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
                           onChangeText={(txt) =>
-                            updateSecondValue("completinDate", index, txt)
+                            updateSecondValue("complete", index, txt)
                           }
-                          value={el.completinDate}
+                          value={el.complete}
                           style={styles.bodyTextInput}
                           placeholder={"Date"}
                         />
@@ -521,10 +538,10 @@ const DecorationRecord = (props) => {
                       onChangeText={(txt) =>
                         setDataSecondDecoration({
                           ...dataSecondDecoration,
-                          bedroom: txt,
+                          bed: txt,
                         })
                       }
-                      value={dataSecondDecoration.bedroom}
+                      value={dataSecondDecoration.bed}
                       style={styles.bodyTextInput}
                       placeholder={"Rooms"}
                     />
@@ -547,10 +564,10 @@ const DecorationRecord = (props) => {
                       onChangeText={(txt) =>
                         setDataSecondDecoration({
                           ...dataSecondDecoration,
-                          plotArea: txt,
+                          plot: txt,
                         })
                       }
-                      value={dataSecondDecoration.plotArea}
+                      value={dataSecondDecoration.plot}
                       style={styles.bodyTextInput}
                       placeholder={"Plot"}
                     />
@@ -560,10 +577,10 @@ const DecorationRecord = (props) => {
                       onChangeText={(txt) =>
                         setDataSecondDecoration({
                           ...dataSecondDecoration,
-                          date: txt,
+                          start: txt,
                         })
                       }
-                      value={dataSecondDecoration.date}
+                      value={dataSecondDecoration.start}
                       style={styles.bodyTextInput}
                       placeholder={"Date"}
                     />
@@ -573,10 +590,10 @@ const DecorationRecord = (props) => {
                       onChangeText={(txt) =>
                         setDataSecondDecoration({
                           ...dataSecondDecoration,
-                          completinDate: txt,
+                          complete: txt,
                         })
                       }
-                      value={dataSecondDecoration.completinDate}
+                      value={dataSecondDecoration.complete}
                       style={styles.bodyTextInput}
                       placeholder={"Date"}
                     />
@@ -625,16 +642,24 @@ const DecorationRecord = (props) => {
 };
 const mapStateToProps = (state) => ({
     token: state.auth.token,
+    isSuccess: state.auth.isSuccess,
+    isSuccessMsg: state.auth.isSuccessMsg,
   });
   const mapDispatchToProps = (dispatch) => ({
     createDecorationRecordHandler: (
       dynamicFirstInput,
       dynamicSecondInput,
+      jobID,
+      tabId,
+      token
     ) =>
       dispatch(
         insertDecorationRecord(
           dynamicFirstInput,
           dynamicSecondInput,
+          jobID,
+          tabId,
+          token
         )
       ),
   });

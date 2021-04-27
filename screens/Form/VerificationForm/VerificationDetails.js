@@ -31,11 +31,14 @@ const VerificationDetails = ({ props, navigation }) => {
     if (tabName === "Miscoat") {
       _ref.current.setPage(0);
       setIsLeft(1);
+      setActiveTab("Miscoat")
     } else if (tabName === "Decoration") {
       _ref.current.setPage(1);
+      setActiveTab("Decoration")
     } else {
       _ref.current.setPage(2);
       setIsLeft(2);
+      setActiveTab("Sang")
     }
   };
   //updating the top tab states

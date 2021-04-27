@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -8,20 +8,21 @@ import {
   ScrollView,
 } from "react-native";
 import { Text } from "native-base";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { connect } from "react-redux";
 import { insertWorkSheet } from "../../../Redux/action/auth/authActionTypes";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const AccurateDayWork = (props) => {
-  const { navigation } = props;
+  const { navigation, token, isSuccess, isSuccessMsg } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [dynamicLabourInput, setdynamicLabourInput] = useState([]);
   const [dynamicMaterialInput, setdynamicMaterialInput] = useState([]);
   const [dynamicPlantInput, setdynamicPlantInput] = useState([]);
   const [dynamicManagmentInput, setdynamicManagmentInput] = useState([]);
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [mainContructor, setMainContructor] = useState("");
   const [contructorTitle, setContructorTitle] = useState("");
@@ -31,6 +32,7 @@ const AccurateDayWork = (props) => {
   const [plotNumber, setPlotNumber] = useState("");
   const [descriptionWork, setDescriptionWork] = useState("");
   const [managerName, setManagerName] = useState("");
+  const [managerSignature, setManagerSignature] = useState("");
   const [position, setPosition] = useState("");
   const [dataLabour, setDataLabour] = useState({
     name: "",
@@ -38,24 +40,24 @@ const AccurateDayWork = (props) => {
     mon: "",
     tues: "",
     wed: "",
-    thus: "",
+    thu: "",
     fri: "",
     sat: "",
     sun: "",
     total: "",
   });
   const [materialData, setMaterialData] = useState({
-    name: "",
+    description: "",
     quantity: "",
     unit: "",
   });
   const [plantData, setPlantData] = useState({
-    name: "",
+    description: "",
     quantity: "",
     unit: "",
   });
   const [managmentData, setManagmentData] = useState({
-    name: "",
+    description: "",
     quantity: "",
     unit: "",
   });
@@ -67,7 +69,7 @@ const AccurateDayWork = (props) => {
       mon: "",
       tues: "",
       wed: "",
-      thus: "",
+      thu: "",
       fri: "",
       sat: "",
       sun: "",
@@ -76,15 +78,15 @@ const AccurateDayWork = (props) => {
   };
   const addMaterialRow = () => {
     setdynamicMaterialInput((oldArray) => [...oldArray, materialData]);
-    setMaterialData({ name: "", quantity: "", unit: "" });
+    setMaterialData({ description: "", quantity: "", unit: "" });
   };
   const addPlantItem = () => {
     setdynamicPlantInput((oldArray) => [...oldArray, plantData]);
-    setPlantData({ name: "", quantity: "", unit: "" });
+    setPlantData({ description: "", quantity: "", unit: "" });
   };
   const addManagmentRow = () => {
     setdynamicManagmentInput((oldArray) => [...oldArray, managmentData]);
-    setManagmentData({ name: "", quantity: "", unit: "" });
+    setManagmentData({ description: "", quantity: "", unit: "" });
   };
   const updateLabourValue = (key, index, value) => {
     let preData = [...dynamicLabourInput];
@@ -106,22 +108,16 @@ const AccurateDayWork = (props) => {
     preData[index][key] = value;
     setdynamicPlantInput(preData);
   };
-  const onChange = (event, selectedDate) => {
+  const onChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShow(Platform.OS === "ios" ? true : false);
-    setDate(new Date(currentDate).toLocaleDateString());
+    setShow(false);
+    setDate(new Date(currentDate));
   };
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
   const showDatepicker = () => {
-    showMode("date");
+    setShow(true);
   };
 
   const workSheetInsert = () => {
-    
     if (
       mainContructor != "" &&
       contructorTitle != "" &&
@@ -132,7 +128,9 @@ const AccurateDayWork = (props) => {
       descriptionWork != "" &&
       managerName != "" &&
       position != "" &&
-      date
+      date &&
+      jobID != "" &&
+      tabId != ""
     ) {
       props.createWorkSheetHandler(
         mainContructor,
@@ -147,26 +145,45 @@ const AccurateDayWork = (props) => {
         dynamicPlantInput,
         dynamicManagmentInput,
         managerName,
+        managerSignature,
         position,
-        date
+        date.toLocaleDateString(),
+        jobID,
+        tabId,
+        token
       );
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
   };
+  useEffect(() => {
+    if(isSuccess){     
+      if(isSuccessMsg){
+          alert(isSuccessMsg)
+          navigation.pop();
+      }
+      }
+      else{
+          if(isSuccessMsg){
+              alert(isSuccessMsg)
+              return false;
+          }
+      }
+  },[isSuccessMsg])
   return (
     <View style={styles.mainContainer}>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          display="default"
-          onChange={onChange}
-          format="DD-MM-YYYY"
-        />
-      )}
+      <DateTimePickerModal
+        isVisible={show}
+        date={date ? date : new Date()}
+        mode={"date"}
+        is24Hour={true}
+        display="default"
+        onConfirm={(date) => onChange(date)}
+        onCancel={() => setShow(false)}
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
+      />
       <View style={styles.imageView}>
         <Image source={mainImage} style={styles.bannerImage} />
       </View>
@@ -455,9 +472,9 @@ const AccurateDayWork = (props) => {
                 <View style={styles.inputWeekBodyContainer}>
                   <TextInput
                     onChangeText={(txt) =>
-                      setDataLabour({ ...dataLabour, thus: txt })
+                      setDataLabour({ ...dataLabour, thu: txt })
                     }
-                    value={dataLabour.thus}
+                    value={dataLabour.thu}
                     style={styles.bodyTextInput}
                     placeholder={"Thus"}
                   />
@@ -583,9 +600,9 @@ const AccurateDayWork = (props) => {
                 <View style={styles.inputMaterialBodyContainer}>
                   <TextInput
                     onChangeText={(txt) =>
-                      setMaterialData({ ...materialData, name: txt })
+                      setMaterialData({ ...materialData, description: txt })
                     }
-                    value={materialData.name}
+                    value={materialData.description}
                     style={styles.bodyTextInput}
                     placeholder={"Name"}
                   />
@@ -691,9 +708,9 @@ const AccurateDayWork = (props) => {
                 <View style={styles.inputMaterialBodyContainer}>
                   <TextInput
                     onChangeText={(txt) =>
-                      setPlantData({ ...plantData, name: txt })
+                      setPlantData({ ...plantData, description: txt })
                     }
-                    value={plantData.name}
+                    value={plantData.description}
                     style={styles.bodyTextInput}
                     placeholder={"Name"}
                   />
@@ -799,9 +816,9 @@ const AccurateDayWork = (props) => {
                 <View style={styles.inputMaterialBodyContainer}>
                   <TextInput
                     onChangeText={(txt) =>
-                      setManagmentData({ ...managmentData, name: txt })
+                      setManagmentData({ ...managmentData, description: txt })
                     }
-                    value={managmentData.name}
+                    value={managmentData.description}
                     style={styles.bodyTextInput}
                     placeholder={"Name"}
                   />
@@ -866,6 +883,8 @@ const AccurateDayWork = (props) => {
             <TextInput
               style={styles.bodyTextInput}
               placeholder={"Managers Signature"}
+              value={managerSignature}
+              onChangeText={(e) => setManagerSignature(e)}
             />
           </View>
           <View style={styles.inputBodyContainer}>
@@ -874,10 +893,15 @@ const AccurateDayWork = (props) => {
               style={{
                 width: "100%",
                 height: 60,
-                paddingTop: 20,
+                width: "90%",
+                paddingTop: 17,
                 fontSize: 12,
                 color: "#96A8B2",
                 fontFamily: "poppins-regular",
+                borderBottomWidth: 1,
+                borderBottomColor: "#96A8B2",
+                padding: 5,
+                color: "#96A8B2",
               }}
             >
               {new Date(date).toLocaleDateString()}
@@ -925,6 +949,8 @@ const AccurateDayWork = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg
 });
 const mapDispatchToProps = (dispatch) => ({
   createWorkSheetHandler: (
@@ -940,8 +966,12 @@ const mapDispatchToProps = (dispatch) => ({
     dynamicPlantInput,
     dynamicManagmentInput,
     managerName,
+    managerSignature,
     position,
-    date
+    date,
+    jobID,
+    tabId,
+    token
   ) =>
     dispatch(
       insertWorkSheet(
@@ -957,8 +987,12 @@ const mapDispatchToProps = (dispatch) => ({
         dynamicPlantInput,
         dynamicManagmentInput,
         managerName,
+        managerSignature,
         position,
-        date
+        date,
+        jobID,
+        tabId,
+        token
       )
     ),
 });

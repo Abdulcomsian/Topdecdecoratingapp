@@ -120,7 +120,7 @@ const NewJob = (props) => {
         <DateTimePickerModal
             isVisible={show}
             date={date ? date : new Date()}
-            mode={'datetime'}
+            mode={'date'}
             is24Hour={true}
             display="default"
             onConfirm={(date) => onChange(date)}
@@ -259,18 +259,18 @@ const NewJob = (props) => {
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-              {/* <TouchableOpacity
+              <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity> */}
-              <TouchableOpacity
+            </TouchableOpacity>
+              {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={()=>newJob(this)}
               >
                 <Text style={styles.commonText}>Save</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </ScrollView>

@@ -776,15 +776,15 @@ export const insertScopeForm = (
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Dynamic Input :", dynamicInput);
-      console.log("Painter Name :", painter);
-      console.log("Signature :", signature);
-      console.log("Plot Number :", plotNumber);
-      console.log("Type :", type);
-      console.log("Date :", date);
-      console.log("Job ID :", task_id);
-      console.log("Tab Name :", tab_id);
-      console.log("Token :", token);
+      // console.log("Dynamic Input :", dynamicInput);
+      // console.log("Painter Name :", painter);
+      // console.log("Signature :", signature);
+      // console.log("Plot Number :", plotNumber);
+      // console.log("Type :", type);
+      // console.log("Date :", date);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
       const body = {
         signature,
         date,
@@ -824,78 +824,284 @@ export const insertScopeForm = (
   };
 };
 export const insertWorkSheet = (
-  mainContructor,
-  contructorTitle,
-  sheetNo,
-  weekEnd,
-  siteInstructionNo,
-  plotNumber,
-  descriptionWork,
-  dynamicLabourInput,
-  dynamicMaterialInput,
-  dynamicPlantInput,
-  dynamicManagmentInput,
-  managerName,
+  contractor,
+  title,
+  day_start,
+  week_ending,
+  indution,
+  plot,
+  description,
+  LABOUR,
+  MATERIALS,
+  PLANTS,
+  PRELIMINARIES,
+  manager,
+  sign,
   position,
-  date
+  date,
+  task_id,
+  tab_id,
+  token
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Main Contructor :", mainContructor);
-      console.log("Constructor Title :", contructorTitle);
-      console.log("Sheet No :", sheetNo);
-      console.log("Week End :", weekEnd);
-      console.log("Site Instruction Number :", siteInstructionNo);
-      console.log("Plot Number :", plotNumber);
-      console.log("Description Work :", descriptionWork);
-      console.log("Labour Array :", dynamicLabourInput);
-      console.log("Material Array :", dynamicMaterialInput);
-      console.log("Plant Array :", dynamicPlantInput);
-      console.log("Managment Array :", dynamicManagmentInput);
-      console.log("Manager Name :", managerName);
-      console.log("Position :", position);
-      console.log("Today Date :", date);
+      // console.log("Main Contructor :", contractor);
+      // console.log("Constructor Title :", title);
+      // console.log("Sheet No :", day_start);
+      // console.log("Week End :", week_ending);
+      // console.log("Site Instruction Number :", indution);
+      // console.log("Plot Number :", plot);
+      // console.log("Description Work :", description);
+      // console.log("Labour Array :", LABOUR);
+      // console.log("Material Array :", MATERIALS);
+      // console.log("Plant Array :", PLANTS);
+      // console.log("Managment Array :", PRELIMINARIES);
+      // console.log("Manager Name :", manager);
+      // console.log("Manager sign :", sign);
+      // console.log("Position :", position);
+      // console.log("Today Date :", date);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
+      const body = {
+        contractor,
+        title,
+        day_start,
+        week_ending,
+        indution,
+        plot,
+        description,
+        manager,
+        sign,
+        date,
+        position,
+        task_id,
+        tab_id,
+        LABOUR,
+        MATERIALS,
+        PLANTS,
+        PRELIMINARIES,
+      };
+
+      const request = await axios(
+        base_url + "supervisor/insert/verification/accurate",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
+      console.log("Erroe :", err.message);
       throw new Error(err.message);
     }
   };
 };
 export const insertDecorationRecord = (
-  dynamicFirstInput,
-  dynamicSeconfInput
+  jobSummary,
+  jobSummarycomplete,
+  task_id,
+  tab_id,
+  token
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Dynamic First Input :", dynamicFirstInput);
-      console.log("Dynamic Second Input :", dynamicSeconfInput);
+      // console.log("Dynamic First Input :", jobSummary);
+      // console.log("Dynamic Second Input :", jobSummarycomplete);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
+      const body = {
+        task_id,
+        tab_id,
+        jobSummary,
+        jobSummarycomplete,
+      };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/decoration",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_DECORATION_RECORD_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_DECORATION_RECORD_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
+      console.log("error:", err.message);
       throw new Error(err.message);
     }
   };
 };
-export const insertMiscoat = (mainContructor, projectName, dynamicInput) => {
+export const insertMiscoat = (
+  contractor,
+  project,
+  jobSummary,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Main Contructor :", mainContructor);
-      console.log("Project Name :", projectName);
-      console.log("Dynamic :", dynamicInput);
+      // console.log("Main Contructor :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Dynamic :", jobSummary);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
+      const body = {
+        contractor,
+        project,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Miscoat",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_MISCOAT_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_MISCOAT_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
+      console.log("error:", err.message);
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertSiteInstruction = (
+  contractor,
+  instruction,
+  raised_by,
+  date,
+  details,
+  condition,
+  supervisor,
+        s_date,
+        task_id,
+        tab_id,
+        token
+) => {
+  return async (dispatch, getState) => {
+    try {
+      // console.log("Contractor Name :", contractor);
+      // console.log("Instruction No :", instruction);
+      // console.log("Raised By :", raised_by);
+      // console.log("Date :", date);
+      // console.log("Description :", details);
+      // console.log("Special Notes :", condition);
+      // console.log("Supervisor Name :", supervisor);
+      // console.log("Supervisor Date :", s_date);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
+      const body = {
+        contractor,
+        instruction,
+        raised_by,
+        date,
+        details,
+        condition,
+        s_date,
+        task_id,
+        tab_id,
+        supervisor
+      };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Instruction",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_SITE_INSTRUCTION_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_SITE_INSTRUCTION_FAIL,
+          payload: response,
+        });
+      }
+    } catch (err) {
+      console.log("error:", err.message);
       throw new Error(err.message);
     }
   };
 };
 export const insertVerificationForm = (
-  projectName,
-  idRef,
-  decoratorName,
-  dynamicInput
+  project,
+  id_ref,
+  decorator,
+  PRELIMINARIES,
+        task_id,
+        tab_id,
+        token
+
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Project Name :", projectName);
-      console.log("Id Ref :", idRef);
-      console.log("Decorator Name :", decoratorName);
-      console.log("Dynamic :", dynamicInput);
+      console.log("Project Name :", project);
+      console.log("Id Ref :", id_ref);
+      console.log("Decorator Name :", decorator);
+      console.log("Dynamic :", PRELIMINARIES);
+      console.log("Job ID :", task_id);
+      console.log("Tab Name :", tab_id);
+      console.log("Token :", token);
     } catch (err) {
       throw new Error(err.message);
     }

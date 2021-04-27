@@ -231,6 +231,62 @@ export default (state = initialState, action)=> {
                     isSuccess: false,
                     isSuccessMsg : action.payload.message,
                 }
+            case Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE:
+             console.log("INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL:
+             console.log("INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_DECORATION_RECORD_SUCCESS:
+             console.log("INSERT_DECORATION_RECORD_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_DECORATION_RECORD_FAIL:
+             console.log("INSERT_DECORATION_RECORD_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_MISCOAT_SUCCESS:
+             console.log("INSERT_MISCOAT_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_MISCOAT_FAIL:
+             console.log("INSERT_MISCOAT_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_SITE_INSTRUCTION_SUCCESS:
+             console.log("INSERT_SITE_INSTRUCTION_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_SITE_INSTRUCTION_FAIL:
+             console.log("INSERT_SITE_INSTRUCTION_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
             default:
             return state;
       }

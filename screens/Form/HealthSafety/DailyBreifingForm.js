@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
-import { View,Image,TouchableOpacity,TextInput,ScrollView} from 'react-native';
-import {CheckBox, Text} from 'native-base';
+import { View,Image,TouchableOpacity,TextInput,ScrollView,CheckBox} from 'react-native';
+import {Text} from 'native-base';
 import styles from '../../../assets/css/styles'
 
 var mainImage=require('../../../assets/authScreen/Accurate-daywork-sheet-docx.png')
@@ -20,57 +20,97 @@ var weather=require('../../../assets/authScreen/weather.png')
 var plus=require('../../../assets/authScreen/plus.png')
 const DailyBreifingForm = () =>{
 
-    const[hazrdArray,setHazrdArray]=useState([]);
-    const addHazrdArray = () =>(
-        setHazrdArray(oldArray=>[...oldArray,{hazrd:"",action:"",responsible:""}])
-    )
+    const [data, setData] = useState({
+        hazrd:"",action:"",responsible:""
+      });
+    const[hazrdArray,setHazrdArray]=useState([{hazrd:"",action:"",responsible:""}]);
+    const addHazrdArray = () =>{
+        setHazrdArray((oldArray) => [...oldArray, data]);
+        setData({hazrd:"",action:"",responsible:""})
+    }
+    const updateValue = (key, index, value) => {
+        let preData = [...dynamicInput];
+        preData[index][key] = value;
+        setdynamicInput(preData);
+      };
     const [dailyArray,setDailyArray]=useState([
-        {title:"Supervision"},
-        {title:"RiskAssessment"},
-        {title:"Method Statement"},
-        {title:"Training"},
-        {title:"COSHH Assessment"},
-        {title:"Plant/Equip certificate"},
-        {title:"Exclusion Zones"},
-        {title:"Signage"},
-        {title:"P.P.E"},
-        {title:"Mobile tower checklist"},
-        {title:"Emergency procedure"},
-        {title:"Hot works"},
-        {title:"Drugs & Alcohol"},
-        {title:"House keeping"},
-        {title:"Permit to work"},
-        {title:"Language"},
+        {title:"Supervision",check:false},
+        {title:"RiskAssessment",check:false},
+        {title:"Method Statement",check:false},
+        {title:"Training",check:false},
+        {title:"COSHH Assessment",check:false},
+        {title:"Plant/Equip certificate",check:false},
+        {title:"Exclusion Zones",check:false},
+        {title:"Signage",check:false},
+        {title:"P.P.E",check:false},
+        {title:"Mobile tower checklist",check:false},
+        {title:"Emergency procedure",check:false},
+        {title:"Hot works",check:false},
+        {title:"Drugs & Alcohol",check:false},
+        {title:"House keeping",check:false},
+        {title:"Permit to work",check:false},
+        {title:"Language",check:false},
     ])
     const [jobSafetyArray,setJobSafetyArray]=useState([
-        {title:"Work at Height",image:work},
-        {title:"Lifting",image:lift},
-        {title:"Work at Height",image:work},
-        {title:"Electricity",image:work},
-        {title:"Tool & Equipment",image:tools},
-        {title:"Harmful Substances",image:harmful},
+        {title:"Work at Height",image:work,check:false},
+        {title:"Lifting",image:lift,check:false},
+        {title:"Work at Height",image:work,check:false},
+        {title:"Electricity",image:work,check:false},
+        {title:"Tool & Equipment",image:tools,check:false},
+        {title:"Harmful Substances",image:harmful,check:false},
         {title:"PPE",image:ppe},
-        {title:"House- keeping",image:keeping},
-        {title:"Manual Handling",image:work},
-        {title:"Health Hazard",image:health},
-        {title:"Traffic Safety",image:traffic},
-        {title:"Environmental Hazard",image:enviornments},
-        {title:"Permits to Work",image:permit},
-        {title:"Weather Conditions",image:weather},
+        {title:"House- keeping",image:keeping,check:false},
+        {title:"Manual Handling",image:work,check:false},
+        {title:"Health Hazard",image:health,check:false},
+        {title:"Traffic Safety",image:traffic,check:false},
+        {title:"Environmental Hazard",image:enviornments,check:false},
+        {title:"Permits to Work",image:permit,check:false},
+        {title:"Weather Conditions",image:weather,check:false},
     ])
     const [berifingArray,setBerifingArray]=useState([
-        {title:"Have the right skills for the job"},
-        {title:"Need a signed permit to work?"},
-        {title:"Impact onto others working around us? Who are they?"},
-        {title:"Segregated form others working around us?"},
-        {title:"Feel good and fit for work? "},
-        {title:"Notice any changes to work since the method statement was drafted? "},
+        {title:"Have the right skills for the job",check:false},
+        {title:"Need a signed permit to work?",check:false},
+        {title:"Impact onto others working around us? Who are they?",check:false},
+        {title:"Segregated form others working around us?",check:false},
+        {title:"Feel good and fit for work? ",check:false},
+        {title:"Notice any changes to work since the method statement was drafted? ",check:false},
     ])
     const [operativeArray,setOperativeArray] = useState([])
     const addOperativeArray = () =>(
         setOperativeArray(oldArray=>[...oldArray,{name:"",sign:""}])
     )
-
+    const checkedDailyValue = (key, index) => {
+        let preData = [...dailyArray];
+        if(preData[index][key]){
+            preData[index][key] = false;
+        }
+        else{
+            preData[index][key] = true;
+        }
+          
+          setDailyArray(preData);
+      };
+      const checkedBreiflyValue = (key, index) => {
+        let preData = [...berifingArray];
+        if(preData[index][key]){
+            preData[index][key] = false;
+        }
+        else{
+            preData[index][key] = true;
+        }
+          
+          setBerifingArray(preData);
+      };
+      const checkedJobValue = (key, index) => {
+        let preData = [...jobSafetyArray];
+        if(preData[index][key]){
+            preData[index][key] = false;
+        }
+        else{
+            preData[index][key] = true;
+        }
+          setJobSafetyArray(preData);
+      };
     return(
         <View style={styles.mainContainer}>
             <View style={{paddingTop:30,justifyContent:'center',alignItems:'center'}}>
@@ -111,149 +151,19 @@ const DailyBreifingForm = () =>{
 
                     <View style={{marginTop:20}}>
                         <Text style={{fontFamily:'poppins-bold',fontSize:10,textAlign:'center'}}>Before each Team Briefing……Ask yourself do I need to discuss!</Text>
-                        <View style={{width:"100%",flexDirection:"row",marginTop:10}}>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Supervision</Text>
+                        <View style={{width:"100%",flexDirection:"column",marginTop:10}}>
+                            {dailyArray.map((item,index)=>(
+                                <View style={{width:"100%",flexDirection:"row",marginBottom:10}} key={index}>
+                                    <View style={{width:"90%"}}>
+                                        <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>{item.title}</Text>
+                                    </View>
+                                    <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end"}}>
+                                        <CheckBox value={item.check} onValueChange={() =>
+                                            checkedDailyValue("check", index)
+                                        }/>
+                                    </View>
                                 </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Risk Assessment</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{width:"100%",flexDirection:"row",marginTop:10}}>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Method Statement</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Training</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{width:"100%",flexDirection:"row",marginTop:10}}>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>COSHH Assessment</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Plant/Equip certificate</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{width:"100%",flexDirection:"row",marginTop:10}}>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Exclusion Zones</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Signage</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{width:"100%",flexDirection:"row",marginTop:10}}>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>P.P.E</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Mobile tower checklist</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{width:"100%",flexDirection:"row",marginTop:10}}>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Emergency procedure</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Hotworks</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{width:"100%",flexDirection:"row",marginTop:10}}>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Drugs & Alcohol</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>House keeping</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{width:"100%",flexDirection:"row",marginTop:10}}>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Permit to work</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
-                            <View style={{width:"50%",flexDirection:"row"}}>
-                                <View style={{width:"90%"}}>
-                                    <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>Language</Text>
-                                </View>
-                                <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:40}}>
-                                    <CheckBox/>
-                                </View>
-                            </View>
+                            ))}
                         </View>
                     </View>
                     <View style={{marginTop:20}}>
@@ -264,8 +174,10 @@ const DailyBreifingForm = () =>{
                                     <View style={{width:"90%"}}>
                                         <Text style={{fontFamily:'poppins-semiBold',fontSize:10}}>{item.title}</Text>
                                     </View>
-                                    <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end",paddingRight:20}}>
-                                        <CheckBox/>
+                                    <View style={{width:"10%",justifyContent:"flex-end",alignItems:"flex-end"}}>
+                                        <CheckBox value={item.check} onValueChange={() =>
+                                            checkedBreiflyValue("check", index)
+                                        }/>
                                     </View>
                                 </View>
                             </View>
@@ -283,7 +195,9 @@ const DailyBreifingForm = () =>{
                                         <Image style={{height:50,width:50}} source={item.image}/>
                                     </View>
                                     <View style={{width:"10%",justifyContent:"flex-start",alignItems:"flex-start",paddingRight:30}}>
-                                        <CheckBox/>
+                                        <CheckBox value={item.check} onValueChange={() =>
+                                            checkedJobValue("check", index)
+                                        }/>
                                     </View>
                                 </View>
                             </View>
@@ -323,18 +237,24 @@ const DailyBreifingForm = () =>{
                                         <TextInput
                                             style={styles.bodyTextInput}
                                             placeholder={"HAZARD"}
+                                            value={item.hazrd}
+                      onChangeText={(txt) => updateValue("hazrd", index, txt)}
                                         />
                                     </View>
                                     <View style={styles.inputHazrdBodyContainer}>
                                         <TextInput
                                             style={styles.bodyTextInput}
                                             placeholder={"ACTION"}
+                                            value={item.action}
+                      onChangeText={(txt) => updateValue("action", index, txt)}
                                         />
                                     </View>
                                     <View style={styles.inputHazrdBodyContainer}>
                                         <TextInput
                                             style={styles.bodyTextInput}
                                             placeholder={"WHO IS RESPONSIBLE"}
+                                            value={item.responsible}
+                      onChangeText={(txt) => updateValue("responsible", index, txt)}
                                         />
                                     </View>
                                 </View>

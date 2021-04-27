@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -14,14 +14,16 @@ import { connect } from "react-redux";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const VerificationOfWork = (props) => {
-  const { navigation } = props;
+  const { navigation, token, isSuccess, isSuccessMsg } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [projectName, setProjectName] = useState([]);
-  const [idRef, setIdRef] = useState([])
-  const [decoratorName, setDecoratorName] = useState([])
+  const [idRef, setIdRef] = useState([]);
+  const [decoratorName, setDecoratorName] = useState([]);
   const [data, setData] = useState({
     days: "",
-    manager: "",
+    work: "",
     date: "",
     project: "",
     plotArea: "",
@@ -35,7 +37,7 @@ const VerificationOfWork = (props) => {
     setdynamicInput((oldArray) => [...oldArray, data]);
     setData({
       days: "",
-      manager: "",
+      work: "",
       date: "",
       project: "",
       plotArea: "",
@@ -51,14 +53,23 @@ const VerificationOfWork = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  const verificationWorkFormInsert = () =>{
-    if(projectName!="" && idRef!="" && decoratorName!=""){
-        props.createVerificationWorkHandler(projectName,idRef,decoratorName,dynamicInput)
+  const verificationWorkFormInsert = () => {
+    if (projectName != "" && idRef != "" && decoratorName != "") {
+      props.createVerificationWorkHandler(
+        projectName,
+        idRef,
+        decoratorName,
+        dynamicInput,
+        jobID,
+        tabId,
+        token
+      );
     } else {
-        alert("Please Insert All Fields CareFully !");
-        return false;
+      alert("Please Insert All Fields CareFully !");
+      return false;
     }
-  }
+  };
+
   return (
     <View
       style={[
@@ -68,16 +79,28 @@ const VerificationOfWork = (props) => {
     >
       <ScrollView style={{ width: "100%" }}>
         <View style={styles.inputFieldContainer}>
-          <TextInput value={projectName}
-                    onChangeText={(e) => setProjectName(e)} style={styles.inputField} placeholder={"Project Name"} />
+          <TextInput
+            value={projectName}
+            onChangeText={(e) => setProjectName(e)}
+            style={styles.inputField}
+            placeholder={"Project Name"}
+          />
         </View>
         <View style={styles.inputFieldContainer}>
-          <TextInput value={idRef}
-                    onChangeText={(e) => setIdRef(e)} style={styles.inputField} placeholder={"Id Ref"} />
+          <TextInput
+            value={idRef}
+            onChangeText={(e) => setIdRef(e)}
+            style={styles.inputField}
+            placeholder={"Id Ref"}
+          />
         </View>
         <View style={styles.inputFieldContainer}>
-          <TextInput value={decoratorName}
-                    onChangeText={(e) => setDecoratorName(e)} style={styles.inputField} placeholder={"Decorator Name"} />
+          <TextInput
+            value={decoratorName}
+            onChangeText={(e) => setDecoratorName(e)}
+            style={styles.inputField}
+            placeholder={"Decorator Name"}
+          />
         </View>
         <View style={styles.tableViewContainer}>
           <View
@@ -149,8 +172,8 @@ const VerificationOfWork = (props) => {
                 </View>
                 <View style={styles.inputBodyContainer}>
                   <TextInput
-                    onChangeText={(txt) => updateValue("manager", index, txt)}
-                    value={el.manager}
+                    onChangeText={(txt) => updateValue("work", index, txt)}
+                    value={el.work}
                     style={styles.bodyTextInput}
                     placeholder={"Manager"}
                   />
@@ -231,13 +254,13 @@ const VerificationOfWork = (props) => {
                 onChangeText={(txt) => setData({ ...data, days: txt })}
                 value={data.days}
                 style={styles.bodyTextInput}
-                placeholder={"Name"}
+                placeholder={"Day"}
               />
             </View>
             <View style={styles.inputBodyContainer}>
               <TextInput
-                onChangeText={(txt) => setData({ ...data, manager: txt })}
-                value={data.manager}
+                onChangeText={(txt) => setData({ ...data, work: txt })}
+                value={data.work}
                 style={styles.bodyTextInput}
                 placeholder={"Block"}
               />
@@ -308,32 +331,52 @@ const VerificationOfWork = (props) => {
             </View>
           </View>
           <View
-                                style={{
-                                backgroundColor: "#000",
-                                width: "100%",
-                                height: "1%",
-                                marginBottom: 20,
-                                marginTop: 20,
-                                }}
-                            ></View>
-                            <View style={styles.btnContainer}>
-                                <TouchableOpacity
-                                style={styles.commonBtn}
-                                onPress={() => verificationWorkFormInsert()}
-                                >
-                                <Text style={styles.commonText}>Save</Text>
-                                </TouchableOpacity>
-                            </View>
+            style={{
+              backgroundColor: "#000",
+              width: "100%",
+              height: "1%",
+              marginBottom: 20,
+              marginTop: 20,
+            }}
+          ></View>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity
+              style={styles.commonBtn}
+              onPress={() => verificationWorkFormInsert()}
+            >
+              <Text style={styles.commonText}>Save</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </View>
   );
 };
 const mapStateToProps = (state) => ({
-    token: state.auth.token,
-  });
-  const mapDispatchToProps = (dispatch) => ({
-    createVerificationWorkHandler: (projectName,idRef,decoratorName,dynamicInput) => dispatch(insertVerificationForm(projectName,idRef,decoratorName,dynamicInput)),
-  });
+  token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createVerificationWorkHandler: (
+    projectName,
+    idRef,
+    decoratorName,
+    dynamicInput,
+    jobID,
+    tabId,
+    token
+  ) =>
+    dispatch(
+      insertVerificationForm(
+        projectName,
+        idRef,
+        decoratorName,
+        dynamicInput,
+        jobID,
+        tabId,
+        token
+      )
+    ),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(VerificationOfWork);
-

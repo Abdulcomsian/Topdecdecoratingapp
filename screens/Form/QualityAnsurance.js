@@ -14,9 +14,9 @@ import { insertAnsuranceForm } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
-const QualityInssurance = ( props ) => {
-    const { navigation, token, isSuccessMsg, isSuccess, isJobId } = props;
-    const jobID= isJobId;
+const QualityInssurance = (props) => {
+  const { navigation, token, isSuccessMsg, isSuccess, isJobId } = props;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [issuranceArray, setInsuraanceArray] = useState([
     {
@@ -160,9 +160,21 @@ const QualityInssurance = ( props ) => {
   ]);
   const [activityArray, setActivityArray] = useState([
     { activity: "Mist Coat", date: new Date().toLocaleDateString(), sign: "" },
-    { activity: "Main Decoration", date: new Date().toLocaleDateString(), sign: "" },
-    { activity: "Site Managers Snag", date: new Date().toLocaleDateString(), sign: "" },
-    { activity: "Builders/Client Snag ", date: new Date().toLocaleDateString(), sign: "" },
+    {
+      activity: "Main Decoration",
+      date: new Date().toLocaleDateString(),
+      sign: "",
+    },
+    {
+      activity: "Site Managers Snag",
+      date: new Date().toLocaleDateString(),
+      sign: "",
+    },
+    {
+      activity: "Builders/Client Snag ",
+      date: new Date().toLocaleDateString(),
+      sign: "",
+    },
   ]);
   const [newRow, setNewRow] = useState([]);
 
@@ -215,54 +227,52 @@ const QualityInssurance = ( props ) => {
   const [smsSign, setSmsSign] = useState("");
   const [bscsSign, setBscsSign] = useState("");
 
-  const qualityAnsuranceFormInsert = () =>{
+  const qualityAnsuranceFormInsert = () => {
     if (
-        projectName != "" &&
-        unitPlot != "" &&
-        mcSign != "" &&
-        mdSign != "" &&
-        smsSign != "" &&
-        bscsSign != "" 
-      ) {
-        props.createAnsuranceHandler(
-            projectName,
-            unitPlot,
-          issuranceArray,
-          activityArray,
-          mcSign,
-          mdSign,
-          smsSign,
-          bscsSign,
-          jobID,
-          tabId,
-          token,
-        );
-      } else {
-        alert("Please Insert All Fields CareFully !");
-        return false;
-      }
-  }
+      projectName != "" &&
+      unitPlot != "" &&
+      mcSign != "" &&
+      mdSign != "" &&
+      smsSign != "" &&
+      bscsSign != ""
+    ) {
+      props.createAnsuranceHandler(
+        projectName,
+        unitPlot,
+        issuranceArray,
+        activityArray,
+        mcSign,
+        mdSign,
+        smsSign,
+        bscsSign,
+        jobID,
+        tabId,
+        token
+      );
+    } else {
+      alert("Please Insert All Fields CareFully !");
+      return false;
+    }
+  };
   const updateSignValue = (key, index, value) => {
     let preData = [...activityArray];
     preData[index][key] = value;
     setActivityArray(preData);
   };
   useEffect(() => {
-    if(isSuccess){     
-      if(isSuccessMsg){
-          console.log("here !")
-          alert(isSuccessMsg)
-          navigation.pop();
+    if (isSuccess) {
+      if (isSuccessMsg) {
+        console.log("here !");
+        alert(isSuccessMsg);
+        navigation.pop();
       }
+    } else {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        return false;
       }
-      else{
-          if(isSuccessMsg){
-              
-              alert(isSuccessMsg)
-              return false;
-          }
-      }
-  },[isSuccess,isSuccessMsg])
+    }
+  }, [isSuccess, isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
@@ -496,9 +506,9 @@ const QualityInssurance = ( props ) => {
                               ]}
                               placeholder={"Sign"}
                               value={item.sign}
-                                onChangeText={(txt) =>
+                              onChangeText={(txt) =>
                                 updateSignValue("sign", index, txt)
-                                }
+                              }
                             />
                           </View>
                         </View>
@@ -555,19 +565,21 @@ const QualityInssurance = ( props ) => {
               placeholder={"MD"}
             />
           </View>
-          <View
-            
-            style={styles.inputFieldContainer}
-          >
-            <TextInput value={smsSign}
-            onChangeText={(e) => setSmsSign(e)} style={styles.inputField} placeholder={"SMS"} />
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              value={smsSign}
+              onChangeText={(e) => setSmsSign(e)}
+              style={styles.inputField}
+              placeholder={"SMS"}
+            />
           </View>
-          <View
-           
-            style={styles.inputFieldContainer}
-          >
-            <TextInput  value={bscsSign}
-            onChangeText={(e) => setBscsSign(e)} style={styles.inputField} placeholder={"BS/CS"} />
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              value={bscsSign}
+              onChangeText={(e) => setBscsSign(e)}
+              style={styles.inputField}
+              placeholder={"BS/CS"}
+            />
           </View>
           <View
             style={{
@@ -590,42 +602,42 @@ const QualityInssurance = ( props ) => {
   );
 };
 const mapStateToProps = (state) => ({
-    token: state.auth.token,
-    isSuccess: state.auth.isSuccess,
-    isSuccessMsg: state.auth.isSuccessMsg,
-    isJobId: state.auth.isJobId
-  });
-  const mapDispatchToProps = (dispatch) => ({
-    createAnsuranceHandler: ( projectName,
+  token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createAnsuranceHandler: (
+    projectName,
+    unitPlot,
+    issuranceArray,
+    activityArray,
+    mcSign,
+    mdSign,
+    smsSign,
+    bscsSign,
+    jobID,
+    tabId,
+    token
+  ) =>
+    dispatch(
+      insertAnsuranceForm(
+        projectName,
         unitPlot,
-      issuranceArray,
-      activityArray,
-      mcSign,
-      mdSign,
-      smsSign,
-      bscsSign,
-      jobID,
-      tabId,
-      token,
-
-    ) =>
-      dispatch(
-        insertAnsuranceForm(
-            projectName,
-            unitPlot,
-          issuranceArray,
-          activityArray,
-          mcSign,
-          mdSign,
-          smsSign,
-          bscsSign,
-          jobID,
-          tabId,
-          token,
-        )
-      ),
-  });
-  export default connect(mapStateToProps, mapDispatchToProps)(QualityInssurance);
+        issuranceArray,
+        activityArray,
+        mcSign,
+        mdSign,
+        smsSign,
+        bscsSign,
+        jobID,
+        tabId,
+        token
+      )
+    ),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(QualityInssurance);
 const styles = StyleSheet.create({
   mainContainer: {
     height: "100%",
@@ -677,7 +689,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     borderWidth: 1,
     height: "2%",
-    marginBottom:10
+    marginBottom: 10,
   },
   tableActivityHeader: {
     flexDirection: "row",
