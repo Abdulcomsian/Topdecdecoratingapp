@@ -111,15 +111,7 @@ export const resetPassword = (id, password) => {
     }
   };
 };
-export const createNewJobCreation = (
-  contractor,
-  project,
-  weeks,
-  supervisor_id,
-  start_date,
-  jobSummary,
-  token
-) => {
+export const createNewJobCreation = (contractor, project, weeks, supervisor_id, start_date, jobSummary, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log(contractor)
@@ -176,17 +168,7 @@ export const searchJob = (reference_number, date, token) => {
     }
   };
 };
-export const createDecorator = (
-  firstname,
-  lastname,
-  id_card,
-  cscs_front,
-  cscs_back,
-  email,
-  phone,
-  password,
-  token
-) => {
+export const createDecorator = (firstname, lastname, id_card, cscs_front, cscs_back, email, phone, password, token) => {
   return async (dispatch, getState) => {
     try {
       console.log("firstname :", firstname);
@@ -351,7 +333,8 @@ export const insertHandOverForm = (
   todayDate,
   task_id,
   tab_id,
-  token
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
@@ -389,19 +372,20 @@ export const insertHandOverForm = (
         tab_id,
         jobSummary,
       };
-      const request = await axios(
-        base_url + "supervisor/make/workflow/insert_handover",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
         dispatch({
           type: Actions.CREATE_HAND_OVER_SHEET_SUCCESS,
           payload: response,
@@ -414,6 +398,7 @@ export const insertHandOverForm = (
       }
     } catch (err) {
       console.log("Error Response :", err);
+
       //throw new Error(err.message);
     }
   };
@@ -438,7 +423,8 @@ export const insertMakeReadyForm = (
   todayDate,
   task_id,
   tab_id,
-  token
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
@@ -485,19 +471,20 @@ export const insertMakeReadyForm = (
         dynamicInput,
       };
 
-      const request = await axios(
-        base_url + "supervisor/make/workflow/makeReadySheet",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/make/workflow/makeReadySheet", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
         dispatch({
           type: Actions.CREATE_MAKE_READY_SHEET_SUCCESS,
           payload: response,
@@ -529,7 +516,8 @@ export const insertSnaggingForm = (
   dynamicInputComplete,
   task_id,
   tab_id,
-  token
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
@@ -565,19 +553,20 @@ export const insertSnaggingForm = (
         dynamicInputComplete,
       };
 
-      const request = await axios(
-        base_url + "supervisor/make/workflow/insertWarenty",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/make/workflow/insertWarenty", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
         dispatch({
           type: Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS,
           payload: response,
@@ -594,19 +583,7 @@ export const insertSnaggingForm = (
     }
   };
 };
-export const insertAnsuranceForm = (
-  project,
-  unit,
-  dynamicInput,
-  dynamicInputcomplete,
-  mc,
-  md,
-  sms,
-  bscs,
-  task_id,
-  tab_id,
-  token
-) => {
+export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Project Name :", project);
@@ -633,19 +610,20 @@ export const insertAnsuranceForm = (
         dynamicInputcomplete,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/quaity",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
         dispatch({
           type: Actions.CREATE_QUALITY_ANSURANCE_FORM_SUCCESS,
           payload: response,
@@ -684,7 +662,8 @@ export const insertRemedialForm = (
   dateManager,
   task_id,
   tab_id,
-  token
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
@@ -735,19 +714,20 @@ export const insertRemedialForm = (
         totalHours,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/workflow/RemendialSheet",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/workflow/RemendialSheet", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
         dispatch({
           type: Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS,
           payload: response,
@@ -763,17 +743,7 @@ export const insertRemedialForm = (
     }
   };
 };
-export const insertScopeForm = (
-  dynamicInput,
-  painter,
-  signature,
-  plotNumber,
-  type,
-  date,
-  task_id,
-  tab_id,
-  token
-) => {
+export const insertScopeForm = (dynamicInput, painter, signature, plotNumber, type, date, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic Input :", dynamicInput);
@@ -795,19 +765,20 @@ export const insertScopeForm = (
         dynamicInput,
       };
 
-      const request = await axios(
-        base_url + "supervisor/make/workflow/insertScope",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/make/workflow/insertScope", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
         dispatch({
           type: Actions.CREATE_SCOPE_FORM_SUCCESS,
           payload: response,
@@ -841,7 +812,8 @@ export const insertWorkSheet = (
   date,
   task_id,
   tab_id,
-  token
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
@@ -883,19 +855,20 @@ export const insertWorkSheet = (
         PRELIMINARIES,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/verification/accurate",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/verification/accurate", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
         dispatch({
           type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE,
           payload: response,
@@ -912,13 +885,7 @@ export const insertWorkSheet = (
     }
   };
 };
-export const insertDecorationRecord = (
-  jobSummary,
-  jobSummarycomplete,
-  task_id,
-  tab_id,
-  token
-) => {
+export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic First Input :", jobSummary);
@@ -933,16 +900,13 @@ export const insertDecorationRecord = (
         jobSummarycomplete,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/decoration",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/decoration", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -962,14 +926,7 @@ export const insertDecorationRecord = (
     }
   };
 };
-export const insertMiscoat = (
-  contractor,
-  project,
-  jobSummary,
-  task_id,
-  tab_id,
-  token
-) => {
+export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contructor :", contractor);
@@ -986,19 +943,20 @@ export const insertMiscoat = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/Miscoat",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Miscoat", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
         dispatch({
           type: Actions.INSERT_MISCOAT_SUCCESS,
           payload: response,
@@ -1015,19 +973,7 @@ export const insertMiscoat = (
     }
   };
 };
-export const insertSiteInstruction = (
-  contractor,
-  instruction,
-  raised_by,
-  date,
-  details,
-  condition,
-  supervisor,
-        s_date,
-        task_id,
-        tab_id,
-        token
-) => {
+export const insertSiteInstruction = (contractor, instruction, raised_by, date, details, condition, supervisor, s_date, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1051,19 +997,16 @@ export const insertSiteInstruction = (
         s_date,
         task_id,
         tab_id,
-        supervisor
+        supervisor,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/Instruction",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Instruction", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1083,16 +1026,7 @@ export const insertSiteInstruction = (
     }
   };
 };
-export const insertVerificationForm = (
-  project,
-  id_ref,
-  decorator,
-  PRELIMINARIES,
-        task_id,
-        tab_id,
-        token
-
-) => {
+export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       console.log("Project Name :", project);

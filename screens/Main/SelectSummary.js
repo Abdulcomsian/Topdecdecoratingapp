@@ -5,15 +5,8 @@ import { connect } from "react-redux";
 
 var rightArrow = require("../../assets/authScreen/right.png");
 const SelectSummary = (props) => {
-  const { navigation, token, isJobId } = props;
+  const { navigation, token, isJobId, summary } = props;
 
-  const [plotArray, setPlotArray] = useState([
-    { ploatName: "Workflow", url: "SelectSummaryDetail" },
-    { ploatName: "Work Flow", url: "PlotDetails" },
-    { ploatName: "Verification of works", url: "VerificationDetails" },
-    { ploatName: "Purchase order request" },
-    { ploatName: "Health and Safety", url: "HealthSafety" },
-  ]);
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
@@ -25,11 +18,8 @@ const SelectSummary = (props) => {
       </View>
       <View style={{ height: "70%", width: "100%" }}>
         <View style={{ paddingTop: 30, paddingLeft: 20, paddingRight: 20 }}>
-          {plotArray.map((item, index) => (
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => navigation.navigate(item.url)}
-            >
+          {summary.map((item, index) => (
+            <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate(item.url)}>
               <Text style={styles.commonText}>{item.ploatName}</Text>
               <Image source={rightArrow} />
             </TouchableOpacity>
@@ -37,10 +27,7 @@ const SelectSummary = (props) => {
         </View>
       </View>
       <View style={styles.btnContainer}>
-        <TouchableOpacity
-          style={styles.saveBtn}
-          onPress={() => navigation.navigate("SelectSummary")}
-        >
+        <TouchableOpacity style={styles.saveBtn} onPress={() => navigation.navigate("SelectSummary")}>
           <Text style={styles.commonText}>Next</Text>
         </TouchableOpacity>
       </View>
@@ -50,6 +37,7 @@ const SelectSummary = (props) => {
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isJobId: state.auth.isJobId,
+  summary: state.summary.summaryReport,
 });
 const mapDispatchToProps = (dispatch) => ({});
 export default connect(mapStateToProps, mapDispatchToProps)(SelectSummary);
