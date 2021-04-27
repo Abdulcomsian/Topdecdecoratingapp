@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  CheckBox,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-} from "react-native";
+import { View, StyleSheet, Image, CheckBox, TouchableOpacity, ScrollView, TextInput } from "react-native";
 import { Text } from "native-base";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker from "react-native-modal-datetime-picker";
 import { insertRemedialForm } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
+import SignatureComponent from "../../components/SignatureComponent";
 
 var plus = require("../../assets/authScreen/plus.png");
 const RemedialWork = (props) => {
   const { navigation, token, isSuccessMsg, isSuccess, isJobId } = props;
-  const jobID= isJobId;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [data, setData] = useState({
     area: "",
@@ -46,6 +39,17 @@ const RemedialWork = (props) => {
   const [supervisorSignature, setSupervisorSignature] = useState("");
   const [managerName, setManagerName] = useState("");
   const [managerSignature, setManagerSignature] = useState("");
+  const [signature, setSignature] = useState({
+    bool: false,
+    agent: {
+      bool: false,
+      uri: "",
+    },
+    normal: {
+      bool: false,
+      uri: "",
+    },
+  });
 
   /**Issue Date */
   const onIssueChange = (event, selectedDate) => {
@@ -135,7 +139,8 @@ const RemedialWork = (props) => {
         dateManager,
         jobID,
         tabId,
-        token
+        token,
+        props.route.params?.index
       );
     } else {
       alert("Please Insert All Fields CareFully !");
@@ -143,326 +148,267 @@ const RemedialWork = (props) => {
     }
   };
   useEffect(() => {
-    if(isSuccess){     
-      if(isSuccessMsg){
-          alert(isSuccessMsg)
-          navigation.pop();
+    if (isSuccess) {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        navigation.pop();
       }
+    } else {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        return false;
       }
-      else{
-          if(isSuccessMsg){
-              alert(isSuccessMsg)
-              return false;
-          }
-      }
-  },[isSuccessMsg])
+    }
+  }, [isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
-      {showIssue && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateIssue}
-          mode={mode}
-          display="default"
-          onChange={onIssueChange}
-          format="DD-MM-YYYY"
+      <DateTimePicker
+        isVisible={showIssue}
+        testID='dateTimePicker'
+        value={dateIssue}
+        mode={mode}
+        display='default'
+        onConfirm={onIssueChange}
+        onCancel={() => {}}
+        format='DD-MM-YYYY'
+      />
+
+      <DateTimePicker
+        isVisible={showSupervisor}
+        testID='dateTimePicker'
+        value={dateSupervisor}
+        mode={mode}
+        display='default'
+        onConfirm={onSupervisorDateChange}
+        onCancel={() => {}}
+        format='DD-MM-YYYY'
+      />
+
+      <DateTimePicker
+        isVisible={showManager}
+        testID='dateTimePicker'
+        value={dateManager}
+        mode={mode}
+        display='default'
+        onConfirm={onManagerDateChange}
+        onCancel={() => {}}
+        format='DD-MM-YYYY'
+      />
+      {signature.bool ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            if (signature.agent.bool) {
+              setSignature({ ...signature, agent: { ...signature.agent, bool: false, uri: uri }, bool: false });
+              setManagerSignature(uri);
+            } else {
+              setSignature({ ...signature, normal: { ...signature.normal, bool: false, uri: uri }, bool: false });
+              setSupervisorSignature(uri);
+            }
+          }}
         />
-      )}
-      {showSupervisor && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateSupervisor}
-          mode={mode}
-          display="default"
-          onChange={onSupervisorDateChange}
-          format="DD-MM-YYYY"
-        />
-      )}
-      {showManager && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateManager}
-          mode={mode}
-          display="default"
-          onChange={onManagerDateChange}
-          format="DD-MM-YYYY"
-        />
-      )}
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>REMEDIAL WORK SHEET</Text>
-      </View>
-      <ScrollView style={{ height: "100%" }}>
-        <View style={styles.formConatiner}>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={contructorName}
-              onChangeText={(e) => setContructorName(e)}
-              style={styles.inputField}
-              placeholder={"Main Contractor Name"}
-            />
+      ) : (
+        <>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>REMEDIAL WORK SHEET</Text>
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={projectName}
-              onChangeText={(e) => setProjectName(e)}
-              style={styles.inputField}
-              placeholder={"Project"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={operative}
-              onChangeText={(e) => setOperative(e)}
-              style={styles.inputField}
-              placeholder={"Operative"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={sheetNumber}
-              onChangeText={(e) => setSheetNumber(e)}
-              style={styles.inputField}
-              placeholder={"Sheet Number"}
-            />
-          </View>
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ width: "40%" }}>
-              <TextInput
-                value={pageOff}
-                onChangeText={(e) => setPageOff(e)}
-                style={styles.inputField}
-                placeholder={"Page"}
-              />
-            </View>
-            <Text
-              style={{
-                color: "#4F4F4F",
-                fontSize: 12,
-                fontFamily: "poppins-semiBold",
-              }}
-            >
-              Off
-            </Text>
-            <View style={{ width: "40%" }}>
-              <TextInput
-                value={pageSecond}
-                onChangeText={(e) => setPageSecond(e)}
-                style={styles.inputField}
-                placeholder={"Page"}
-              />
-            </View>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={block}
-              onChangeText={(e) => setBlock(e)}
-              style={styles.inputField}
-              placeholder={"Block"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={plotNumber}
-              onChangeText={(e) => setPlotNumber(e)}
-              style={styles.inputField}
-              placeholder={"Plot/Area Number"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("DateIssue")}
-              style={styles.inputField}
-            >
-              {new Date(dateIssue).toLocaleDateString()}
-            </Text>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={instructionNumber}
-              onChangeText={(e) => setInstructionNumber(e)}
-              style={styles.inputField}
-              placeholder={"Site Instruction Number"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={reasonWork}
-              onChangeText={(e) => setReasonWork(e)}
-              style={styles.inputField}
-              placeholder={" Reason for Work"}
-            />
-          </View>
-        </View>
-        <View style={styles.tableViewContainer}>
-          <View style={styles.tableHeader}>
-            <View style={styles.headerTitleView}>
-              <Text style={styles.headerTitle}>AREA/UNITS</Text>
-            </View>
-            <View style={styles.headerTitleView}>
-              <Text style={styles.headerTitle}>DESCRIPTION</Text>
-            </View>
-            <View style={styles.headerTitleView}>
-              <Text style={styles.headerTitle}>NUMBER OF PHOTO</Text>
-            </View>
-          </View>
-          <View style={{ flexDirection: "column" }}>
-            {dynamicInput.length > 0 &&
-              dynamicInput.map((el, index) => (
-                <View style={styles.tableBody} key={index}>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) => updateValue("area", index, txt)}
-                      value={el.area}
-                      style={styles.bodyTextInput}
-                      placeholder={"Area/unit"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        updateValue("description", index, txt)
-                      }
-                      value={el.description}
-                      style={styles.bodyTextInput}
-                      placeholder={"Description"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) => updateValue("photo", index, txt)}
-                      value={el.photo}
-                      style={styles.bodyTextInput}
-                      placeholder={"No of photo"}
-                    />
-                  </View>
+          <ScrollView style={{ height: "100%" }}>
+            <View style={styles.formConatiner}>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={contructorName} onChangeText={(e) => setContructorName(e)} style={styles.inputField} placeholder={"Main Contractor Name"} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={projectName} onChangeText={(e) => setProjectName(e)} style={styles.inputField} placeholder={"Project"} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={operative} onChangeText={(e) => setOperative(e)} style={styles.inputField} placeholder={"Operative"} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={sheetNumber} onChangeText={(e) => setSheetNumber(e)} style={styles.inputField} placeholder={"Sheet Number"} />
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}>
+                <View style={{ width: "40%" }}>
+                  <TextInput value={pageOff} onChangeText={(e) => setPageOff(e)} style={styles.inputField} placeholder={"Page"} />
                 </View>
-              ))}
-          </View>
-          <View style={styles.tableBody}>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, area: txt })}
-                value={data.area}
-                style={styles.bodyTextInput}
-                placeholder={"Area/unit"}
-              />
+                <Text
+                  style={{
+                    color: "#4F4F4F",
+                    fontSize: 12,
+                    fontFamily: "poppins-semiBold",
+                  }}>
+                  Off
+                </Text>
+                <View style={{ width: "40%" }}>
+                  <TextInput value={pageSecond} onChangeText={(e) => setPageSecond(e)} style={styles.inputField} placeholder={"Page"} />
+                </View>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={block} onChangeText={(e) => setBlock(e)} style={styles.inputField} placeholder={"Block"} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={plotNumber} onChangeText={(e) => setPlotNumber(e)} style={styles.inputField} placeholder={"Plot/Area Number"} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text onPress={() => showDatepicker("DateIssue")} style={styles.inputField}>
+                  {new Date(dateIssue).toLocaleDateString()}
+                </Text>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={instructionNumber}
+                  onChangeText={(e) => setInstructionNumber(e)}
+                  style={styles.inputField}
+                  placeholder={"Site Instruction Number"}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={reasonWork} onChangeText={(e) => setReasonWork(e)} style={styles.inputField} placeholder={" Reason for Work"} />
+              </View>
             </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, description: txt })}
-                value={data.description}
-                style={styles.bodyTextInput}
-                placeholder={"Description"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, photo: txt })}
-                value={data.photo}
-                style={styles.bodyTextInput}
-                placeholder={"No of photo"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TouchableOpacity style={styles.addBtn} onPress={() => addRow()}>
-                <Image style={styles.plusBtn} source={plus} />
+            <View style={styles.tableViewContainer}>
+              <View style={styles.tableHeader}>
+                <View style={styles.headerTitleView}>
+                  <Text style={styles.headerTitle}>AREA/UNITS</Text>
+                </View>
+                <View style={styles.headerTitleView}>
+                  <Text style={styles.headerTitle}>DESCRIPTION</Text>
+                </View>
+                <View style={styles.headerTitleView}>
+                  <Text style={styles.headerTitle}>NUMBER OF PHOTO</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: "column" }}>
+                {dynamicInput.length > 0 &&
+                  dynamicInput.map((el, index) => (
+                    <View style={styles.tableBody} key={index}>
+                      <View style={styles.inputBodyContainer}>
+                        <TextInput
+                          onChangeText={(txt) => updateValue("area", index, txt)}
+                          value={el.area}
+                          style={styles.bodyTextInput}
+                          placeholder={"Area/unit"}
+                        />
+                      </View>
+                      <View style={styles.inputBodyContainer}>
+                        <TextInput
+                          onChangeText={(txt) => updateValue("description", index, txt)}
+                          value={el.description}
+                          style={styles.bodyTextInput}
+                          placeholder={"Description"}
+                        />
+                      </View>
+                      <View style={styles.inputBodyContainer}>
+                        <TextInput
+                          onChangeText={(txt) => updateValue("photo", index, txt)}
+                          value={el.photo}
+                          style={styles.bodyTextInput}
+                          placeholder={"No of photo"}
+                        />
+                      </View>
+                    </View>
+                  ))}
+              </View>
+              <View style={styles.tableBody}>
+                <View style={styles.inputBodyContainer}>
+                  <TextInput onChangeText={(txt) => setData({ ...data, area: txt })} value={data.area} style={styles.bodyTextInput} placeholder={"Area/unit"} />
+                </View>
+                <View style={styles.inputBodyContainer}>
+                  <TextInput
+                    onChangeText={(txt) => setData({ ...data, description: txt })}
+                    value={data.description}
+                    style={styles.bodyTextInput}
+                    placeholder={"Description"}
+                  />
+                </View>
+                <View style={styles.inputBodyContainer}>
+                  <TextInput
+                    onChangeText={(txt) => setData({ ...data, photo: txt })}
+                    value={data.photo}
+                    style={styles.bodyTextInput}
+                    placeholder={"No of photo"}
+                  />
+                </View>
+                <View style={styles.inputBodyContainer}>
+                  <TouchableOpacity style={styles.addBtn} onPress={() => addRow()}>
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={totalHours} onChangeText={(e) => setTotalHours(e)} style={styles.inputField} placeholder={"Hours"} />
+              </View>
+              <Text
+                style={{
+                  paddingTop: 20,
+                  paddingBottom: 20,
+                  color: "#96A8B2",
+                  fontSize: 12,
+                }}>
+                I can confirm by signing this form that I have inspect the above Areas/Units and they are completed.{" "}
+              </Text>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={supervisorName} onChangeText={(e) => setSupervisorName(e)} style={styles.inputField} placeholder={"Supervisor"} />
+              </View>
+              <TouchableOpacity
+                onPress={() =>
+                  setSignature({ ...signature, bool: true, normal: { ...signature.normal, bool: true }, agent: { ...signature.agent, bool: false } })
+                }
+                style={styles.inputFieldContainer}>
+                {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
+                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.normal.uri }} />
               </TouchableOpacity>
+              <View style={styles.inputFieldContainer}>
+                <Text onPress={() => showDatepicker("SupervisorDate")} style={styles.inputField}>
+                  {new Date(dateSupervisor).toLocaleDateString()}
+                </Text>
+              </View>
+              <Text
+                style={{
+                  paddingTop: 20,
+                  paddingBottom: 20,
+                  color: "#96A8B2",
+                  fontSize: 12,
+                }}>
+                I have checked these areas / units and I can confirm they are remedial work.
+              </Text>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={managerName} onChangeText={(e) => setManagerName(e)} style={styles.inputField} placeholder={"Site Manager (Print name)"} />
+              </View>
+              <TouchableOpacity
+                onPress={() =>
+                  setSignature({ ...signature, bool: true, normal: { ...signature.normal, bool: false }, agent: { ...signature.agent, bool: true } })
+                }
+                style={styles.inputFieldContainer}>
+                {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
+                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.agent.uri }} />
+              </TouchableOpacity>
+              <View style={styles.inputFieldContainer}>
+                <Text onPress={() => showDatepicker("ManagerDate")} style={styles.inputField}>
+                  {new Date(dateManager).toLocaleDateString()}
+                </Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: "#000",
+                  width: "100%",
+                  height: ".5%",
+                  marginBottom: 20,
+                  marginTop: 20,
+                }}></View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity style={styles.commonBtn} onPress={() => remedialFormInsert()}>
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={totalHours}
-              onChangeText={(e) => setTotalHours(e)}
-              style={styles.inputField}
-              placeholder={"Hours"}
-            />
-          </View>
-          <Text
-            style={{
-              paddingTop: 20,
-              paddingBottom: 20,
-              color: "#96A8B2",
-              fontSize: 12,
-            }}
-          >
-            I can confirm by signing this form that I have inspect the above
-            Areas/Units and they are completed.{" "}
-          </Text>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={supervisorName}
-              onChangeText={(e) => setSupervisorName(e)}
-              style={styles.inputField}
-              placeholder={"Supervisor"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Signature"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("SupervisorDate")}
-              style={styles.inputField}
-            >
-              {new Date(dateSupervisor).toLocaleDateString()}
-            </Text>
-          </View>
-          <Text
-            style={{
-              paddingTop: 20,
-              paddingBottom: 20,
-              color: "#96A8B2",
-              fontSize: 12,
-            }}
-          >
-            I have checked these areas / units and I can confirm they are
-            remedial work.
-          </Text>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={managerName}
-              onChangeText={(e) => setManagerName(e)}
-              style={styles.inputField}
-              placeholder={"Site Manager (Print name)"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Signature"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("ManagerDate")}
-              style={styles.inputField}
-            >
-              {new Date(dateManager).toLocaleDateString()}
-            </Text>
-          </View>
-          <View
-            style={{
-              backgroundColor: "#000",
-              width: "100%",
-              height: ".5%",
-              marginBottom: 20,
-              marginTop: 20,
-            }}
-          ></View>
-          <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => remedialFormInsert()}
-            >
-              <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
+          </ScrollView>
+        </>
+      )}
     </View>
   );
 };
@@ -470,7 +416,7 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   isSuccess: state.auth.isSuccess,
   isSuccessMsg: state.auth.isSuccessMsg,
-  isJobId: state.auth.isJobId
+  isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
   createRemedialHandler: (
@@ -495,7 +441,8 @@ const mapDispatchToProps = (dispatch) => ({
     dateManager,
     jobID,
     tabId,
-    token
+    token,
+    index
   ) =>
     dispatch(
       insertRemedialForm(
@@ -520,7 +467,8 @@ const mapDispatchToProps = (dispatch) => ({
         dateManager,
         jobID,
         tabId,
-        token
+        token,
+        index
       )
     ),
 });

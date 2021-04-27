@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  CheckBox,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-} from "react-native";
+import { View, StyleSheet, Image, CheckBox, TouchableOpacity, ScrollView, TextInput } from "react-native";
 import { Text } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { insertAnsuranceForm } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
+import SignatureComponent from "../../components/SignatureComponent";
 
 var plus = require("../../assets/authScreen/plus.png");
 const QualityInssurance = (props) => {
@@ -34,8 +27,7 @@ const QualityInssurance = (props) => {
       managerSign: "",
     },
     {
-      title:
-        "Ensure all areas are mist coated properly for e.g. uneven paint application (Snag Sheet)",
+      title: "Ensure all areas are mist coated properly for e.g. uneven paint application (Snag Sheet)",
       dateComplte: new Date().toLocaleDateString(),
       keyLetter: "",
       comment: "",
@@ -79,40 +71,35 @@ const QualityInssurance = (props) => {
       managerSign: "",
     },
     {
-      title:
-        "In the event where the decorators do get paint on the fittings,furniture’s, floors or any unpainted surfaces, these should be left paint free.",
+      title: "In the event where the decorators do get paint on the fittings,furniture’s, floors or any unpainted surfaces, these should be left paint free.",
       dateComplte: new Date().toLocaleDateString(),
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
-      title:
-        "Supervisor to issue a Snag Sheet to the decorator/s after they have completed their decoration works",
+      title: "Supervisor to issue a Snag Sheet to the decorator/s after they have completed their decoration works",
       dateComplte: new Date().toLocaleDateString(),
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
-      title:
-        "Supervisor to ensure that items flagged on the snag sheets are all completed during the de-snag/inspection.",
+      title: "Supervisor to ensure that items flagged on the snag sheets are all completed during the de-snag/inspection.",
       dateComplte: new Date().toLocaleDateString(),
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
-      title:
-        "Hand over units/plots (Hand over sheets to be signed by site managers to confirm that quality is met).",
+      title: "Hand over units/plots (Hand over sheets to be signed by site managers to confirm that quality is met).",
       dateComplte: new Date().toLocaleDateString(),
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
-      title:
-        "Site Managers Snag (inspection of units by site manager by issuing supervisor with their written snag sheet/s).",
+      title: "Site Managers Snag (inspection of units by site manager by issuing supervisor with their written snag sheet/s).",
       dateComplte: new Date().toLocaleDateString(),
       keyLetter: "",
       comment: "",
@@ -126,8 +113,7 @@ const QualityInssurance = (props) => {
       managerSign: "",
     },
     {
-      title:
-        "Builders/Client Final Snag (inspection of units by issuing written snag sheet/s)",
+      title: "Builders/Client Final Snag (inspection of units by issuing written snag sheet/s)",
       dateComplte: new Date().toLocaleDateString(),
       keyLetter: "",
       comment: "",
@@ -179,10 +165,7 @@ const QualityInssurance = (props) => {
   const [newRow, setNewRow] = useState([]);
 
   const addRow = () => {
-    setNewRow((oldArray) => [
-      ...oldArray,
-      { area: "1", description: "2", yes: "no", comments: "hi" },
-    ]);
+    setNewRow((oldArray) => [...oldArray, { area: "1", description: "2", yes: "no", comments: "hi" }]);
   };
   const [date, setDate] = useState(new Date(1598051730000));
   const [dateActivity, setDateActivity] = useState(new Date(1598051730000));
@@ -228,14 +211,7 @@ const QualityInssurance = (props) => {
   const [bscsSign, setBscsSign] = useState("");
 
   const qualityAnsuranceFormInsert = () => {
-    if (
-      projectName != "" &&
-      unitPlot != "" &&
-      mcSign != "" &&
-      mdSign != "" &&
-      smsSign != "" &&
-      bscsSign != ""
-    ) {
+    if (projectName != "" && unitPlot != "" && mcSign != "" && mdSign != "" && smsSign != "" && bscsSign != "") {
       props.createAnsuranceHandler(
         projectName,
         unitPlot,
@@ -247,7 +223,8 @@ const QualityInssurance = (props) => {
         bscsSign,
         jobID,
         tabId,
-        token
+        token,
+        props.route.params?.index
       );
     } else {
       alert("Please Insert All Fields CareFully !");
@@ -259,6 +236,13 @@ const QualityInssurance = (props) => {
     preData[index][key] = value;
     setActivityArray(preData);
   };
+
+  const [signature, setSignature] = useState({
+    bool: false,
+    isUpperSign: false,
+    islowerSign: false,
+    index: -1,
+  });
   useEffect(() => {
     if (isSuccess) {
       if (isSuccessMsg) {
@@ -280,324 +264,266 @@ const QualityInssurance = (props) => {
         date={date ? date : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onChange(date)}
         onCancel={() => setShow({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       <DateTimePickerModal
         isVisible={showActivity.isVisible}
         date={date ? date : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onActivityChange(date)}
         onCancel={() => setShowActivity({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>
-          Quality Assurance Inpection CheckList
-        </Text>
-      </View>
-      <ScrollView style={{ height: "100%" }}>
-        <View style={styles.formConatiner}>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Project"}
-              value={projectName}
-              onChangeText={(e) => setProjectName(e)}
-            />
+      {signature.bool ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            let data = signature.isUpperSign ? [...issuranceArray] : [...activityArray];
+            if (signature.isUpperSign) {
+              data[signature.index].managerSign = uri;
+              setInsuraanceArray(data);
+            } else {
+              data[signature.index].sign = uri;
+              setActivityArray(data);
+            }
+            setSignature({ bool: false, index: -1, isUpperSign: false, islowerSign: false });
+          }}
+        />
+      ) : (
+        <>
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>Quality Assurance Inpection CheckList</Text>
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={unitPlot}
-              onChangeText={(e) => setUnitPlot(e)}
-              style={styles.inputField}
-              placeholder={"Unit/Plot"}
-            />
-          </View>
-        </View>
-        <View style={styles.tableViewContainer}>
-          <View style={styles.tableHeader}>
-            <View style={styles.headerTitleView}>
-              <Text style={styles.headerTitle}>Activity</Text>
+          <ScrollView style={{ height: "100%" }}>
+            <View style={styles.formConatiner}>
+              <View style={styles.inputFieldContainer}>
+                <TextInput style={styles.inputField} placeholder={"Project"} value={projectName} onChangeText={(e) => setProjectName(e)} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={unitPlot} onChangeText={(e) => setUnitPlot(e)} style={styles.inputField} placeholder={"Unit/Plot"} />
+              </View>
             </View>
-            <View style={styles.headerTitleView}>
-              <Text style={styles.headerTitle}>Date Completed</Text>
-            </View>
-            <View style={styles.headerTitleView}>
-              <Text style={styles.headerTitle}>Key Letter </Text>
-            </View>
-            <View style={styles.headerTitleView}>
-              <Text style={styles.headerTitle}>Comments</Text>
-            </View>
-            <View style={styles.headerTitleView}>
-              <Text style={styles.headerTitle}>Site Manager/s to sign * </Text>
-            </View>
-          </View>
-          <View style={{ width: "100%" }}>
-            {issuranceArray.length > 0 &&
-              issuranceArray.map((item, index) => (
-                <View
-                  style={{
-                    marginBottom: 20,
-                    paddingRight: 20,
-                    paddingLeft: 20,
-                  }}
-                >
-                  <View style={styles.activityTitleView}>
-                    <Text
-                      style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}
-                    >
-                      {item.title}
-                    </Text>
-                    {item.secondTitle && (
-                      <Text
-                        style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}
-                      >
-                        {item.title}
-                      </Text>
-                    )}
-                  </View>
-                  <View style={styles.tableBody}>
-                    <View style={styles.inputBodyContainer}>
-                      <Text
-                        onPress={() => showDatepicker(index)}
-                        style={{
-                          width: "100%",
+            <View style={styles.tableViewContainer}>
+              <View style={styles.tableHeader}>
+                <View style={styles.headerTitleView}>
+                  <Text style={styles.headerTitle}>Activity</Text>
+                </View>
+                <View style={styles.headerTitleView}>
+                  <Text style={styles.headerTitle}>Date Completed</Text>
+                </View>
+                <View style={styles.headerTitleView}>
+                  <Text style={styles.headerTitle}>Key Letter </Text>
+                </View>
+                <View style={styles.headerTitleView}>
+                  <Text style={styles.headerTitle}>Comments</Text>
+                </View>
+                <View style={styles.headerTitleView}>
+                  <Text style={styles.headerTitle}>Site Manager/s to sign * </Text>
+                </View>
+              </View>
+              <View style={{ width: "100%" }}>
+                {issuranceArray.length > 0 &&
+                  issuranceArray.map((item, index) => (
+                    <View
+                      style={{
+                        marginBottom: 20,
+                        paddingRight: 20,
+                        paddingLeft: 20,
+                      }}>
+                      <View style={styles.activityTitleView}>
+                        <Text style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}>{item.title}</Text>
+                        {item.secondTitle && <Text style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}>{item.title}</Text>}
+                      </View>
+                      <View style={styles.tableBody}>
+                        <View style={styles.inputBodyContainer}>
+                          <Text
+                            onPress={() => showDatepicker(index)}
+                            style={{
+                              width: "100%",
 
-                          paddingTop: 10,
-                          fontSize: 12,
-                          color: "#96A8B2",
-                          fontFamily: "poppins-regular",
-                        }}
-                      >
-                        {new Date(item.dateComplte).toLocaleDateString()}
-                      </Text>
-                    </View>
-                    <View style={styles.inputBodyContainer}>
-                      <TextInput
-                        style={styles.bodyTextInput}
-                        placeholder={"Key Letter"}
-                        onChangeText={(txt) =>
-                          updateValue("keyLetter", index, txt)
-                        }
-                        value={item.keyLetter}
-                      />
-                    </View>
-                    <View style={styles.inputBodyContainer}>
-                      <TextInput
-                        style={styles.bodyTextInput}
-                        placeholder={"Comments"}
-                        onChangeText={(txt) =>
-                          updateValue("comments", index, txt)
-                        }
-                        value={item.comment}
-                      />
-                    </View>
-                    <View style={styles.inputBodyContainer}>
-                      <TextInput
+                              paddingTop: 10,
+                              fontSize: 12,
+                              color: "#96A8B2",
+                              fontFamily: "poppins-regular",
+                            }}>
+                            {new Date(item.dateComplte).toLocaleDateString()}
+                          </Text>
+                        </View>
+                        <View style={styles.inputBodyContainer}>
+                          <TextInput
+                            style={styles.bodyTextInput}
+                            placeholder={"Key Letter"}
+                            onChangeText={(txt) => updateValue("keyLetter", index, txt)}
+                            value={item.keyLetter}
+                          />
+                        </View>
+                        <View style={styles.inputBodyContainer}>
+                          <TextInput
+                            style={styles.bodyTextInput}
+                            placeholder={"Comments"}
+                            onChangeText={(txt) => updateValue("comments", index, txt)}
+                            value={item.comment}
+                          />
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => setSignature({ bool: true, index: index, isUpperSign: true, islowerSign: false })}
+                          style={[styles.inputBodyContainer, { justifyContent: "center", alignItems: "flex-end" }]}>
+                          {/* <TextInput
                         style={styles.bodyTextInput}
                         placeholder={"Sign"}
-                        onChangeText={(txt) =>
-                          updateValue("managerSign", index, txt)
-                        }
+                        onChangeText={(txt) => updateValue("managerSign", index, txt)}
                         value={item.managerSign}
-                      />
+                      /> */}
+                          <Image source={{ uri: item.managerSign }} style={{ height: 30, width: 30, backgroundColor: "gray" }} />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ))}
+              </View>
+              <View>
+                <Text style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}>Overall comments once all the above is completed: </Text>
+              </View>
+              <View style={styles.tableHeader}>
+                <View style={styles.headerCompletionTitleView}>
+                  <Text style={styles.headerCompletionTitle}>KEY</Text>
+                </View>
+                <View style={styles.headerCompletionTitleView}>
+                  <Text style={styles.headerCompletionTitle}>Site Mannagers to sign after Completion</Text>
+                </View>
+              </View>
+              <View style={styles.keyActivityDiv}>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={styles.keyDiv}>
+                    {keyArray.map((item, index) => (
+                      <View style={styles.keyTextView}>
+                        <Text style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}>{item.keys}</Text>
+                        <Text style={{ fontSize: 10, fontFamily: "poppins-regular" }}>{item.keyDetails}</Text>
+                      </View>
+                    ))}
+                  </View>
+                  <View style={styles.activityDiv}>
+                    <View style={styles.tableActivityHeader}>
+                      <View style={styles.headerActivityTitleView}>
+                        <Text style={styles.headerActivityTitle}>Activity</Text>
+                      </View>
+                      <View style={styles.headerActivityTitleView}>
+                        <Text style={styles.headerActivityTitle}>Date</Text>
+                      </View>
+                      <View style={styles.headerActivityTitleView}>
+                        <Text style={styles.headerActivityTitle}>Sign</Text>
+                      </View>
+                    </View>
+                    <View style={styles.tableActivityBody}>
+                      <View style={styles.activityListView}>
+                        {activityArray.length > 0 &&
+                          activityArray.map((item, index) => (
+                            <View style={{ flexDirection: "row", width: "100%" }} key={index}>
+                              <View style={[styles.activityTitle, { width: "33.3%" }]}>
+                                <Text
+                                  style={{
+                                    fontSize: 8,
+                                    fontFamily: "poppins-semiBold",
+                                    paddingTop: 8,
+                                  }}>
+                                  {item.activity}
+                                </Text>
+                              </View>
+
+                              <View style={{ width: "30.3%", marginRight: 5 }}>
+                                <Text
+                                  onPress={() => showActivityDatepicker(index)}
+                                  style={{
+                                    width: "100%",
+                                    paddingTop: 18,
+                                    fontSize: 8,
+                                    color: "#96A8B2",
+                                    fontFamily: "poppins-regular",
+                                    borderBottomWidth: 1,
+                                    borderBottomColor: "#96A8B2",
+                                    padding: 5,
+                                    color: "#96A8B2",
+                                  }}>
+                                  {new Date(item.date).toLocaleDateString()}
+                                </Text>
+                              </View>
+                              <TouchableOpacity
+                                onPress={() => setSignature({ bool: true, index: index, isUpperSign: false, islowerSign: true })}
+                                style={{ width: "30.3%", justifyContent: "center", alignItems: "flex-end" }}>
+                                {/* <TextInput
+                              style={[styles.bodyTextInput, { width: "100%", fontSize: 8 }]}
+                              placeholder={"Sign"}
+                              value={item.sign}
+                              onChangeText={(txt) => updateSignValue("sign", index, txt)}
+                            /> */}
+                                <Image source={{ uri: item.sign }} style={{ height: 20, width: 20, backgroundColor: "gray" }} />
+                              </TouchableOpacity>
+                            </View>
+                          ))}
+                      </View>
                     </View>
                   </View>
                 </View>
-              ))}
-          </View>
-          <View>
-            <Text style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}>
-              Overall comments once all the above is completed:{" "}
-            </Text>
-          </View>
-          <View style={styles.tableHeader}>
-            <View style={styles.headerCompletionTitleView}>
-              <Text style={styles.headerCompletionTitle}>KEY</Text>
-            </View>
-            <View style={styles.headerCompletionTitleView}>
-              <Text style={styles.headerCompletionTitle}>
-                Site Mannagers to sign after Completion
+              </View>
+              <Text
+                style={{
+                  paddingTop: 20,
+                  paddingBottom: 20,
+                  color: "#96A8B2",
+                  fontSize: 12,
+                  fontFamily: "poppins-semiBold",
+                  textAlign: "center",
+                }}>
+                <Text
+                  style={{
+                    color: "#96A8B2",
+                    fontSize: 12,
+                    fontFamily: "poppins-semiBold",
+                  }}>
+                  Quality Insurance
+                </Text>{" "}
+                is an audit process to verify that the quality of work performed is what was inspected and reported.
               </Text>
-            </View>
-          </View>
-          <View style={styles.keyActivityDiv}>
-            <View style={{ flexDirection: "row" }}>
-              <View style={styles.keyDiv}>
-                {keyArray.map((item, index) => (
-                  <View style={styles.keyTextView}>
-                    <Text
-                      style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}
-                    >
-                      {item.keys}
-                    </Text>
-                    <Text
-                      style={{ fontSize: 10, fontFamily: "poppins-regular" }}
-                    >
-                      {item.keyDetails}
-                    </Text>
-                  </View>
-                ))}
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontFamily: "poppins-semiBold",
+                  color: "#000",
+                }}>
+                Supervisor Sign
+              </Text>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={mcSign} onChangeText={(e) => setMcSign(e)} style={styles.inputField} placeholder={"MC"} />
               </View>
-              <View style={styles.activityDiv}>
-                <View style={styles.tableActivityHeader}>
-                  <View style={styles.headerActivityTitleView}>
-                    <Text style={styles.headerActivityTitle}>Activity</Text>
-                  </View>
-                  <View style={styles.headerActivityTitleView}>
-                    <Text style={styles.headerActivityTitle}>Date</Text>
-                  </View>
-                  <View style={styles.headerActivityTitleView}>
-                    <Text style={styles.headerActivityTitle}>Sign</Text>
-                  </View>
-                </View>
-                <View style={styles.tableActivityBody}>
-                  <View style={styles.activityListView}>
-                    {activityArray.length > 0 &&
-                      activityArray.map((item, index) => (
-                        <View
-                          style={{ flexDirection: "row", width: "100%" }}
-                          key={index}
-                        >
-                          <View
-                            style={[styles.activityTitle, { width: "33.3%" }]}
-                          >
-                            <Text
-                              style={{
-                                fontSize: 8,
-                                fontFamily: "poppins-semiBold",
-                                paddingTop: 8,
-                              }}
-                            >
-                              {item.activity}
-                            </Text>
-                          </View>
-
-                          <View style={{ width: "30.3%", marginRight: 5 }}>
-                            <Text
-                              onPress={() => showActivityDatepicker(index)}
-                              style={{
-                                width: "100%",
-                                paddingTop: 18,
-                                fontSize: 8,
-                                color: "#96A8B2",
-                                fontFamily: "poppins-regular",
-                                borderBottomWidth: 1,
-                                borderBottomColor: "#96A8B2",
-                                padding: 5,
-                                color: "#96A8B2",
-                              }}
-                            >
-                              {new Date(item.date).toLocaleDateString()}
-                            </Text>
-                          </View>
-                          <View style={{ width: "30.3%" }}>
-                            <TextInput
-                              style={[
-                                styles.bodyTextInput,
-                                { width: "100%", fontSize: 8 },
-                              ]}
-                              placeholder={"Sign"}
-                              value={item.sign}
-                              onChangeText={(txt) =>
-                                updateSignValue("sign", index, txt)
-                              }
-                            />
-                          </View>
-                        </View>
-                      ))}
-                  </View>
-                </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={mdSign} onChangeText={(e) => setMdSign(e)} style={styles.inputField} placeholder={"MD"} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={smsSign} onChangeText={(e) => setSmsSign(e)} style={styles.inputField} placeholder={"SMS"} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput value={bscsSign} onChangeText={(e) => setBscsSign(e)} style={styles.inputField} placeholder={"BS/CS"} />
+              </View>
+              <View
+                style={{
+                  backgroundColor: "#000",
+                  width: "100%",
+                  height: 2,
+                }}></View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity style={styles.commonBtn} onPress={() => qualityAnsuranceFormInsert()}>
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
               </View>
             </View>
-          </View>
-          <Text
-            style={{
-              paddingTop: 20,
-              paddingBottom: 20,
-              color: "#96A8B2",
-              fontSize: 12,
-              fontFamily: "poppins-semiBold",
-              textAlign: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: "#96A8B2",
-                fontSize: 12,
-                fontFamily: "poppins-semiBold",
-              }}
-            >
-              Quality Insurance
-            </Text>{" "}
-            is an audit process to verify that the quality of work performed is
-            what was inspected and reported.
-          </Text>
-          <Text
-            style={{
-              fontSize: 12,
-              fontFamily: "poppins-semiBold",
-              color: "#000",
-            }}
-          >
-            Supervisor Sign
-          </Text>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={mcSign}
-              onChangeText={(e) => setMcSign(e)}
-              style={styles.inputField}
-              placeholder={"MC"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={mdSign}
-              onChangeText={(e) => setMdSign(e)}
-              style={styles.inputField}
-              placeholder={"MD"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={smsSign}
-              onChangeText={(e) => setSmsSign(e)}
-              style={styles.inputField}
-              placeholder={"SMS"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={bscsSign}
-              onChangeText={(e) => setBscsSign(e)}
-              style={styles.inputField}
-              placeholder={"BS/CS"}
-            />
-          </View>
-          <View
-            style={{
-              backgroundColor: "#000",
-              width: "100%",
-              height: 2,
-            }}
-          ></View>
-          <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => qualityAnsuranceFormInsert()}
-            >
-              <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
+          </ScrollView>
+        </>
+      )}
     </View>
   );
 };
@@ -608,34 +534,8 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createAnsuranceHandler: (
-    projectName,
-    unitPlot,
-    issuranceArray,
-    activityArray,
-    mcSign,
-    mdSign,
-    smsSign,
-    bscsSign,
-    jobID,
-    tabId,
-    token
-  ) =>
-    dispatch(
-      insertAnsuranceForm(
-        projectName,
-        unitPlot,
-        issuranceArray,
-        activityArray,
-        mcSign,
-        mdSign,
-        smsSign,
-        bscsSign,
-        jobID,
-        tabId,
-        token
-      )
-    ),
+  createAnsuranceHandler: (projectName, unitPlot, issuranceArray, activityArray, mcSign, mdSign, smsSign, bscsSign, jobID, tabId, token, index) =>
+    dispatch(insertAnsuranceForm(projectName, unitPlot, issuranceArray, activityArray, mcSign, mdSign, smsSign, bscsSign, jobID, tabId, token, index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(QualityInssurance);
 const styles = StyleSheet.create({

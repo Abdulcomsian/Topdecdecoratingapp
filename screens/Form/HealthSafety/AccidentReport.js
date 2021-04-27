@@ -1,41 +1,33 @@
 import React, { useState } from "react";
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  CheckBox,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Image, TouchableOpacity, CheckBox, TextInput, ScrollView } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const AccidentReport = () => {
-
-    const [nameOfPerson, setNameOfPerson] = useState("")
-    const [locationOfIncident, setLocationOfIncident] = useState("")
-    const [nameOfInjuredPerson, setNameOfInjuredPerson] = useState("")
-    const [ageOfInjuredPerson, setAgeOfInjuredPerson] = useState("")
-    const [sexOfInjuredPerson, setSexOfInjuredPerson] = useState("")
-    const [stateOfInjuredPerson, setStateOfInjuredPerson] = useState("") 
-    const [telephonNumber, setTelephoneNumber] = useState("") 
-    const [occupationInjured, setOccupationInjured] = useState("") 
-    const [natureOfInjury, setNatureOfInjury] = useState("")
-    const [witnessStatement, setWitnessStatement] = useState("")
-    const [whomAccidentReported, setwhomAccidentReported] = useState("") 
-    const [whenAccidentReported, setwhenAccidentReported] = useState("")
-    const [supervisorName, setSupervisorName] = useState("")
-    const [mangementWhomAccidentReported, setMangementWhomAccidentReported] = useState("") 
-    const [managerInitialNotes, setManagerInitialNotes] = useState("") 
-    const [actionRequried, setActionRequried] = useState("") 
-    const [actionPerformed, setActionPerformed] = useState("") 
-    const [managerName, setManagerName] = useState("") 
-    const [managerSignature, setManagerSignature] = useState("") 
-    const [injuredPersonStatement, setInjuredPersonStatement] = useState("") 
-    const [supervisorSignature, setSupervisorSignature] = useState("") 
+  const [nameOfPerson, setNameOfPerson] = useState("");
+  const [locationOfIncident, setLocationOfIncident] = useState("");
+  const [nameOfInjuredPerson, setNameOfInjuredPerson] = useState("");
+  const [ageOfInjuredPerson, setAgeOfInjuredPerson] = useState("");
+  const [sexOfInjuredPerson, setSexOfInjuredPerson] = useState("");
+  const [stateOfInjuredPerson, setStateOfInjuredPerson] = useState("");
+  const [telephonNumber, setTelephoneNumber] = useState("");
+  const [occupationInjured, setOccupationInjured] = useState("");
+  const [natureOfInjury, setNatureOfInjury] = useState("");
+  const [witnessStatement, setWitnessStatement] = useState("");
+  const [whomAccidentReported, setwhomAccidentReported] = useState("");
+  const [whenAccidentReported, setwhenAccidentReported] = useState("");
+  const [supervisorName, setSupervisorName] = useState("");
+  const [mangementWhomAccidentReported, setMangementWhomAccidentReported] = useState("");
+  const [managerInitialNotes, setManagerInitialNotes] = useState("");
+  const [actionRequried, setActionRequried] = useState("");
+  const [actionPerformed, setActionPerformed] = useState("");
+  const [managerName, setManagerName] = useState("");
+  const [managerSignature, setManagerSignature] = useState("");
+  const [injuredPersonStatement, setInjuredPersonStatement] = useState("");
+  const [supervisorSignature, setSupervisorSignature] = useState("");
   const [callingDetails, setCallingDetails] = useState([
     {
       title: "Was an ambulance called?",
@@ -465,92 +457,92 @@ const AccidentReport = () => {
       setReOccurance({ ...reOccurance, yes: false, no: true });
     }
   };
-  const incidentFormInsert = () =>{
-    console.log("Name Of Person :",nameOfInjuredPerson)
-    console.log("Incident Date :",dateIncident)
-    console.log("Location of Incident :",locationOfIncident)
-    console.log("Investigation Date :",dateInvestigation)
-    console.log("Type of Incident :",incidentArray)
-    console.log("Name of Injured Person :",nameOfInjuredPerson)
-    console.log("Age :",ageOfInjuredPerson)
-    console.log("Sex :",sexOfInjuredPerson)
-    console.log("Employee :",employee)
-    console.log("State of Injured Person :",stateOfInjuredPerson)
-    console.log("Phone Number :",telephonNumber)
-    console.log("Occupation :",occupationInjured)
-    console.log("Nature of Injury :",natureOfInjury)
-    console.log("Ambulance Details :",callingDetails)
-    console.log("Statement Of Injured Person :",stateOfInjuredPerson)
-    console.log("Dynamic Input :",dynamicInput)
-    console.log("Witness Statement :",witnessStatement)
-    console.log("Whom Accident Reported :",whomAccidentReported)
-    console.log("When Accident Reported :",whenAccidentReported)
-    console.log("Supervisor Name :",supervisorName)
-    console.log("Supervisor Signature :",supervisorSignature)
-    console.log("Supervisor Date :",dateSupervisor)
-    console.log("Whom Management Reported :",mangementWhomAccidentReported)
-    console.log("Manager Date Report :",dateReport)
-    console.log("Comment Initial Investigation :",managerInitialNotes)
-    console.log("Action Requried :",actionRequried)
-    console.log("Actiion Performed :",actionPerformed)
-    console.log("Claender day :",calendarDay)
-    console.log("Re Occurance :",reOccurance)
-    console.log("Manager Name :",managerName)
-    console.log("Manager Signature :",managerSignature)
-    console.log("Manager Date :",dateManager)
-  }
+  const incidentFormInsert = () => {
+    console.log("Name Of Person :", nameOfInjuredPerson);
+    console.log("Incident Date :", dateIncident);
+    console.log("Location of Incident :", locationOfIncident);
+    console.log("Investigation Date :", dateInvestigation);
+    console.log("Type of Incident :", incidentArray);
+    console.log("Name of Injured Person :", nameOfInjuredPerson);
+    console.log("Age :", ageOfInjuredPerson);
+    console.log("Sex :", sexOfInjuredPerson);
+    console.log("Employee :", employee);
+    console.log("State of Injured Person :", stateOfInjuredPerson);
+    console.log("Phone Number :", telephonNumber);
+    console.log("Occupation :", occupationInjured);
+    console.log("Nature of Injury :", natureOfInjury);
+    console.log("Ambulance Details :", callingDetails);
+    console.log("Statement Of Injured Person :", stateOfInjuredPerson);
+    console.log("Dynamic Input :", dynamicInput);
+    console.log("Witness Statement :", witnessStatement);
+    console.log("Whom Accident Reported :", whomAccidentReported);
+    console.log("When Accident Reported :", whenAccidentReported);
+    console.log("Supervisor Name :", supervisorName);
+    console.log("Supervisor Signature :", supervisorSignature);
+    console.log("Supervisor Date :", dateSupervisor);
+    console.log("Whom Management Reported :", mangementWhomAccidentReported);
+    console.log("Manager Date Report :", dateReport);
+    console.log("Comment Initial Investigation :", managerInitialNotes);
+    console.log("Action Requried :", actionRequried);
+    console.log("Actiion Performed :", actionPerformed);
+    console.log("Claender day :", calendarDay);
+    console.log("Re Occurance :", reOccurance);
+    console.log("Manager Name :", managerName);
+    console.log("Manager Signature :", managerSignature);
+    console.log("Manager Date :", dateManager);
+  };
   return (
     <View style={styles.mainContainer}>
-      {showIncident && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateIncident}
-          mode={mode}
-          display="default"
-          onChange={onIncidentChange}
-          format="DD-MM-YYYY"
-        />
-      )}
-      {showInvestigation && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateInvestigation}
-          mode={mode}
-          display="default"
-          onChange={onInvestigationChange}
-          format="DD-MM-YYYY"
-        />
-      )}
-      {showSupervisor && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateSupervisor}
-          mode={mode}
-          display="default"
-          onChange={onSupervisorDateChange}
-          format="DD-MM-YYYY"
-        />
-      )}
-      {showReport && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateReport}
-          mode={mode}
-          display="default"
-          onChange={onReportDateChange}
-          format="DD-MM-YYYY"
-        />
-      )}
-      {showManager && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dateManager}
-          mode={mode}
-          display="default"
-          onChange={onManagerDateChange}
-          format="DD-MM-YYYY"
-        />
-      )}
+      <DateTimePicker
+        isVisible={showIncident}
+        testID='dateTimePicker'
+        value={dateIncident}
+        mode={mode}
+        display='default'
+        onConfirm={onIncidentChange}
+        onCancel={() => {}}
+        format='DD-MM-YYYY'
+      />
+      <DateTimePicker
+        isVisible={showInvestigation}
+        testID='dateTimePicker'
+        value={dateInvestigation}
+        mode={mode}
+        display='default'
+        onConfirm={onInvestigationChange}
+        onCancel={() => {}}
+        format='DD-MM-YYYY'
+      />
+      <DateTimePicker
+        isVisible={showSupervisor}
+        testID='dateTimePicker'
+        value={dateSupervisor}
+        mode={mode}
+        display='default'
+        onConfirm={onSupervisorDateChange}
+        onCancel={() => {}}
+        format='DD-MM-YYYY'
+      />
+      <DateTimePicker
+        isVisible={showReport}
+        testID='dateTimePicker'
+        value={dateReport}
+        mode={mode}
+        display='default'
+        onConfirm={onReportDateChange}
+        onCancel={() => {}}
+        format='DD-MM-YYYY'
+      />
+      <DateTimePicker
+        isVisible={showManager}
+        testID='dateTimePicker'
+        value={dateManager}
+        mode={mode}
+        display='default'
+        onConfirm={onManagerDateChange}
+        onCancel={() => {}}
+        format='DD-MM-YYYY'
+      />
       <View style={styles.imageView}>
         <Image source={mainImage} style={styles.bannerImage} />
       </View>
@@ -559,8 +551,7 @@ const AccidentReport = () => {
           paddingTop: 30,
           justifyContent: "center",
           alignItems: "center",
-        }}
-      >
+        }}>
         <Text style={styles.titleText}>Accident/Incident Report Form</Text>
       </View>
       <ScrollView>
@@ -569,15 +560,12 @@ const AccidentReport = () => {
             <TextInput
               style={styles.inputField}
               placeholder={"Full name of person completing this report"}
-              onChangeText={(e)=>setNameOfPerson(e)}
+              onChangeText={(e) => setNameOfPerson(e)}
               value={nameOfPerson}
             />
           </View>
           <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("Date")}
-              style={[styles.inputField, { paddingTop: 15 }]}
-            >
+            <Text onPress={() => showDatepicker("Date")} style={[styles.inputField, { paddingTop: 15 }]}>
               {new Date(dateIncident).toLocaleDateString()}
             </Text>
           </View>
@@ -585,34 +573,25 @@ const AccidentReport = () => {
             <TextInput
               style={styles.inputField}
               placeholder={"Location of Incident"}
-              onChangeText={(e)=>setLocationOfIncident(e)}
+              onChangeText={(e) => setLocationOfIncident(e)}
               value={locationOfIncident}
             />
           </View>
           <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("DateInvestigation")}
-              style={[styles.inputField, { paddingTop: 15 }]}
-            >
+            <Text onPress={() => showDatepicker("DateInvestigation")} style={[styles.inputField, { paddingTop: 15 }]}>
               {new Date(dateInvestigation).toLocaleDateString()}
             </Text>
           </View>
           <View style={{ paddingTop: 20, paddingBottom: 20 }}>
             <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-              TYPE OF INCIDENT{" "}
-              <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                (please tick relevant boxes)
-              </Text>
+              TYPE OF INCIDENT <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>(please tick relevant boxes)</Text>
             </Text>
           </View>
           <View style={styles.checkBoxDiv}>
             <View style={styles.firstCheckBoxRow}>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.fatality}
-                    onValueChange={() => checkedIncidentValue("fatality")}
-                  />
+                  <CheckBox value={incidentArray.fatality} onValueChange={() => checkedIncidentValue("fatality")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Fatality</Text>
@@ -620,12 +599,7 @@ const AccidentReport = () => {
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.underDaysInjury}
-                    onValueChange={() =>
-                      checkedIncidentValue("underDaysInjury")
-                    }
-                  />
+                  <CheckBox value={incidentArray.underDaysInjury} onValueChange={() => checkedIncidentValue("underDaysInjury")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Under ‘7’day injury</Text>
@@ -633,10 +607,7 @@ const AccidentReport = () => {
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.timeLost}
-                    onValueChange={() => checkedIncidentValue("timeLost")}
-                  />
+                  <CheckBox value={incidentArray.timeLost} onValueChange={() => checkedIncidentValue("timeLost")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>No time lost</Text>
@@ -646,10 +617,7 @@ const AccidentReport = () => {
             <View style={styles.firstCheckBoxRow}>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.majorInjury}
-                    onValueChange={() => checkedIncidentValue("majorInjury")}
-                  />
+                  <CheckBox value={incidentArray.majorInjury} onValueChange={() => checkedIncidentValue("majorInjury")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Major Injury</Text>
@@ -657,38 +625,25 @@ const AccidentReport = () => {
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.hospital}
-                    onValueChange={() => checkedIncidentValue("hospital")}
-                  />
+                  <CheckBox value={incidentArray.hospital} onValueChange={() => checkedIncidentValue("hospital")} />
                 </View>
                 <View style={styles.rightCheckBox}>
-                  <Text style={styles.accidentText}>
-                    In hospital more than 24hrs
-                  </Text>
+                  <Text style={styles.accidentText}>In hospital more than 24hrs</Text>
                 </View>
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.publicInjury}
-                    onValueChange={() => checkedIncidentValue("publicInjury")}
-                  />
+                  <CheckBox value={incidentArray.publicInjury} onValueChange={() => checkedIncidentValue("publicInjury")} />
                 </View>
                 <View style={styles.rightCheckBox}>
-                  <Text style={styles.accidentText}>
-                    Member of public/contractor injured{" "}
-                  </Text>
+                  <Text style={styles.accidentText}>Member of public/contractor injured </Text>
                 </View>
               </View>
             </View>
             <View style={styles.firstCheckBoxRow}>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.overDaysInjury}
-                    onValueChange={() => checkedIncidentValue("overDaysInjury")}
-                  />
+                  <CheckBox value={incidentArray.overDaysInjury} onValueChange={() => checkedIncidentValue("overDaysInjury")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Over ‘7’ day injury</Text>
@@ -696,27 +651,15 @@ const AccidentReport = () => {
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.dangerousOccurrences}
-                    onValueChange={() =>
-                      checkedIncidentValue("danegerousOccurrences")
-                    }
-                  />
+                  <CheckBox value={incidentArray.dangerousOccurrences} onValueChange={() => checkedIncidentValue("danegerousOccurrences")} />
                 </View>
                 <View style={styles.rightCheckBox}>
-                  <Text style={styles.accidentText}>
-                    Dangerous Occurrences{" "}
-                  </Text>
+                  <Text style={styles.accidentText}>Dangerous Occurrences </Text>
                 </View>
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.becameUnconscious}
-                    onValueChange={() =>
-                      checkedIncidentValue("becameUnconscious")
-                    }
-                  />
+                  <CheckBox value={incidentArray.becameUnconscious} onValueChange={() => checkedIncidentValue("becameUnconscious")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Became unconscious</Text>
@@ -726,10 +669,7 @@ const AccidentReport = () => {
             <View style={styles.firstCheckBoxRow}>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.reportDiesase}
-                    onValueChange={() => checkedIncidentValue("reportDiesase")}
-                  />
+                  <CheckBox value={incidentArray.reportDiesase} onValueChange={() => checkedIncidentValue("reportDiesase")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Reportable disease</Text>
@@ -737,10 +677,7 @@ const AccidentReport = () => {
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.damaghIncident}
-                    onValueChange={() => checkedIncidentValue("damaghIncident")}
-                  />
+                  <CheckBox value={incidentArray.damaghIncident} onValueChange={() => checkedIncidentValue("damaghIncident")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Damage Incident</Text>
@@ -748,12 +685,7 @@ const AccidentReport = () => {
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={incidentArray.neededResuscitation}
-                    onValueChange={() =>
-                      checkedIncidentValue("neededResuscitation")
-                    }
-                  />
+                  <CheckBox value={incidentArray.neededResuscitation} onValueChange={() => checkedIncidentValue("neededResuscitation")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Needed resuscitation</Text>
@@ -762,34 +694,27 @@ const AccidentReport = () => {
             </View>
           </View>
           <View style={{ paddingTop: 20, paddingBottom: 10 }}>
-            <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-              THE INJURED PERSON
-            </Text>
+            <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>THE INJURED PERSON</Text>
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
               placeholder={"Name of Injured Person"}
-              onChangeText={(e)=>setNameOfInjuredPerson(e)}
+              onChangeText={(e) => setNameOfInjuredPerson(e)}
               value={nameOfInjuredPerson}
             />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput onChangeText={(e)=>setAgeOfInjuredPerson(e)}
-              value={ageOfInjuredPerson} style={styles.inputField} placeholder={"Age"} />
+            <TextInput onChangeText={(e) => setAgeOfInjuredPerson(e)} value={ageOfInjuredPerson} style={styles.inputField} placeholder={"Age"} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput onChangeText={(e)=>setSexOfInjuredPerson(e)}
-              value={sexOfInjuredPerson} style={styles.inputField} placeholder={"Sex"} />
+            <TextInput onChangeText={(e) => setSexOfInjuredPerson(e)} value={sexOfInjuredPerson} style={styles.inputField} placeholder={"Sex"} />
           </View>
           <View style={styles.checkBoxDiv}>
             <View style={styles.firstCheckBoxRow}>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={employee.employeed}
-                    onValueChange={() => checkedEmployeeValue("employeed")}
-                  />
+                  <CheckBox value={employee.employeed} onValueChange={() => checkedEmployeeValue("employeed")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Employee</Text>
@@ -797,10 +722,7 @@ const AccidentReport = () => {
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={employee.selfEmployee}
-                    onValueChange={() => checkedEmployeeValue("selfEmployee")}
-                  />
+                  <CheckBox value={employee.selfEmployee} onValueChange={() => checkedEmployeeValue("selfEmployee")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Self Employed</Text>
@@ -808,10 +730,7 @@ const AccidentReport = () => {
               </View>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={employee.trainee}
-                    onValueChange={() => checkedEmployeeValue("trainee")}
-                  />
+                  <CheckBox value={employee.trainee} onValueChange={() => checkedEmployeeValue("trainee")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Trainee</Text>
@@ -821,12 +740,7 @@ const AccidentReport = () => {
             <View style={styles.firstCheckBoxRow}>
               <View style={styles.parentCheckBox}>
                 <View style={styles.leftCheckBox}>
-                  <CheckBox
-                    value={employee.tradeContructor}
-                    onValueChange={() =>
-                      checkedEmployeeValue("tradeContructor")
-                    }
-                  />
+                  <CheckBox value={employee.tradeContructor} onValueChange={() => checkedEmployeeValue("tradeContructor")} />
                 </View>
                 <View style={styles.rightCheckBox}>
                   <Text style={styles.accidentText}>Trade Contracto</Text>
@@ -838,33 +752,26 @@ const AccidentReport = () => {
             <TextInput
               style={styles.inputField}
               placeholder={"(Please State) Injured Person Name"}
-              onChangeText={(e)=>setStateOfInjuredPerson(e)}
+              onChangeText={(e) => setStateOfInjuredPerson(e)}
               value={stateOfInjuredPerson}
             />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Telephone Number"}
-              onChangeText={(e)=>setTelephoneNumber(e)}
-              value={telephonNumber}
-            />
+            <TextInput style={styles.inputField} placeholder={"Telephone Number"} onChangeText={(e) => setTelephoneNumber(e)} value={telephonNumber} />
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
               placeholder={"Occupation when Injured"}
-              onChangeText={(e)=>setOccupationInjured(e)}
+              onChangeText={(e) => setOccupationInjured(e)}
               value={occupationInjured}
             />
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
-              placeholder={
-                "Nature of Injury or condition, And the part of the body affected"
-              }
-              onChangeText={(e)=>setNatureOfInjury(e)}
+              placeholder={"Nature of Injury or condition, And the part of the body affected"}
+              onChangeText={(e) => setNatureOfInjury(e)}
               value={natureOfInjury}
             />
           </View>
@@ -873,20 +780,13 @@ const AccidentReport = () => {
               {callingDetails.map((item, index) => (
                 <View style={styles.detailsContactView} key={index}>
                   <View style={styles.instructionView}>
-                    <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                      {item.title}
-                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>{item.title}</Text>
                   </View>
                   <View style={styles.checkBoxView}>
                     <View style={styles.firstCheckBoxRow}>
                       <View style={styles.parentCheckBox}>
                         <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={item.no}
-                            onValueChange={() =>
-                              checkedAmbulanceValue("no", index, "true")
-                            }
-                          />
+                          <CheckBox value={item.no} onValueChange={() => checkedAmbulanceValue("no", index, "true")} />
                         </View>
                         <View style={styles.rightCheckBox}>
                           <Text style={styles.accidentText}>No</Text>
@@ -894,12 +794,7 @@ const AccidentReport = () => {
                       </View>
                       <View style={styles.parentCheckBox}>
                         <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={item.yes}
-                            onValueChange={() =>
-                              checkedAmbulanceValue("yes", index, "true")
-                            }
-                          />
+                          <CheckBox value={item.yes} onValueChange={() => checkedAmbulanceValue("yes", index, "true")} />
                         </View>
                         <View style={styles.rightCheckBox}>
                           <Text style={styles.accidentText}>Yes</Text>
@@ -909,13 +804,7 @@ const AccidentReport = () => {
                   </View>
                   <View style={styles.numberView}>
                     <View style={styles.inputFieldContainer}>
-                      <TextInput
-                        style={styles.inputField}
-                        placeholder={"Incident No"}
-                        onChangeText={(txt) =>
-                          checkIncidentNo("incidentNo", index, txt)
-                        }
-                      />
+                      <TextInput style={styles.inputField} placeholder={"Incident No"} onChangeText={(txt) => checkIncidentNo("incidentNo", index, txt)} />
                     </View>
                   </View>
                 </View>
@@ -927,8 +816,8 @@ const AccidentReport = () => {
                 numberOfLines={4}
                 style={styles.inputField}
                 placeholder={"INJURED PERSON STATEMENT"}
-                onChangeText={(e)=>setInjuredPersonStatement(e)}
-              value={injuredPersonStatement}
+                onChangeText={(e) => setInjuredPersonStatement(e)}
+                value={injuredPersonStatement}
               />
             </View>
             <View style={styles.witnessStatementView}>
@@ -937,10 +826,8 @@ const AccidentReport = () => {
                   fontFamily: "poppins-bold",
                   fontSize: 12,
                   paddingTop: 10,
-                }}
-              >
-                Witness’s names and contact number (attach witness statements if
-                available)
+                }}>
+                Witness’s names and contact number (attach witness statements if available)
               </Text>
               <View
                 style={{
@@ -948,12 +835,8 @@ const AccidentReport = () => {
                   width: "100%",
                   alignItems: "flex-end",
                   marginBottom: 10,
-                }}
-              >
-                <TouchableOpacity
-                  style={styles.addBtn}
-                  onPress={() => addRow()}
-                >
+                }}>
+                <TouchableOpacity style={styles.addBtn} onPress={() => addRow()}>
                   <Image style={styles.plusBtn} source={plus} />
                 </TouchableOpacity>
               </View>
@@ -973,9 +856,7 @@ const AccidentReport = () => {
                         <View style={styles.inputWitnessBodyContainer}>
                           <TextInput
                             value={el.name}
-                            onChangeText={(txt) =>
-                              updateValue("completed", index, txt)
-                            }
+                            onChangeText={(txt) => updateValue("completed", index, txt)}
                             style={styles.bodyTextInput}
                             placeholder={"Name"}
                           />
@@ -983,9 +864,7 @@ const AccidentReport = () => {
                         <View style={styles.inputWitnessBodyContainer}>
                           <TextInput
                             value={el.number}
-                            onChangeText={(txt) =>
-                              updateValue("completed", index, txt)
-                            }
+                            onChangeText={(txt) => updateValue("completed", index, txt)}
                             style={styles.bodyTextInput}
                             placeholder={"Number"}
                           />
@@ -994,20 +873,13 @@ const AccidentReport = () => {
                     ))}
                   <View style={styles.tableBody}>
                     <View style={styles.inputWitnessBodyContainer}>
-                      <TextInput
-                        style={styles.bodyTextInput}
-                        placeholder={"Name"}
-                        onChangeText={(txt) => setData({ ...data, name: txt })}
-                        value={data.name}
-                      />
+                      <TextInput style={styles.bodyTextInput} placeholder={"Name"} onChangeText={(txt) => setData({ ...data, name: txt })} value={data.name} />
                     </View>
                     <View style={styles.inputWitnessBodyContainer}>
                       <TextInput
                         style={styles.bodyTextInput}
                         placeholder={"Number"}
-                        onChangeText={(txt) =>
-                          setData({ ...data, number: txt })
-                        }
+                        onChangeText={(txt) => setData({ ...data, number: txt })}
                         value={data.number}
                       />
                     </View>
@@ -1019,8 +891,8 @@ const AccidentReport = () => {
                     numberOfLines={4}
                     style={styles.inputField}
                     placeholder={"WITNESS STATEMENT"}
-                    onChangeText={(e)=>setWitnessStatement(e)}
-                value={witnessStatement}
+                    onChangeText={(e) => setWitnessStatement(e)}
+                    value={witnessStatement}
                   />
                 </View>
                 <View style={styles.inputFieldContainer}>
@@ -1029,8 +901,8 @@ const AccidentReport = () => {
                     numberOfLines={4}
                     style={styles.inputField}
                     placeholder={"To whom was the accident reported?"}
-                    onChangeText={(e)=>setwhomAccidentReported(e)}
-              value={whomAccidentReported}
+                    onChangeText={(e) => setwhomAccidentReported(e)}
+                    value={whomAccidentReported}
                   />
                 </View>
                 <View style={styles.inputFieldContainer}>
@@ -1039,8 +911,8 @@ const AccidentReport = () => {
                     numberOfLines={4}
                     style={styles.inputField}
                     placeholder={"When was the accident reported?"}
-                    onChangeText={(e)=>setwhenAccidentReported(e)}
-              value={whenAccidentReported}
+                    onChangeText={(e) => setwhenAccidentReported(e)}
+                    value={whenAccidentReported}
                   />
                 </View>
                 <View style={styles.inputFieldContainer}>
@@ -1049,23 +921,15 @@ const AccidentReport = () => {
                     numberOfLines={4}
                     style={styles.inputField}
                     placeholder={"Supervisor Name"}
-                    onChangeText={(e)=>setSupervisorName(e)}
-              value={supervisorName}
+                    onChangeText={(e) => setSupervisorName(e)}
+                    value={supervisorName}
                   />
                 </View>
                 <View style={styles.inputFieldContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder={"Signature"}
-                    onChangeText={(e)=>setSupervisorSignature(e)}
-              value={supervisorSignature}
-                  />
+                  <TextInput style={styles.inputField} placeholder={"Signature"} onChangeText={(e) => setSupervisorSignature(e)} value={supervisorSignature} />
                 </View>
                 <View style={styles.inputFieldContainer}>
-                  <Text
-                    onPress={() => showDatepicker("DateSupervisor")}
-                    style={[styles.inputField, { paddingTop: 15 }]}
-                  >
+                  <Text onPress={() => showDatepicker("DateSupervisor")} style={[styles.inputField, { paddingTop: 15 }]}>
                     {new Date(dateSupervisor).toLocaleDateString()}
                   </Text>
                 </View>
@@ -1075,30 +939,25 @@ const AccidentReport = () => {
                     height: 2,
                     backgroundColor: "#000",
                     marginTop: 20,
-                  }}
-                ></View>
+                  }}></View>
                 <Text
                   style={{
                     fontFamily: "poppins-bold",
                     fontSize: 12,
                     paddingTop: 10,
-                  }}
-                >
+                  }}>
                   MANAGEMENT USE ONLY
                 </Text>
                 <View style={styles.inputFieldContainer}>
                   <TextInput
                     style={styles.inputField}
                     placeholder={"To whom was the accident reported?"}
-                    onChangeText={(e)=>setMangementWhomAccidentReported(e)}
-              value={mangementWhomAccidentReported}
+                    onChangeText={(e) => setMangementWhomAccidentReported(e)}
+                    value={mangementWhomAccidentReported}
                   />
                 </View>
                 <View style={styles.inputFieldContainer}>
-                  <Text
-                    onPress={() => showDatepicker("DateReport")}
-                    style={[styles.inputField, { paddingTop: 15 }]}
-                  >
+                  <Text onPress={() => showDatepicker("DateReport")} style={[styles.inputField, { paddingTop: 15 }]}>
                     {new Date(dateReport).toLocaleDateString()}
                   </Text>
                 </View>
@@ -1107,11 +966,9 @@ const AccidentReport = () => {
                     multiline={true}
                     numberOfLines={4}
                     style={styles.inputField}
-                    placeholder={
-                      "Manager/Director comment and initial investigation notes"
-                    }
-                    onChangeText={(e)=>setManagerInitialNotes(e)}
-              value={managerInitialNotes}
+                    placeholder={"Manager/Director comment and initial investigation notes"}
+                    onChangeText={(e) => setManagerInitialNotes(e)}
+                    value={managerInitialNotes}
                   />
                 </View>
                 <View style={styles.inputFieldContainer}>
@@ -1120,33 +977,27 @@ const AccidentReport = () => {
                     numberOfLines={4}
                     style={styles.inputField}
                     placeholder={"Manager/Director follow up action required"}
-                    onChangeText={(e)=>setActionRequried(e)}
-              value={actionRequried}
+                    onChangeText={(e) => setActionRequried(e)}
+                    value={actionRequried}
                   />
                 </View>
                 <View style={styles.inputFieldContainer}>
                   <TextInput
                     style={styles.inputField}
                     placeholder={"Follow up action to be performed by whom?"}
-                    onChangeText={(e)=>setActionPerformed(e)}
-              value={actionPerformed}
+                    onChangeText={(e) => setActionPerformed(e)}
+                    value={actionPerformed}
                   />
                 </View>
                 <View style={styles.detailsContactView}>
                   <View style={styles.instructionManagmentView}>
-                    <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                      Will the injured person be off work for more than 7
-                      calendar days?
-                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>Will the injured person be off work for more than 7 calendar days?</Text>
                   </View>
                   <View style={styles.checkBoxManagmentView}>
                     <View style={styles.firstCheckBoxRow}>
                       <View style={styles.parentCheckBox}>
                         <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={calendarDay.no}
-                            onValueChange={() => calendarDayChange("no")}
-                          />
+                          <CheckBox value={calendarDay.no} onValueChange={() => calendarDayChange("no")} />
                         </View>
                         <View style={styles.rightCheckBox}>
                           <Text style={styles.accidentText}>No</Text>
@@ -1154,10 +1005,7 @@ const AccidentReport = () => {
                       </View>
                       <View style={styles.parentCheckBox}>
                         <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={calendarDay.yes}
-                            onValueChange={() => calendarDayChange("yes")}
-                          />
+                          <CheckBox value={calendarDay.yes} onValueChange={() => calendarDayChange("yes")} />
                         </View>
                         <View style={styles.rightCheckBox}>
                           <Text style={styles.accidentText}>Yes</Text>
@@ -1168,19 +1016,13 @@ const AccidentReport = () => {
                 </View>
                 <View style={styles.detailsContactView}>
                   <View style={styles.instructionManagmentView}>
-                    <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                      Have all possible actions been taken to prevent
-                      Re-occurrence?
-                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>Have all possible actions been taken to prevent Re-occurrence?</Text>
                   </View>
                   <View style={styles.checkBoxManagmentView}>
                     <View style={styles.firstCheckBoxRow}>
                       <View style={styles.parentCheckBox}>
                         <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={reOccurance.no}
-                            onValueChange={() => reOccuranceChange("no")}
-                          />
+                          <CheckBox value={reOccurance.no} onValueChange={() => reOccuranceChange("no")} />
                         </View>
                         <View style={styles.rightCheckBox}>
                           <Text style={styles.accidentText}>No</Text>
@@ -1188,10 +1030,7 @@ const AccidentReport = () => {
                       </View>
                       <View style={styles.parentCheckBox}>
                         <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={reOccurance.yes}
-                            onValueChange={() => reOccuranceChange("yes")}
-                          />
+                          <CheckBox value={reOccurance.yes} onValueChange={() => reOccuranceChange("yes")} />
                         </View>
                         <View style={styles.rightCheckBox}>
                           <Text style={styles.accidentText}>Yes</Text>
@@ -1201,46 +1040,29 @@ const AccidentReport = () => {
                   </View>
                 </View>
                 <View style={styles.inputFieldContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder={"Manager/Director Name"}
-                    onChangeText={(e)=>setManagerName(e)}
-              value={managerName}
-                  />
+                  <TextInput style={styles.inputField} placeholder={"Manager/Director Name"} onChangeText={(e) => setManagerName(e)} value={managerName} />
                 </View>
                 <View style={styles.inputFieldContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder={"Signature"}
-                    onChangeText={(e)=>setManagerSignature(e)}
-                    value={managerSignature}
-                  />
+                  <TextInput style={styles.inputField} placeholder={"Signature"} onChangeText={(e) => setManagerSignature(e)} value={managerSignature} />
                 </View>
                 <View style={styles.inputFieldContainer}>
-                  <Text
-                    onPress={() => showDatepicker("DateManager")}
-                    style={[styles.inputField, { paddingTop: 15 }]}
-                  >
+                  <Text onPress={() => showDatepicker("DateManager")} style={[styles.inputField, { paddingTop: 15 }]}>
                     {new Date(dateManager).toLocaleDateString()}
                   </Text>
                 </View>
                 <View
-            style={{
-              backgroundColor: "#000",
-              width: "100%",
-              height: ".2%",
-              marginBottom: 20,
-              marginTop: 20,
-            }}
-          ></View>
-          <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => incidentFormInsert()}
-            >
-              <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
-          </View>
+                  style={{
+                    backgroundColor: "#000",
+                    width: "100%",
+                    height: ".2%",
+                    marginBottom: 20,
+                    marginTop: 20,
+                  }}></View>
+                <View style={styles.btnContainer}>
+                  <TouchableOpacity style={styles.commonBtn} onPress={() => incidentFormInsert()}>
+                    <Text style={styles.commonText}>Save</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
