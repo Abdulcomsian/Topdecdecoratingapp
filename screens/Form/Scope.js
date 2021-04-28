@@ -9,7 +9,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const Scope = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
-  const jobID = isJobId;
+  const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [date, setDate] = useState(new Date());
@@ -78,6 +78,10 @@ const Scope = (props) => {
       }
     }
   }, [isSuccessMsg]);
+  const CancelPicker = (type) =>{
+      setShow(false)
+  
+  }
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
@@ -87,7 +91,7 @@ const Scope = (props) => {
         mode={mode}
         display='default'
         onConfirm={onChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker()}
         format='DD-MM-YYYY'
       />
 
@@ -268,8 +272,17 @@ const Scope = (props) => {
                 <TextInput value={type} onChangeText={(e) => setType(e)} style={styles.inputField} placeholder={"Type"} />
               </View>
               <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
-                {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
-                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature }} />
+                {signature ?
+                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Signature</Text>
+                }
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
                 <Text

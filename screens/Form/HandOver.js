@@ -9,7 +9,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const HandOverForm = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
-  const jobID = 242342; //isJobId;
+  const jobID = "242342"; //isJobId;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [date, setDate] = useState(new Date());
@@ -125,7 +125,6 @@ const HandOverForm = (props) => {
         agentName,
         agentSignature,
         todayDate,
-
         jobID,
         tabId,
         token,
@@ -148,7 +147,7 @@ const HandOverForm = (props) => {
         return false;
       }
     }
-  }, [isSuccessMsg]);
+  }, [isSuccess,isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
@@ -255,7 +254,18 @@ const HandOverForm = (props) => {
                 }
                 style={styles.inputFieldContainer}>
                 {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
-                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.normal.uri }} />
+                {signature.normal.uri ? 
+                  <Image style={{ marginTop:10,height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.normal.uri }} />
+                :
+                <Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Supervisor Signature</Text>}
+                
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
                 <Text onPress={() => showDatepicker("CompleteDate")} style={styles.inputField}>
@@ -372,7 +382,16 @@ const HandOverForm = (props) => {
                 }
                 style={styles.inputFieldContainer}>
                 {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
-                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.agent.uri }} />
+                {signature.agent.uri ?
+                <Image style={{ marginTop:10,height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.agent.uri }} />
+               : <Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Agent Signature</Text>}
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
                 <Text onPress={() => showDatepicker("TodayDate")} style={styles.inputField}>

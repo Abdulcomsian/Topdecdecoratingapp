@@ -7,12 +7,14 @@ import {
   CheckBox,
 } from "react-native";
 import { Text } from "native-base";
+import { connect } from "react-redux";
 import ViewPager from "@react-native-community/viewpager";
 
 var tick = require("../../../assets/authScreen/check.png");
 var disableTick = require("../../../assets/authScreen/disable.png");
 var rightArrow = require("../../../assets/authScreen/right.png");
-const VerificationDetails = ({ props, navigation }) => {
+const VerificationDetails = ( props ) => {
+  const { navigation, token, isJobId, verificationInfo } = props;
   const [tab, setTab] = useState({
     miscoat: true,
     decoration: false,
@@ -46,28 +48,8 @@ const VerificationDetails = ({ props, navigation }) => {
     setTab({ ...tab, [key1]: value1, [key2]: value2, [key3]: value3 });
   };
 
-  const [miscotArray, setMiscotArray] = useState([
-    { tickSign: tick, text: "Day Work Sheet", chekecd: false, url: "DayWork" },
-    {
-      tickSign: tick,
-      text: "Decoration Record",
-      chekecd: false,
-      url: "DecorationRecord",
-    },
-    { tickSign: tick, text: "Mis Coat", chekecd: false, url: "MisCoat" },
-    {
-      tickSign: tick,
-      text: "Site Instruction",
-      chekecd: false,
-      url: "SiteInstruction",
-    },
-    {
-      tickSign: tick,
-      text: "Verification Of Work",
-      chekecd: false,
-      url: "VerificationWork",
-    },
-  ]);
+  const [miscotArray, setMiscotArray] = useState(verificationInfo);
+
   const checkedForm = (index) => {
     const preData = [...miscotArray];
     const flag = preData[index].chekecd;
@@ -79,6 +61,9 @@ const VerificationDetails = ({ props, navigation }) => {
       setMiscotArray(preData);
     }
   };
+  React.useEffect(() => {
+    setMiscotArray(verificationInfo);
+  }, [verificationInfo]);
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
@@ -259,7 +244,13 @@ const VerificationDetails = ({ props, navigation }) => {
     </View>
   );
 };
-export default VerificationDetails;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isJobId: state.auth.isJobId,
+  verificationInfo: state.summary.verificationInfo,
+});
+const mapDispatchToProps = (dispatch) => ({});
+export default connect(mapStateToProps, mapDispatchToProps)(VerificationDetails);
 const styles = StyleSheet.create({
   viewPager: {
     height: "100%",

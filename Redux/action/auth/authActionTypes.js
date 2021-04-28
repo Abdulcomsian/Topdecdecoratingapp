@@ -346,9 +346,11 @@ export const insertHandOverForm = (
       // console.log("Date Written :",dateWritten)
       // console.log("Date Issue :",date_isue)
       // console.log("Supervsior Name :",supervisor)
+      // console.log("Supervsior Sign :",signature)
       // console.log("Comleted Date :",completed_date)
       // console.log("JobSummary :",jobSummary)
       // console.log("Agent Name :",agentName)
+      // console.log("Agent Name :",agentSignature)
       // console.log("Today Date :",todayDate)
       // console.log("Job ID :",task_id)
       // console.log("Tab Name :",tab_id)
@@ -380,7 +382,7 @@ export const insertHandOverForm = (
         data: body,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
+      console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.UPDATE_PLOT_REPORT,
@@ -479,7 +481,7 @@ export const insertMakeReadyForm = (
         data: body,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
+      console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.UPDATE_PLOT_REPORT,
@@ -561,22 +563,22 @@ export const insertSnaggingForm = (
         data: body,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
-      if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
-        dispatch({
-          type: Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS,
-          payload: response,
-        });
-      } else {
-        dispatch({
-          type: Actions.CREATE_PRE_WRRANTY_FORM_FAIL,
-          payload: response,
-        });
-      }
+      console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.UPDATE_PLOT_REPORT,
+      //     payload: index,
+      //   });
+      //   dispatch({
+      //     type: Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.CREATE_PRE_WRRANTY_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
     } catch (err) {
       console.log("Insert Error Response :", err.message);
       throw new Error(err.message);
@@ -586,54 +588,54 @@ export const insertSnaggingForm = (
 export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
-      // console.log("Project Name :", project);
-      // console.log("Unit Plot :", unit);
-      // console.log("Supervisor MC Sign :", mc);
-      // console.log("Supervisor MD Sign :", md);
-      // console.log("Supervisor SMS Sign :", sms);
-      // console.log("Supervisor BSCS Sign :", bscs);
-      // console.log("Job ID :", task_id);
-      // console.log("Tab Name :", tab_id);
-      // console.log("Inssurance Array :", dynamicInput);
-      // console.log("Activity Array :", dynamicInputcomplete);
-      // console.log("Token :", token);
-      const body = {
-        project,
-        unit,
-        mc,
-        md,
-        sms,
-        bscs,
-        task_id,
-        tab_id,
-        dynamicInput,
-        dynamicInputcomplete,
-      };
+      console.log("Project Name :", project);
+      console.log("Unit Plot :", unit);
+      console.log("Supervisor MC Sign :", mc);
+      console.log("Supervisor MD Sign :", md);
+      console.log("Supervisor SMS Sign :", sms);
+      console.log("Supervisor BSCS Sign :", bscs);
+      console.log("Job ID :", task_id);
+      console.log("Tab Name :", tab_id);
+      console.log("Inssurance Array :", dynamicInput);
+      console.log("Activity Array :", dynamicInputcomplete);
+      console.log("Token :", token);
+      // const body = {
+      //   project,
+      //   unit,
+      //   mc,
+      //   md,
+      //   sms,
+      //   bscs,
+      //   task_id,
+      //   tab_id,
+      //   dynamicInput,
+      //   dynamicInputcomplete,
+      // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
-      const response = request.data;
-      //console.log("Insert Response :", response);
-      if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
-        dispatch({
-          type: Actions.CREATE_QUALITY_ANSURANCE_FORM_SUCCESS,
-          payload: response,
-        });
-      } else {
-        dispatch({
-          type: Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL,
-          payload: response,
-        });
-      }
+      // const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
+      //   method: "POST",
+      //   headers: {
+      //     authorization: "Bearer " + token,
+      //   },
+      //   data: body,
+      // });
+      // const response = request.data;
+      // console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.UPDATE_PLOT_REPORT,
+      //     payload: index,
+      //   });
+      //   dispatch({
+      //     type: Actions.CREATE_QUALITY_ANSURANCE_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
     } catch (err) {
       console.log("Insert Error Response :", err.message);
       throw new Error(err.message);
@@ -722,22 +724,22 @@ export const insertRemedialForm = (
         data: body,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
-      if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
-        dispatch({
-          type: Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS,
-          payload: response,
-        });
-      } else {
-        dispatch({
-          type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
-          payload: response,
-        });
-      }
+      console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.UPDATE_PLOT_REPORT,
+      //     payload: index,
+      //   });
+      //   dispatch({
+      //     type: Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
+      //     payload: response,
+      //   });
+      // }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -773,22 +775,22 @@ export const insertScopeForm = (dynamicInput, painter, signature, plotNumber, ty
         data: body,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
-      if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
-        dispatch({
-          type: Actions.CREATE_SCOPE_FORM_SUCCESS,
-          payload: response,
-        });
-      } else {
-        dispatch({
-          type: Actions.CREATE_SCOPE_FORM_FAIL,
-          payload: response,
-        });
-      }
+      console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.UPDATE_PLOT_REPORT,
+      //     payload: index,
+      //   });
+      //   dispatch({
+      //     type: Actions.CREATE_SCOPE_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.CREATE_SCOPE_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -863,22 +865,22 @@ export const insertWorkSheet = (
         data: body,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
-      if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
-        dispatch({
-          type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE,
-          payload: response,
-        });
-      } else {
-        dispatch({
-          type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
-          payload: response,
-        });
-      }
+      console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.UPDATE_PLOT_REPORT,
+      //     payload: index,
+      //   });
+      //   dispatch({
+      //     type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
+      //     payload: response,
+      //   });
+      // }
     } catch (err) {
       console.log("Erroe :", err.message);
       throw new Error(err.message);
@@ -908,7 +910,7 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
         data: body,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
+      console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.INSERT_DECORATION_RECORD_SUCCESS,
@@ -951,7 +953,7 @@ export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, 
         data: body,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
+      console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.UPDATE_PLOT_REPORT,
@@ -1008,7 +1010,7 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
         data: body,
       });
       const response = request.data;
-      console.log("Insert Response :", response);
+      //console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.INSERT_SITE_INSTRUCTION_SUCCESS,
@@ -1036,6 +1038,123 @@ export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES
       console.log("Job ID :", task_id);
       console.log("Tab Name :", tab_id);
       console.log("Token :", token);
+
+      const body = {
+        project,
+        id_ref,
+        decorator,
+        task_id,
+        tab_id,
+        PRELIMINARIES,
+      };
+
+      const request = await axios(base_url + "supervisor/insert/verification/verrify_worksheet", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      console.log("Insert Response :", response);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertCleanUpForm = (contractor, project, operation, date, jobSummary, signature,date1, task_id, tab_id, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      // console.log("Contractor Name :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Operatives :", operation);
+      // console.log("Date :", date);
+      // console.log("Array:", jobSummary);
+      // console.log("Supervisor Sign :", signature);
+      // console.log("Supervisor Date :", date1);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
+
+      const body = {
+        contractor,
+        project,
+        operation,
+        date,
+        signature,
+        date1,
+        task_id,
+        tab_id,
+        jobSummary
+      };
+
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/cleanup", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_CLEAN_UP_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_CLEAN_UP_FORM_FAIL,
+          payload: response,
+        });
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertElectricalEquipemntForm = (contractor, project, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+    console.log("Name Of Contractor :", contractor);
+    console.log("Project Name :", project);
+    console.log("Supervisor Sign :", supervisor);
+    console.log("Date :", date);
+    console.log("Dynamic Input :", jobSummary);
+    console.log("Job ID :", task_id);
+    console.log("Tab Name :", tab_id);
+    console.log("Token :", token);
+
+      const body = {
+        contractor,
+        project,
+        supervisor,
+        date,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
+
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/electric_equipment", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
     }

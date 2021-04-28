@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 var plus = require("../../assets/authScreen/plus.png");
 const MakeReady = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
-  const jobID = isJobId;
+  const jobID = "123456";
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [data, setData] = useState({
@@ -57,19 +57,19 @@ const MakeReady = (props) => {
     setShow(false);
     setDateWritten(new Date(currentDate).toLocaleDateString());
   };
-  const onIssueChange = (event, selectedDate) => {
+  const onIssueChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShowIssue(Platform.OS === "ios" ? true : false);
+    setShowIssue(false);
     setDateIssue(new Date(currentDate).toLocaleDateString());
   };
-  const onCompleteChange = (event, selectedDate) => {
+  const onCompleteChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShowComplete(Platform.OS === "ios" ? true : false);
+    setShowComplete(false);
     setDateComplete(new Date(currentDate).toLocaleDateString());
   };
-  const onTodayDate = (event, selectedDate) => {
+  const onTodayDate = (selectedDate) => {
     const currentDate = selectedDate;
-    setShowToday(Platform.OS === "ios" ? true : false);
+    setShowToday(false);
     setTodayDate(new Date(currentDate).toLocaleDateString());
   };
   const showMode = (currentMode, type) => {
@@ -168,6 +168,18 @@ const MakeReady = (props) => {
       }
     }
   }, [isSuccessMsg]);
+  const CancelPicker = (type) =>{
+    console.log(type)
+    if(type=="show"){
+      setShow(false)
+    } else if(type=="issue") {
+      setShowIssue(false)
+    } else if(type=="complete") {
+      setShowComplete(false)
+    } else {
+      setShowToday(false)
+    }
+  }
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
@@ -176,7 +188,7 @@ const MakeReady = (props) => {
         value={dateWritten}
         mode={mode}
         display='default'
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("show")}
         onConfirm={onChange}
         format='DD-MM-YYYY'
       />
@@ -187,7 +199,7 @@ const MakeReady = (props) => {
         value={dateIssue}
         mode={mode}
         display='default'
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("issue")}
         onConfirm={onIssueChange}
         format='DD-MM-YYYY'
       />
@@ -199,7 +211,7 @@ const MakeReady = (props) => {
         mode={mode}
         display='default'
         onConfirm={onCompleteChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("complete")}
         format='DD-MM-YYYY'
       />
 
@@ -210,7 +222,7 @@ const MakeReady = (props) => {
         mode={mode}
         display='default'
         onConfirm={onTodayDate}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("today")}
         format='DD-MM-YYYY'
       />
       {signature.bool ? (
@@ -398,7 +410,17 @@ const MakeReady = (props) => {
                 }
                 style={styles.inputFieldContainer}>
                 {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
-                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.normal.uri }} />
+                {signature.normal.uri ?
+                <Image style={{ marginTop:10, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.normal.uri }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Supervisor Signature</Text>
+                }
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
                 <Text onPress={() => showDatepicker("CompleteDate")} style={styles.inputField}>
@@ -422,7 +444,17 @@ const MakeReady = (props) => {
                   setSignature({ ...signature, bool: true, normal: { ...signature.normal, bool: false }, agent: { ...signature.agent, bool: true } })
                 }
                 style={styles.inputFieldContainer}>
-                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.agent.uri }} />
+                  {signature.agent.uri ?
+                <Image style={{ marginTop:10,height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.agent.uri }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Agent Signature</Text>
+                }
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
                 <Text onPress={() => showDatepicker("TodayDate")} style={styles.inputField}>

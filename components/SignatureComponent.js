@@ -37,7 +37,7 @@ const SignatureComponent = (props) => {
         // String, webview style for overwrite default style, all style: https://github.com/YanYuanFE/react-native-signature-canvas/blob/master/h5/css/signature-pad.css
         webStyle={`.m-signature-pad--footer
     .button {
-      background-color: red;
+      background-color: #1073AC;
       color: #FFF;
     }`}
         autoClear={true}

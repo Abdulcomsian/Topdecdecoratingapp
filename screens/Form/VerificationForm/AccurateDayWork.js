@@ -11,6 +11,7 @@ import { Text } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { connect } from "react-redux";
 import { insertWorkSheet } from "../../../Redux/action/auth/authActionTypes";
+import SignatureComponent from "../../../components/SignatureComponent";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -34,6 +35,7 @@ const AccurateDayWork = (props) => {
   const [managerName, setManagerName] = useState("");
   const [managerSignature, setManagerSignature] = useState("");
   const [position, setPosition] = useState("");
+  const [getSign, setGetSign] = useState(false);
   const [dataLabour, setDataLabour] = useState({
     name: "",
     trade: "",
@@ -158,19 +160,18 @@ const AccurateDayWork = (props) => {
     }
   };
   useEffect(() => {
-    if(isSuccess){     
-      if(isSuccessMsg){
-          alert(isSuccessMsg)
-          navigation.pop();
+    if (isSuccess) {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        navigation.pop();
       }
+    } else {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        return false;
       }
-      else{
-          if(isSuccessMsg){
-              alert(isSuccessMsg)
-              return false;
-          }
-      }
-  },[isSuccessMsg])
+    }
+  }, [isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
@@ -184,9 +185,20 @@ const AccurateDayWork = (props) => {
         cancelTextIOS="Cancel"
         confirmTextIOS="Confirm"
       />
-      <View style={styles.imageView}>
-        <Image source={mainImage} style={styles.bannerImage} />
-      </View>
+      {getSign ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            setManagerSignature(uri);
+            setGetSign(false);
+          }}
+        />
+      ) : (
+        <> 
+        <View style={styles.imageView}>
+          <Image source={mainImage} style={styles.bannerImage} />
+        </View>
+        
+      
       <View style={{ height: "75%", width: "100%" }}>
         <ScrollView
           style={{ width: "100%", paddingLeft: 20, paddingRight: 20 }}
@@ -880,12 +892,19 @@ const AccurateDayWork = (props) => {
             />
           </View>
           <View style={styles.inputBodyContainer}>
-            <TextInput
-              style={styles.bodyTextInput}
-              placeholder={"Managers Signature"}
-              value={managerSignature}
-              onChangeText={(e) => setManagerSignature(e)}
-            />
+          <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
+                {managerSignature ?
+                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: managerSignature }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Signature</Text>
+                }
+              </TouchableOpacity>
           </View>
           <View style={styles.inputBodyContainer}>
             <Text
@@ -929,7 +948,7 @@ const AccurateDayWork = (props) => {
             style={{
               backgroundColor: "#000",
               width: "100%",
-              height: ".5%",
+              height: 2,
               marginBottom: 20,
               marginTop: 20,
             }}
@@ -944,13 +963,15 @@ const AccurateDayWork = (props) => {
           </View>
         </ScrollView>
       </View>
+      </>
+        )}
     </View>
   );
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isSuccess: state.auth.isSuccess,
-  isSuccessMsg: state.auth.isSuccessMsg
+  isSuccessMsg: state.auth.isSuccessMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
   createWorkSheetHandler: (

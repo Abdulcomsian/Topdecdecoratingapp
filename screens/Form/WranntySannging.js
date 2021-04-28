@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 var plus = require("../../assets/authScreen/plus.png");
 const WrantySannging = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
-  const jobID = isJobId;
+  const jobID = "1234";
   const tabId = props.route.params.tabName;
   const [dateIssue, setDateIssue] = useState(new Date());
   const [dateComplete, setDateComplete] = useState(new Date());
@@ -57,27 +57,27 @@ const WrantySannging = (props) => {
     setdynamicSnagCompleteInput(preData);
   };
   /**Issue Date */
-  const onIssueChange = (event, selectedDate) => {
+  const onIssueChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShowIssue(Platform.OS === "ios" ? true : false);
+    setShowIssue(false);
     setDateIssue(new Date(currentDate).toLocaleDateString());
   };
   /**Completed Date */
-  const onCompleteChange = (event, selectedDate) => {
+  const onCompleteChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShowComplete(Platform.OS === "ios" ? true : false);
+    setShowComplete(false);
     setDateComplete(new Date(currentDate).toLocaleDateString());
   };
   /**Snagging Issue Date */
-  const onSnaggingIssueChange = (event, selectedDate) => {
+  const onSnaggingIssueChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShowSnaggingIssue(Platform.OS === "ios" ? true : false);
+    setShowSnaggingIssue(false);
     setDateSnaggingIssue(new Date(currentDate).toLocaleDateString());
   };
   /**Snagging Completed Date */
-  const onSnaggingCompleteChange = (event, selectedDate) => {
+  const onSnaggingCompleteChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShowSnaggingComplete(Platform.OS === "ios" ? true : false);
+    setShowSnaggingComplete(false);
     setDateSnaggingComplete(new Date(currentDate).toLocaleDateString());
   };
   const showMode = (currentMode, type) => {
@@ -145,6 +145,18 @@ const WrantySannging = (props) => {
       }
     }
   }, [isSuccess, isSuccessMsg]);
+  const CancelPicker = (type) =>{
+    console.log(type)
+    if(type=="issue"){
+      setShowIssue(false)
+    } else if(type=="complete") {
+      setShowComplete(false)
+    } else if(type=="dateSnaggingIssue") {
+      setShowSnaggingIssue(false)
+    } else {
+      setShowSnaggingComplete(false)
+    }
+  }
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
@@ -154,7 +166,7 @@ const WrantySannging = (props) => {
         mode={mode}
         display='default'
         onConfirm={onIssueChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("issue")}
         format='DD-MM-YYYY'
       />
       <DateTimePicker
@@ -164,7 +176,7 @@ const WrantySannging = (props) => {
         mode={mode}
         display='default'
         onConfirm={onCompleteChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("complete")}
         format='DD-MM-YYYY'
       />
       <DateTimePicker
@@ -174,7 +186,7 @@ const WrantySannging = (props) => {
         mode={mode}
         display='default'
         onConfirm={onSnaggingIssueChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("dateSnaggingIssue")}
         format='DD-MM-YYYY'
       />
       <DateTimePicker
@@ -184,7 +196,7 @@ const WrantySannging = (props) => {
         mode={mode}
         display='default'
         onConfirm={onSnaggingCompleteChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("dateSnaggingComplete")}
         format='DD-MM-YYYY'
       />
       <ScrollView style={{ height: "100%" }}>

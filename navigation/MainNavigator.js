@@ -718,6 +718,15 @@ function getHeaderTitle(route) {
                     headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
                     headerTitle:"Wrannty Sannging"
                     };
+        case 'QualityInssurance':
+            return { headerShown: true,
+                    headerTintColor: '#fff',
+                    headerStyle: {
+                    backgroundColor: '#1073AC',
+                    },  
+                    headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
+                    headerTitle:"Quality Assurance Inspection"
+                    };
          case 'RemedialWork':
             return { headerShown: true,
                     headerTintColor: '#fff',

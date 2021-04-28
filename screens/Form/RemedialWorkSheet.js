@@ -9,7 +9,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const RemedialWork = (props) => {
   const { navigation, token, isSuccessMsg, isSuccess, isJobId } = props;
-  const jobID = isJobId;
+  const jobID = "1234";
   const tabId = props.route.params.tabName;
   const [data, setData] = useState({
     area: "",
@@ -52,21 +52,21 @@ const RemedialWork = (props) => {
   });
 
   /**Issue Date */
-  const onIssueChange = (event, selectedDate) => {
+  const onIssueChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setIssueShow(Platform.OS === "ios" ? true : false);
+    setIssueShow(false);
     setIssueDate(new Date(currentDate).toLocaleDateString());
   };
   /**Supervisor Date */
-  const onSupervisorDateChange = (event, selectedDate) => {
+  const onSupervisorDateChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setSupervisorShow(Platform.OS === "ios" ? true : false);
+    setSupervisorShow(false);
     setSupervisorDate(new Date(currentDate).toLocaleDateString());
   };
   /**Manager Date */
-  const onManagerDateChange = (event, selectedDate) => {
+  const onManagerDateChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setManagerShow(Platform.OS === "ios" ? true : false);
+    setManagerShow(false);
     setManagerDate(new Date(currentDate).toLocaleDateString());
   };
   const showMode = (currentMode, type) => {
@@ -160,6 +160,16 @@ const RemedialWork = (props) => {
       }
     }
   }, [isSuccessMsg]);
+  const CancelPicker = (type) =>{
+    console.log(type)
+    if(type=="issue"){
+      setIssueShow(false)
+    } else if(type=="supervisorDate") {
+      setSupervisorShow(false)
+    } else 
+      setShowComplete(false)
+  
+  }
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
@@ -169,7 +179,7 @@ const RemedialWork = (props) => {
         mode={mode}
         display='default'
         onConfirm={onIssueChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("issue")}
         format='DD-MM-YYYY'
       />
 
@@ -180,7 +190,7 @@ const RemedialWork = (props) => {
         mode={mode}
         display='default'
         onConfirm={onSupervisorDateChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("supervisorDate")}
         format='DD-MM-YYYY'
       />
 
@@ -191,7 +201,7 @@ const RemedialWork = (props) => {
         mode={mode}
         display='default'
         onConfirm={onManagerDateChange}
-        onCancel={() => {}}
+        onCancel={() => CancelPicker("managerDate")}
         format='DD-MM-YYYY'
       />
       {signature.bool ? (
@@ -254,7 +264,7 @@ const RemedialWork = (props) => {
                 <TextInput value={plotNumber} onChangeText={(e) => setPlotNumber(e)} style={styles.inputField} placeholder={"Plot/Area Number"} />
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("DateIssue")} style={styles.inputField}>
+                <Text onPress={() => showDatepicker("DateIssue")} style={[styles.inputField,{paddingTop:15}]}>
                   {new Date(dateIssue).toLocaleDateString()}
                 </Text>
               </View>
@@ -359,11 +369,20 @@ const RemedialWork = (props) => {
                   setSignature({ ...signature, bool: true, normal: { ...signature.normal, bool: true }, agent: { ...signature.agent, bool: false } })
                 }
                 style={styles.inputFieldContainer}>
-                {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
-                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.normal.uri }} />
+                  {signature.normal.uri ? 
+                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.normal.uri }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Supervisor Signature</Text>
+                }
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("SupervisorDate")} style={styles.inputField}>
+                <Text onPress={() => showDatepicker("SupervisorDate")} style={[styles.inputField,{paddingTop:15}]}>
                   {new Date(dateSupervisor).toLocaleDateString()}
                 </Text>
               </View>
@@ -384,11 +403,20 @@ const RemedialWork = (props) => {
                   setSignature({ ...signature, bool: true, normal: { ...signature.normal, bool: false }, agent: { ...signature.agent, bool: true } })
                 }
                 style={styles.inputFieldContainer}>
-                {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
-                <Image style={{ height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.agent.uri }} />
+                  {signature.agent.uri ?
+                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.agent.uri }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Manager Signature</Text>
+                }
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("ManagerDate")} style={styles.inputField}>
+                <Text onPress={() => showDatepicker("ManagerDate")} style={[styles.inputField,{paddingTop:15}]}>
                   {new Date(dateManager).toLocaleDateString()}
                 </Text>
               </View>

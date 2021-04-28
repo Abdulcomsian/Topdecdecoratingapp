@@ -10,7 +10,10 @@ import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const FridayPack = () => {
+const FridayPack = (props) => {
+  const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [documentRow, setDocumentRow] = useState([
     {
       title: "Record of on-site Decorators (Name & CSCS Card Details)",
@@ -147,6 +150,13 @@ const FridayPack = () => {
     console.log("Week Ending :", weekEnding);
     console.log("further Comments :", furtherComments);
     console.log("Date :", date.toLocaleDateString());
+
+    if (contractorName != "" && projectName != "" && supervisorSign != "" && documentRow != "" && weekEnding != "" && furtherComments !=="" && date !=="") {
+      props.createScopeHandler(contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, props.route.params?.index);
+    } else {
+      alert("Please Insert All Fields CareFully !");
+      return false;
+    }
   };
   return (
     <View style={styles.mainContainer}>
@@ -333,4 +343,14 @@ const FridayPack = () => {
     </View>
   );
 };
-export default FridayPack;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createFridayPackHandler: (dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, index) =>
+    dispatch(insertFridayPackForm(dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(FridayPack);

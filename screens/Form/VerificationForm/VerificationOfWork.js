@@ -11,42 +11,46 @@ import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import { insertVerificationForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const VerificationOfWork = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
-  const [dynamicInput, setdynamicInput] = useState([]);
-  const [projectName, setProjectName] = useState([]);
-  const [idRef, setIdRef] = useState([]);
-  const [decoratorName, setDecoratorName] = useState([]);
-  const [data, setData] = useState({
-    days: "",
-    work: "",
-    date: "",
-    project: "",
-    plotArea: "",
-    description: "",
-    price: "",
-    remedial: "",
-    siNumber: "",
-    confrimWork: "",
-  });
-  const addVerificationRow = () => {
-    setdynamicInput((oldArray) => [...oldArray, data]);
-    setData({
+  const [dynamicInput, setdynamicInput] = useState([
+    {
       days: "",
       work: "",
-      date: "",
+      date: new Date().toLocaleDateString(),
       project: "",
-      plotArea: "",
+      plot: "",
       description: "",
       price: "",
       remedial: "",
-      siNumber: "",
-      confrimWork: "",
-    });
+      si: "",
+      c_work: "",
+    },
+  ]);
+  const [projectName, setProjectName] = useState([]);
+  const [idRef, setIdRef] = useState([]);
+  const [decoratorName, setDecoratorName] = useState([]);
+  const addVerificationRow = () => {
+    setdynamicInput((oldArray) => [
+      ...oldArray,
+      {
+        days: "",
+        work: "",
+        date: new Date().toLocaleDateString(),
+        project: "",
+        plot: "",
+        description: "",
+        price: "",
+        remedial: "",
+        si: "",
+        c_work: "",
+      },
+    ]);
   };
   const updateValue = (key, index, value) => {
     let preData = [...dynamicInput];
@@ -69,7 +73,21 @@ const VerificationOfWork = (props) => {
       return false;
     }
   };
-
+  const [show, setShow] = useState({
+    isVisible: false,
+    index: -1,
+  });
+  const [date, setDate] = useState(new Date(1598051730000));
+  const onChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShow({ ...show, isVisible: false, index: -1 });
+    let copyArr = [...dynamicInput];
+    copyArr[show.index].date = currentDate.toLocaleDateString();
+    setdynamicInput(copyArr);
+  };
+  const showStartDatepicker = (index = -1) => {
+    setShow({ ...show, isVisible: true, index: index });
+  };
   return (
     <View
       style={[
@@ -77,6 +95,17 @@ const VerificationOfWork = (props) => {
         { paddingLeft: 20, paddingRight: 20, marginTop: 50 },
       ]}
     >
+      <DateTimePickerModal
+        isVisible={show.isVisible}
+        date={date ? date : new Date()}
+        mode={"date"}
+        is24Hour={true}
+        display="default"
+        onConfirm={(date) => onChange(date)}
+        onCancel={() => setShow({ isVisible: false, index: -1 })}
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
+      />
       <ScrollView style={{ width: "100%" }}>
         <View style={styles.inputFieldContainer}>
           <TextInput
@@ -179,12 +208,19 @@ const VerificationOfWork = (props) => {
                   />
                 </View>
                 <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => updateValue("date", index, txt)}
-                    value={el.date}
-                    style={styles.bodyTextInput}
-                    placeholder={"Date"}
-                  />
+                  <Text
+                    onPress={() => showStartDatepicker(index)}
+                    style={{
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#96A8B2",
+                      fontSize: 8,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                      paddingTop: 10,
+                    }}
+                  >
+                    {new Date(el.date).toLocaleDateString()}
+                  </Text>
                 </View>
                 <View style={styles.inputBodyContainer}>
                   <TextInput
@@ -196,8 +232,8 @@ const VerificationOfWork = (props) => {
                 </View>
                 <View style={styles.inputBodyContainer}>
                   <TextInput
-                    onChangeText={(txt) => updateValue("plotArea", index, txt)}
-                    value={el.plotArea}
+                    onChangeText={(txt) => updateValue("plot", index, txt)}
+                    value={el.plot}
                     style={styles.bodyTextInput}
                     placeholder={"Plot"}
                   />
@@ -230,8 +266,8 @@ const VerificationOfWork = (props) => {
                 </View>
                 <View style={styles.inputBodyContainer}>
                   <TextInput
-                    onChangeText={(txt) => updateValue("siNumber", index, txt)}
-                    value={el.siNumber}
+                    onChangeText={(txt) => updateValue("si", index, txt)}
+                    value={el.si}
                     style={styles.bodyTextInput}
                     placeholder={"No."}
                   />
@@ -239,102 +275,20 @@ const VerificationOfWork = (props) => {
                 <View style={styles.inputBodyContainer}>
                   <TextInput
                     onChangeText={(txt) =>
-                      updateValue("confrimWork", index, txt)
+                      updateValue("c_work", index, txt)
                     }
-                    value={el.confrimWork}
+                    value={el.c_work}
                     style={styles.bodyTextInput}
                     placeholder={"Work"}
                   />
                 </View>
               </View>
             ))}
-          <View style={[styles.tableBody, { justifyContent: "space-between" }]}>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, days: txt })}
-                value={data.days}
-                style={styles.bodyTextInput}
-                placeholder={"Day"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, work: txt })}
-                value={data.work}
-                style={styles.bodyTextInput}
-                placeholder={"Block"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, date: txt })}
-                value={data.date}
-                style={styles.bodyTextInput}
-                placeholder={"level"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, project: txt })}
-                value={data.project}
-                style={styles.bodyTextInput}
-                placeholder={"Rooms"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, plotArea: txt })}
-                value={data.plotArea}
-                style={styles.bodyTextInput}
-                placeholder={"Price"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, description: txt })}
-                value={data.description}
-                style={styles.bodyTextInput}
-                placeholder={"Plot"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, price: txt })}
-                value={data.price}
-                style={styles.bodyTextInput}
-                placeholder={"Days"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, remedial: txt })}
-                value={data.remedial}
-                style={styles.bodyTextInput}
-                placeholder={"Date"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, siNumber: txt })}
-                value={data.siNumber}
-                style={styles.bodyTextInput}
-                placeholder={"Date"}
-              />
-            </View>
-            <View style={styles.inputBodyContainer}>
-              <TextInput
-                onChangeText={(txt) => setData({ ...data, confrimWork: txt })}
-                value={data.confrimWork}
-                style={styles.bodyTextInput}
-                placeholder={"Date"}
-              />
-            </View>
-          </View>
           <View
             style={{
               backgroundColor: "#000",
               width: "100%",
-              height: "1%",
+              height: 2,
               marginBottom: 20,
               marginTop: 20,
             }}

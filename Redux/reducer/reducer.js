@@ -287,6 +287,34 @@ export default (state = initialState, action)=> {
                     isSuccess: false,
                     isSuccessMsg : action.payload.message,
                 }
+            case Actions.INSERT_CLEAN_UP_FORM_SUCCESS:
+             console.log("INSERT_CLEAN_UP_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_CLEAN_UP_FORM_FAIL:
+             console.log("INSERT_CLEAN_UP_FORM_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_SUCCESS:
+             console.log("INSERT_ELECTRICAL_EQUIPMENT_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL:
+             console.log("INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
             default:
             return state;
       }

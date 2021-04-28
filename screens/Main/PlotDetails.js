@@ -45,6 +45,7 @@ const PlotDetails = (props) => {
   };
 
   const [miscotArray, setMiscotArray] = useState(plotInfo);
+  
   const checkedForm = (index) => {
     const preData = [...miscotArray];
     const flag = preData[index].chekecd;

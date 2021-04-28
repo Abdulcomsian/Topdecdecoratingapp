@@ -3,41 +3,43 @@ import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-nati
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePicker from "react-native-modal-datetime-picker";
+import SignatureComponent from "../../../components/SignatureComponent";
+import { insertElectricalEquipemntForm } from "../../../Redux/action/auth/authActionTypes";
+import { connect } from "react-redux";
 
 var plus = require("../../../assets/authScreen/plus.png");
-const ElectricalEquipment = () => {
+const ElectricalEquipment = (props) => {
+  const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [equipmentRow, setEquipmentRow] = useState([]);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [showDate, setShowDate] = useState(false);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
-  const [dynamicInput, setdynamicInput] = useState([]);
+  const [dynamicInput, setdynamicInput] = useState([{    equipment: "",
+  site_date: new Date().toLocaleDateString(),
+  serial: "",
+  local: "",
+  owner_if_not_dec: "",
+  last_test_date: new Date().toLocaleDateString(),
+  next_date: new Date().toLocaleDateString(),
+  offsite: new Date().toLocaleDateString(),
+  comment: "",
+}]);
   const [supervisorSignature, setSupervisorSignature] = useState("");
-  const [data, setData] = useState({
-    equ: "",
-    date: "",
+  const addEquipmentRegister = () => {
+    setdynamicInput((oldArray) => [...oldArray, {    equ: "",
+    onSiteDate: new Date().toLocaleDateString(),
     serial: "",
     local: "",
     owner: "",
-    test: "",
-    nextDate: "",
-    dateOfSite: "",
+    lastTestDate: new Date().toLocaleDateString(),
+    testDueDate: new Date().toLocaleDateString(),
+    dateOfSite: new Date().toLocaleDateString(),
     comments: "",
-  });
-  const addEquipmentRegister = () => {
-    setdynamicInput((oldArray) => [...oldArray, data]);
-    setData({
-      equ: "",
-      date: "",
-      serial: "",
-      local: "",
-      owner: "",
-      test: "",
-      nextDate: "",
-      dateOfSite: "",
-      comments: "",
-    });
+  }]);
   };
   const updateValue = (key, index, value) => {
     let preData = [...dynamicInput];
@@ -51,30 +53,170 @@ const ElectricalEquipment = () => {
   const showDatepicker = (type) => {
     showMode("date");
   };
-  const onDateChange = (event, selectedDate) => {
+  const onDateChange = (selectedDate) => {
     const currentDate = selectedDate;
-    setShowDate(Platform.OS === "ios" ? true : false);
+    setShowDate(false);
     setDate(new Date(currentDate).toLocaleDateString());
   };
-  const electricalEquipmentFormInsert = () => {
-    console.log("Name Of Contractor :", contractorName);
-    console.log("Project Name :", projectName);
-    console.log("Supervisor Sign :", supervisorSignature);
-    console.log("Date :", date);
-    console.log("Dynamic Input :", dynamicInput);
+  const [showDateOnSite, setShowDateOnSite] = useState({
+    isVisible: false,
+    index: -1,
+  });
+  const [showLastTestDate, setShowLastTestDate] = useState({
+    isVisible: false,
+    index: -1,
+  });
+  const [showTestDueDate, setShowTestDueDate] = useState({
+    isVisible: false,
+    index: -1,
+  });
+  const [showDateOfSite, setShowDateOfSite] = useState({
+    isVisible: false,
+    index: -1,
+  });
+
+  const showOnSiteDatepicker = (index = -1) => {
+    setShowDateOnSite({ ...showDateOnSite, isVisible: true, index: index });
   };
+  const showLastTestDatepicker = (index = -1) => {
+    setShowLastTestDate({ ...showLastTestDate, isVisible: true, index: index });
+  };
+  const showTestDueDatepicker = (index = -1) => {
+    setShowTestDueDate({ ...showTestDueDate, isVisible: true, index: index });
+  };
+  const showOffDatepicker = (index = -1) => {
+    setShowDateOfSite({ ...showDateOfSite, isVisible: true, index: index });
+  };
+
+  const [dateOnsite, setDateOnsite] = useState(new Date(1598051730000));
+  const [lastTestDate, setLastTestDate] = useState(new Date(1598051730000));
+  const [testDueDate, setTestDueDate] = useState(new Date(1598051730000));
+  const [dateOffSite, setDateOffSite] = useState(new Date(1598051730000));
+
+
+  const onDateOnSiteChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShowDateOnSite({ ...showDateOnSite, isVisible: false, index: -1 });
+    let copyArr = [...dynamicInput];
+    copyArr[showDateOnSite.index].site_date = currentDate.toLocaleDateString();
+    setdynamicInput(copyArr);
+  };
+
+  const onLastTestDateChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShowLastTestDate({ ...showLastTestDate, isVisible: false, index: -1 });
+    let copyArr = [...dynamicInput];
+    copyArr[showLastTestDate.index].last_test_date = currentDate.toLocaleDateString();
+    setdynamicInput(copyArr);
+  };
+
+  const onNextTestDateChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShowTestDueDate({ ...showTestDueDate, isVisible: false, index: -1 });
+    let copyArr = [...dynamicInput];
+    copyArr[showTestDueDate.index].next_date = currentDate.toLocaleDateString();
+    setdynamicInput(copyArr);
+  };
+
+  const onDateOfSiteChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShowDateOfSite({ ...showDateOfSite, isVisible: false, index: -1 });
+    let copyArr = [...dynamicInput];
+    copyArr[showDateOfSite.index].offsite = currentDate.toLocaleDateString();
+    setdynamicInput(copyArr);
+  };
+  const [getSign, setGetSign] = useState(false);
+
+
+  const electricalEquipmentFormInsert = () => {
+    
+    if (contractorName != "" && projectName != "" && supervisorSignature != "" && date != "" && dynamicInput != "") {
+      props.createElectricalEquipmentHandler(contractorName, projectName, supervisorSignature, date, dynamicInput, jobID, tabId, token, props.route.params?.index);
+    } else {
+      alert("Please Insert All Fields CareFully !");
+      return false;
+    }
+  };
+  
+  useEffect(() => {
+    if (isSuccess) {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        navigation.pop();
+      }
+    } else {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        return false;
+      }
+    }
+  }, [isSuccess,isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
+      
       <DateTimePicker
         isVisible={showDate}
         testID='dateTimePicker'
         value={date}
         mode={mode}
         display='default'
-        onCancel={() => {}}
+        onCancel={() => setShowDate(false)}
         onConfirm={onDateChange}
         format='DD-MM-YYYY'
       />
+      <DateTimePicker
+        isVisible={showDateOnSite.isVisible}
+        date={dateOnsite ? dateOnsite : new Date()}
+        mode={"date"}
+        is24Hour={true}
+        display="default"
+        onConfirm={(date) => onDateOnSiteChange(date)}
+        onCancel={() => setShowDateOnSite({ isVisible: false, index: -1 })}
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
+      />
+      <DateTimePicker
+        isVisible={showLastTestDate.isVisible}
+        date={lastTestDate ? lastTestDate : new Date()}
+        mode={"date"}
+        is24Hour={true}
+        display="default"
+        onConfirm={(date) => onLastTestDateChange(date)}
+        onCancel={() => setShowLastTestDate({ isVisible: false, index: -1 })}
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
+      />
+       <DateTimePicker
+        isVisible={showTestDueDate.isVisible}
+        date={testDueDate ? testDueDate : new Date()}
+        mode={"date"}
+        is24Hour={true}
+        display="default"
+        onConfirm={(date) => onNextTestDateChange(date)}
+        onCancel={() => setShowTestDueDate({ isVisible: false, index: -1 })}
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
+      />
+      <DateTimePicker
+        isVisible={showDateOfSite.isVisible}
+        date={dateOffSite ? dateOffSite : new Date()}
+        mode={"date"}
+        is24Hour={true}
+        display="default"
+        onConfirm={(date) => onDateOfSiteChange(date)}
+        onCancel={() => setShowDateOfSite({ isVisible: false, index: -1 })}
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
+      />
+        {getSign ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            setSupervisorSignature(uri);
+            setGetSign(false);
+          }}
+        />
+      ) : (
+        <>
       <View
         style={{
           paddingTop: 30,
@@ -93,12 +235,19 @@ const ElectricalEquipment = () => {
             <TextInput value={projectName} onChangeText={(e) => setProjectName(e)} style={styles.inputField} placeholder={"Project"} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={supervisorSignature}
-              onChangeText={(e) => setSupervisorSignature(e)}
-              style={styles.inputField}
-              placeholder={"Supervisor Print & Sign"}
-            />
+          <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
+                {supervisorSignature ?
+                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: supervisorSignature }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Supervisor Print & Sign</Text>
+                }
+              </TouchableOpacity>
           </View>
           <View style={styles.inputFieldContainer}>
             <Text onPress={() => showDatepicker("Date")} style={[styles.inputField, { paddingTop: 15 }]}>
@@ -161,10 +310,24 @@ const ElectricalEquipment = () => {
                 dynamicInput.map((el, index) => (
                   <View style={styles.tableBody} key={index}>
                     <View style={styles.inputEquipmentBodyContainer}>
-                      <TextInput value={el.equ} onChangeText={(txt) => updateValue("equ", index, txt)} style={styles.bodyTextInput} placeholder={"Equipment"} />
+                      <TextInput value={el.equipment} onChangeText={(txt) => updateValue("equipment", index, txt)} style={styles.bodyTextInput} placeholder={"Equipment"} />
                     </View>
                     <View style={styles.inputEquipmentBodyContainer}>
-                      <TextInput value={el.date} onChangeText={(txt) => updateValue("date", index, txt)} style={styles.bodyTextInput} placeholder={"On-Site"} />
+                    <Text
+                        onPress={() => showOnSiteDatepicker(index)}
+                        style={{
+                          height: 39,
+                          marginRight:3,
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          fontSize: 7,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
+                      >
+                        {new Date(el.site_date).toLocaleDateString()}
+                      </Text>
                     </View>
                     <View style={styles.inputEquipmentBodyContainer}>
                       <TextInput
@@ -184,100 +347,73 @@ const ElectricalEquipment = () => {
                     </View>
                     <View style={styles.inputEquipmentBodyContainer}>
                       <TextInput
-                        value={el.owner}
-                        onChangeText={(txt) => updateValue("owner", index, txt)}
+                        value={el.owner_if_not_dec}
+                        onChangeText={(txt) => updateValue("owner_if_not_dec", index, txt)}
                         style={styles.bodyTextInput}
                         placeholder={"Top Dec"}
                       />
                     </View>
                     <View style={styles.inputEquipmentBodyContainer}>
-                      <TextInput
-                        value={el.test}
-                        onChangeText={(txt) => updateValue("test", index, txt)}
-                        style={styles.bodyTextInput}
-                        placeholder={"Last Test"}
-                      />
+                    <Text
+                        onPress={() => showLastTestDatepicker(index)}
+                        style={{
+                          height: 39,
+                          marginRight:3,
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          fontSize: 7,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
+                      >
+                        {new Date(el.last_test_date).toLocaleDateString()}
+                      </Text>
+                    </View>
+                    <View style={styles.inputEquipmentBodyContainer}>
+                    <Text
+                        onPress={() => showTestDueDatepicker(index)}
+                        style={{
+                          height: 39,
+                          marginRight:3,
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          fontSize: 7,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
+                      >
+                        {new Date(el.next_date).toLocaleDateString()}
+                      </Text>
+                    </View>
+                    <View style={styles.inputEquipmentBodyContainer}>
+                    <Text
+                        onPress={() => showOffDatepicker(index)}
+                        style={{
+                          height: 39,
+                          marginRight:3,
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          fontSize: 7,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
+                      >
+                        {new Date(el.offsite).toLocaleDateString()}
+                      </Text>
                     </View>
                     <View style={styles.inputEquipmentBodyContainer}>
                       <TextInput
-                        value={el.nextDate}
-                        onChangeText={(txt) => updateValue("nextDate", index, txt)}
-                        style={styles.bodyTextInput}
-                        placeholder={"Duw Date"}
-                      />
-                    </View>
-                    <View style={styles.inputEquipmentBodyContainer}>
-                      <TextInput
-                        value={el.dateOfSite}
-                        onChangeText={(txt) => updateValue("dateOfSite", index, txt)}
-                        style={styles.bodyTextInput}
-                        placeholder={"Site"}
-                      />
-                    </View>
-                    <View style={styles.inputEquipmentBodyContainer}>
-                      <TextInput
-                        value={el.comments}
-                        onChangeText={(txt) => updateValue("comments", index, txt)}
+                        value={el.comment}
+                        onChangeText={(txt) => updateValue("comment", index, txt)}
                         style={styles.bodyTextInput}
                         placeholder={"Comments"}
                       />
                     </View>
                   </View>
                 ))}
-              <View style={styles.tableBody}>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput onChangeText={(txt) => setData({ ...data, equ: txt })} value={data.equ} style={styles.bodyTextInput} placeholder={"Equipment"} />
-                </View>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput onChangeText={(txt) => setData({ ...data, date: txt })} value={data.date} style={styles.bodyTextInput} placeholder={"On-Site"} />
-                </View>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, serial: txt })}
-                    value={data.serial}
-                    style={styles.bodyTextInput}
-                    placeholder={"Serial No"}
-                  />
-                </View>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, local: txt })}
-                    value={data.local}
-                    style={styles.bodyTextInput}
-                    placeholder={"Local No"}
-                  />
-                </View>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput onChangeText={(txt) => setData({ ...data, owner: txt })} value={data.owner} style={styles.bodyTextInput} placeholder={"Top Dec"} />
-                </View>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput onChangeText={(txt) => setData({ ...data, test: txt })} value={data.test} style={styles.bodyTextInput} placeholder={"Last Test"} />
-                </View>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, nextDate: txt })}
-                    value={data.nextDate}
-                    style={styles.bodyTextInput}
-                    placeholder={"Duw Date"}
-                  />
-                </View>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, dateOfSite: txt })}
-                    value={data.dateOfSite}
-                    style={styles.bodyTextInput}
-                    placeholder={"Site"}
-                  />
-                </View>
-                <View style={styles.inputEquipmentBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, comments: txt })}
-                    value={data.comments}
-                    style={styles.bodyTextInput}
-                    placeholder={"Comments"}
-                  />
-                </View>
-              </View>
             </View>
             <View
               style={{
@@ -335,7 +471,20 @@ const ElectricalEquipment = () => {
           </View>
         </View>
       </ScrollView>
+      </>
+      )}
     </View>
   );
 };
-export default ElectricalEquipment;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createElectricalEquipmentHandler: (contractorName, projectName, supervisorSignature, date, dynamicInput, jobID, tabId, token, index) =>
+    dispatch(insertElectricalEquipemntForm(contractorName, projectName, supervisorSignature, date, dynamicInput, jobID, tabId, token, index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ElectricalEquipment);
+

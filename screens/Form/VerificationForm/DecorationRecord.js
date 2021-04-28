@@ -10,63 +10,69 @@ import {
 import { Text } from "native-base";
 import { connect } from "react-redux";
 import { insertDecorationRecord } from "../../../Redux/action/auth/authActionTypes";
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const DecorationRecord = (props) => {
-    const { navigation, token, isSuccessMsg, isSuccess } = props;
-    const jobID = Math.floor(Math.random() * 100) + 1;
+  const { navigation, token, isSuccessMsg, isSuccess } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
-  const [dynamicFirstInput, setdynamicFirstInput] = useState([]);
-  const [dynamicSecondInput, setdynamicSeconfInput] = useState([]);
-
-  const [dataFirstDecoration, setDataFirstDecoration] = useState({
-    name: "",
-    block: "",
-    level: "",
-    bed: "",
-    price: "",
-    plot: "",
-    days: "",
-    start: "",
-    complete: "",
-  });
-  const [dataSecondDecoration, setDataSecondDecoration] = useState({
-    name: "",
-    block: "",
-    level: "",
-    bed: "",
-    price: "",
-    plot: "",
-    start: "",
-    complete: "",
-  });
-  const addDecorationRow = () => {
-    setdynamicFirstInput((oldArray) => [...oldArray, dataFirstDecoration]);
-    setDataFirstDecoration({
-      name: "",
-    block: "",
-    level: "",
-    bed: "",
-    price: "",
-    plot: "",
-    days: "",
-    start: "",
-    complete: "",
-    });
-  };
-  const addDecorationSecondRow = () => {
-    setdynamicSeconfInput((oldArray) => [...oldArray, dataSecondDecoration]);
-    setDataSecondDecoration({
+  const [dynamicFirstInput, setdynamicFirstInput] = useState([
+    {
       name: "",
       block: "",
       level: "",
       bed: "",
       price: "",
       plot: "",
-      start: "",
-      complete: "",
-    });
+      days: "",
+      start: new Date().toLocaleDateString(),
+      complete: new Date().toLocaleDateString(),
+    },
+  ]);
+  const [dynamicSecondInput, setdynamicSeconfInput] = useState([
+    {
+      name: "",
+      block: "",
+      level: "",
+      bed: "",
+      price: "",
+      plot: "",
+      start: new Date().toLocaleDateString(),
+      complete: new Date().toLocaleDateString(),
+    },
+  ]);
+
+  const addDecorationRow = () => {
+    setdynamicFirstInput((oldArray) => [
+      ...oldArray,
+      {
+        name: "",
+        block: "",
+        level: "",
+        bed: "",
+        price: "",
+        plot: "",
+        days: "",
+        start: new Date().toLocaleDateString(),
+        complete: new Date().toLocaleDateString(),
+      },
+    ]);
+  };
+  const addDecorationSecondRow = () => {
+    setdynamicSeconfInput((oldArray) => [
+      ...oldArray,
+      {
+        name: "",
+        block: "",
+        level: "",
+        bed: "",
+        price: "",
+        plot: "",
+        start: new Date().toLocaleDateString(),
+        complete: new Date().toLocaleDateString(),
+      },
+    ]);
   };
   const updateFirstValue = (key, index, value) => {
     let preData = [...dynamicFirstInput];
@@ -76,35 +82,156 @@ const DecorationRecord = (props) => {
   const updateSecondValue = (key, index, value) => {
     let preData = [...dynamicSecondInput];
     preData[index][key] = value;
-    setDataSecondDecoration(preData);
+    setdynamicSeconfInput(preData);
   };
-  const decorationRecordInsert = () =>{
-      if(dynamicFirstInput && dynamicSecondInput && jobID!=="" && tabId!=""){
-        props.createDecorationRecordHandler(dynamicFirstInput,dynamicSecondInput,jobID,tabId,token)
-      } else {
+  const decorationRecordInsert = () => {
+    
+    if (
+      dynamicFirstInput &&
+      dynamicSecondInput &&
+      jobID !== "" &&
+      tabId != ""
+    ) {
+      props.createDecorationRecordHandler(
+        dynamicFirstInput,
+        dynamicSecondInput,
+        jobID,
+        tabId,
+        token
+      );
+    } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
-  } 
+  };
   useEffect(() => {
-    if(isSuccess){     
-      if(isSuccessMsg){
-          console.log("here !")
-          alert(isSuccessMsg)
-          navigation.pop();
+    if (isSuccess) {
+      if (isSuccessMsg) {
+        console.log("here !");
+        alert(isSuccessMsg);
+        navigation.pop();
       }
+    } else {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        return false;
       }
-      else{
-          if(isSuccessMsg){
-              
-              alert(isSuccessMsg)
-              return false;
-          }
-      }
-  },[isSuccess,isSuccessMsg])
+    }
+  }, [isSuccess, isSuccessMsg]);
+  const [show, setShow] = useState({
+    isVisible: false,
+    index: -1,
+  });
+  const [showComplete, setShowComplete] = useState({
+    isVisible: false,
+    index: -1,
+  });
+
+  const [showDateSecond, setShowDateSecond] = useState({
+    isVisible: false,
+    index: -1,
+  });
+  const [showCompleteDateSecond, setShowCompleteDateSecond] = useState({
+    isVisible: false,
+    index: -1,
+  });
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [dateComplete, setDateComplete] = useState(new Date(1598051730000));
+  const [dateSecond, setDateSecond] = useState(new Date(1598051730000));
+  const [dateSecondComplete, setDateSecondComplete] = useState(new Date(1598051730000));
+
+  const onChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShow({ ...show, isVisible: false, index: -1 });
+    let copyArr = [...dynamicFirstInput];
+    copyArr[show.index].start = currentDate.toLocaleDateString();
+    setdynamicFirstInput(copyArr);
+  };
+
+  const onCompleteChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShowComplete({ ...showComplete, isVisible: false, index: -1 });
+    let copyArr = [...dynamicFirstInput];
+    copyArr[showComplete.index].complete = currentDate.toLocaleDateString();
+    setdynamicFirstInput(copyArr);
+  };
+
+  const onDateSecondChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShowDateSecond({ ...showDateSecond, isVisible: false, index: -1 });
+    let copyArr = [...dynamicSecondInput];
+    copyArr[showDateSecond.index].start = currentDate.toLocaleDateString();
+    setdynamicSeconfInput(copyArr);
+  };
+
+  const onDateCompleteSecondChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShowCompleteDateSecond({ ...showCompleteDateSecond, isVisible: false, index: -1 });
+    let copyArr = [...dynamicSecondInput];
+    copyArr[showCompleteDateSecond.index].complete = currentDate.toLocaleDateString();
+    setdynamicSeconfInput(copyArr);
+  };
+
+  const showStartDatepicker = (index = -1) => {
+    setShow({ ...show, isVisible: true, index: index });
+  };
+  const showCompleteDatepicker = (index = -1) => {
+    setShowComplete({ ...showComplete, isVisible: true, index: index });
+  };
+  const showDateSecondpicker = (index = -1) => {
+    setShowDateSecond({ ...showDateSecond, isVisible: true, index: index });
+  };
+  const showDateCompleteSecondpicker = (index = -1) => {
+    setShowCompleteDateSecond({ ...showCompleteDateSecond, isVisible: true, index: index });
+  };
+  console.log(dynamicFirstInput)
   return (
     <ScrollView style={{ height: "100%" }}>
       <View style={styles.mainContainer}>
+        <DateTimePickerModal
+          isVisible={show.isVisible}
+          date={date ? date : new Date()}
+          mode={"date"}
+          is24Hour={true}
+          display="default"
+          onConfirm={(date) => onChange(date)}
+          onCancel={() => setShow({ isVisible: false, index: -1 })}
+          cancelTextIOS="Cancel"
+          confirmTextIOS="Confirm"
+        />
+        <DateTimePickerModal
+          isVisible={showComplete.isVisible}
+          date={dateComplete ? dateComplete : new Date()}
+          mode={"date"}
+          is24Hour={true}
+          display="default"
+          onConfirm={(date) => onCompleteChange(date)}
+          onCancel={() => setShowComplete({ isVisible: false, index: -1 })}
+          cancelTextIOS="Cancel"
+          confirmTextIOS="Confirm"
+        />
+        <DateTimePickerModal
+          isVisible={showDateSecond.isVisible}
+          date={dateSecond ? dateSecond : new Date()}
+          mode={"date"}
+          is24Hour={true}
+          display="default"
+          onConfirm={(date) => onDateSecondChange(date)}
+          onCancel={() => setShowDateSecond({ isVisible: false, index: -1 })}
+          cancelTextIOS="Cancel"
+          confirmTextIOS="Confirm"
+        />
+         <DateTimePickerModal
+          isVisible={showCompleteDateSecond.isVisible}
+          date={dateSecondComplete ? dateSecondComplete : new Date()}
+          mode={"date"}
+          is24Hour={true}
+          display="default"
+          onConfirm={(date) => onDateCompleteSecondChange(date)}
+          onCancel={() => setShowCompleteDateSecond({ isVisible: false, index: -1 })}
+          cancelTextIOS="Cancel"
+          confirmTextIOS="Confirm"
+        />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Decoration Record</Text>
         </View>
@@ -218,146 +345,35 @@ const DecorationRecord = (props) => {
                         />
                       </View>
                       <View style={styles.inputBodyContainer}>
-                        <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("start", index, txt)
-                          }
-                          value={el.start}
-                          style={styles.bodyTextInput}
-                          placeholder={"Date"}
-                        />
+                        <Text
+                          onPress={() => showStartDatepicker(index)}
+                          style={{
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          {new Date(el.start).toLocaleDateString()}
+                        </Text>
                       </View>
                       <View style={styles.inputBodyContainer}>
-                        <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("complete", index, txt)
-                          }
-                          value={el.complete}
-                          style={styles.bodyTextInput}
-                          placeholder={"Date"}
-                        />
+                      <Text
+                          onPress={() => showCompleteDatepicker(index)}
+                          style={{
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          {new Date(el.complete).toLocaleDateString()}
+                        </Text>
                       </View>
                     </View>
                   ))}
-                <View style={styles.tableBody}>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          name: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.name}
-                      style={styles.bodyTextInput}
-                      placeholder={"Name"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          block: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.block}
-                      style={styles.bodyTextInput}
-                      placeholder={"Block"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          level: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.level}
-                      style={styles.bodyTextInput}
-                      placeholder={"level"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          bed: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.bed}
-                      style={styles.bodyTextInput}
-                      placeholder={"Rooms"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          price: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.price}
-                      style={styles.bodyTextInput}
-                      placeholder={"Price"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          plot: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.plot}
-                      style={styles.bodyTextInput}
-                      placeholder={"Plot"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          days: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.days}
-                      style={styles.bodyTextInput}
-                      placeholder={"Days"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          start: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.start}
-                      style={styles.bodyTextInput}
-                      placeholder={"Date"}
-                    />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataFirstDecoration({
-                          ...dataFirstDecoration,
-                          complete: txt,
-                        })
-                      }
-                      value={dataFirstDecoration.complete}
-                      style={styles.bodyTextInput}
-                      placeholder={"Date"}
-                    />
-                  </View>
-                </View>
               </View>
               <View
                 style={{
@@ -472,133 +488,35 @@ const DecorationRecord = (props) => {
                         />
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
-                        <TextInput
-                          onChangeText={(txt) =>
-                            updateSecondValue("start", index, txt)
-                          }
-                          value={el.start}
-                          style={styles.bodyTextInput}
-                          placeholder={"Date"}
-                        />
+                      <Text
+                          onPress={() => showDateSecondpicker(index)}
+                          style={{
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          {new Date(el.start).toLocaleDateString()}
+                        </Text>
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
-                        <TextInput
-                          onChangeText={(txt) =>
-                            updateSecondValue("complete", index, txt)
-                          }
-                          value={el.complete}
-                          style={styles.bodyTextInput}
-                          placeholder={"Date"}
-                        />
+                      <Text
+                          onPress={() => showDateCompleteSecondpicker(index)}
+                          style={{
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          {new Date(el.complete).toLocaleDateString()}
+                        </Text>
                       </View>
                     </View>
                   ))}
-                <View style={styles.tableBody}>
-                  <View style={styles.inputSecondBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataSecondDecoration({
-                          ...dataSecondDecoration,
-                          name: txt,
-                        })
-                      }
-                      value={dataSecondDecoration.name}
-                      style={styles.bodyTextInput}
-                      placeholder={"Name"}
-                    />
-                  </View>
-                  <View style={styles.inputSecondBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataSecondDecoration({
-                          ...dataSecondDecoration,
-                          block: txt,
-                        })
-                      }
-                      value={dataSecondDecoration.block}
-                      style={styles.bodyTextInput}
-                      placeholder={"Block"}
-                    />
-                  </View>
-                  <View style={styles.inputSecondBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataSecondDecoration({
-                          ...dataSecondDecoration,
-                          level: txt,
-                        })
-                      }
-                      value={dataSecondDecoration.level}
-                      style={styles.bodyTextInput}
-                      placeholder={"level"}
-                    />
-                  </View>
-                  <View style={styles.inputSecondBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataSecondDecoration({
-                          ...dataSecondDecoration,
-                          bed: txt,
-                        })
-                      }
-                      value={dataSecondDecoration.bed}
-                      style={styles.bodyTextInput}
-                      placeholder={"Rooms"}
-                    />
-                  </View>
-                  <View style={styles.inputSecondBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataSecondDecoration({
-                          ...dataSecondDecoration,
-                          price: txt,
-                        })
-                      }
-                      value={dataSecondDecoration.price}
-                      style={styles.bodyTextInput}
-                      placeholder={"Price"}
-                    />
-                  </View>
-                  <View style={styles.inputSecondBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataSecondDecoration({
-                          ...dataSecondDecoration,
-                          plot: txt,
-                        })
-                      }
-                      value={dataSecondDecoration.plot}
-                      style={styles.bodyTextInput}
-                      placeholder={"Plot"}
-                    />
-                  </View>
-                  <View style={styles.inputSecondBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataSecondDecoration({
-                          ...dataSecondDecoration,
-                          start: txt,
-                        })
-                      }
-                      value={dataSecondDecoration.start}
-                      style={styles.bodyTextInput}
-                      placeholder={"Date"}
-                    />
-                  </View>
-                  <View style={styles.inputSecondBodyContainer}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        setDataSecondDecoration({
-                          ...dataSecondDecoration,
-                          complete: txt,
-                        })
-                      }
-                      value={dataSecondDecoration.complete}
-                      style={styles.bodyTextInput}
-                      placeholder={"Date"}
-                    />
-                  </View>
-                </View>
               </View>
               <View
                 style={{
@@ -641,28 +559,28 @@ const DecorationRecord = (props) => {
   );
 };
 const mapStateToProps = (state) => ({
-    token: state.auth.token,
-    isSuccess: state.auth.isSuccess,
-    isSuccessMsg: state.auth.isSuccessMsg,
-  });
-  const mapDispatchToProps = (dispatch) => ({
-    createDecorationRecordHandler: (
-      dynamicFirstInput,
-      dynamicSecondInput,
-      jobID,
-      tabId,
-      token
-    ) =>
-      dispatch(
-        insertDecorationRecord(
-          dynamicFirstInput,
-          dynamicSecondInput,
-          jobID,
-          tabId,
-          token
-        )
-      ),
-  });
+  token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createDecorationRecordHandler: (
+    dynamicFirstInput,
+    dynamicSecondInput,
+    jobID,
+    tabId,
+    token
+  ) =>
+    dispatch(
+      insertDecorationRecord(
+        dynamicFirstInput,
+        dynamicSecondInput,
+        jobID,
+        tabId,
+        token
+      )
+    ),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(DecorationRecord);
 
 const styles = StyleSheet.create({
