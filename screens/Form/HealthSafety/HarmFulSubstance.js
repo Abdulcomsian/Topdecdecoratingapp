@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { insertHarmFulForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const HarmFulSubstance = (props) => {
@@ -51,22 +46,10 @@ const HarmFulSubstance = (props) => {
     setShow(true);
   };
   const harmFulSubstanceFormInsert = () => {
-    if (
-      contractorName != "" &&
-      projectName != "" &&
-      date != "" &&
-      dynamicInput != ""
-    ) {
-      props.createHarmFullHandler(
-        contractorName,
-        projectName,
-        date,
-        dynamicInput,
-        jobID,
-        tabId,
-        token,
-        props.route.params?.index
-      );
+    if (contractorName != "" && projectName != "" && date != "" && dynamicInput != "") {
+      props.createHarmFullHandler(contractorName, projectName, date, dynamicInput, jobID, tabId, token, props.route.params?.index);
+      props.updateHealthReport(props?.route?.params?.index);
+      props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
@@ -102,27 +85,16 @@ const HarmFulSubstance = (props) => {
           paddingTop: 30,
           justifyContent: "center",
           alignItems: "center",
-        }}
-      >
+        }}>
         <Text style={styles.titleText}>Harmful Substance Register</Text>
       </View>
       <ScrollView>
         <View style={styles.formCodnatiner}>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Main Contractor"}
-              value={contractorName}
-              onChangeText={(e) => setContractorName(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Main Contractor"} value={contractorName} onChangeText={(e) => setContractorName(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Project"}
-              value={projectName}
-              onChangeText={(e) => setProjectName(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Project"} value={projectName} onChangeText={(e) => setProjectName(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
             <Text
@@ -137,8 +109,7 @@ const HarmFulSubstance = (props) => {
                 borderBottomWidth: 1,
                 borderBottomColor: "#96A8B2",
                 padding: 5,
-              }}
-            >
+              }}>
               {new Date(date).toLocaleDateString()}
             </Text>
           </View>
@@ -157,9 +128,7 @@ const HarmFulSubstance = (props) => {
                 <Text style={styles.headerTitle}>Safer alternatives </Text>
               </View>
               <View style={styles.headerHarmFulTitleView}>
-                <Text style={styles.headerTitle}>
-                  Protective clothing required Y/N
-                </Text>
+                <Text style={styles.headerTitle}>Protective clothing required Y/N</Text>
               </View>
               <View style={styles.headerHarmFulTitleView}>
                 <Text style={styles.headerTitle}>Supplier MSDS Held Y/N</Text>
@@ -172,12 +141,8 @@ const HarmFulSubstance = (props) => {
               width: "100%",
               alignItems: "flex-end",
               marginBottom: 10,
-            }}
-          >
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={() => addHarmfullRow()}
-            >
+            }}>
+            <TouchableOpacity style={styles.addBtn} onPress={() => addHarmfullRow()}>
               <Image style={styles.plusBtn} source={plus} />
             </TouchableOpacity>
           </View>
@@ -198,9 +163,7 @@ const HarmFulSubstance = (props) => {
                       style={styles.bodyTextInput}
                       placeholder={"Location"}
                       value={el.location}
-                      onChangeText={(txt) =>
-                        updateValue("location", index, txt)
-                      }
+                      onChangeText={(txt) => updateValue("location", index, txt)}
                     />
                   </View>
                   <View style={styles.inputHarmFullBodyContainer}>
@@ -208,9 +171,7 @@ const HarmFulSubstance = (props) => {
                       style={styles.bodyTextInput}
                       placeholder={"Potential hazard"}
                       value={el.potential_hazard}
-                      onChangeText={(txt) =>
-                        updateValue("potential_hazard", index, txt)
-                      }
+                      onChangeText={(txt) => updateValue("potential_hazard", index, txt)}
                     />
                   </View>
                   <View style={styles.inputHarmFullBodyContainer}>
@@ -218,9 +179,7 @@ const HarmFulSubstance = (props) => {
                       style={styles.bodyTextInput}
                       placeholder={"Safer alternatives"}
                       value={el.safer_alternatives}
-                      onChangeText={(txt) =>
-                        updateValue("safer_alternatives", index, txt)
-                      }
+                      onChangeText={(txt) => updateValue("safer_alternatives", index, txt)}
                     />
                   </View>
                   <View style={styles.inputHarmFullBodyContainer}>
@@ -228,9 +187,7 @@ const HarmFulSubstance = (props) => {
                       style={styles.bodyTextInput}
                       placeholder={"Protective clothing required Y/N"}
                       value={el.protective_clothes}
-                      onChangeText={(txt) =>
-                        updateValue("protective_clothes", index, txt)
-                      }
+                      onChangeText={(txt) => updateValue("protective_clothes", index, txt)}
                     />
                   </View>
                   <View style={styles.inputHarmFullBodyContainer}>
@@ -238,21 +195,14 @@ const HarmFulSubstance = (props) => {
                       style={styles.bodyTextInput}
                       placeholder={"Supplier MSDS Held Y/N"}
                       value={el.supplierMSDS}
-                      onChangeText={(txt) =>
-                        updateValue("supplierMSDS", index, txt)
-                      }
+                      onChangeText={(txt) => updateValue("supplierMSDS", index, txt)}
                     />
                   </View>
                 </View>
               ))}
             <View style={styles.tableBody}>
               <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Substance"}
-                  onChangeText={(txt) => setData({ ...data, paint: txt })}
-                  value={data.paint}
-                />
+                <TextInput style={styles.bodyTextInput} placeholder={"Substance"} onChangeText={(txt) => setData({ ...data, paint: txt })} value={data.paint} />
               </View>
               <View style={styles.inputHarmFullBodyContainer}>
                 <TextInput
@@ -266,9 +216,7 @@ const HarmFulSubstance = (props) => {
                 <TextInput
                   style={styles.bodyTextInput}
                   placeholder={"Potential hazard"}
-                  onChangeText={(txt) =>
-                    setData({ ...data, potential_hazard: txt })
-                  }
+                  onChangeText={(txt) => setData({ ...data, potential_hazard: txt })}
                   value={data.potential_hazard}
                 />
               </View>
@@ -276,9 +224,7 @@ const HarmFulSubstance = (props) => {
                 <TextInput
                   style={styles.bodyTextInput}
                   placeholder={"Safer alternatives"}
-                  onChangeText={(txt) =>
-                    setData({ ...data, safer_alternatives: txt })
-                  }
+                  onChangeText={(txt) => setData({ ...data, safer_alternatives: txt })}
                   value={data.safer_alternatives}
                 />
               </View>
@@ -286,9 +232,7 @@ const HarmFulSubstance = (props) => {
                 <TextInput
                   style={styles.bodyTextInput}
                   placeholder={"Protective clothing required Y/N"}
-                  onChangeText={(txt) =>
-                    setData({ ...data, protective_clothes: txt })
-                  }
+                  onChangeText={(txt) => setData({ ...data, protective_clothes: txt })}
                   value={data.protective_clothes}
                 />
               </View>
@@ -296,9 +240,7 @@ const HarmFulSubstance = (props) => {
                 <TextInput
                   style={styles.bodyTextInput}
                   placeholder={"Supplier MSDS Held Y/N"}
-                  onChangeText={(txt) =>
-                    setData({ ...data, supplierMSDS: txt })
-                  }
+                  onChangeText={(txt) => setData({ ...data, supplierMSDS: txt })}
                   value={data.supplierMSDS}
                 />
               </View>
@@ -311,13 +253,9 @@ const HarmFulSubstance = (props) => {
               height: 2,
               marginBottom: 20,
               marginTop: 20,
-            }}
-          ></View>
+            }}></View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => harmFulSubstanceFormInsert()}
-            >
+            <TouchableOpacity style={styles.commonBtn} onPress={() => harmFulSubstanceFormInsert()}>
               <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -333,27 +271,8 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createHarmFullHandler: (
-    contractorName,
-    projectName,
-    date,
-    dynamicInput,
-    jobID,
-    tabId,
-    token,
-    index
-  ) =>
-    dispatch(
-      insertHarmFulForm(
-        contractorName,
-        projectName,
-        date,
-        dynamicInput,
-        jobID,
-        tabId,
-        token,
-        index
-      )
-    ),
+  createHarmFullHandler: (contractorName, projectName, date, dynamicInput, jobID, tabId, token, index) =>
+    dispatch(insertHarmFulForm(contractorName, projectName, date, dynamicInput, jobID, tabId, token, index)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HarmFulSubstance);

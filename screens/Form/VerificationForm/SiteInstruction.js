@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Text } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { insertSiteInstruction } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 const DecorationRecord = (props) => {
-    const { navigation, token, isSuccessMsg, isSiteInstruction } = props;
-    const jobID = Math.floor(Math.random() * 100) + 1;
-    const tabId = props.route.params.tabName;
+  const { navigation, token, isSuccessMsg, isSiteInstruction } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [dateSupervisor, setDateSupervisor] = useState(new Date());
@@ -43,7 +37,7 @@ const DecorationRecord = (props) => {
   const showSupervisorDatepicker = () => {
     setShowSupervisor(true);
   };
-   const siteInstructionForm = () => {
+  const siteInstructionForm = () => {
     if (
       contractName != "" &&
       instructionNo != "" &&
@@ -52,7 +46,7 @@ const DecorationRecord = (props) => {
       description != "" &&
       specialNotes != "" &&
       supervisorName != "" &&
-      dateSupervisor != "" 
+      dateSupervisor != ""
     ) {
       props.createSiteInstructionHandler(
         contractName,
@@ -67,6 +61,8 @@ const DecorationRecord = (props) => {
         tabId,
         token
       );
+      props.updateHealthReport(props?.route?.params?.index);
+      props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
@@ -93,22 +89,22 @@ const DecorationRecord = (props) => {
         date={date ? date : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onChange(date)}
         onCancel={() => setShow(false)}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       <DateTimePickerModal
         isVisible={showSupervisor}
         date={dateSupervisor ? dateSupervisor : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onDateSupervisorChange(date)}
         onCancel={() => setShowSupervisor(false)}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       <View style={styles.mainContainer}>
         <View style={styles.titleContainer}>
@@ -117,28 +113,13 @@ const DecorationRecord = (props) => {
 
         <View style={styles.formCodnatiner}>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Contract Name"}
-              value={contractName}
-              onChangeText={(e) => setContractName(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Contract Name"} value={contractName} onChangeText={(e) => setContractName(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Instruction No"}
-              value={instructionNo}
-              onChangeText={(e) => setInstructionNo(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Instruction No"} value={instructionNo} onChangeText={(e) => setInstructionNo(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Raised by"}
-              value={raisedBy}
-              onChangeText={(e) => setRaisedBy(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Raised by"} value={raisedBy} onChangeText={(e) => setRaisedBy(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
             <Text
@@ -152,17 +133,14 @@ const DecorationRecord = (props) => {
                 fontSize: 12,
                 color: "#96A8B2",
                 fontFamily: "poppins-regular",
-              }}
-            >
+              }}>
               {new Date(date).toLocaleDateString()}
             </Text>
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
-              placeholder={
-                "Detailed Description of works to be carried out including its location"
-              }
+              placeholder={"Detailed Description of works to be carried out including its location"}
               value={description}
               onChangeText={(e) => setDescription(e)}
             />
@@ -177,31 +155,18 @@ const DecorationRecord = (props) => {
           </View>
           <View style={{ paddingTop: 20, paddingBottom: 20 }}>
             <Text style={{ fontFamily: "poppins-bold", fontSize: 8 }}>
-              The works as instructed above are to be carried out in accordance
-              with clause 2 and 9 of the agreed Contract Terms. It is the
-              responsibility of the supervisor to manage the dayworks and DO NOT
-              exceed the agreed figure for the daywork rates. If there are any
-              changes throughout the process the supervisor should kindly inform
-              the relevant Top Dec Managers before proceeding.{" "}
+              The works as instructed above are to be carried out in accordance with clause 2 and 9 of the agreed Contract Terms. It is the responsibility of
+              the supervisor to manage the dayworks and DO NOT exceed the agreed figure for the daywork rates. If there are any changes throughout the process
+              the supervisor should kindly inform the relevant Top Dec Managers before proceeding.{" "}
             </Text>
           </View>
           <View style={styles.instructionView}>
             <View style={styles.leftView}>
-              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                A
-              </Text>
-              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                B
-              </Text>
-              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                C
-              </Text>
-              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                D
-              </Text>
-              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                E
-              </Text>
+              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>A</Text>
+              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>B</Text>
+              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>C</Text>
+              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>D</Text>
+              <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>E</Text>
             </View>
             <View style={styles.rightView}>
               <Text
@@ -209,8 +174,7 @@ const DecorationRecord = (props) => {
                   fontFamily: "poppins-regular",
                   fontSize: 9,
                   paddingTop: 2,
-                }}
-              >
+                }}>
                 Cost to be set off against bad workmanship by other decorators
               </Text>
               <Text
@@ -218,8 +182,7 @@ const DecorationRecord = (props) => {
                   fontFamily: "poppins-regular",
                   fontSize: 9,
                   paddingTop: 2,
-                }}
-              >
+                }}>
                 Cost to be set off against client{" "}
               </Text>
               <Text
@@ -227,8 +190,7 @@ const DecorationRecord = (props) => {
                   fontFamily: "poppins-regular",
                   fontSize: 9,
                   paddingTop: 2,
-                }}
-              >
+                }}>
                 Contract agreed hours
               </Text>
               <Text
@@ -236,8 +198,7 @@ const DecorationRecord = (props) => {
                   fontFamily: "poppins-regular",
                   fontSize: 9,
                   paddingTop: 2,
-                }}
-              >
+                }}>
                 Non-recoverable cost{" "}
               </Text>
               <Text
@@ -245,27 +206,19 @@ const DecorationRecord = (props) => {
                   fontFamily: "poppins-regular",
                   fontSize: 9,
                   paddingTop: 2,
-                }}
-              >
+                }}>
                 Client – Extra works (Site Instruction)
               </Text>
             </View>
           </View>
           <View style={{ paddingTop: 20, paddingBottom: 20 }}>
-            <Text style={{ fontFamily: "poppins-bold", fontSize: 8 }}>
-              For and on behalf of Top Dec Decorating Limited.
-            </Text>
+            <Text style={{ fontFamily: "poppins-bold", fontSize: 8 }}>For and on behalf of Top Dec Decorating Limited.</Text>
           </View>
           <View style={styles.instructionView}>
             <View style={styles.leftDistributionView}>
               <View style={{ width: "50%", marginRight: 5 }}>
                 <View style={styles.inputFieldContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder={"Supervisor"}
-                    value={supervisorName}
-                    onChangeText={(e) => setSupervisorName(e)}
-                  />
+                  <TextInput style={styles.inputField} placeholder={"Supervisor"} value={supervisorName} onChangeText={(e) => setSupervisorName(e)} />
                 </View>
               </View>
               <View style={{ width: "50%", marginRight: 5 }}>
@@ -281,27 +234,18 @@ const DecorationRecord = (props) => {
                       fontSize: 12,
                       color: "#96A8B2",
                       fontFamily: "poppins-regular",
-                    }}
-                  >
+                    }}>
                     {new Date(dateSupervisor).toLocaleDateString()}
                   </Text>
                 </View>
               </View>
             </View>
             <View style={styles.rightDistributionView}>
-              <Text style={{ fontFamily: "poppins-bold", fontSize: 8 }}>
-                Distribution:
-              </Text>
+              <Text style={{ fontFamily: "poppins-bold", fontSize: 8 }}>Distribution:</Text>
               <View style={{ paddingLeft: 10 }}>
-                <Text style={{ fontFamily: "poppins-regular", fontSize: 8 }}>
-                  Top Dec Accounts
-                </Text>
-                <Text style={{ fontFamily: "poppins-regular", fontSize: 8 }}>
-                  Managing Director
-                </Text>
-                <Text style={{ fontFamily: "poppins-regular", fontSize: 8 }}>
-                  Accountant
-                </Text>
+                <Text style={{ fontFamily: "poppins-regular", fontSize: 8 }}>Top Dec Accounts</Text>
+                <Text style={{ fontFamily: "poppins-regular", fontSize: 8 }}>Managing Director</Text>
+                <Text style={{ fontFamily: "poppins-regular", fontSize: 8 }}>Accountant</Text>
               </View>
             </View>
           </View>
@@ -312,13 +256,9 @@ const DecorationRecord = (props) => {
             width: "100%",
             height: 2,
             marginTop: 20,
-          }}
-        ></View>
+          }}></View>
         <View style={styles.btnContainer}>
-          <TouchableOpacity
-            style={styles.commonBtn}
-            onPress={() => siteInstructionForm()}
-          >
+          <TouchableOpacity style={styles.commonBtn} onPress={() => siteInstructionForm()}>
             <Text style={styles.commonText}>Save</Text>
           </TouchableOpacity>
         </View>
@@ -327,41 +267,18 @@ const DecorationRecord = (props) => {
   );
 };
 const mapStateToProps = (state) => ({
-    token: state.auth.token,
-    isSiteInstruction: state.auth.isSiteInstruction,
-    isSuccessMsg: state.auth.isSuccessMsg
-  });
-  const mapDispatchToProps = (dispatch) => ({
-    createSiteInstructionHandler: (
-        contractName,
-        instructionNo,
-        raisedBy,
-        date,
-        description,
-        specialNotes,
-        supervisorName,
-        dateSupervisor,
-        jobID,
-        tabId,
-        token
-      ) =>
-        dispatch(
-          insertSiteInstruction(
-            contractName,
-        instructionNo,
-        raisedBy,
-        date,
-        description,
-        specialNotes,
-        supervisorName,
-        dateSupervisor,
-        jobID,
-        tabId,
-        token
-          )
-        ),
-  });
-  export default connect(mapStateToProps, mapDispatchToProps)(DecorationRecord);
+  token: state.auth.token,
+  isSiteInstruction: state.auth.isSiteInstruction,
+  isSuccessMsg: state.auth.isSuccessMsg,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createSiteInstructionHandler: (contractName, instructionNo, raisedBy, date, description, specialNotes, supervisorName, dateSupervisor, jobID, tabId, token) =>
+    dispatch(
+      insertSiteInstruction(contractName, instructionNo, raisedBy, date, description, specialNotes, supervisorName, dateSupervisor, jobID, tabId, token)
+    ),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(DecorationRecord);
 const styles = StyleSheet.create({
   mainContainer: {
     height: "100%",
