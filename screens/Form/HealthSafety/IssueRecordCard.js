@@ -1,16 +1,12 @@
 import React, { useState } from "react";
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { connect } from "react-redux";
 
 var plus = require("../../../assets/authScreen/plus.png");
-const IssueCard = () => {
+const IssueCard = (props) => {
   const [issueArray, setIssueArray] = useState([]);
   const [dynamicInput, setdynamicInput] = useState([]);
   const [contractorName, setContractorName] = useState("");
@@ -46,6 +42,8 @@ const IssueCard = () => {
     console.log("Project Name :", projectName);
     console.log("Operative Name :", nameOfOperative);
     console.log("Array :", dynamicInput);
+    props.updateHealthReport(props?.route?.params?.index);
+    props.navigation.pop();
   };
   return (
     <View style={styles.mainContainer}>
@@ -54,11 +52,8 @@ const IssueCard = () => {
           paddingTop: 30,
           justifyContent: "center",
           alignItems: "center",
-        }}
-      >
-        <Text style={styles.titleText}>
-          PERSONAL PROTECTIVE EQUIPMENT ISSUE RECORD CARD{" "}
-        </Text>
+        }}>
+        <Text style={styles.titleText}>PERSONAL PROTECTIVE EQUIPMENT ISSUE RECORD CARD </Text>
         <Text
           style={{
             fontSize: 12,
@@ -66,34 +61,19 @@ const IssueCard = () => {
             paddingTop: 10,
             paddingBottom: 20,
             textAlign: "center",
-          }}
-        >
+          }}>
           (ONE SHEET PER OPERATIVE / EMPLOYEE){" "}
         </Text>
       </View>
       <ScrollView>
         <View style={styles.formCodnatiner}>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Main Contractor"}
-              value={contractorName}
-              onChangeText={(e) => setContractorName(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Main Contractor"} value={contractorName} onChangeText={(e) => setContractorName(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Project"}
-              value={projectName}
-              onChangeText={(e) => setProjectName(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Project"} value={projectName} onChangeText={(e) => setProjectName(e)} />
           </View>
-          <Text
-            style={{ fontSize: 12, fontFamily: "poppins-bold", paddingTop: 10 }}
-          >
-            Name of Operative / Direct Employee:
-          </Text>
+          <Text style={{ fontSize: 12, fontFamily: "poppins-bold", paddingTop: 10 }}>Name of Operative / Direct Employee:</Text>
           <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
@@ -107,46 +87,36 @@ const IssueCard = () => {
               fontSize: 12,
               fontFamily: "poppins-regular",
               paddingTop: 10,
-            }}
-          >
-            ALL SELF EMPLOYED/EMPLOYEES PROVIDED WITH PPE MUST TAKE REASONABLE
-            STEPS TO ENSURE PPE IS PROPERLY USED IN ACCORDANCE WITH THE TRAINING
-            RECEIVED. ANY LOSS OR DEFECT OF THE P.P.E TO BE REPORTED TO YOUR
-            SUPERVISOR.
+            }}>
+            ALL SELF EMPLOYED/EMPLOYEES PROVIDED WITH PPE MUST TAKE REASONABLE STEPS TO ENSURE PPE IS PROPERLY USED IN ACCORDANCE WITH THE TRAINING RECEIVED.
+            ANY LOSS OR DEFECT OF THE P.P.E TO BE REPORTED TO YOUR SUPERVISOR.
           </Text>
           <Text
             style={{
               fontSize: 8,
               fontFamily: "poppins-regular",
               paddingTop: 10,
-            }}
-          >
-            1. I acknowledge receipt of the following items of personal
-            protective equipment issued to me, by appending my signature
-            adjacent to the item entered on this form.
+            }}>
+            1. I acknowledge receipt of the following items of personal protective equipment issued to me, by appending my signature adjacent to the item
+            entered on this form.
           </Text>
           <Text
             style={{
               fontSize: 8,
               fontFamily: "poppins-regular",
               paddingTop: 10,
-            }}
-          >
-            2. I fully understand that I must wear the correct PPE as identified
-            in site rules and project/work activity risk assessments when
-            undertaking the work or using a particular tool or equipment. This
-            in accordance to the training I have received.
+            }}>
+            2. I fully understand that I must wear the correct PPE as identified in site rules and project/work activity risk assessments when undertaking the
+            work or using a particular tool or equipment. This in accordance to the training I have received.
           </Text>
           <Text
             style={{
               fontSize: 8,
               fontFamily: "poppins-regular",
               paddingTop: 10,
-            }}
-          >
-            3. I will ensure that the PPE is properly cared for and maintained
-            in accordance with instruction given. When not in use my PPE will be
-            kept secure in accommodation provided or as advised.
+            }}>
+            3. I will ensure that the PPE is properly cared for and maintained in accordance with instruction given. When not in use my PPE will be kept secure
+            in accommodation provided or as advised.
           </Text>
           <Text
             style={{
@@ -154,10 +124,8 @@ const IssueCard = () => {
               fontFamily: "poppins-regular",
               paddingTop: 10,
               paddingBottom: 20,
-            }}
-          >
-            4. I will report all loss or defects to the issued PPE to my
-            supervisor.
+            }}>
+            4. I will report all loss or defects to the issued PPE to my supervisor.
           </Text>
           <View style={styles.tableViewContainer}>
             <View style={styles.tableHeader}>
@@ -186,101 +154,50 @@ const IssueCard = () => {
                 width: "100%",
                 alignItems: "flex-end",
                 marginBottom: 10,
-              }}
-            >
-              <TouchableOpacity
-                style={styles.addBtn}
-                onPress={() => addIssue()}
-              >
+              }}>
+              <TouchableOpacity style={styles.addBtn} onPress={() => addIssue()}>
                 <Image style={styles.plusBtn} source={plus} />
               </TouchableOpacity>
             </View>
             {dynamicInput.map((item, index) => (
               <View style={styles.tableBody} key={index}>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Item"}
-                    onChangeText={(txt) => updateValue("item", index, txt)}
-                    value={item.item}
-                  />
+                  <TextInput style={styles.bodyTextInput} placeholder={"Item"} onChangeText={(txt) => updateValue("item", index, txt)} value={item.item} />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"No"}
-                    onChangeText={(txt) => updateValue("no", index, txt)}
-                    value={item.no}
-                  />
+                  <TextInput style={styles.bodyTextInput} placeholder={"No"} onChangeText={(txt) => updateValue("no", index, txt)} value={item.no} />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Type"}
-                    onChangeText={(txt) => updateValue("type", index, txt)}
-                    value={item.type}
-                  />
+                  <TextInput style={styles.bodyTextInput} placeholder={"Type"} onChangeText={(txt) => updateValue("type", index, txt)} value={item.type} />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Date"}
-                    onChangeText={(txt) => updateValue("date", index, txt)}
-                    value={item.date}
-                  />
+                  <TextInput style={styles.bodyTextInput} placeholder={"Date"} onChangeText={(txt) => updateValue("date", index, txt)} value={item.date} />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
                   <TextInput
                     style={styles.bodyTextInput}
                     placeholder={"Supervisor"}
-                    onChangeText={(txt) =>
-                      updateValue("supervisor", index, txt)
-                    }
+                    onChangeText={(txt) => updateValue("supervisor", index, txt)}
                     value={item.supervisor}
                   />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Signature"}
-                    onChangeText={(txt) => updateValue("sign", index, txt)}
-                    value={item.sign}
-                  />
+                  <TextInput style={styles.bodyTextInput} placeholder={"Signature"} onChangeText={(txt) => updateValue("sign", index, txt)} value={item.sign} />
                 </View>
               </View>
             ))}
             <View style={styles.tableBody}>
               <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Item"}
-                  onChangeText={(txt) => setData({ ...data, item: txt })}
-                  value={data.item}
-                />
+                <TextInput style={styles.bodyTextInput} placeholder={"Item"} onChangeText={(txt) => setData({ ...data, item: txt })} value={data.item} />
               </View>
               <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"No"}
-                  onChangeText={(txt) => setData({ ...data, no: txt })}
-                  value={data.no}
-                />
+                <TextInput style={styles.bodyTextInput} placeholder={"No"} onChangeText={(txt) => setData({ ...data, no: txt })} value={data.no} />
               </View>
               <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Type"}
-                  onChangeText={(txt) => setData({ ...data, type: txt })}
-                  value={data.type}
-                />
+                <TextInput style={styles.bodyTextInput} placeholder={"Type"} onChangeText={(txt) => setData({ ...data, type: txt })} value={data.type} />
               </View>
               <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Date"}
-                  onChangeText={(txt) => setData({ ...data, date: txt })}
-                  value={data.date}
-                />
+                <TextInput style={styles.bodyTextInput} placeholder={"Date"} onChangeText={(txt) => setData({ ...data, date: txt })} value={data.date} />
               </View>
               <View style={styles.inputHarmFullBodyContainer}>
                 <TextInput
@@ -291,12 +208,7 @@ const IssueCard = () => {
                 />
               </View>
               <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Signature"}
-                  onChangeText={(txt) => setData({ ...data, sign: txt })}
-                  value={data.sign}
-                />
+                <TextInput style={styles.bodyTextInput} placeholder={"Signature"} onChangeText={(txt) => setData({ ...data, sign: txt })} value={data.sign} />
               </View>
             </View>
             <Text
@@ -306,10 +218,8 @@ const IssueCard = () => {
                 paddingTop: 10,
                 paddingBottom: 20,
                 textAlign: "center",
-              }}
-            >
-              Once completed, please file a copy in the Site Folder and send a
-              copy to our Head Office.
+              }}>
+              Once completed, please file a copy in the Site Folder and send a copy to our Head Office.
             </Text>
           </View>
           <View
@@ -318,13 +228,9 @@ const IssueCard = () => {
               width: "100%",
               height: 2,
               marginBottom: 20,
-            }}
-          ></View>
+            }}></View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => issueRecordForm()}
-            >
+            <TouchableOpacity style={styles.commonBtn} onPress={() => issueRecordForm()}>
               <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -333,4 +239,7 @@ const IssueCard = () => {
     </View>
   );
 };
-export default IssueCard;
+const mapDispatchToProps = (dispatch) => ({
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+});
+export default connect(null, mapDispatchToProps)(IssueCard);

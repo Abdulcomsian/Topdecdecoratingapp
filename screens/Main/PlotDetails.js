@@ -45,7 +45,7 @@ const PlotDetails = (props) => {
   };
 
   const [miscotArray, setMiscotArray] = useState(plotInfo);
-  
+
   const checkedForm = (index) => {
     const preData = [...miscotArray];
     const flag = preData[index].chekecd;
@@ -108,7 +108,7 @@ const PlotDetails = (props) => {
             <View style={styles.pageView} key='1'>
               {miscotArray.map((item, index) => (
                 <View style={styles.listView}>
-                  {item.tickSign == true ? (
+                  {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
                       {item.tickSign && (
                         <View style={styles.tickSign}>

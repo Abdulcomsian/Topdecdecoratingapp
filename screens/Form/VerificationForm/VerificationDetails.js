@@ -1,11 +1,5 @@
 import React, { useState, useRef } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  CheckBox,
-} from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity, CheckBox } from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
 import ViewPager from "@react-native-community/viewpager";
@@ -13,7 +7,7 @@ import ViewPager from "@react-native-community/viewpager";
 var tick = require("../../../assets/authScreen/check.png");
 var disableTick = require("../../../assets/authScreen/disable.png");
 var rightArrow = require("../../../assets/authScreen/right.png");
-const VerificationDetails = ( props ) => {
+const VerificationDetails = (props) => {
   const { navigation, token, isJobId, verificationInfo } = props;
   const [tab, setTab] = useState({
     miscoat: true,
@@ -27,20 +21,20 @@ const VerificationDetails = ( props ) => {
   const _refSnag = useRef(null);
   const [isSelected, setSelection] = useState(false);
   const [checkFlag, setCheckFlag] = useState(false);
-  const [activeTab, setActiveTab] = useState("Miscoat")
+  const [activeTab, setActiveTab] = useState("Miscoat");
 
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
       _ref.current.setPage(0);
       setIsLeft(1);
-      setActiveTab("Miscoat")
+      setActiveTab("Miscoat");
     } else if (tabName === "Decoration") {
       _ref.current.setPage(1);
-      setActiveTab("Decoration")
+      setActiveTab("Decoration");
     } else {
       _ref.current.setPage(2);
       setIsLeft(2);
-      setActiveTab("Sang")
+      setActiveTab("Sang");
     }
   };
   //updating the top tab states
@@ -76,100 +70,66 @@ const VerificationDetails = ( props ) => {
       <View style={styles.tabsContainer}>
         <View style={styles.tabsView}>
           <TouchableOpacity onPress={() => selectTabManually("Miscoat")}>
-            <Text style={tab.miscoat ? styles.activeTabText : styles.tabText}>
-              Miscoat
-            </Text>
+            <Text style={tab.miscoat ? styles.activeTabText : styles.tabText}>Miscoat</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => selectTabManually("Decoration")}>
-            <Text
-              style={tab.decoration ? styles.activeTabText : styles.tabText}
-            >
-              Main decoration
-            </Text>
+            <Text style={tab.decoration ? styles.activeTabText : styles.tabText}>Main decoration</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => selectTabManually("Snag")}>
-            <Text style={tab.snag ? styles.activeTabText : styles.tabText}>
-              Snag
-            </Text>
+            <Text style={tab.snag ? styles.activeTabText : styles.tabText}>Snag</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.viewrPagerConatiner}>
           <ViewPager
             ref={_ref}
-            orientation="horizontal"
+            orientation='horizontal'
             scrollEnabled
             pageMargin={0}
             onPageSelected={(page) => {
               if (page.nativeEvent.position === 0) {
-                swicthTabChecked(
-                  "miscoat",
-                  "decoration",
-                  "snag",
-                  true,
-                  false,
-                  false
-                );
+                swicthTabChecked("miscoat", "decoration", "snag", true, false, false);
                 setIsLeft(1);
-                setActiveTab("Miscoat")
+                setActiveTab("Miscoat");
               } else if (page.nativeEvent.position === 1) {
-                swicthTabChecked(
-                  "miscoat",
-                  "decoration",
-                  "snag",
-                  false,
-                  true,
-                  false
-                );
-                setActiveTab("Decoration")
-              }
-              else{
-                swicthTabChecked(
-                  "miscoat",
-                  "decoration",
-                  "snag",
-                  false,
-                  false,
-                  true
-                );
-                setActiveTab("Snag")
+                swicthTabChecked("miscoat", "decoration", "snag", false, true, false);
+                setActiveTab("Decoration");
+              } else {
+                swicthTabChecked("miscoat", "decoration", "snag", false, false, true);
+                setActiveTab("Snag");
               }
             }}
             style={styles.viewPager}
-            initialPage={0}
-          >
-            <View style={styles.pageView} key="1">
+            initialPage={0}>
+            <View style={styles.pageView} key='1'>
               {miscotArray.map((item, index) => (
                 <View style={styles.listView}>
-                  {item.chekecd == true ? (
+                  {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
-                      <View style={styles.tickSign}>
-                        <Image source={item.tickSign} />
-                      </View>
+                      {item.tickSign && (
+                        <View style={styles.tickSign}>
+                          <Image source={tick} />
+                        </View>
+                      )}
                       <View style={styles.textArowTrueView}>
                         <TouchableOpacity
                           style={styles.textArrow}
-                          onPress={() => navigation.navigate(item.url,{tabName:activeTab}) }
-                        >
+                          disabled={item?.tickSign}
+                          onPress={() => navigation.navigate(item.url, { tabName: activeTab, index })}>
                           <Text
                             style={{
                               color: "#1073AC",
                               marginRight: 10,
                               fontFamily: "poppins-semiBold",
                               fontSize: 14,
-                            }}
-                          >
+                            }}>
                             {item.text}
                           </Text>
                           <Image source={rightArrow} />
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() => checkedForm(index)}
-                          style={styles.checkbox}
-                        />
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
                       </View>
                     </View>
                   ) : (
@@ -179,29 +139,26 @@ const VerificationDetails = ( props ) => {
                         flexDirection: "row",
                         marginLeft: 20,
                         marginRight: 20,
-                      }}
-                    >
+                      }}>
                       <View style={styles.textArowView}>
-                        <TouchableOpacity style={styles.disbaleTextArrow}>
+                        <TouchableOpacity
+                          disabled={item?.tickSign}
+                          onPress={() => navigation.navigate(item.url, { tabName: activeTab, index })}
+                          style={styles.disbaleTextArrow}>
                           <Text
                             style={{
                               color: "#96A8B2",
                               marginRight: 10,
                               fontFamily: "poppins-semiBold",
                               fontSize: 14,
-                            }}
-                          >
+                            }}>
                             {item.text}
                           </Text>
                           <Image source={disableTick} />
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() => checkedForm(index)}
-                          style={styles.checkbox}
-                        />
+                        <CheckBox value={item.chekecd} onValueChange={() => (item?.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
                       </View>
                     </View>
                   )}
@@ -232,10 +189,10 @@ const VerificationDetails = ( props ) => {
               {/* <Text style={{paddingLeft:20,paddingRight:20,
                         paddingTop:10}}>The forms must be filled out in sequence one after the other. Once the form is filled out it will show a tick. You can select individual forms to combine and email. Every Friday the forms completed will be sent to the admin.</Text> */}
             </View>
-            <View style={styles.pageView} key="2">
+            <View style={styles.pageView} key='2'>
               <Text>Second page</Text>
             </View>
-            <View style={styles.pageView} key="3">
+            <View style={styles.pageView} key='3'>
               <Text>Third page</Text>
             </View>
           </ViewPager>
