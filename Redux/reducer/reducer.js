@@ -30,7 +30,18 @@ const initialState = {
     isUser: null,
     role:null,
     isUserID: null,
-    isJobId: null
+    isJobId: null,
+    isHandOver:false,
+    isMakeReady: false,
+    isMisCoat: false,
+    isQuality: false,
+    isRemedial: false,
+    isScope: false,
+    isDayWork: false,
+    isDecoration: false,
+    isVerifyMiscoat: false,
+    isSiteInstruction: false,
+    isVerifyWork: false,
 };
 
 export default (state = initialState, action)=> {
@@ -151,56 +162,56 @@ export default (state = initialState, action)=> {
              console.log("CREATE_HAND_OVER_SHEET_SUCCESS",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isHandOver: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_HAND_OVER_SHEET_FAIL:
              console.log("CREATE_HAND_OVER_SHEET_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: false,
+                    isHandOver: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_MAKE_READY_SHEET_SUCCESS:
              console.log("CREATE_MAKE_READY_SHEET_SUCCESS",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isMakeReady: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_MAKE_READY_SHEET_FAIL:
              console.log("CREATE_MAKE_READY_SHEET_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: false,
+                    isMakeReady: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS:
              console.log("CREATE_REMEDIAL_WORK_SHEET_SUCCESS",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isRemedial: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL:
              console.log("CREATE_REMEDIAL_WORK_SHEET_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: false,
+                    isRemedial: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_SCOPE_FORM_SUCCESS:
              console.log("CREATE_SCOPE_FORM_SUCCESS",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isScope: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_SCOPE_FORM_FAIL:
              console.log("CREATE_SCOPE_FORM_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: false,
+                    isScope: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS:
@@ -221,70 +232,84 @@ export default (state = initialState, action)=> {
              console.log("CREATE_QUALITY_ANSURANCE_FORM_SUCCESS",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isQuality: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL:
              console.log("CREATE_QUALITY_ANSURANCE_FORM_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: false,
+                    isQuality: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE:
              console.log("INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isDayWork: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL:
              console.log("INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: false,
+                    isDayWork: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_DECORATION_RECORD_SUCCESS:
              console.log("INSERT_DECORATION_RECORD_SUCCESS",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isDecoration: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_DECORATION_RECORD_FAIL:
              console.log("INSERT_DECORATION_RECORD_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: false,
+                    isDecoration: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_MISCOAT_SUCCESS:
              console.log("INSERT_MISCOAT_SUCCESS",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isVerifyMiscoat: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_MISCOAT_FAIL:
              console.log("INSERT_MISCOAT_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isVerifyMiscoat: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_SITE_INSTRUCTION_SUCCESS:
              console.log("INSERT_SITE_INSTRUCTION_SUCCESS",action.payload)
                 return{
                     ...state,
-                    isSuccess: true,
+                    isSiteInstruction: true,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_SITE_INSTRUCTION_FAIL:
              console.log("INSERT_SITE_INSTRUCTION_FAIL",action.payload)
                 return{
                     ...state,
-                    isSuccess: false,
+                    isSiteInstruction: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_VERIFICATION_WORK_SUCCESS:
+             console.log("INSERT_VERIFICATION_WORK_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isVerifyWork: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_VERIFICATION_WORK_FAIL:
+             console.log("INSERT_VERIFICATION_WORK_FAIL",action.payload)
+                return{
+                    ...state,
+                    isVerifyWork: false,
                     isSuccessMsg : action.payload.message,
                 }
             case Actions.INSERT_CLEAN_UP_FORM_SUCCESS:
@@ -310,6 +335,34 @@ export default (state = initialState, action)=> {
                 }
             case Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL:
              console.log("INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_HARMFUL_SUBSTANCE_FORM_SUCCESS:
+             console.log("INSERT_HARMFUL_SUBSTANCE_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_HARMFUL_SUBSTANCE_FORM_FAIL:
+             console.log("INSERT_HARMFUL_SUBSTANCE_FORM_FAIL",action.payload)
+                return{
+                    ...state,
+                    isSuccess: false,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_HOUSE_KEEPING_FORM_SUCCESS:
+             console.log("INSERT_HOUSE_KEEPING_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isSuccess: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_HOUSE_KEEPING_FORM_FAIL:
+             console.log("INSERT_HOUSE_KEEPING_FORM_FAIL",action.payload)
                 return{
                     ...state,
                     isSuccess: false,

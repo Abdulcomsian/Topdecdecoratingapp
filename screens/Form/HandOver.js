@@ -8,7 +8,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 
 var plus = require("../../assets/authScreen/plus.png");
 const HandOverForm = (props) => {
-  const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
+  const { navigation, token, isHandOver, isSuccessMsg, isJobId } = props;
   const jobID = "242342"; //isJobId;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
@@ -136,7 +136,7 @@ const HandOverForm = (props) => {
     }
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isHandOver) {
       if (isSuccessMsg) {
         alert(isSuccessMsg);
         navigation.pop();
@@ -147,7 +147,7 @@ const HandOverForm = (props) => {
         return false;
       }
     }
-  }, [isSuccess,isSuccessMsg]);
+  }, [isHandOver,isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
@@ -420,7 +420,7 @@ const HandOverForm = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isHandOver: state.auth.isHandOver,
   isSuccessMsg: state.auth.isSuccessMsg,
   isJobId: state.auth.isJobId,
 });

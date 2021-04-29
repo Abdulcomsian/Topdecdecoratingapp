@@ -8,7 +8,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 
 var plus = require("../../assets/authScreen/plus.png");
 const Scope = (props) => {
-  const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
+  const { navigation, token, isScope, isSuccessMsg, isJobId } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
@@ -66,7 +66,7 @@ const Scope = (props) => {
     }
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isScope) {
       if (isSuccessMsg) {
         alert(isSuccessMsg);
         navigation.pop();
@@ -77,7 +77,7 @@ const Scope = (props) => {
         return false;
       }
     }
-  }, [isSuccessMsg]);
+  }, [isScope,isSuccessMsg]);
   const CancelPicker = (type) =>{
       setShow(false)
   
@@ -320,7 +320,7 @@ const Scope = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isScope: state.auth.isScope,
   isSuccessMsg: state.auth.isSuccessMsg,
   isJobId: state.auth.isJobId,
 });

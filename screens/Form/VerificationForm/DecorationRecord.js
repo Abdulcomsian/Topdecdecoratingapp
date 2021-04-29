@@ -14,7 +14,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const DecorationRecord = (props) => {
-  const { navigation, token, isSuccessMsg, isSuccess } = props;
+  const { navigation, token, isSuccessMsg, isDecoration } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [dynamicFirstInput, setdynamicFirstInput] = useState([
@@ -105,7 +105,7 @@ const DecorationRecord = (props) => {
     }
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isDecoration) {
       if (isSuccessMsg) {
         console.log("here !");
         alert(isSuccessMsg);
@@ -117,7 +117,7 @@ const DecorationRecord = (props) => {
         return false;
       }
     }
-  }, [isSuccess, isSuccessMsg]);
+  }, [isDecoration, isSuccessMsg]);
   const [show, setShow] = useState({
     isVisible: false,
     index: -1,
@@ -560,7 +560,7 @@ const DecorationRecord = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isDecoration: state.auth.isDecoration,
   isSuccessMsg: state.auth.isSuccessMsg,
 });
 const mapDispatchToProps = (dispatch) => ({

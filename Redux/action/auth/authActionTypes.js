@@ -181,24 +181,20 @@ export const createDecorator = (firstname, lastname, id_card, cscs_front, cscs_b
       console.log("password :", password);
       console.log("Token :", token);
 
-      const body = { id_card };
+      const body = { email,password,firstname,phone,id_card,lastname,cscs_front,cscs_back };
       const request = await axios(base_url + "admin/create/decorator", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
-          "content-type": "multipart/form-data",
+          'content-type': 'multipart/form-data',
+          ///'Content-Type': 'application/x-www-form-urlencoded',
         },
-        data: id_card,
-      })
-        .then((response) => {
-          console.log("then Response :", response);
-        })
-        .catch((error) => {
-          console.log("then Error :", error);
-        });
+        data: body,
+      });
       const response = request;
       console.log("API Response :", response);
     } catch (err) {
+      console.log("API Error :", err.message);
       throw new Error(err.message);
     }
   };
@@ -400,8 +396,7 @@ export const insertHandOverForm = (
       }
     } catch (err) {
       console.log("Error Response :", err);
-
-      //throw new Error(err.message);
+      throw new Error(err.message);
     }
   };
 };
@@ -563,22 +558,22 @@ export const insertSnaggingForm = (
         data: body,
       });
       const response = request.data;
-      console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.UPDATE_PLOT_REPORT,
-      //     payload: index,
-      //   });
-      //   dispatch({
-      //     type: Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.CREATE_PRE_WRRANTY_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
+        dispatch({
+          type: Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_PRE_WRRANTY_FORM_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       console.log("Insert Error Response :", err.message);
       throw new Error(err.message);
@@ -599,43 +594,43 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
       console.log("Inssurance Array :", dynamicInput);
       console.log("Activity Array :", dynamicInputcomplete);
       console.log("Token :", token);
-      // const body = {
-      //   project,
-      //   unit,
-      //   mc,
-      //   md,
-      //   sms,
-      //   bscs,
-      //   task_id,
-      //   tab_id,
-      //   dynamicInput,
-      //   dynamicInputcomplete,
-      // };
+      const body = {
+        project,
+        unit,
+        mc,
+        md,
+        sms,
+        bscs,
+        task_id,
+        tab_id,
+        dynamicInput,
+        dynamicInputcomplete,
+      };
 
-      // const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
-      //   method: "POST",
-      //   headers: {
-      //     authorization: "Bearer " + token,
-      //   },
-      //   data: body,
-      // });
-      // const response = request.data;
-      // console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.UPDATE_PLOT_REPORT,
-      //     payload: index,
-      //   });
-      //   dispatch({
-      //     type: Actions.CREATE_QUALITY_ANSURANCE_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
+        dispatch({
+          type: Actions.CREATE_QUALITY_ANSURANCE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       console.log("Insert Error Response :", err.message);
       throw new Error(err.message);
@@ -724,22 +719,22 @@ export const insertRemedialForm = (
         data: body,
       });
       const response = request.data;
-      console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.UPDATE_PLOT_REPORT,
-      //     payload: index,
-      //   });
-      //   dispatch({
-      //     type: Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
-      //     payload: response,
-      //   });
-      // }
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
+        dispatch({
+          type: Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -776,21 +771,21 @@ export const insertScopeForm = (dynamicInput, painter, signature, plotNumber, ty
       });
       const response = request.data;
       console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.UPDATE_PLOT_REPORT,
-      //     payload: index,
-      //   });
-      //   dispatch({
-      //     type: Actions.CREATE_SCOPE_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.CREATE_SCOPE_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
+      if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
+        dispatch({
+          type: Actions.CREATE_SCOPE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_SCOPE_FORM_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -865,22 +860,22 @@ export const insertWorkSheet = (
         data: body,
       });
       const response = request.data;
-      console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.UPDATE_PLOT_REPORT,
-      //     payload: index,
-      //   });
-      //   dispatch({
-      //     type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
-      //     payload: response,
-      //   });
-      // }
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_PLOT_REPORT,
+          payload: index,
+        });
+        dispatch({
+          type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       console.log("Erroe :", err.message);
       throw new Error(err.message);
@@ -910,7 +905,7 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
         data: body,
       });
       const response = request.data;
-      console.log("Insert Response :", response);
+      //console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.INSERT_DECORATION_RECORD_SUCCESS,
@@ -953,7 +948,7 @@ export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, 
         data: body,
       });
       const response = request.data;
-      console.log("Insert Response :", response);
+      //console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.UPDATE_PLOT_REPORT,
@@ -1057,6 +1052,17 @@ export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES
       });
       const response = request.data;
       console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_VERIFICATION_WORK_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_VERIFICATION_WORK_SUCCESS,
+          payload: response,
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -1152,6 +1158,155 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
       } else {
         dispatch({
           type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
+          payload: response,
+        });
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertFridayPackForm = (contractor, project, supervisor, jobSummary, week_ending, date, furtherComments, task_id, tab_id, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Name Of Contractor :", contractor);
+      console.log("Project Name :", project);
+      console.log("Supervisor Sign :", supervisor);
+      console.log("Document Row :", jobSummary);
+      console.log("Week Ending :", week_ending);
+      console.log("further Comments :", furtherComments);
+      console.log("Date :", date.toLocaleDateString());
+      console.log("Job ID :", task_id);
+      console.log("Tab Name :", tab_id);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   supervisor,
+      //   date,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(base_url + "supervisor/insert/healthAndSecurity/electric_equipment", {
+      //   method: "POST",
+      //   headers: {
+      //     authorization: "Bearer " + token,
+      //   },
+      //   data: body,
+      // });
+      // const response = request.data;
+      // console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertHarmFulForm = ( contractor,
+  project,
+  date,
+  jobSummary,
+  task_id,
+  tab_id,
+  token,
+  index) => {
+  return async (dispatch, getState) => {
+    try {
+      // console.log("Name Of Contractor :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Date :", date);
+      // console.log("Dynamic Input  :", jobSummary);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
+
+
+      const body = {
+        contractor,
+        project,
+        date,
+        tab_id,
+        task_id,
+        jobSummary,
+      };
+
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_HARMFUL_SUBSTANCE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_HARMFUL_SUBSTANCE_FORM_FAIL,
+          payload: response,
+        });
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Supervisor, date, task_id, tab_id, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Main Contractor  :", contractor);
+      console.log("Project Name :", project);
+      console.log("Week Commencing :", week);
+      console.log("Check List Attay :", jobSummary);
+      console.log("Supervisor Sign :", Supervisor);
+      console.log("Supervisor Date :", date);
+
+
+      const body = {
+        contractor,
+        project,
+        week,
+        Supervisor,
+        date,
+        task_id,
+        tab_id,
+        jobSummary
+      };
+
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepings", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_HOUSE_KEEPING_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_HOUSE_KEEPING_FORM_FAIL,
           payload: response,
         });
       }

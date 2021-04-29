@@ -8,7 +8,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 
 var plus = require("../../assets/authScreen/plus.png");
 const RemedialWork = (props) => {
-  const { navigation, token, isSuccessMsg, isSuccess, isJobId } = props;
+  const { navigation, token, isSuccessMsg, isRemedial, isJobId } = props;
   const jobID = "1234";
   const tabId = props.route.params.tabName;
   const [data, setData] = useState({
@@ -148,7 +148,7 @@ const RemedialWork = (props) => {
     }
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isRemedial) {
       if (isSuccessMsg) {
         alert(isSuccessMsg);
         navigation.pop();
@@ -159,7 +159,7 @@ const RemedialWork = (props) => {
         return false;
       }
     }
-  }, [isSuccessMsg]);
+  }, [isRemedial,isSuccessMsg]);
   const CancelPicker = (type) =>{
     console.log(type)
     if(type=="issue"){
@@ -442,7 +442,7 @@ const RemedialWork = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isRemedial: state.auth.isRemedial,
   isSuccessMsg: state.auth.isSuccessMsg,
   isJobId: state.auth.isJobId,
 });

@@ -23,7 +23,6 @@ const CreateDecorataor = (props) => {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
   const [token,setToken]=useState(props.token)
- 
   const postCreateDecortor = () => {
    
     console.log(email);
@@ -42,25 +41,34 @@ const CreateDecorataor = (props) => {
           setPassword(password);
           return false;
         } else {
-          let frmData = new FormData();
-          frmData.append('avatar', {
-            uri: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),
-            name: Math.random(0, 1000).toString(),
-            type: 'image/png', // it may be necessary in Android.
-          });
-          console.log(frmData)
-          console.log("Password is Correct");
-          // props.createDecoratorHandler(
-          //   name,
-          //   lastName,
-          //   formData,
-          //   cscsFront.localUri,
-          //   cscsBack.localUri,
-          //   email,
-          //   number,
-          //   password,
-          //   token
-          // );
+          // let frmData = new FormData();
+          // frmData.append('avatar', {
+          //   file: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),
+          //   name: Math.random(0, 1000).toString(),
+          //   // type: 'image/png', // it may be necessary in Android.
+          // });
+          // console.log(frmData)
+          // console.log("Password is Correct");
+
+          let localUri = photoID.localUri;
+          let filename = localUri.split('/').pop();
+          let match = /\.(\w+)$/.exec(filename);
+          let type = match ? `image/${match[1]}` : `image`;
+           let formData = new FormData();
+              formData.append('photo', { uri: localUri, name: filename, type });
+          props.createDecoratorHandler(
+            name,
+            lastName,
+            formData,
+            cscsFront.localUri,
+            cscsBack.localUri,
+            email,
+            number,
+            password,
+            token
+          );
+          
+          
           return true;
         }
       }
@@ -82,6 +90,12 @@ const CreateDecorataor = (props) => {
         return;
       }
       console.log("Piceker Result :",pickerResult)
+    
+      // frmData.append('avatar', {
+      //   file: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),
+      //   name: Math.random(0, 1000).toString(),
+      //   // type: 'image/png', // it may be necessary in Android.
+      // });
       setPhotoID({ localUri: pickerResult.uri });
     } else if (type == "cscsFront") {
       let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -270,7 +284,7 @@ const mapDispatchToProps = (dispatch) => ({
   createDecoratorHandler: (
     name,
     lastName,
-    photoID,
+    frmData,
     cscsFront,
     cscsBack,
     email,
@@ -282,7 +296,7 @@ const mapDispatchToProps = (dispatch) => ({
       createDecorator(
         name,
         lastName,
-        photoID,
+        frmData,
         cscsFront,
         cscsBack,
         email,

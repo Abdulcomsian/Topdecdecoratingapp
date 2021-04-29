@@ -14,7 +14,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const MistCoat = (props) => {
-  const { navigation, token, isSuccessMsg, isSuccess } = props;
+  const { navigation, token, isSuccessMsg, isVerifyMiscoat } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([
@@ -70,7 +70,7 @@ const MistCoat = (props) => {
     }
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isVerifyMiscoat) {
       if (isSuccessMsg) {
         console.log("here !");
         alert(isSuccessMsg);
@@ -82,7 +82,7 @@ const MistCoat = (props) => {
         return false;
       }
     }
-  }, [isSuccess, isSuccessMsg]);
+  }, [isVerifyMiscoat, isSuccessMsg]);
 
   const [show, setShow] = useState({
     isVisible: false,
@@ -338,7 +338,7 @@ const MistCoat = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isVerifyMiscoat: state.auth.isVerifyMiscoat,
   isSuccessMsg: state.auth.isSuccessMsg,
 });
 const mapDispatchToProps = (dispatch) => ({

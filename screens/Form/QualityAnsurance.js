@@ -16,7 +16,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 
 var plus = require("../../assets/authScreen/plus.png");
 const QualityInssurance = (props) => {
-  const { navigation, token, isSuccessMsg, isSuccess, isJobId } = props;
+  const { navigation, token, isSuccessMsg, isQuality, isJobId } = props;
   const jobID = "123";
   const tabId = props.route.params.tabName;
   const [issuranceArray, setInsuraanceArray] = useState([
@@ -281,7 +281,7 @@ const QualityInssurance = (props) => {
     },
   });
   useEffect(() => {
-    if (isSuccess) {
+    if (isQuality) {
       if (isSuccessMsg) {
         console.log("here !");
         alert(isSuccessMsg);
@@ -293,7 +293,7 @@ const QualityInssurance = (props) => {
         return false;
       }
     }
-  }, [isSuccess, isSuccessMsg]);
+  }, [isQuality, isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
@@ -947,7 +947,7 @@ const QualityInssurance = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isQuality: state.auth.isQuality,
   isSuccessMsg: state.auth.isSuccessMsg,
   isJobId: state.auth.isJobId,
 });

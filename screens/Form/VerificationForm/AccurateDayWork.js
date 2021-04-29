@@ -16,7 +16,7 @@ import SignatureComponent from "../../../components/SignatureComponent";
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const AccurateDayWork = (props) => {
-  const { navigation, token, isSuccess, isSuccessMsg } = props;
+  const { navigation, token, isDayWork, isSuccessMsg } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [dynamicLabourInput, setdynamicLabourInput] = useState([]);
@@ -160,7 +160,7 @@ const AccurateDayWork = (props) => {
     }
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isDayWork) {
       if (isSuccessMsg) {
         alert(isSuccessMsg);
         navigation.pop();
@@ -171,7 +171,7 @@ const AccurateDayWork = (props) => {
         return false;
       }
     }
-  }, [isSuccessMsg]);
+  }, [isDayWork,isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
@@ -970,7 +970,7 @@ const AccurateDayWork = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isDayWork: state.auth.isDayWork,
   isSuccessMsg: state.auth.isSuccessMsg,
 });
 const mapDispatchToProps = (dispatch) => ({

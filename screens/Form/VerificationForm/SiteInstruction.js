@@ -13,7 +13,7 @@ import { insertSiteInstruction } from "../../../Redux/action/auth/authActionType
 import { connect } from "react-redux";
 
 const DecorationRecord = (props) => {
-    const { navigation, token, isSuccessMsg, isSuccess } = props;
+    const { navigation, token, isSuccessMsg, isSiteInstruction } = props;
     const jobID = Math.floor(Math.random() * 100) + 1;
     const tabId = props.route.params.tabName;
   const [date, setDate] = useState(new Date());
@@ -73,7 +73,7 @@ const DecorationRecord = (props) => {
     }
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isSiteInstruction) {
       if (isSuccessMsg) {
         console.log("here !");
         alert(isSuccessMsg);
@@ -85,7 +85,7 @@ const DecorationRecord = (props) => {
         return false;
       }
     }
-  }, [isSuccess, isSuccessMsg]);
+  }, [isSiteInstruction, isSuccessMsg]);
   return (
     <ScrollView style={{ height: "100%" }}>
       <DateTimePickerModal
@@ -328,7 +328,7 @@ const DecorationRecord = (props) => {
 };
 const mapStateToProps = (state) => ({
     token: state.auth.token,
-    isSuccess: state.auth.isSuccess,
+    isSiteInstruction: state.auth.isSiteInstruction,
     isSuccessMsg: state.auth.isSuccessMsg
   });
   const mapDispatchToProps = (dispatch) => ({

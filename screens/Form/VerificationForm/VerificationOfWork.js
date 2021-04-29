@@ -15,7 +15,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const VerificationOfWork = (props) => {
-  const { navigation, token, isSuccess, isSuccessMsg } = props;
+  const { navigation, token, isVerifyWork, isSuccessMsg } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([
@@ -88,6 +88,20 @@ const VerificationOfWork = (props) => {
   const showStartDatepicker = (index = -1) => {
     setShow({ ...show, isVisible: true, index: index });
   };
+  useEffect(() => {
+    if (isVerifyWork) {
+      if (isSuccessMsg) {
+        console.log("here !");
+        alert(isSuccessMsg);
+        navigation.pop();
+      }
+    } else {
+      if (isSuccessMsg) {
+        alert(isSuccessMsg);
+        return false;
+      }
+    }
+  }, [isVerifyWork, isSuccessMsg]);
   return (
     <View
       style={[
@@ -308,7 +322,7 @@ const VerificationOfWork = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isVerifyWork: state.auth.isVerifyWork,
   isSuccessMsg: state.auth.isSuccessMsg,
 });
 const mapDispatchToProps = (dispatch) => ({

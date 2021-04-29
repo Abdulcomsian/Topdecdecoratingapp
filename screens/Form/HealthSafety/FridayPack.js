@@ -5,15 +5,20 @@ import {
   ScrollView,
   CheckBox,
   TouchableOpacity,
+  Image
 } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { insertFridayPackForm } from "../../../Redux/action/auth/authActionTypes";
+import { connect } from "react-redux";
+import SignatureComponent from "../../../components/SignatureComponent";
 
 const FridayPack = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
+  const [getSign, setGetSign] = useState(false);
   const [documentRow, setDocumentRow] = useState([
     {
       title: "Record of on-site Decorators (Name & CSCS Card Details)",
@@ -152,7 +157,7 @@ const FridayPack = (props) => {
     console.log("Date :", date.toLocaleDateString());
 
     if (contractorName != "" && projectName != "" && supervisorSign != "" && documentRow != "" && weekEnding != "" && furtherComments !=="" && date !=="") {
-      props.createScopeHandler(contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, props.route.params?.index);
+      props.createFridayPackHandler(contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, props.route.params?.index);
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
@@ -171,6 +176,15 @@ const FridayPack = (props) => {
         cancelTextIOS="Cancel"
         confirmTextIOS="Confirm"
       />
+      {getSign ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            setSupervisorSign(uri);
+            setGetSign(false);
+          }}
+        />
+      ) : (
+        <>
       <View
         style={{
           paddingTop: 30,
@@ -283,14 +297,19 @@ const FridayPack = (props) => {
             />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              multiline={true}
-              numberOfLines={4}
-              style={styles.inputField}
-              placeholder={"Supervisor (Print & Sign)"}
-              value={supervisorSign}
-              onChangeText={(e) => setSupervisorSign(e)}
-            />
+          <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
+                {supervisorSign ?
+                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: supervisorSign }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Signature</Text>
+                }
+              </TouchableOpacity>
           </View>
           <View style={styles.inputFieldContainer}>
             <Text
@@ -340,6 +359,8 @@ const FridayPack = (props) => {
           </View>
         </View>
       </ScrollView>
+      </>
+      )}
     </View>
   );
 };
@@ -350,7 +371,7 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createFridayPackHandler: (dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, index) =>
-    dispatch(insertFridayPackForm(dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, index)),
+  createFridayPackHandler: (contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, index) =>
+    dispatch(insertFridayPackForm(contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(FridayPack);

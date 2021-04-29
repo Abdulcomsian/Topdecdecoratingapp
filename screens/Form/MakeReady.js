@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");
 const MakeReady = (props) => {
-  const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
+  const { navigation, token, isMakeReady, isSuccessMsg, isJobId } = props;
   const jobID = "123456";
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
@@ -156,7 +156,7 @@ const MakeReady = (props) => {
     }
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isMakeReady) {
       if (isSuccessMsg) {
         alert(isSuccessMsg);
         navigation.pop();
@@ -167,7 +167,7 @@ const MakeReady = (props) => {
         return false;
       }
     }
-  }, [isSuccessMsg]);
+  }, [isMakeReady,isSuccessMsg]);
   const CancelPicker = (type) =>{
     console.log(type)
     if(type=="show"){
@@ -483,7 +483,7 @@ const MakeReady = (props) => {
 };
 const mapStateToProps = (state) => ({
   token: state.auth.token,
-  isSuccess: state.auth.isSuccess,
+  isMakeReady: state.auth.isMakeReady,
   isSuccessMsg: state.auth.isSuccessMsg,
   isJobId: state.auth.isJobId,
 });
