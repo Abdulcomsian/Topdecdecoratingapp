@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Text } from "native-base";
 import { insertMiscoat } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const MistCoat = (props) => {
@@ -56,14 +50,9 @@ const MistCoat = (props) => {
   };
   const mistCoatFormInsert = () => {
     if (dynamicInput != "" && mainContructor != "" && projectName != "") {
-      props.createMisCoatHandler(
-        mainContructor,
-        projectName,
-        dynamicInput,
-        jobID,
-        tabId,
-        token
-      );
+      props.createMisCoatHandler(mainContructor, projectName, dynamicInput, jobID, tabId, token);
+      props.updateHealthReport(props?.route?.params?.index);
+      props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
@@ -125,41 +114,31 @@ const MistCoat = (props) => {
           date={date ? date : new Date()}
           mode={"date"}
           is24Hour={true}
-          display="default"
+          display='default'
           onConfirm={(date) => onChange(date)}
           onCancel={() => setShow({ isVisible: false, index: -1 })}
-          cancelTextIOS="Cancel"
-          confirmTextIOS="Confirm"
+          cancelTextIOS='Cancel'
+          confirmTextIOS='Confirm'
         />
         <DateTimePickerModal
           isVisible={showComplete.isVisible}
           date={dateComplete ? dateComplete : new Date()}
           mode={"date"}
           is24Hour={true}
-          display="default"
+          display='default'
           onConfirm={(date) => onCompleteChange(date)}
           onCancel={() => setShowComplete({ isVisible: false, index: -1 })}
-          cancelTextIOS="Cancel"
-          confirmTextIOS="Confirm"
+          cancelTextIOS='Cancel'
+          confirmTextIOS='Confirm'
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>MisCoat Record</Text>
         </View>
         <View style={styles.inputFieldContainer}>
-          <TextInput
-            value={mainContructor}
-            onChangeText={(e) => setMainContructor(e)}
-            style={styles.inputField}
-            placeholder={"Main Contractor"}
-          />
+          <TextInput value={mainContructor} onChangeText={(e) => setMainContructor(e)} style={styles.inputField} placeholder={"Main Contractor"} />
         </View>
         <View style={styles.inputFieldContainer}>
-          <TextInput
-            value={projectName}
-            onChangeText={(e) => setProjectName(e)}
-            style={styles.inputField}
-            placeholder={"Project"}
-          />
+          <TextInput value={projectName} onChangeText={(e) => setProjectName(e)} style={styles.inputField} placeholder={"Project"} />
         </View>
         <View style={{ height: "95%", width: "100%" }}>
           <ScrollView style={{ height: "100%" }}>
@@ -198,13 +177,9 @@ const MistCoat = (props) => {
                   width: "100%",
                   justifyContent: "flex-end",
                   alignItems: "flex-end",
-                }}
-              >
+                }}>
                 <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity
-                    style={styles.addBtn}
-                    onPress={() => addDecorationRow()}
-                  >
+                  <TouchableOpacity style={styles.addBtn} onPress={() => addDecorationRow()}>
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
@@ -214,20 +189,11 @@ const MistCoat = (props) => {
                   dynamicInput.map((el, index) => (
                     <View style={styles.tableBody}>
                       <View style={styles.inputBodyContainer}>
-                        <TextInput
-                          onChangeText={(txt) =>
-                            updateValue("name", index, txt)
-                          }
-                          value={el.name}
-                          style={styles.bodyTextInput}
-                          placeholder={"Name"}
-                        />
+                        <TextInput onChangeText={(txt) => updateValue("name", index, txt)} value={el.name} style={styles.bodyTextInput} placeholder={"Name"} />
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateValue("block", index, txt)
-                          }
+                          onChangeText={(txt) => updateValue("block", index, txt)}
                           value={el.block}
                           style={styles.bodyTextInput}
                           placeholder={"Block"}
@@ -235,51 +201,28 @@ const MistCoat = (props) => {
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateValue("level", index, txt)
-                          }
+                          onChangeText={(txt) => updateValue("level", index, txt)}
                           value={el.level}
                           style={styles.bodyTextInput}
                           placeholder={"level"}
                         />
                       </View>
                       <View style={styles.inputBodyContainer}>
-                        <TextInput
-                          onChangeText={(txt) => updateValue("bed", index, txt)}
-                          value={el.bed}
-                          style={styles.bodyTextInput}
-                          placeholder={"Bed"}
-                        />
+                        <TextInput onChangeText={(txt) => updateValue("bed", index, txt)} value={el.bed} style={styles.bodyTextInput} placeholder={"Bed"} />
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateValue("price", index, txt)
-                          }
+                          onChangeText={(txt) => updateValue("price", index, txt)}
                           value={el.price}
                           style={styles.bodyTextInput}
                           placeholder={"Price"}
                         />
                       </View>
                       <View style={styles.inputBodyContainer}>
-                        <TextInput
-                          onChangeText={(txt) =>
-                            updateValue("plot", index, txt)
-                          }
-                          value={el.plot}
-                          style={styles.bodyTextInput}
-                          placeholder={"Plot"}
-                        />
+                        <TextInput onChangeText={(txt) => updateValue("plot", index, txt)} value={el.plot} style={styles.bodyTextInput} placeholder={"Plot"} />
                       </View>
                       <View style={styles.inputBodyContainer}>
-                        <TextInput
-                          onChangeText={(txt) =>
-                            updateValue("days", index, txt)
-                          }
-                          value={el.days}
-                          style={styles.bodyTextInput}
-                          placeholder={"Days"}
-                        />
+                        <TextInput onChangeText={(txt) => updateValue("days", index, txt)} value={el.days} style={styles.bodyTextInput} placeholder={"Days"} />
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <Text
@@ -290,8 +233,7 @@ const MistCoat = (props) => {
                             fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
-                          }}
-                        >
+                          }}>
                           {new Date(el.start).toLocaleDateString()}
                         </Text>
                       </View>
@@ -304,8 +246,7 @@ const MistCoat = (props) => {
                             fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
-                          }}
-                        >
+                          }}>
                           {new Date(el.complete).toLocaleDateString()}
                         </Text>
                       </View>
@@ -318,13 +259,9 @@ const MistCoat = (props) => {
                     height: "2%",
                     marginBottom: 20,
                     marginTop: 20,
-                  }}
-                ></View>
+                  }}></View>
                 <View style={styles.btnContainer}>
-                  <TouchableOpacity
-                    style={styles.commonBtn}
-                    onPress={() => mistCoatFormInsert()}
-                  >
+                  <TouchableOpacity style={styles.commonBtn} onPress={() => mistCoatFormInsert()}>
                     <Text style={styles.commonText}>Save</Text>
                   </TouchableOpacity>
                 </View>
@@ -342,24 +279,9 @@ const mapStateToProps = (state) => ({
   isSuccessMsg: state.auth.isSuccessMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createMisCoatHandler: (
-    mainContructor,
-    projectName,
-    dynamicInput,
-    jobID,
-    tabId,
-    token
-  ) =>
-    dispatch(
-      insertMiscoat(
-        mainContructor,
-        projectName,
-        dynamicInput,
-        jobID,
-        tabId,
-        token
-      )
-    ),
+  createMisCoatHandler: (mainContructor, projectName, dynamicInput, jobID, tabId, token) =>
+    dispatch(insertMiscoat(mainContructor, projectName, dynamicInput, jobID, tabId, token)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(MistCoat);
 const styles = StyleSheet.create({

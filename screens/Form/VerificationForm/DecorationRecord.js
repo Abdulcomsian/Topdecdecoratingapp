@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
 import { insertDecorationRecord } from "../../../Redux/action/auth/authActionTypes";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const DecorationRecord = (props) => {
@@ -85,20 +79,10 @@ const DecorationRecord = (props) => {
     setdynamicSeconfInput(preData);
   };
   const decorationRecordInsert = () => {
-    
-    if (
-      dynamicFirstInput &&
-      dynamicSecondInput &&
-      jobID !== "" &&
-      tabId != ""
-    ) {
-      props.createDecorationRecordHandler(
-        dynamicFirstInput,
-        dynamicSecondInput,
-        jobID,
-        tabId,
-        token
-      );
+    if (dynamicFirstInput && dynamicSecondInput && jobID !== "" && tabId != "") {
+      props.createDecorationRecordHandler(dynamicFirstInput, dynamicSecondInput, jobID, tabId, token);
+      props.updateHealthReport(props?.route?.params?.index);
+      props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
@@ -184,7 +168,7 @@ const DecorationRecord = (props) => {
   const showDateCompleteSecondpicker = (index = -1) => {
     setShowCompleteDateSecond({ ...showCompleteDateSecond, isVisible: true, index: index });
   };
-  console.log(dynamicFirstInput)
+  console.log(dynamicFirstInput);
   return (
     <ScrollView style={{ height: "100%" }}>
       <View style={styles.mainContainer}>
@@ -193,52 +177,50 @@ const DecorationRecord = (props) => {
           date={date ? date : new Date()}
           mode={"date"}
           is24Hour={true}
-          display="default"
+          display='default'
           onConfirm={(date) => onChange(date)}
           onCancel={() => setShow({ isVisible: false, index: -1 })}
-          cancelTextIOS="Cancel"
-          confirmTextIOS="Confirm"
+          cancelTextIOS='Cancel'
+          confirmTextIOS='Confirm'
         />
         <DateTimePickerModal
           isVisible={showComplete.isVisible}
           date={dateComplete ? dateComplete : new Date()}
           mode={"date"}
           is24Hour={true}
-          display="default"
+          display='default'
           onConfirm={(date) => onCompleteChange(date)}
           onCancel={() => setShowComplete({ isVisible: false, index: -1 })}
-          cancelTextIOS="Cancel"
-          confirmTextIOS="Confirm"
+          cancelTextIOS='Cancel'
+          confirmTextIOS='Confirm'
         />
         <DateTimePickerModal
           isVisible={showDateSecond.isVisible}
           date={dateSecond ? dateSecond : new Date()}
           mode={"date"}
           is24Hour={true}
-          display="default"
+          display='default'
           onConfirm={(date) => onDateSecondChange(date)}
           onCancel={() => setShowDateSecond({ isVisible: false, index: -1 })}
-          cancelTextIOS="Cancel"
-          confirmTextIOS="Confirm"
+          cancelTextIOS='Cancel'
+          confirmTextIOS='Confirm'
         />
-         <DateTimePickerModal
+        <DateTimePickerModal
           isVisible={showCompleteDateSecond.isVisible}
           date={dateSecondComplete ? dateSecondComplete : new Date()}
           mode={"date"}
           is24Hour={true}
-          display="default"
+          display='default'
           onConfirm={(date) => onDateCompleteSecondChange(date)}
           onCancel={() => setShowCompleteDateSecond({ isVisible: false, index: -1 })}
-          cancelTextIOS="Cancel"
-          confirmTextIOS="Confirm"
+          cancelTextIOS='Cancel'
+          confirmTextIOS='Confirm'
         />
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Decoration Record</Text>
         </View>
         <View style={{ height: "95%", width: "100%" }}>
-          <ScrollView
-            style={{ height: "100%", paddingLeft: 20, paddingRight: 20 }}
-          >
+          <ScrollView style={{ height: "100%", paddingLeft: 20, paddingRight: 20 }}>
             <View style={styles.tableViewContainer}>
               <View style={styles.tableHeader}>
                 <View style={styles.headerTitleView}>
@@ -276,9 +258,7 @@ const DecorationRecord = (props) => {
                     <View style={styles.tableBody} key={index}>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("name", index, txt)
-                          }
+                          onChangeText={(txt) => updateFirstValue("name", index, txt)}
                           value={el.name}
                           style={styles.bodyTextInput}
                           placeholder={"Name"}
@@ -286,9 +266,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("block", index, txt)
-                          }
+                          onChangeText={(txt) => updateFirstValue("block", index, txt)}
                           value={el.block}
                           style={styles.bodyTextInput}
                           placeholder={"Block"}
@@ -296,9 +274,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("level", index, txt)
-                          }
+                          onChangeText={(txt) => updateFirstValue("level", index, txt)}
                           value={el.level}
                           style={styles.bodyTextInput}
                           placeholder={"level"}
@@ -306,9 +282,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("bed", index, txt)
-                          }
+                          onChangeText={(txt) => updateFirstValue("bed", index, txt)}
                           value={el.bed}
                           style={styles.bodyTextInput}
                           placeholder={"Rooms"}
@@ -316,9 +290,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("price", index, txt)
-                          }
+                          onChangeText={(txt) => updateFirstValue("price", index, txt)}
                           value={el.price}
                           style={styles.bodyTextInput}
                           placeholder={"Price"}
@@ -326,9 +298,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("plot", index, txt)
-                          }
+                          onChangeText={(txt) => updateFirstValue("plot", index, txt)}
                           value={el.plot}
                           style={styles.bodyTextInput}
                           placeholder={"Plot"}
@@ -336,9 +306,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateFirstValue("days", index, txt)
-                          }
+                          onChangeText={(txt) => updateFirstValue("days", index, txt)}
                           value={el.days}
                           style={styles.bodyTextInput}
                           placeholder={"Days"}
@@ -353,13 +321,12 @@ const DecorationRecord = (props) => {
                             fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
-                          }}
-                        >
+                          }}>
                           {new Date(el.start).toLocaleDateString()}
                         </Text>
                       </View>
                       <View style={styles.inputBodyContainer}>
-                      <Text
+                        <Text
                           onPress={() => showCompleteDatepicker(index)}
                           style={{
                             borderBottomWidth: 1,
@@ -367,8 +334,7 @@ const DecorationRecord = (props) => {
                             fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
-                          }}
-                        >
+                          }}>
                           {new Date(el.complete).toLocaleDateString()}
                         </Text>
                       </View>
@@ -380,13 +346,9 @@ const DecorationRecord = (props) => {
                   width: "100%",
                   justifyContent: "flex-end",
                   alignItems: "flex-end",
-                }}
-              >
+                }}>
                 <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity
-                    style={styles.addBtn}
-                    onPress={() => addDecorationRow()}
-                  >
+                  <TouchableOpacity style={styles.addBtn} onPress={() => addDecorationRow()}>
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
@@ -429,9 +391,7 @@ const DecorationRecord = (props) => {
                     <View style={styles.tableBody} key={index}>
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateSecondValue("name", index, txt)
-                          }
+                          onChangeText={(txt) => updateSecondValue("name", index, txt)}
                           value={el.name}
                           style={styles.bodyTextInput}
                           placeholder={"Name"}
@@ -439,9 +399,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateSecondValue("block", index, txt)
-                          }
+                          onChangeText={(txt) => updateSecondValue("block", index, txt)}
                           value={el.block}
                           style={styles.bodyTextInput}
                           placeholder={"Block"}
@@ -449,9 +407,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateSecondValue("level", index, txt)
-                          }
+                          onChangeText={(txt) => updateSecondValue("level", index, txt)}
                           value={el.level}
                           style={styles.bodyTextInput}
                           placeholder={"level"}
@@ -459,9 +415,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateSecondValue("bed", index, txt)
-                          }
+                          onChangeText={(txt) => updateSecondValue("bed", index, txt)}
                           value={el.bed}
                           style={styles.bodyTextInput}
                           placeholder={"Rooms"}
@@ -469,9 +423,7 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateSecondValue("price", index, txt)
-                          }
+                          onChangeText={(txt) => updateSecondValue("price", index, txt)}
                           value={el.price}
                           style={styles.bodyTextInput}
                           placeholder={"Price"}
@@ -479,16 +431,14 @@ const DecorationRecord = (props) => {
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
                         <TextInput
-                          onChangeText={(txt) =>
-                            updateSecondValue("plot", index, txt)
-                          }
+                          onChangeText={(txt) => updateSecondValue("plot", index, txt)}
                           value={el.plot}
                           style={styles.bodyTextInput}
                           placeholder={"Plot"}
                         />
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
-                      <Text
+                        <Text
                           onPress={() => showDateSecondpicker(index)}
                           style={{
                             borderBottomWidth: 1,
@@ -496,13 +446,12 @@ const DecorationRecord = (props) => {
                             fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
-                          }}
-                        >
+                          }}>
                           {new Date(el.start).toLocaleDateString()}
                         </Text>
                       </View>
                       <View style={styles.inputSecondBodyContainer}>
-                      <Text
+                        <Text
                           onPress={() => showDateCompleteSecondpicker(index)}
                           style={{
                             borderBottomWidth: 1,
@@ -510,8 +459,7 @@ const DecorationRecord = (props) => {
                             fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
-                          }}
-                        >
+                          }}>
                           {new Date(el.complete).toLocaleDateString()}
                         </Text>
                       </View>
@@ -523,13 +471,9 @@ const DecorationRecord = (props) => {
                   width: "100%",
                   justifyContent: "flex-end",
                   alignItems: "flex-end",
-                }}
-              >
+                }}>
                 <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity
-                    style={styles.addBtn}
-                    onPress={() => addDecorationSecondRow()}
-                  >
+                  <TouchableOpacity style={styles.addBtn} onPress={() => addDecorationSecondRow()}>
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
@@ -541,13 +485,9 @@ const DecorationRecord = (props) => {
                   height: ".5%",
                   marginBottom: 20,
                   marginTop: 20,
-                }}
-              ></View>
+                }}></View>
               <View style={styles.btnContainer}>
-                <TouchableOpacity
-                  style={styles.commonBtn}
-                  onPress={() => decorationRecordInsert()}
-                >
+                <TouchableOpacity style={styles.commonBtn} onPress={() => decorationRecordInsert()}>
                   <Text style={styles.commonText}>Save</Text>
                 </TouchableOpacity>
               </View>
@@ -564,22 +504,9 @@ const mapStateToProps = (state) => ({
   isSuccessMsg: state.auth.isSuccessMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createDecorationRecordHandler: (
-    dynamicFirstInput,
-    dynamicSecondInput,
-    jobID,
-    tabId,
-    token
-  ) =>
-    dispatch(
-      insertDecorationRecord(
-        dynamicFirstInput,
-        dynamicSecondInput,
-        jobID,
-        tabId,
-        token
-      )
-    ),
+  createDecorationRecordHandler: (dynamicFirstInput, dynamicSecondInput, jobID, tabId, token) =>
+    dispatch(insertDecorationRecord(dynamicFirstInput, dynamicSecondInput, jobID, tabId, token)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DecorationRecord);
 

@@ -1,21 +1,16 @@
 import React, { useState } from "react";
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  CheckBox,
-} from "react-native";
+import { View, Image, TouchableOpacity, TextInput, ScrollView, CheckBox } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import InputCheckBox from "../../../components/common/inputCheckBox";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
 import { set } from "react-native-reanimated";
+import { connect } from "react-redux";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var plus = require("../../../assets/authScreen/plus.png");
-const HealthSafetyInspection = () => {
+const HealthSafetyInspection = (props) => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
@@ -60,26 +55,25 @@ const HealthSafetyInspection = () => {
       title: "All Risk Assessments & Method Statements up to date? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     {
-      title:
-        "All COSHH (Control of substances hazardous to Health) assessments available? ",
+      title: "All COSHH (Control of substances hazardous to Health) assessments available? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     {
       title: "All MSDS (Material Safety Datasheets) available? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     {
       title: "Permits to work required, has it been issued? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     { title: "Decorators read and sign the RAMS? ", yes: false, no: false },
     { title: "Toolbox Talk carried out? ", yes: false, no: false },
@@ -88,7 +82,7 @@ const HealthSafetyInspection = () => {
       title: "Appropriate safety signs in place? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     { title: "Working area isolated from others? ", yes: false, no: false },
     { title: "Barriers in place? ", yes: false, no: false },
@@ -97,7 +91,7 @@ const HealthSafetyInspection = () => {
       title: "Standard PPE being worn? Boots, Hat, Hi Vis, Coverall ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     { title: "Extras - goggles/ear defenders? ", yes: false, no: false },
     { title: "Decorators Face Fit Tested? ", yes: false, no: false },
@@ -106,7 +100,7 @@ const HealthSafetyInspection = () => {
       title: "Have tools had a visual inspection? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     { title: "Are casings or leads damaged? ", yes: false, no: false },
     { title: "Have electrical tools been PAT tested? ", yes: false, no: false },
@@ -115,20 +109,20 @@ const HealthSafetyInspection = () => {
       title: "Specific Risk Assessment carried out? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     { title: "Ladders/ steps checked and tagged? ", yes: false, no: false },
     {
       title: "Scaffold/ Mobile tower checked and tagged? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     {
       title: "MEWP (Mobile Elevated Work Platform) checked? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     { title: "PASMA/IPAF certificated personnel? ", yes: false, no: false },
     { title: "Means of access suitable? ", yes: false, no: false },
@@ -136,27 +130,26 @@ const HealthSafetyInspection = () => {
       title: "Is edge protection needed, is it available? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     {
       mainTitle: "Exposure to dust/noise ",
       title: "Specific Risk Assessment carried out? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     {
       title: "Is dust suppression in place when rubbing down?",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     {
-      title:
-        "Is noise an issue to decorator/others, is it sufficiently controlled, are specific PPE worn? ",
+      title: "Is noise an issue to decorator/others, is it sufficiently controlled, are specific PPE worn? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     { title: "Are barriers needed/ used? ", yes: false, no: false },
     {
@@ -164,14 +157,13 @@ const HealthSafetyInspection = () => {
       title: "Are skips and containers clearly labelled? ",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
     {
-      title:
-        "Are there provisions for Product supplier to collect unused product and empty containers?",
+      title: "Are there provisions for Product supplier to collect unused product and empty containers?",
       yes: false,
       no: false,
-      comment:""
+      comment: "",
     },
   ]);
 
@@ -210,7 +202,7 @@ const HealthSafetyInspection = () => {
   const [projectAddress, setProjectAddress] = useState("");
   const [inspectionName, setInspectionName] = useState("");
   const [inspectionFor, setInspectionFor] = useState("");
-  
+
   const checkArrayData = (key, index, value) => {
     let preData = [...arrayDocument];
     if (key == "yes") {
@@ -240,6 +232,8 @@ const HealthSafetyInspection = () => {
     console.log("Inspection Date :", dateInspection.toLocaleDateString());
     console.log("Inspection Signature :", signature);
     console.log("Document Array :", arrayDocument);
+    props.updateHealthReport(props?.route?.params?.index);
+    props.navigation.pop();
   };
   const updateValue = (key, index, value) => {
     let preData = [...dynamicInput];
@@ -253,46 +247,44 @@ const HealthSafetyInspection = () => {
         date={date ? date : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onChange(date)}
         onCancel={() => setShow(false)}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       <DateTimePickerModal
         isVisible={showInspection}
         date={dateInspection ? dateInspection : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onInspectionChange(date)}
         onCancel={() => setShowInspection(false)}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       <DateTimePickerModal
         isVisible={showComplete.isVisible}
         date={dateComplete ? dateComplete : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onDateCompleteChange(date)}
         onCancel={() => setShowComplete({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       <DateTimePickerModal
         isVisible={showUpdateDateComplete.isVisible}
         date={dateUpdateComplete ? dateUpdateComplete : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onDateUpdateCompleteChange(date)}
-        onCancel={() =>
-          setShowUpdateDateComplete({ isVisible: false, index: -1 })
-        }
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        onCancel={() => setShowUpdateDateComplete({ isVisible: false, index: -1 })}
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       {getSign ? (
         <SignatureComponent
@@ -308,29 +300,16 @@ const HealthSafetyInspection = () => {
               paddingTop: 30,
               justifyContent: "center",
               alignItems: "center",
-            }}
-          >
-            <Text style={styles.titleText}>
-              Health Safety Inspection / Monitoring Form{" "}
-            </Text>
+            }}>
+            <Text style={styles.titleText}>Health Safety Inspection / Monitoring Form </Text>
           </View>
           <ScrollView>
             <View style={styles.formCodnatiner}>
               <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Main Contractor"}
-                  value={contractorName}
-                  onChangeText={(e) => setContractorName(e)}
-                />
+                <TextInput style={styles.inputField} placeholder={"Main Contractor"} value={contractorName} onChangeText={(e) => setContractorName(e)} />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Site Supervisor"}
-                  value={siteSupervisor}
-                  onChangeText={(e) => setSiteSupervisor(e)}
-                />
+                <TextInput style={styles.inputField} placeholder={"Site Supervisor"} value={siteSupervisor} onChangeText={(e) => setSiteSupervisor(e)} />
               </View>
               <View style={styles.inputFieldContainer}>
                 <Text
@@ -345,18 +324,12 @@ const HealthSafetyInspection = () => {
                     borderBottomWidth: 1,
                     borderBottomColor: "#96A8B2",
                     padding: 5,
-                  }}
-                >
+                  }}>
                   {new Date(date).toLocaleDateString()}
                 </Text>
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Project Address"}
-                  value={projectAddress}
-                  onChangeText={(e) => setProjectAddress(e)}
-                />
+                <TextInput style={styles.inputField} placeholder={"Project Address"} value={projectAddress} onChangeText={(e) => setProjectAddress(e)} />
               </View>
               <View style={[styles.tableViewContainer, { marginTop: 10 }]}>
                 <View style={styles.tableHeader}>
@@ -385,8 +358,7 @@ const HealthSafetyInspection = () => {
                     width: "100%",
                     alignItems: "flex-end",
                     marginBottom: 10,
-                  }}
-                ></View>
+                  }}></View>
                 <View style={{ flexDirection: "column" }}>
                   {dynamicInput.length > 0 &&
                     dynamicInput.map((item, index) => (
@@ -395,9 +367,7 @@ const HealthSafetyInspection = () => {
                           <TextInput
                             style={styles.bodyTextInput}
                             placeholder={"Item No"}
-                            onChangeText={(txt) =>
-                              updateValue("itemNo", index, txt)
-                            }
+                            onChangeText={(txt) => updateValue("itemNo", index, txt)}
                             value={item.itemNo}
                           />
                         </View>
@@ -405,9 +375,7 @@ const HealthSafetyInspection = () => {
                           <TextInput
                             style={styles.bodyTextInput}
                             placeholder={"Location"}
-                            onChangeText={(txt) =>
-                              updateValue("location", index, txt)
-                            }
+                            onChangeText={(txt) => updateValue("location", index, txt)}
                             value={item.location}
                           />
                         </View>
@@ -415,9 +383,7 @@ const HealthSafetyInspection = () => {
                           <TextInput
                             style={styles.bodyTextInput}
                             placeholder={"Action required"}
-                            onChangeText={(txt) =>
-                              updateValue("actionReq", index, txt)
-                            }
+                            onChangeText={(txt) => updateValue("actionReq", index, txt)}
                             value={item.actionReq}
                           />
                         </View>
@@ -425,9 +391,7 @@ const HealthSafetyInspection = () => {
                           <TextInput
                             style={styles.bodyTextInput}
                             placeholder={"Priority"}
-                            onChangeText={(txt) =>
-                              updateValue("priority", index, txt)
-                            }
+                            onChangeText={(txt) => updateValue("priority", index, txt)}
                             value={item.priority}
                           />
                         </View>
@@ -435,9 +399,7 @@ const HealthSafetyInspection = () => {
                           <TextInput
                             style={styles.bodyTextInput}
                             placeholder={"Action by"}
-                            onChangeText={(txt) =>
-                              updateValue("actionBy", index, txt)
-                            }
+                            onChangeText={(txt) => updateValue("actionBy", index, txt)}
                             value={item.actionBy}
                           />
                         </View>
@@ -454,8 +416,7 @@ const HealthSafetyInspection = () => {
                               borderBottomColor: "#96A8B2",
                               padding: 5,
                               color: "#96A8B2",
-                            }}
-                          >
+                            }}>
                             {new Date(item.dateComplte).toLocaleDateString()}
                           </Text>
                         </View>
@@ -470,12 +431,8 @@ const HealthSafetyInspection = () => {
                       justifyContent: "flex-end",
                       width: "100%",
                     },
-                  ]}
-                >
-                  <TouchableOpacity
-                    style={styles.addBtn}
-                    onPress={() => addInspectionRow()}
-                  >
+                  ]}>
+                  <TouchableOpacity style={styles.addBtn} onPress={() => addInspectionRow()}>
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
@@ -486,25 +443,14 @@ const HealthSafetyInspection = () => {
                   fontFamily: "poppins-bold",
                   paddingTop: 10,
                   paddingBottom: 20,
-                }}
-              >
+                }}>
                 Inspection carried out by:{" "}
               </Text>
               <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Name"}
-                  value={inspectionName}
-                  onChangeText={(e) => setInspectionName(e)}
-                />
+                <TextInput style={styles.inputField} placeholder={"Name"} value={inspectionName} onChangeText={(e) => setInspectionName(e)} />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"For"}
-                  value={inspectionFor}
-                  onChangeText={(e) => setInspectionFor(e)}
-                />
+                <TextInput style={styles.inputField} placeholder={"For"} value={inspectionFor} onChangeText={(e) => setInspectionFor(e)} />
               </View>
               <View style={styles.inputFieldContainer}>
                 <Text
@@ -519,16 +465,12 @@ const HealthSafetyInspection = () => {
                     borderBottomWidth: 1,
                     borderBottomColor: "#96A8B2",
                     padding: 5,
-                  }}
-                >
+                  }}>
                   {new Date(dateInspection).toLocaleDateString()}
                 </Text>
               </View>
               <View style={styles.inputFieldContainer}>
-                <TouchableOpacity
-                  onPress={() => setGetSign(true)}
-                  style={styles.inputFieldContainer}
-                >
+                <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
                   {signature ? (
                     <Image
                       style={{
@@ -551,16 +493,13 @@ const HealthSafetyInspection = () => {
                         color: "#96A8B2",
                         fontFamily: "poppins-regular",
                         paddingTop: 15,
-                      }}
-                    >
+                      }}>
                       Signature
                     </Text>
                   )}
                 </TouchableOpacity>
               </View>
-              <Text style={{ fontSize: 12, fontFamily: "poppins-bold" }}>
-                Priority Key
-              </Text>
+              <Text style={{ fontSize: 12, fontFamily: "poppins-bold" }}>Priority Key</Text>
               <Text style={{ fontSize: 12, fontFamily: "poppins-bold" }}>
                 A{" "}
                 <Text
@@ -568,8 +507,7 @@ const HealthSafetyInspection = () => {
                     fontSize: 10,
                     fontFamily: "poppins-regular",
                     paddingLeft: 20,
-                  }}
-                >
+                  }}>
                   Immediate
                 </Text>
               </Text>
@@ -580,8 +518,7 @@ const HealthSafetyInspection = () => {
                     fontSize: 10,
                     fontFamily: "poppins-regular",
                     paddingLeft: 20,
-                  }}
-                >
+                  }}>
                   One / Two Day
                 </Text>
               </Text>
@@ -592,8 +529,7 @@ const HealthSafetyInspection = () => {
                     fontSize: 10,
                     fontFamily: "poppins-regular",
                     paddingLeft: 20,
-                  }}
-                >
+                  }}>
                   One Week
                 </Text>
               </Text>
@@ -604,8 +540,7 @@ const HealthSafetyInspection = () => {
                     fontSize: 10,
                     fontFamily: "poppins-regular",
                     paddingLeft: 20,
-                  }}
-                >
+                  }}>
                   Recommended
                 </Text>
               </Text>
@@ -618,29 +553,19 @@ const HealthSafetyInspection = () => {
                         fontFamily: "poppins-bold",
                         paddingTop: 10,
                         paddingBottom: 20,
-                      }}
-                    >
+                      }}>
                       {item.mainTitle}
                     </Text>
-                    <View
-                      style={styles.detailsInstructionContactView}
-                      key={index}
-                    >
+                    <View style={styles.detailsInstructionContactView} key={index}>
                       <View style={{ flexDirection: "row" }}>
                         <View style={styles.instructionFridayView}>
-                          <Text
-                            style={{ fontFamily: "poppins-bold", fontSize: 10 }}
-                          >
-                            {item.title}
-                          </Text>
+                          <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>{item.title}</Text>
                         </View>
                         <View style={styles.checkBoxInstructionView}>
                           <View style={styles.firstInstructionCheckBoxRow}>
                             <View style={styles.parentCheckBox}>
                               <View style={styles.leftCheckBox}>
-                                <CheckBox value={item.yes} onValueChange={() =>
-                                  checkArrayData("yes", index, "true")
-                                }/>
+                                <CheckBox value={item.yes} onValueChange={() => checkArrayData("yes", index, "true")} />
                               </View>
                               <View style={styles.rightCheckBox}>
                                 <Text style={styles.accidentText}>Y/N</Text>
@@ -648,9 +573,7 @@ const HealthSafetyInspection = () => {
                             </View>
                             <View style={styles.parentCheckBox}>
                               <View style={styles.leftCheckBox}>
-                                <CheckBox value={item.no} onValueChange={() =>
-                                  checkArrayData("no", index, "true")
-                                } />
+                                <CheckBox value={item.no} onValueChange={() => checkArrayData("no", index, "true")} />
                               </View>
                               <View style={styles.rightCheckBox}>
                                 <Text style={styles.accidentText}>N/A</Text>
@@ -663,34 +586,23 @@ const HealthSafetyInspection = () => {
                         <TextInput
                           style={styles.inputField}
                           placeholder={"Comments"}
-                          onChangeText={(txt) =>
-                            updateValue("comment", index, txt)
-                          }
+                          onChangeText={(txt) => updateValue("comment", index, txt)}
                           value={item.comment}
                         />
                       </View>
                     </View>
                   </View>
                 ) : (
-                  <View
-                    style={styles.detailsInstructionContactView}
-                    key={index}
-                  >
+                  <View style={styles.detailsInstructionContactView} key={index}>
                     <View style={{ flexDirection: "row" }}>
                       <View style={styles.instructionFridayView}>
-                        <Text
-                          style={{ fontFamily: "poppins-bold", fontSize: 10 }}
-                        >
-                          {item.title}
-                        </Text>
+                        <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>{item.title}</Text>
                       </View>
                       <View style={styles.checkBoxInstructionView}>
                         <View style={styles.firstInstructionCheckBoxRow}>
                           <View style={styles.parentCheckBox}>
                             <View style={styles.leftCheckBox}>
-                              <CheckBox value={item.yes} value={item.yes} onValueChange={() =>
-                                  checkArrayData("yes", index, "true")
-                                } />
+                              <CheckBox value={item.yes} value={item.yes} onValueChange={() => checkArrayData("yes", index, "true")} />
                             </View>
                             <View style={styles.rightCheckBox}>
                               <Text style={styles.accidentText}>Y/N</Text>
@@ -698,9 +610,7 @@ const HealthSafetyInspection = () => {
                           </View>
                           <View style={styles.parentCheckBox}>
                             <View style={styles.leftCheckBox}>
-                              <CheckBox value={item.no} value={item.no} onValueChange={() =>
-                                  checkArrayData("no", index, "true")
-                                } />
+                              <CheckBox value={item.no} value={item.no} onValueChange={() => checkArrayData("no", index, "true")} />
                             </View>
                             <View style={styles.rightCheckBox}>
                               <Text style={styles.accidentText}>N/A</Text>
@@ -713,9 +623,7 @@ const HealthSafetyInspection = () => {
                       <TextInput
                         style={styles.inputField}
                         placeholder={"Comments"}
-                        onChangeText={(txt) =>
-                          updateArrayValue("comment", index, txt)
-                        }
+                        onChangeText={(txt) => updateArrayValue("comment", index, txt)}
                         value={item.comment}
                       />
                     </View>
@@ -811,13 +719,9 @@ const HealthSafetyInspection = () => {
                   height: 2,
                   marginBottom: 20,
                   marginTop: 20,
-                }}
-              ></View>
+                }}></View>
               <View style={styles.btnContainer}>
-                <TouchableOpacity
-                  style={styles.commonBtn}
-                  onPress={() => healthSafetyFormInsert()}
-                >
+                <TouchableOpacity style={styles.commonBtn} onPress={() => healthSafetyFormInsert()}>
                   <Text style={styles.commonText}>Save</Text>
                 </TouchableOpacity>
               </View>
@@ -828,4 +732,7 @@ const HealthSafetyInspection = () => {
     </View>
   );
 };
-export default HealthSafetyInspection;
+const mapDispatchToProps = (dispatch) => ({
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+});
+export default connect(null, mapDispatchToProps)(HealthSafetyInspection);

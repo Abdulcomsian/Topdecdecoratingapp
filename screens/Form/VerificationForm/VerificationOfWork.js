@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import { insertVerificationForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const VerificationOfWork = (props) => {
@@ -59,15 +53,9 @@ const VerificationOfWork = (props) => {
   };
   const verificationWorkFormInsert = () => {
     if (projectName != "" && idRef != "" && decoratorName != "") {
-      props.createVerificationWorkHandler(
-        projectName,
-        idRef,
-        decoratorName,
-        dynamicInput,
-        jobID,
-        tabId,
-        token
-      );
+      props.createVerificationWorkHandler(projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token);
+      props.updateHealthReport(props?.route?.params?.index);
+      props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
@@ -103,55 +91,30 @@ const VerificationOfWork = (props) => {
     }
   }, [isVerifyWork, isSuccessMsg]);
   return (
-    <View
-      style={[
-        styles.mainContainer,
-        { paddingLeft: 20, paddingRight: 20, marginTop: 50 },
-      ]}
-    >
+    <View style={[styles.mainContainer, { paddingLeft: 20, paddingRight: 20, marginTop: 50 }]}>
       <DateTimePickerModal
         isVisible={show.isVisible}
         date={date ? date : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onChange(date)}
         onCancel={() => setShow({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       <ScrollView style={{ width: "100%" }}>
         <View style={styles.inputFieldContainer}>
-          <TextInput
-            value={projectName}
-            onChangeText={(e) => setProjectName(e)}
-            style={styles.inputField}
-            placeholder={"Project Name"}
-          />
+          <TextInput value={projectName} onChangeText={(e) => setProjectName(e)} style={styles.inputField} placeholder={"Project Name"} />
         </View>
         <View style={styles.inputFieldContainer}>
-          <TextInput
-            value={idRef}
-            onChangeText={(e) => setIdRef(e)}
-            style={styles.inputField}
-            placeholder={"Id Ref"}
-          />
+          <TextInput value={idRef} onChangeText={(e) => setIdRef(e)} style={styles.inputField} placeholder={"Id Ref"} />
         </View>
         <View style={styles.inputFieldContainer}>
-          <TextInput
-            value={decoratorName}
-            onChangeText={(e) => setDecoratorName(e)}
-            style={styles.inputField}
-            placeholder={"Decorator Name"}
-          />
+          <TextInput value={decoratorName} onChangeText={(e) => setDecoratorName(e)} style={styles.inputField} placeholder={"Decorator Name"} />
         </View>
         <View style={styles.tableViewContainer}>
-          <View
-            style={[
-              styles.tableHeader,
-              { marginTop: 30, paddingRight: 5, paddingLeft: 5 },
-            ]}
-          >
+          <View style={[styles.tableHeader, { marginTop: 30, paddingRight: 5, paddingLeft: 5 }]}>
             <View style={styles.headerTitleView}>
               <Text style={styles.headerTitle}>FORTNIGHT-DAYS</Text>
             </View>
@@ -188,38 +151,21 @@ const VerificationOfWork = (props) => {
               width: "100%",
               justifyContent: "flex-end",
               alignItems: "flex-end",
-            }}
-          >
+            }}>
             <View style={styles.inputButtonBodyContainer}>
-              <TouchableOpacity
-                style={styles.addBtn}
-                onPress={() => addVerificationRow()}
-              >
+              <TouchableOpacity style={styles.addBtn} onPress={() => addVerificationRow()}>
                 <Image style={styles.plusBtn} source={plus} />
               </TouchableOpacity>
             </View>
           </View>
           {dynamicInput.length > 0 &&
             dynamicInput.map((el, index) => (
-              <View
-                style={[styles.tableBody, { justifyContent: "space-between" }]}
-                key={index}
-              >
+              <View style={[styles.tableBody, { justifyContent: "space-between" }]} key={index}>
                 <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => updateValue("days", index, txt)}
-                    value={el.days}
-                    style={styles.bodyTextInput}
-                    placeholder={"Days"}
-                  />
+                  <TextInput onChangeText={(txt) => updateValue("days", index, txt)} value={el.days} style={styles.bodyTextInput} placeholder={"Days"} />
                 </View>
                 <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => updateValue("work", index, txt)}
-                    value={el.work}
-                    style={styles.bodyTextInput}
-                    placeholder={"Manager"}
-                  />
+                  <TextInput onChangeText={(txt) => updateValue("work", index, txt)} value={el.work} style={styles.bodyTextInput} placeholder={"Manager"} />
                 </View>
                 <View style={styles.inputBodyContainer}>
                   <Text
@@ -231,8 +177,7 @@ const VerificationOfWork = (props) => {
                       color: "#96A8B2",
                       fontFamily: "poppins-regular",
                       paddingTop: 10,
-                    }}
-                  >
+                    }}>
                     {new Date(el.date).toLocaleDateString()}
                   </Text>
                 </View>
@@ -245,30 +190,18 @@ const VerificationOfWork = (props) => {
                   />
                 </View>
                 <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => updateValue("plot", index, txt)}
-                    value={el.plot}
-                    style={styles.bodyTextInput}
-                    placeholder={"Plot"}
-                  />
+                  <TextInput onChangeText={(txt) => updateValue("plot", index, txt)} value={el.plot} style={styles.bodyTextInput} placeholder={"Plot"} />
                 </View>
                 <View style={styles.inputBodyContainer}>
                   <TextInput
-                    onChangeText={(txt) =>
-                      updateValue("description", index, txt)
-                    }
+                    onChangeText={(txt) => updateValue("description", index, txt)}
                     value={el.description}
                     style={styles.bodyTextInput}
                     placeholder={"Description"}
                   />
                 </View>
                 <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => updateValue("price", index, txt)}
-                    value={el.price}
-                    style={styles.bodyTextInput}
-                    placeholder={"Price"}
-                  />
+                  <TextInput onChangeText={(txt) => updateValue("price", index, txt)} value={el.price} style={styles.bodyTextInput} placeholder={"Price"} />
                 </View>
                 <View style={styles.inputBodyContainer}>
                   <TextInput
@@ -279,22 +212,10 @@ const VerificationOfWork = (props) => {
                   />
                 </View>
                 <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => updateValue("si", index, txt)}
-                    value={el.si}
-                    style={styles.bodyTextInput}
-                    placeholder={"No."}
-                  />
+                  <TextInput onChangeText={(txt) => updateValue("si", index, txt)} value={el.si} style={styles.bodyTextInput} placeholder={"No."} />
                 </View>
                 <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) =>
-                      updateValue("c_work", index, txt)
-                    }
-                    value={el.c_work}
-                    style={styles.bodyTextInput}
-                    placeholder={"Work"}
-                  />
+                  <TextInput onChangeText={(txt) => updateValue("c_work", index, txt)} value={el.c_work} style={styles.bodyTextInput} placeholder={"Work"} />
                 </View>
               </View>
             ))}
@@ -305,13 +226,9 @@ const VerificationOfWork = (props) => {
               height: 2,
               marginBottom: 20,
               marginTop: 20,
-            }}
-          ></View>
+            }}></View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => verificationWorkFormInsert()}
-            >
+            <TouchableOpacity style={styles.commonBtn} onPress={() => verificationWorkFormInsert()}>
               <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -326,25 +243,8 @@ const mapStateToProps = (state) => ({
   isSuccessMsg: state.auth.isSuccessMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createVerificationWorkHandler: (
-    projectName,
-    idRef,
-    decoratorName,
-    dynamicInput,
-    jobID,
-    tabId,
-    token
-  ) =>
-    dispatch(
-      insertVerificationForm(
-        projectName,
-        idRef,
-        decoratorName,
-        dynamicInput,
-        jobID,
-        tabId,
-        token
-      )
-    ),
+  createVerificationWorkHandler: (projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token) =>
+    dispatch(insertVerificationForm(projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(VerificationOfWork);

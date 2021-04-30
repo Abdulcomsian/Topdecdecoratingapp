@@ -8,7 +8,7 @@ import SignatureComponent from "../../../components/SignatureComponent";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
-const TBTFire = () => {
+const TBTFire = (props) => {
   const [coshhArray, setCoshhArray] = useState([
     {
       mainTitle: "Fire Prevention",

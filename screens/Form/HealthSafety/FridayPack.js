@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -7,12 +8,17 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
+=======
+import React, { useState } from "react";
+import { View, TextInput, ScrollView, CheckBox, TouchableOpacity, Image } from "react-native";
+>>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { insertFridayPackForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import SignatureComponent from "../../../components/SignatureComponent";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 const FridayPack = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
@@ -156,8 +162,22 @@ const FridayPack = (props) => {
     console.log("further Comments :", furtherComments);
     console.log("Date :", date.toLocaleDateString());
 
-    if (contractorName != "" && projectName != "" && supervisorSign != "" && documentRow != "" && weekEnding != "" && furtherComments !=="" && date !=="") {
-      props.createFridayPackHandler(contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, props.route.params?.index);
+    if (contractorName != "" && projectName != "" && supervisorSign != "" && documentRow != "" && weekEnding != "" && furtherComments !== "" && date !== "") {
+      props.createFridayPackHandler(
+        contractorName,
+        projectName,
+        supervisorSign,
+        documentRow,
+        weekEnding,
+        date,
+        furtherComments,
+        jobID,
+        tabId,
+        token,
+        props.route.params?.index
+      );
+      props.updateHealthReport(props?.route?.params?.index);
+      props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
@@ -170,11 +190,11 @@ const FridayPack = (props) => {
         date={date ? date : new Date()}
         mode={"date"}
         is24Hour={true}
-        display="default"
+        display='default'
         onConfirm={(date) => onChange(date)}
         onCancel={() => setShow(false)}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        cancelTextIOS='Cancel'
+        confirmTextIOS='Confirm'
       />
       {getSign ? (
         <SignatureComponent
@@ -185,181 +205,146 @@ const FridayPack = (props) => {
         />
       ) : (
         <>
-      <View
-        style={{
-          paddingTop: 30,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text style={styles.titleText}>FRIDAY PACK</Text>
-      </View>
-      <ScrollView>
-        <View style={styles.formCodnatiner}>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Main Contractor"}
-              value={contractorName}
-              onChangeText={(e) => setContractorName(e)}
-            />
+          <View
+            style={{
+              paddingTop: 30,
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+            <Text style={styles.titleText}>FRIDAY PACK</Text>
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Project"}
-              value={projectName}
-              onChangeText={(e) => setProjectName(e)}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Week Ending"}
-              value={weekEnding}
-              onChangeText={(e) => setWeekEnding(e)}
-            />
-          </View>
-          <View style={{ flexDirection: "column" }}>
-            {documentRow.map((item, index) => (
-              <View style={styles.detailsInstructionContactView} key={index}>
-                <View style={{ flexDirection: "row" }}>
-                  <View style={styles.instructionFridayView}>
-                    <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
-                      {item.title}
-                    </Text>
-                  </View>
-                  <View style={styles.checkBoxInstructionView}>
-                    <View style={styles.firstInstructionCheckBoxRow}>
-                      <View style={styles.parentCheckBox}>
-                        <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={item.no}
-                            onValueChange={() =>
-                              checkedValue("No", index, "no")
-                            }
-                          />
-                        </View>
-                        <View style={styles.rightCheckBox}>
-                          <Text style={styles.accidentText}>No</Text>
-                        </View>
+          <ScrollView>
+            <View style={styles.formCodnatiner}>
+              <View style={styles.inputFieldContainer}>
+                <TextInput style={styles.inputField} placeholder={"Main Contractor"} value={contractorName} onChangeText={(e) => setContractorName(e)} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput style={styles.inputField} placeholder={"Project"} value={projectName} onChangeText={(e) => setProjectName(e)} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput style={styles.inputField} placeholder={"Week Ending"} value={weekEnding} onChangeText={(e) => setWeekEnding(e)} />
+              </View>
+              <View style={{ flexDirection: "column" }}>
+                {documentRow.map((item, index) => (
+                  <View style={styles.detailsInstructionContactView} key={index}>
+                    <View style={{ flexDirection: "row" }}>
+                      <View style={styles.instructionFridayView}>
+                        <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>{item.title}</Text>
                       </View>
-                      <View style={styles.parentCheckBox}>
-                        <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={item.yes}
-                            onValueChange={() =>
-                              checkedValue("Yes", index, "yes")
-                            }
-                          />
-                        </View>
-                        <View style={styles.rightCheckBox}>
-                          <Text style={styles.accidentText}>Yes</Text>
-                        </View>
-                      </View>
-                      <View style={styles.parentCheckBox}>
-                        <View style={styles.leftCheckBox}>
-                          <CheckBox
-                            value={item.other}
-                            onValueChange={() =>
-                              checkedValue("other", index, "other")
-                            }
-                          />
-                        </View>
-                        <View style={styles.rightCheckBox}>
-                          <Text style={styles.accidentText}>N/A</Text>
+                      <View style={styles.checkBoxInstructionView}>
+                        <View style={styles.firstInstructionCheckBoxRow}>
+                          <View style={styles.parentCheckBox}>
+                            <View style={styles.leftCheckBox}>
+                              <CheckBox value={item.no} onValueChange={() => checkedValue("No", index, "no")} />
+                            </View>
+                            <View style={styles.rightCheckBox}>
+                              <Text style={styles.accidentText}>No</Text>
+                            </View>
+                          </View>
+                          <View style={styles.parentCheckBox}>
+                            <View style={styles.leftCheckBox}>
+                              <CheckBox value={item.yes} onValueChange={() => checkedValue("Yes", index, "yes")} />
+                            </View>
+                            <View style={styles.rightCheckBox}>
+                              <Text style={styles.accidentText}>Yes</Text>
+                            </View>
+                          </View>
+                          <View style={styles.parentCheckBox}>
+                            <View style={styles.leftCheckBox}>
+                              <CheckBox value={item.other} onValueChange={() => checkedValue("other", index, "other")} />
+                            </View>
+                            <View style={styles.rightCheckBox}>
+                              <Text style={styles.accidentText}>N/A</Text>
+                            </View>
+                          </View>
                         </View>
                       </View>
                     </View>
+                    <View style={styles.inputFieldContainer}>
+                      <TextInput
+                        style={styles.inputField}
+                        placeholder={"Comments"}
+                        value={item.comment}
+                        onChangeText={(txt) => updateCommentValue("comment", index, txt)}
+                      />
+                    </View>
                   </View>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <TextInput
-                    style={styles.inputField}
-                    placeholder={"Comments"}
-                    value={item.comment}
-                    onChangeText={(txt) =>
-                      updateCommentValue("comment", index, txt)
-                    }
-                  />
-                </View>
+                ))}
               </View>
-            ))}
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              multiline={true}
-              numberOfLines={4}
-              style={styles.inputField}
-              placeholder={"Any Further Comments"}
-              value={furtherComments}
-              onChangeText={(e) => setFurtherComments(e)}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-          <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
-                {supervisorSign ?
-                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: supervisorSign }} />
-                :<Text style={{height: 52,
-                  width: "100%",
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#96A8B2",
-                  padding: 5,
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  multiline={true}
+                  numberOfLines={4}
+                  style={styles.inputField}
+                  placeholder={"Any Further Comments"}
+                  value={furtherComments}
+                  onChangeText={(e) => setFurtherComments(e)}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
+                  {supervisorSign ? (
+                    <Image style={{ marginTop: 20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: supervisorSign }} />
+                  ) : (
+                    <Text
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}>
+                      Signature
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => showDatepicker()}
+                  style={{
+                    width: "100%",
+                    height: 52,
+                    paddingTop: 20,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                  }}>
+                  {new Date(date).toLocaleDateString()}
+                </Text>
+              </View>
+              <Text
+                style={{
+                  fontFamily: "poppins-bold",
                   fontSize: 12,
-                  color: "#96A8B2",
-                  fontFamily: "poppins-regular",paddingTop:15}}>Signature</Text>
-                }
-              </TouchableOpacity>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker()}
-              style={{
-                width: "100%",
-                height: 52,
-                paddingTop: 20,
-                fontSize: 12,
-                color: "#96A8B2",
-                fontFamily: "poppins-regular",
-                borderBottomWidth: 1,
-                borderBottomColor: "#96A8B2",
-                padding: 5,
-              }}
-            >
-              {new Date(date).toLocaleDateString()}
-            </Text>
-          </View>
-          <Text
-            style={{
-              fontFamily: "poppins-bold",
-              fontSize: 12,
-              paddingTop: 10,
-              textAlign: "center",
-            }}
-          >
-            Once completed, please file a copy in the Site Folder and send a
-            copy to our Head Office.
-          </Text>
-          <View
-            style={{
-              backgroundColor: "#000",
-              width: "100%",
-              height: 2,
-              marginBottom: 20,
-              marginTop: 20,
-            }}
-          ></View>
-          <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => fridayPackFormInsert()}
-            >
-              <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-      </>
+                  paddingTop: 10,
+                  textAlign: "center",
+                }}>
+                Once completed, please file a copy in the Site Folder and send a copy to our Head Office.
+              </Text>
+              <View
+                style={{
+                  backgroundColor: "#000",
+                  width: "100%",
+                  height: 2,
+                  marginBottom: 20,
+                  marginTop: 20,
+                }}></View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity style={styles.commonBtn} onPress={() => fridayPackFormInsert()}>
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </>
       )}
     </View>
   );
@@ -373,5 +358,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createFridayPackHandler: (contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, index) =>
     dispatch(insertFridayPackForm(contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, index)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(FridayPack);
