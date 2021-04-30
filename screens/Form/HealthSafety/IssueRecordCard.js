@@ -8,39 +8,66 @@ import {
 } from "react-native";
 import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
+import SignatureComponent from "../../../components/SignatureComponent";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const IssueCard = () => {
   const [issueArray, setIssueArray] = useState([]);
-  const [dynamicInput, setdynamicInput] = useState([]);
-  const [contractorName, setContractorName] = useState("");
-  const [projectName, setProjectName] = useState("");
-  const [nameOfOperative, setNameOfOperative] = useState("");
-  const [data, setData] = useState({
+  const [dynamicInput, setdynamicInput] = useState([{
     item: "",
     no: "",
     type: "",
-    date: "",
+    date: new Date().toLocaleDateString(),
     supervisor: "",
     sign: "",
-  });
+  }]);
+  const [contractorName, setContractorName] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [nameOfOperative, setNameOfOperative] = useState("");
+
 
   const addIssue = () => {
-    setdynamicInput((oldArray) => [...oldArray, data]);
-    setData({
+    setdynamicInput((oldArray) => [...oldArray, {
       item: "",
       no: "",
       type: "",
-      date: "",
+      date: new Date().toLocaleDateString(),
       supervisor: "",
       sign: "",
-    });
+    }]);
   };
   const updateValue = (key, index, value) => {
     let preData = [...dynamicInput];
     preData[index][key] = value;
     setdynamicInput(preData);
   };
+
+  const [signature, setSignature] = useState({
+    bool: false,
+    isSign: false,
+    index: -1,
+  });
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState({
+    isVisible: false,
+    index: -1,
+  });
+
+  
+  const onChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShow({ ...show, isVisible: false, index: -1 });
+    let copyArr = [...dynamicInput];
+    copyArr[show.index].date = currentDate.toLocaleDateString();
+    setdynamicInput(copyArr);
+  };
+
+  const showDatepicker = (index = -1) => {
+    
+    setShow({ ...show, isVisible: true, index: index });
+  };
+
   const issueRecordForm = () => {
     console.log("Main Contractor  :", contractorName);
     console.log("Project Name :", projectName);
@@ -49,6 +76,33 @@ const IssueCard = () => {
   };
   return (
     <View style={styles.mainContainer}>
+      <DateTimePickerModal
+        isVisible={show.isVisible}
+        date={date ? date : new Date()}
+        mode={"date"}
+        is24Hour={true}
+        display="default"
+        onConfirm={(date) => onChange(date)}
+        onCancel={() => setShow({ isVisible: false, index: -1 })}
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
+      />
+      {signature.bool ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+              let copydata = [...dynamicInput];
+              copydata[signature.index].sign = uri;
+              setdynamicInput(copydata);
+              setSignature({
+                ...signature.isSign,
+                isSign: false,
+                bool: false,
+                index: -1,
+              });
+            }}
+        />
+      ) : (
+        <>
       <View
         style={{
           paddingTop: 30,
@@ -222,12 +276,23 @@ const IssueCard = () => {
                   />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Date"}
-                    onChangeText={(txt) => updateValue("date", index, txt)}
-                    value={item.date}
-                  />
+                <Text
+                            onPress={() => showDatepicker(index)}
+                            style={{
+                              width:"90%",
+                              height:39,
+                               borderBottomWidth: 1,
+                               borderBottomColor: "#96A8B2",
+                               padding: 5,
+                               fontSize: 8,
+                               color: "#96A8B2",
+                               fontFamily: "poppins-regular",
+                               paddingTop: 12,
+                               marginRight:5
+                            }}
+                          >
+                            {new Date(item.date).toLocaleDateString()}
+                          </Text>
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
                   <TextInput
@@ -240,65 +305,55 @@ const IssueCard = () => {
                   />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Signature"}
-                    onChangeText={(txt) => updateValue("sign", index, txt)}
-                    value={item.sign}
-                  />
+                <TouchableOpacity
+                          onPress={() =>
+                            setSignature({
+                              bool: true,
+                              isSign: false,
+                              isSupervisor:true,
+                              index: index
+                            })
+                          }
+                          style={[
+                            styles.inputHarmFullBodyContainer,
+                            {
+                              width:"100%",
+                              justifyContent:"center",
+                              alignItems:"center"
+                            },
+                          ]}
+                        >
+                          {item.sign?
+                          <Image
+                            source={{ uri: item.sign }}
+                            style={{
+                              marginTop:10,
+                              height: 30,
+                              width: 30,
+                              backgroundColor: "gray",
+                            }}
+                          />
+                          :
+                          <Text
+                          style={{
+                            width:"100%",
+                           height:39,
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 12,
+                            marginRight:5
+                           
+                          }}
+                        >Sign</Text>
+}
+                        </TouchableOpacity>
                 </View>
               </View>
             ))}
-            <View style={styles.tableBody}>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Item"}
-                  onChangeText={(txt) => setData({ ...data, item: txt })}
-                  value={data.item}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"No"}
-                  onChangeText={(txt) => setData({ ...data, no: txt })}
-                  value={data.no}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Type"}
-                  onChangeText={(txt) => setData({ ...data, type: txt })}
-                  value={data.type}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Date"}
-                  onChangeText={(txt) => setData({ ...data, date: txt })}
-                  value={data.date}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Supervisor"}
-                  onChangeText={(txt) => setData({ ...data, supervisor: txt })}
-                  value={data.supervisor}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Signature"}
-                  onChangeText={(txt) => setData({ ...data, sign: txt })}
-                  value={data.sign}
-                />
-              </View>
-            </View>
             <Text
               style={{
                 fontSize: 12,
@@ -330,6 +385,8 @@ const IssueCard = () => {
           </View>
         </View>
       </ScrollView>
+      </>
+      )}
     </View>
   );
 };

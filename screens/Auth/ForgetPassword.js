@@ -33,7 +33,7 @@ const ForgotPassword = (props) => {
   const postEmailLink = () => {
     try {
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if(showEmail==false){
+        if(email!=""){
             if (regEmail.test(email) === false) {
                 alert("Email is Not Correct");
                 setEmail(email);
@@ -45,6 +45,9 @@ const ForgotPassword = (props) => {
                 props.postEmailLink(email);
                 setEmailShow(true)
             }
+        }
+        else{
+          alert("Please Enter Emial Carefully !");
         }
     } catch (err) {
       console.log(err.message);
@@ -66,8 +69,9 @@ const ForgotPassword = (props) => {
     let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     console.log("Password",password,regPass.test(password) === false)
       console.log("Reset Password",resetPassword,regPass.test(resetPassword) === false)
+      if(password !="" && resetPassword!=""){
     if (regPass.test(password) === false || regPass.test(resetPassword) === false) {
-        alert("Password is Not Correct");
+      alert("Password / Reset Passsword is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
         setPassword(password);
         setResetPassword(resetPassword)
         return false;
@@ -83,6 +87,10 @@ const ForgotPassword = (props) => {
           return false;
         }
     }
+  }
+  else{
+    alert("Please Enter Password & Reset Password CareFully !")
+  }
   }
   /* Email Send & recive Code */
   useEffect(() => {
@@ -133,7 +141,7 @@ const ForgotPassword = (props) => {
           <Image style={styles.logoImage} source={logo} />
         </View>
         <Text style={styles.mainBannerText}>
-          <Text style={styles.boldText}>Top Dec Decorating </Text> App
+          <Text style={styles.boldText}>Top Dec </Text> Decorating
         </Text>
       </View>
 

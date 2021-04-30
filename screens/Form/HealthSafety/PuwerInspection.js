@@ -9,9 +9,14 @@ import {
 import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import SignatureComponent from "../../../components/SignatureComponent";
+
 
 var plus = require("../../../assets/authScreen/plus.png");
-const PuwerInspection = () => {
+const PuwerInspection = (props) => {
+  const { navigation, token, isScope, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [puwerArrayList, setPuwerArrayList] = useState([
     {
       title: "Step ladders",
@@ -23,6 +28,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 2",
       equpment: "",
       location: "",
@@ -31,6 +37,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 3",
       equpment: "",
       location: "",
@@ -48,6 +55,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 2",
       equpment: "",
       location: "",
@@ -65,6 +73,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 2",
       equpment: "",
       location: "",
@@ -73,6 +82,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 3",
       equpment: "",
       location: "",
@@ -81,6 +91,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 4",
       equpment: "",
       location: "",
@@ -89,6 +100,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 5",
       equpment: "",
       location: "",
@@ -97,6 +109,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 6",
       equpment: "",
       location: "",
@@ -114,6 +127,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "No. 2",
       equpment: "",
       location: "",
@@ -159,6 +173,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "Pasting table, wallpaper scissors",
       equpment: "",
       location: "",
@@ -167,6 +182,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "Paint mixer, extension/sanding poles",
       equpment: "",
       location: "",
@@ -174,7 +190,7 @@ const PuwerInspection = () => {
       condition: "",
       inspectionDate: new Date().toLocaleDateString(),
     },
-    {
+    {title: "",
       subTitle: "Stripping knife, window scraper",
       equpment: "",
       location: "",
@@ -183,6 +199,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "Caulker, caulking gun",
       equpment: "",
       location: "",
@@ -191,6 +208,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "PPE",
       equpment: "",
       location: "",
@@ -199,6 +217,7 @@ const PuwerInspection = () => {
       inspectionDate: new Date().toLocaleDateString(),
     },
     {
+      title: "",
       subTitle: "Skuttle kits & trays",
       equpment: "",
       location: "",
@@ -214,6 +233,7 @@ const PuwerInspection = () => {
   const [projectName, setProjectName] = useState("");
   const [furtherComment, setFurtherComment] = useState("");
   const [supervisorSign, setSupervisorSign] = useState("");
+  const [getSign, setGetSign] = useState(false);
   const [show, setShow] = useState({
     isVisible: false,
     index: -1,
@@ -273,6 +293,15 @@ const PuwerInspection = () => {
         cancelTextIOS="Cancel"
         confirmTextIOS="Confirm"
       />
+      {getSign ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            setSupervisorSign(uri);
+            setGetSign(false);
+          }}
+        />
+      ) : (
+        <>
       <View
         style={{
           paddingTop: 30,
@@ -402,7 +431,7 @@ const PuwerInspection = () => {
                 </View>
               </View>
               {puwerArrayList.map((item, index) =>
-                item.title ? (
+                item.title !="" ? (
                   <View key={index}>
                     <View>
                       <Text
@@ -573,12 +602,19 @@ const PuwerInspection = () => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Supervisor (Print & Sign)"}
-                  value={supervisorSign}
-                  onChangeText={(e) => setSupervisorSign(e)}
-                />
+              <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
+                {supervisorSign ?
+                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: supervisorSign }} />
+                :<Text style={{height: 52,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#96A8B2",
+                  padding: 5,
+                  fontSize: 12,
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",paddingTop:15}}>Supervisor Sign / Print</Text>
+                }
+              </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
                 <Text
@@ -631,6 +667,8 @@ const PuwerInspection = () => {
           </View>
         </View>
       </ScrollView>
+      </>
+      )}
     </View>
   );
 };

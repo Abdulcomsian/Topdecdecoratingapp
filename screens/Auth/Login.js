@@ -14,12 +14,62 @@ var lock=require('../../assets/authScreen/lock.png')
 const LoginScreen = (props) =>{
     const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
    // const dispatch = useDispatch()
-    const [email, setEmail] = useState('admin@accrualgroup.com')
-    const [password, setPassword] = useState('asdfghjkl')
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
-    const postSignInHandler = ()=>{
+    const postSignInHandler = (type)=>{
         try{
-            props.loginHandler(email,password);
+            if(type=="admin"){
+                let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                if(email!="" && password!=""){
+                    if (regEmail.test(email) === false) {
+                        alert("Email is Not Correct");
+                        setEmail(email)
+                        return false;
+                    }
+                    else{
+                        setEmail(email)
+                        alert("Email is Correct");
+                        try{
+                            props.loginHandler(email,password);
+                        } catch(err){
+                            alert(err.message)
+                        }
+                    }
+                }
+                else{
+                    alert("Please Enter Login Credential Carefully !")
+                }
+            }
+            else{
+            let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+            if(email!="" && password!="")
+            {
+                if (regEmail.test(email) === false) {
+                    alert("Email is Not Correct");
+                    setEmail(email)
+                    return false;
+                }
+                else{
+                    setEmail(email)
+                    alert("Email is Correct");
+                    if(regPass.test(password) === false){
+                        alert("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
+                        setPassword(password)
+                        return false;
+                    }
+                    else{
+                        alert("Password is Correct");
+                        props.loginHandler(email,password);
+                    }
+                }
+            }
+            else{
+                alert("Please Enter Login Credential Carefully !")
+            }
+        }
+            
         }
           catch(err){
             alert(err.message)
@@ -46,7 +96,7 @@ const LoginScreen = (props) =>{
             alert(isLoginMsg)
         }
        }
-    },[isLoginMsg])
+    },[isLogin,isLoginMsg])
     
        return(
             <View style={styles.mainContainer}>
@@ -55,7 +105,7 @@ const LoginScreen = (props) =>{
                     <View style={styles.logoImageContainer}>
                         <Image style={styles.logoImage} source={logo}/>
                     </View>
-                    <Text style={styles.mainBannerText}><Text style={styles.boldText}>Top Dec Decorating </Text> App</Text>
+                    <Text style={styles.mainBannerText}><Text style={styles.boldText}>Top Dec  </Text> Decorating</Text>
                 </View>
                 <ScrollView>
                 <View style={styles.formConatiner}>
@@ -87,7 +137,7 @@ const LoginScreen = (props) =>{
                                 />
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.loginBtn} onPress={() => postSignInHandler()}>
+                    <TouchableOpacity style={styles.loginBtn} onPress={() => postSignInHandler("admin")}>
                         <Text style={styles.loginText}>Login</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('SelectSummary')}>
@@ -126,15 +176,14 @@ const styles = StyleSheet.create({
         marginTop:80,
     },
     logoContainer:{
-        height:"40%",
         width:'100%',
         justifyContent:'center',
         alignItems:'center',
+        height:"40%"
     },
     logoImageContainer:{
         justifyContent:'center',
         width:'100%',
-        height:150,
         alignItems:'center',
         textAlign:'center',
     },
@@ -142,12 +191,11 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     formConatiner:{
-        height:'40%',
         width:'100%',
         padding:30,
         justifyContent:'center',
         alignItems:'center',
-        marginTop:80,
+
     },
     inputContainer:{
         height:60,
@@ -155,9 +203,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         marginBottom:30
     },  
-    boldText:{
-        
-    },
     mainBannerText:{
         fontSize:25,
         marginTop:60,

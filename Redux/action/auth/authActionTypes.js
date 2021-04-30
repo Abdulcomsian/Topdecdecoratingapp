@@ -168,31 +168,42 @@ export const searchJob = (reference_number, date, token) => {
     }
   };
 };
-export const createDecorator = (firstname, lastname, id_card, cscs_front, cscs_back, email, phone, password, token) => {
+export const createDecorator = ( firstname,
+  lastname,
+  email,
+  phone,
+  password,
+  token) => {
   return async (dispatch, getState) => {
     try {
       console.log("firstname :", firstname);
       console.log("lastname :", lastname);
-      console.log("id_card :", id_card);
-      console.log("cscs_front :", cscs_front);
-      console.log("cscs_back :", cscs_back);
       console.log("email :", email);
       console.log("phone :", phone);
       console.log("password :", password);
       console.log("Token :", token);
 
-      const body = { email,password,firstname,phone,id_card,lastname,cscs_front,cscs_back };
+      const body = { email,password,firstname,phone,lastname };
       const request = await axios(base_url + "admin/create/decorator", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
-          'content-type': 'multipart/form-data',
-          ///'Content-Type': 'application/x-www-form-urlencoded',
         },
         data: body,
       });
-      const response = request;
+      const response = request.data;
       console.log("API Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.CREATE_DECORATOR_SUCSESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.CREATE_DECORATOR_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       console.log("API Error :", err.message);
       throw new Error(err.message);
@@ -214,6 +225,17 @@ export const searchDecorator = (id, token) => {
       });
       const response = request.data;
       console.log(response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.SEARCH_DECORATOR_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.SEARCH_DECORATOR_FAIL,
+          payload: response,
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -1307,6 +1329,170 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
       } else {
         dispatch({
           type: Actions.INSERT_HOUSE_KEEPING_FORM_FAIL,
+          payload: response,
+        });
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertMethodStatementForm = (title, contractor, project, ref, jobSummary, supervisor, supervisor_sign, task_id, tab_id, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+    //   console.log("Statement Title  :", title);
+    // console.log("Main Contractor  :", contractor);
+    // console.log("Project Name :", project);
+    // console.log("Ref No :", ref);
+    // console.log("Name Of Supervisor :", supervisor);
+    // console.log("Supervisor Sign :", supervisor_sign);
+    // console.log("Array Data :", jobSummary);
+    // console.log("Job ID :", task_id);
+    // console.log("Tab Name :", tab_id);
+    // console.log("Token :", token);
+
+
+      const body = {
+        title,
+        contractor,
+        project,
+        ref,
+        supervisor,
+        supervisor_sign,
+        task_id,
+        tab_id,
+        jobSummary
+      };
+
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/methodStatement", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_METHOD_STATEMENT_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_METHOD_STATEMENT_FORM_FAIL,
+          payload: response,
+        });
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertOnSiteDecorationForm = (contractor, project, jobSummary, task_id, tab_id, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+    //   console.log("Statement Title  :", title);
+    // console.log("Main Contractor  :", contractor);
+    // console.log("Project Name :", project);
+    // console.log("Ref No :", ref);
+    // console.log("Name Of Supervisor :", supervisor);
+    // console.log("Supervisor Sign :", supervisor_sign);
+    // console.log("Array Data :", jobSummary);
+    // console.log("Job ID :", task_id);
+    // console.log("Tab Name :", tab_id);
+    // console.log("Token :", token);
+
+
+      const body = {
+        contractor,
+        project,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
+
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/top_decorting", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+          payload: response,
+        });
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertRecordOfProject = (surname,
+  mobile,
+  firstname,
+  job,
+  address,
+  cscscard,
+  detail,
+  nextofkin,
+  relation,
+  kincontact,
+  contractor,
+  project,
+  recordArray,
+  jobID,
+  tabId,
+  token,
+  index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Statement Title  :", title);
+    console.log("Main Contractor  :", contractor);
+    console.log("Project Name :", project);
+    console.log("Ref No :", ref);
+    console.log("Name Of Supervisor :", supervisor);
+    console.log("Supervisor Sign :", supervisor_sign);
+    console.log("Array Data :", jobSummary);
+    console.log("Job ID :", task_id);
+    console.log("Tab Name :", tab_id);
+    console.log("Token :", token);
+
+
+      const body = {
+        contractor,
+        project,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
+
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/top_decorting", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        dispatch({
+          type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
           payload: response,
         });
       }

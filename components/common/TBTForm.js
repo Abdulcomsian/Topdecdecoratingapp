@@ -8,6 +8,7 @@ const TBTForm = (props) => {
   console.log(data);
   const { mainContractor, project, meeting, date, comments, attendess } = data;
   const [openData, setOpenDate] = React.useState(false);
+
   return (
     <>
       <DateTimePicker
@@ -73,7 +74,7 @@ const TBTForm = (props) => {
                 {index}
               </Text>
               <View style={styles.inputOprativesBodyContainer}>
-                <TextInput style={styles.bodyTextInput} placeholder={"Print"} />
+                <TextInput style={styles.bodyTextInput} placeholder={"Print"}  onChangeText={(txt) => onChangeData("print", txt)} />
               </View>
               <TouchableOpacity
                 onPress={() => getSignature(index)}

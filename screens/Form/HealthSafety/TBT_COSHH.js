@@ -9,6 +9,8 @@ import {
 import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import TBTForm from "../../../components/common/TBTForm";
+import SignatureComponent from "../../../components/SignatureComponent";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -58,6 +60,10 @@ const TBTCOSHH = () => {
         "•	COSHH risk assessments must be reviewed on a regular basis to ensure their relevance to your working environment and processes.",
     },
   ]);
+  const [openSign, setOpenSign] = useState({
+    index: -1,
+    bool: false,
+  });
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const updateValue = (key, index, value) => {
@@ -86,6 +92,14 @@ const TBTCOSHH = () => {
     console.log("Comments :",comment)
     console.log("Array :",attendenceArray)
   }
+  const [data, setData] = useState({
+    mainContractor: "",
+    project: "",
+    meeting: "",
+    date: null,
+    comments: "",
+    attendess: [],
+  });
   return (
     <View style={styles.mainContainer}>
         <DateTimePickerModal
@@ -99,6 +113,17 @@ const TBTCOSHH = () => {
             cancelTextIOS="Cancel"
             confirmTextIOS="Confirm"
           />
+           {openSign.bool ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            let copydata = [...data.attendess];
+            copydata[openSign.index].sign = uri;
+            setData({ ...data, copydata });
+            setOpenSign({ bool: false, index: -1 });
+          }}
+        />
+      ) : (
+        <>
       <View style={styles.imageView}>
         <Image source={mainImage} style={styles.bannerImage} />
       </View>
@@ -147,7 +172,7 @@ const TBTCOSHH = () => {
               )
             )}
           </View>
-          <View style={styles.inputFieldContainer}>
+          {/* <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
               placeholder={"Main Contractor"}
@@ -193,8 +218,15 @@ const TBTCOSHH = () => {
           </View>
           <Text style={{ fontFamily: "poppins-bold", fontSize: 16 }}>
             Attendees
-          </Text>
-          <View style={styles.tableViewContainer}>
+          </Text> */}
+          <TBTForm
+                data={data}
+                getSignature={(index) => setOpenSign({ ...openSign, bool: true, index })}
+                addAttendence={() => setData({ ...data, attendess: [...data.attendess, { print: "", sign: "" }] })}
+                onChangeData={(key, value) => setData({ ...data, [key]: value })}
+                
+              />
+          {/* <View style={styles.tableViewContainer}>
             <View style={styles.tableHeader}>
               <View style={styles.headerWitnessTitleView}>
                 <Text style={styles.headerTitle}>Print</Text>
@@ -251,7 +283,7 @@ const TBTCOSHH = () => {
                 </View>
               ))}
             </View>
-          </View>
+          </View> */}
           <Text
             style={{
               fontFamily: "poppins-bold",
@@ -332,6 +364,8 @@ const TBTCOSHH = () => {
           </View>
         </View>
       </ScrollView>
+      </>
+      )}
     </View>
   );
 };

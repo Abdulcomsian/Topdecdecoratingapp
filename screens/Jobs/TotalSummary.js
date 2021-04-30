@@ -58,7 +58,7 @@ const TotalSummary = ( props ) =>{
             </View>
             <View style={{padding:30}}>
             {totalSummary.map((item,index)=>(
-                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("SelectProject",{jobID: jobId})} key={index}>
+                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("SelectProject",{jobID: jobId,type:item.name2})} key={index}>
                     <Text style={styles.commonText}>{item.total}</Text>
                     <Text style={styles.commonText}>{item.name2}</Text>
                     <Image  source={rightArrow}/>

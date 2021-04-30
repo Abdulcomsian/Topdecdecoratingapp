@@ -3,6 +3,7 @@ import { View,Image,TouchableOpacity,TextInput,ScrollView,CheckBox} from 'react-
 import {Text} from 'native-base';
 import styles from '../../../assets/css/styles'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import SignatureComponent from "../../../components/SignatureComponent";
 
 var mainImage=require('../../../assets/authScreen/Accurate-daywork-sheet-docx.png')
 var work=require('../../../assets/authScreen/work.png')
@@ -141,6 +142,11 @@ const DailyBreifingForm = () =>{
         console.log("Operative Array :",operativeArray)
         console.log("Hazrd Array :",hazrdArray)
       }
+      const [signature, setSignature] = useState({
+        bool: false,
+        isSign: false,
+        index: -1,
+      });
     return(
         <View style={styles.mainContainer}>
             <DateTimePickerModal
@@ -154,6 +160,22 @@ const DailyBreifingForm = () =>{
                 cancelTextIOS="Cancel"
                 confirmTextIOS="Confirm"
             />
+            {signature.bool ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+              let copydata = [...operativeArray];
+              copydata[signature.index].sign = uri;
+              setOperativeArray(copydata);
+              setSignature({
+                ...signature.isSign,
+                isSign: false,
+                bool: false,
+                index: -1,
+              });
+            }}
+        />
+      ) : (
+        <>
             <View style={{paddingTop:30,justifyContent:'center',alignItems:'center'}}>
                 <Text style={styles.titleText}>Top Dec’s Daily Briefing Form - SAFE START</Text>
             </View>
@@ -344,12 +366,51 @@ const DailyBreifingForm = () =>{
                                                 />
                                             </View>
                                             <View style={styles.inputOprativesBodyContainer}>
-                                                <TextInput
-                                                    style={styles.bodyTextInput}
-                                                    placeholder={"ACTION"}
-                                                    value={item.sign}
-                      onChangeText={(txt) => updateOperativeValue("sign", index, txt)}
-                                                />
+                                            <TouchableOpacity
+                          onPress={() =>
+                            setSignature({
+                              bool: true,
+                              index: index,
+                              isSign: true,
+                            })
+                          }
+                          style={[
+                            styles.inputHarmFullBodyContainer,
+                            {
+                              justifyContent: "center",
+                              alignItems: "center",
+                              width:"100%"
+                            },
+                          ]}
+                        >
+                          {item.sign ?
+                          <Image
+                            source={{ uri: item.sign }}
+                            style={{
+                              height: 30,
+                              width: 30,
+                              backgroundColor: "gray",
+                              justifyContent:"center"
+                            }}
+                          />
+                          :
+                          <Text
+                          style={{
+                            width:"90%",
+                           height:39,
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 8,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 12,
+                            marginRight:5
+                           
+                          }}
+                        >Sign</Text>
+}
+                        </TouchableOpacity>
                                             </View>
                                         </View>
                                     ))}
@@ -378,6 +439,8 @@ const DailyBreifingForm = () =>{
           </View>
                 </View>
             </ScrollView>
+            </>
+      )}
         </View>
     )
 

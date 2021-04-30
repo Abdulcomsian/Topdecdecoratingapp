@@ -30,6 +30,7 @@ const ListSupervisor = (props) => {
         );
         const response = await request.data;
         if (response.success) {
+          console.log("supervisor Data :",response.data.user)
           setSupervisorData(response.data.user);
           setLoading(false);
           setShowView(true);

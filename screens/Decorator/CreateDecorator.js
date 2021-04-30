@@ -13,7 +13,7 @@ import { createDecorator } from "../../Redux/action/auth/authActionTypes";
 import * as ImagePicker from "expo-image-picker";
 
 const CreateDecorataor = (props) => {
-  const { navigation } = props;
+  const { navigation,token, createDecorator, createDecoratorMsg } = props;
   const [photoID, setPhotoID] = useState(null);
   const [cscsFront, setCscsFront] = useState(null);
   const [cscsBack, setCscsBack] = useState(null);
@@ -22,11 +22,11 @@ const CreateDecorataor = (props) => {
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [token,setToken]=useState(props.token)
   const postCreateDecortor = () => {
    
-    console.log(email);
+   
     try {
+      if(name!="", lastName!="", email!="", number!="", password!=""){
       let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
       let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
       if (regEmail.test(email) === false) {
@@ -50,18 +50,21 @@ const CreateDecorataor = (props) => {
           // console.log(frmData)
           // console.log("Password is Correct");
 
-          let localUri = photoID.localUri;
-          let filename = localUri.split('/').pop();
-          let match = /\.(\w+)$/.exec(filename);
-          let type = match ? `image/${match[1]}` : `image`;
-           let formData = new FormData();
-              formData.append('photo', { uri: localUri, name: filename, type });
+          // let localUri = photoID.localUri;
+          // let filename = localUri.split('/').pop();
+          // let match = /\.(\w+)$/.exec(filename);
+          // let type = match ? `image/${match[1]}` : `image`;
+          //  let formData = new FormData();
+          //     formData.append('photo', { uri: localUri, name: filename, type });
+          console.log("firstname :", name);
+      console.log("lastname :", lastName);
+      console.log("email :", email);
+      console.log("phone :", number);
+      console.log("password :", password);
+      console.log("Token :", token);
           props.createDecoratorHandler(
             name,
             lastName,
-            formData,
-            cscsFront.localUri,
-            cscsBack.localUri,
             email,
             number,
             password,
@@ -72,6 +75,9 @@ const CreateDecorataor = (props) => {
           return true;
         }
       }
+    }else{
+      alert("Please Insert All Fields CareFully !")
+    }
      
     } catch (err) {
       console.log(err.message);
@@ -125,7 +131,20 @@ const CreateDecorataor = (props) => {
       setCscsBack({ localUri: pickerResult.uri });
     }
   };
-
+  React.useEffect(()=>{
+    if(createDecorator){
+      console.log("here")
+        
+        if(createDecoratorMsg){
+            props.navigation.navigate('MainScreen')
+        }
+    }
+    else{
+        if(createDecoratorMsg){
+            alert(createDecoratorMsg)
+        }
+    }
+},[createDecorator,createDecoratorMsg])
   return (
     <View style={styles.mainContainer}>
       <View style={styles.titleContainer}>
@@ -279,30 +298,26 @@ const CreateDecorataor = (props) => {
 };
 const mapStateToProps = (state) => ({
   token : state.auth.token,
+  createDecorator : state.auth.createDecorator,
+  createDecoratorMsg : state.auth.createDecoratorMsg
 });
 const mapDispatchToProps = (dispatch) => ({
   createDecoratorHandler: (
     name,
-    lastName,
-    frmData,
-    cscsFront,
-    cscsBack,
-    email,
-    pass,
-    phone,
-    token
+            lastName,
+            email,
+            number,
+            password,
+            token
   ) =>
     dispatch(
       createDecorator(
         name,
-        lastName,
-        frmData,
-        cscsFront,
-        cscsBack,
-        email,
-        pass,
-        phone,
-        token
+            lastName,
+            email,
+            number,
+            password,
+            token
       )
     ),
 });

@@ -4,6 +4,8 @@ import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
+import { insertScopeForm } from "../../../Redux/action/auth/authActionTypes";
+import { connect } from "react-redux";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 const LadderCheckList = (props) => {
@@ -562,4 +564,13 @@ const LadderCheckList = (props) => {
     </View>
   );
 };
-export default LadderCheckList;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isScope: state.auth.isScope,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+});
+export default connect(mapStateToProps, mapDispatchToProps)(LadderCheckList);
+

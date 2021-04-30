@@ -161,7 +161,7 @@ inputEquipmentBodyContainer:{
     width:"11.1%"
 },
 inputInventoryBodyContainer:{
-    width:"12.5%"
+    width:"11.1%"
 },
 footerView:{
     marginTop:20

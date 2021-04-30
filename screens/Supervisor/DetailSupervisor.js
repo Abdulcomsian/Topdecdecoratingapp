@@ -47,9 +47,9 @@ const SupervisorDetails = (props) => {
                 }
               );
               const response = await request.data;
-              //console.log(response);
+              console.log(response);
               if (response.success == true) {
-                  // 
+                console.log(response);
                 setSupervisorData(response.data.user);
                 setLoading(false);
               } else {

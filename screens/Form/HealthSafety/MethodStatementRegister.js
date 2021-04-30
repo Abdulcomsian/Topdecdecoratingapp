@@ -8,9 +8,16 @@ import {
 } from "react-native";
 import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
+import SignatureComponent from "../../../components/SignatureComponent";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { connect } from "react-redux";
+import { insertMethodStatementForm } from "../../../Redux/action/auth/authActionTypes";
 
 var plus = require("../../../assets/authScreen/plus.png");
-const MethodStatement = () => {
+const MethodStatement = (props) => {
+  const { navigation, token, isSuccess, isSuccessMsg, isJobId, isMethod } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [statementArray, setStatementArray] = useState([]);
   const [statementTitle, setStatementTitle] = useState("");
   const [contractorName, setContractorName] = useState("");
@@ -18,36 +25,110 @@ const MethodStatement = () => {
   const [refNo, setRefNo] = useState("");
   const [supervisorName, setSupervisorName] = useState("");
   const [supervisorSignature, setSupervisorSignature] = useState("");
-  const [dynamicInput, setdynamicInput] = useState([]);
-  const [data, setData] = useState({
+  const [dynamicInput, setdynamicInput] = useState([{
     name: "",
-        sign: "",
-        company: "",
-        date: "",
+    signature: "",
+        comapany: "",
+        date: new Date().toLocaleDateString(),
         translation: "",
-        translator: "",
+        translatore: "",
+  }]);
+
+  const addStatement = () => {setdynamicInput((oldArray) => [...oldArray, {
+    name: "",
+    signature: "",
+        comapany: "",
+        date: new Date().toLocaleDateString(),
+        translation: "",
+        translatore: "",
+  }]);
+  };
+  const [signature, setSignature] = useState({
+    bool: false,
+    isSign: false,
+    isSupervisor:false,
+    index: -1,
   });
-  const addStatement = () => {setdynamicInput((oldArray) => [...oldArray, data]);
-    setData({
-        name: "",
-        sign: "",
-        company: "",
-        date: "",
-        translation: "",
-        translator: "",
-    });
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState({
+    isVisible: false,
+    index: -1,
+  });
+
+  
+  const onChange = (selectedDate) => {
+    const currentDate = selectedDate;
+    setShow({ ...show, isVisible: false, index: -1 });
+    let copyArr = [...dynamicInput];
+    copyArr[show.index].date = currentDate.toLocaleDateString();
+    setdynamicInput(copyArr);
+  };
+
+  const showDatepicker = (index = -1) => {
+    
+    setShow({ ...show, isVisible: true, index: index });
+  };
+
+  const updateValue = (key, index, value) => {
+    let preData = [...dynamicInput];
+    preData[index][key] = value;
+    setdynamicInput(preData);
   };
   const statementRegisterForm = () =>{
-    console.log("Statement Title  :", statementTitle);
-    console.log("Main Contractor  :", contractorName);
-    console.log("Project Name :", projectName);
-    console.log("Ref No :", refNo);
-    console.log("Name Of Supervisor :", supervisorName);
-    console.log("Supervisor Sign :", supervisorSignature);
-    console.log("Array Data :", dynamicInput);
+    
+    try{
+      if (statementTitle != "" && contractorName != "" && projectName != "" && refNo != "" && dynamicInput != "" && supervisorName!=="" && supervisorSignature !== "") {
+        props.createMethodStateMentHandler(statementTitle, contractorName, projectName, refNo, dynamicInput, supervisorName, supervisorSignature, jobID, tabId, token, props.route.params?.index);
+      
+      } else {
+        alert("Please Insert All Fields CareFully !");
+        return false;
+      }
+      
+    } catch(err){
+
+    }
   }
   return (
     <View style={styles.mainContainer}>
+       <DateTimePickerModal
+        isVisible={show.isVisible}
+        date={date ? date : new Date()}
+        mode={"date"}
+        is24Hour={true}
+        display="default"
+        onConfirm={(date) => onChange(date)}
+        onCancel={() => setShow({ isVisible: false, index: -1 })}
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
+      />
+      {signature.bool ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+              let copydata = [...dynamicInput];
+              if(signature.isSign){
+              copydata[signature.index].signature = uri;
+              setdynamicInput(copydata);
+              setSignature({
+                ...signature.isSign,
+                isSign: false,
+                bool: false,
+                index: -1,
+                isSupervisor: {...dynamicInput.isSupervisor}
+              });
+            } else{
+              setSupervisorSignature(uri)
+              setSignature({
+                ...signature.isSupervisor,
+                isSign: false,
+                bool: false,
+                isSupervisor: {...dynamicInput.isSupervisor},
+                index: -1,
+              })
+          }}}
+        />
+      ) : (
+        <>
       <View
         style={{
           paddingTop: 30,
@@ -154,26 +235,79 @@ const MethodStatement = () => {
                   />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Signature"}
-                    onChangeText={(txt) => updateValue("sign", index, txt)}
-                    value={item.sign}
-                  />
+                <TouchableOpacity
+                          onPress={() =>
+                            setSignature({
+                              bool: true,
+                              index: index,
+                              isSign: true,
+                              isSupervisor:false
+                            })
+                          }
+                          style={[
+                            styles.inputHarmFullBodyContainer,
+                            {
+                              justifyContent: "center",
+                              alignItems: "center",
+                              width:"100%"
+                            },
+                          ]}
+                        >
+                          {item.signature ?
+                          <Image
+                            source={{ uri: item.signature }}
+                            style={{
+                              height: 30,
+                              width: 30,
+                              backgroundColor: "gray",
+                              justifyContent:"center"
+                            }}
+                          />
+                          :
+                          <Text
+                          style={{
+                            width:"90%",
+                           height:39,
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 8,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 12,
+                            marginRight:5
+                           
+                          }}
+                        >Sign</Text>
+}
+                        </TouchableOpacity>
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
                   <TextInput
                     style={styles.bodyTextInput}
                     placeholder={"Company"}
-                    onChangeText={(txt) => updateValue("company", index, txt)}
-                    value={item.company}
+                    onChangeText={(txt) => updateValue("comapany", index, txt)}
+                    value={item.comapany}
                   />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Date"}
-                  />
+                <Text
+                            onPress={() => showDatepicker(index)}
+                            style={{
+                              width:"90%",
+                              height:39,
+                               borderBottomWidth: 1,
+                               borderBottomColor: "#96A8B2",
+                               padding: 5,
+                               fontSize: 8,
+                               color: "#96A8B2",
+                               fontFamily: "poppins-regular",
+                               paddingTop: 12,
+                               marginRight:5
+                            }}
+                          >
+                            {new Date(item.date).toLocaleDateString()}
+                          </Text>
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
                   <TextInput
@@ -186,63 +320,13 @@ const MethodStatement = () => {
                 <View style={styles.inputHarmFullBodyContainer}>
                   <TextInput
                     style={styles.bodyTextInput}
-                    placeholder={"Translator"}
-                    onChangeText={(txt) => updateValue("translator", index, txt)}
-                    value={item.translator}
+                    placeholder={"translatore"}
+                    onChangeText={(txt) => updateValue("translatore", index, txt)}
+                    value={item.translatore}
                   />
                 </View>
               </View>
             ))}
-            <View style={styles.tableBody}>
-                <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Name"}
-                    onChangeText={(txt) => setData({ ...data, name: txt })}
-                    value={data.name}
-                  />
-                </View>
-                <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Signature"}
-                    onChangeText={(txt) => setData({ ...data, sign: txt })}
-                    value={data.sign}
-                  />
-                </View>
-                <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Company"}
-                    onChangeText={(txt) => setData({ ...data, company: txt })}
-                    value={data.company}
-                  />
-                </View>
-                <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Date"}
-                    onChangeText={(txt) => setData({ ...data, date: txt })}
-                    value={data.date}
-                  />
-                </View>
-                <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Yes/No"}
-                    onChangeText={(txt) => setData({ ...data, translation: txt })}
-                    value={data.translation}
-                  />
-                </View>
-                <View style={styles.inputHarmFullBodyContainer}>
-                  <TextInput
-                    style={styles.bodyTextInput}
-                    placeholder={"Translator"}
-                    onChangeText={(txt) => setData({ ...data, translator: txt })}
-                    value={data.translator}
-                  />
-                </View>
-              </View>
             <View style={styles.inputFieldContainer}>
               <TextInput
                 style={styles.inputField}
@@ -252,12 +336,49 @@ const MethodStatement = () => {
               />
             </View>
             <View style={styles.inputFieldContainer}>
-              <TextInput
-                style={styles.inputField}
-                placeholder={"Signature"}
-                value={supervisorSignature}
-                onChangeText={(e) => setSupervisorSignature(e)}
-              />
+            <TouchableOpacity
+                          onPress={() =>
+                            setSignature({
+                              bool: true,
+                              isSign: false,
+                              isSupervisor:true
+                            })
+                          }
+                          style={[
+                            styles.inputHarmFullBodyContainer,
+                            {
+                              width:"100%"
+                            },
+                          ]}
+                        >
+                          {supervisorSignature?
+                          <Image
+                            source={{ uri: supervisorSignature }}
+                            style={{
+                              marginTop:10,
+                              height: 100,
+                              width: 100,
+                              backgroundColor: "gray",
+                            }}
+                          />
+                          :
+                          <Text
+                          style={{
+                            width:"100%",
+                           height:39,
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 12,
+                            marginRight:5
+                           
+                          }}
+                        >Supervisor Sign</Text>
+}
+                        </TouchableOpacity>
             </View>
             <Text
               style={{
@@ -290,7 +411,19 @@ const MethodStatement = () => {
           </View>
         </View>
       </ScrollView>
+      </>
+      )}
     </View>
   );
 };
-export default MethodStatement;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isMethod: state.auth.isMethod,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createMethodStateMentHandler: (statementTitle, contractorName, projectName, refNo, dynamicInput, supervisorName, supervisorSignature, jobID, tabId, token, index) =>
+    dispatch(insertMethodStatementForm(statementTitle, contractorName, projectName, refNo, dynamicInput, supervisorName, supervisorSignature, jobID, tabId, token, index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(MethodStatement);

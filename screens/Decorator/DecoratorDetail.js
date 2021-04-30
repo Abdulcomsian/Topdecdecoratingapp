@@ -8,6 +8,7 @@ import axios from "axios";
 var rightArrow=require('../../assets/authScreen/right.png')
 const DecoratorDetails = (props) =>{
     const { navigation } = props;
+    const [decoratorID, setDEcoratorID] = useState(props.route.params)
     const [role,setRole] = useState(props.route.params.role);
     const[check,setCheck]=useState({
         approved:true,
@@ -74,43 +75,43 @@ const DecoratorDetails = (props) =>{
           setCscsBack({ localUri: pickerResult.uri });
         }
       };
-    // const id = props.route.params.id;
-    // const token = props.route.params.token
-    // useEffect(() => {
-    //     try {
-    //       const body = {id};
-    //       (async () => {
-    //         setLoading(true);
-    //         const request = await axios(
-    //           "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/search/decorator",
-    //           {
-    //             method: "POST",
-    //             headers: {
-    //               authorization: "Bearer " + token,
-    //             },
-    //             data: body,
-    //           }
-    //         );
-    //         const response = await request.data.success;
-    //         console.log(response);
-    //         console.log(request.data);
-    //         if(response){
-    //             setDecoratorDate(request.data.data.user)
-    //             setLoading(false);
-    //             setShowView(true)
-    //         }
-    //         else{
-    //             setLoading(false);
-    //             setShowView(false)
-    //             setErrorMsg(request.data.message)
-    //         }
-    //       })();
-    //     } catch (err) {
-    //         console.log("Error")
-    //         console.log(err.message);
-    //         setLoading(false);
-    //     }  
-    //   }, []);
+    const id = props.route.params.id;
+    const token = props.route.params.token
+    useEffect(() => {
+        try {
+          const body = {id};
+          (async () => {
+            setLoading(true);
+            const request = await axios(
+              "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/search/decorator",
+              {
+                method: "POST",
+                headers: {
+                  authorization: "Bearer " + token,
+                },
+                data: body,
+              }
+            );
+            const response = await request.data;
+            console.log(response);
+            console.log(request.data);
+            if(response.success==true){
+                setDecoratorDate(request.data.user)
+                setLoading(false);
+                setShowView(true)
+            }
+            else{
+                setLoading(false);
+                setShowView(false)
+                setErrorMsg(request.data.message)
+            }
+          })();
+        } catch (err) {
+            console.log("Error")
+            console.log(err.message);
+            setLoading(false);
+        }  
+      }, []);
       if (loading) {
         return (
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -119,6 +120,7 @@ const DecoratorDetails = (props) =>{
         );
       }
       else{
+          console.log("decorator Array :",decoratorData)
     return(
         <View style={styles.mainContainer}>
             <View style={styles.dateTimeContainer}>
@@ -267,18 +269,18 @@ const DecoratorDetails = (props) =>{
            </ScrollView>
            :
             <ScrollView style={{height:'100%',width:'100%'}}>
-                   <View style={styles.formConatiner} >
+                    <View style={styles.formConatiner} >
                        <View style={styles.inputFieldContainer}>
                            <Text style={styles.decoratorTitle}>Name:</Text>
-                           <Text style={{fontSize:12,width:"50%",justifyContent:"center",fontFamily:'poppins-regular',}}>Hamza</Text>
+                           <Text style={{fontSize:12,width:"50%",justifyContent:"center",fontFamily:'poppins-regular',}}>{decoratorData.name}</Text>
                        </View>
                        <View style={styles.inputFieldContainer}>
                            <Text style={styles.decoratorTitle}>Email:</Text>
-                           <Text style={{fontSize:12,width:"50%",justifyContent:"center",fontFamily:'poppins-regular'}}>hamza@gmail.com</Text>
+                           <Text style={{fontSize:12,width:"50%",justifyContent:"center",fontFamily:'poppins-regular'}}>{decoratorData.email}</Text>
                        </View>
                        <View style={styles.inputFieldContainer}>
                            <Text style={styles.decoratorTitle}>Number:</Text>
-                           <Text style={{fontSize:12,width:"50%",justifyContent:"center",fontFamily:'poppins-regular'}}>03359853140</Text>
+                           <Text style={{fontSize:12,width:"50%",justifyContent:"center",fontFamily:'poppins-regular'}}>{decoratorData.phone}</Text>
                        </View>
                        <View style={styles.inputFieldContainer}>
                            <Text style={styles.decoratorTitle}>Photo ID:</Text>
@@ -301,21 +303,23 @@ const DecoratorDetails = (props) =>{
                            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                                <View style={styles.chekboxText}>
                                    <CheckBox
-                                       value={check.approved}
-                                       onValueChange={() => checkedValue("approved")}
+                                       value={decoratorData.status==="1" ? true:false}
+                                       
                                    />
                                    <Text style={styles.checkText}>Approved</Text>
                                </View>
                                <View style={styles.chekboxText}>
                                    <CheckBox
-                                       value={check.disApproved}
-                                       onValueChange={() => checkedValue("disapproved")}
+                                       value={decoratorData.status==="0" ? true:false}
+                                      
                                    />
                                    <Text style={styles.checkText}>Dis-Approved</Text>
                                </View>
                            </View>
                        </View> 
                    </View>
+            
+                   
            </ScrollView>
             }
            

@@ -9,9 +9,9 @@ const ViewJob = ({props,navigation}) =>{
                 <Text style={styles.titleText}>Search/View Jobs</Text>
             </View>
             <View style={{padding:30}}>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SelectProject')}>
+                {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SelectProject')}>
                     <Text style={styles.commonText}>View your assigned Jobs</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchJob')}>
                     <Text style={styles.commonText}>Search job</Text>
                 </TouchableOpacity>

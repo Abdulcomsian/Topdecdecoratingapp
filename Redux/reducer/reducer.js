@@ -19,6 +19,7 @@ const initialState = {
     createDecoratorMsg: null,
     isSeacrh: false,
     supervisorArray : [],
+    decoratorArray : [],
     isUpdate:true,
     isUpdateMsg:null,
     isSuccess:true,
@@ -42,6 +43,7 @@ const initialState = {
     isVerifyMiscoat: false,
     isSiteInstruction: false,
     isVerifyWork: false,
+    isMethod: false
 };
 
 export default (state = initialState, action)=> {
@@ -59,7 +61,7 @@ export default (state = initialState, action)=> {
                     
                 }
             case Actions.LOGIN_FAIL:
-             console.log("LOGIN FAIL")
+             alert("Wrong Credential")
                 return{
                     ...state,
                     isLogin: false,
@@ -80,7 +82,7 @@ export default (state = initialState, action)=> {
                     createSuperVisorMsg : action.payload.message
                 }
             case Actions.CREATE_NEW_JOB_SUCCESS:
-             console.log("CREATE_NEW_JOB_SUCCESS")
+             alert("Job Saved SuccessFully")
                 return{
                     ...state,
                     isJob: true,
@@ -95,19 +97,26 @@ export default (state = initialState, action)=> {
                     isJobMsg : action.payload.message
                 }
             case Actions.CREATE_DECORATOR_SUCSESS:
-             console.log("CREATE_DECORATOR_SUCSESS")
+             alert("Decorator Create SuccessFully !")
                 return{
                     ...state,
                     createDecorator: true,
                     createDecoratorMsg : action.payload.message
                 }
             case Actions.CREATE_DECORATOR_FAIL:
-             console.log("CREATE_DECORATOR_FAIL")
+                alert("Decorator Creation Failed !")
                 return{
                     ...state,
                     icreateDecorator: false,
                     createDecoratorMsg : action.payload.message
                 }
+                case Actions.SEARCH_DECORATOR_SUCCESS:
+                    console.log("SEARCH_DECORATOR_SUCCESS",action.payload)
+                       return{
+                           ...state,
+                           isSeacrh: true,
+                           decoratorArray : action.payload
+                       }
             case Actions.SEARCH_SUPERVISOR_SUCCESS:
              console.log("SEARCH_SUPERVISOR_SUCCESS",action.payload)
                 return{
@@ -367,6 +376,38 @@ export default (state = initialState, action)=> {
                     ...state,
                     isSuccess: false,
                     isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_METHOD_STATEMENT_FORM_SUCCESS:
+             console.log("INSERT_METHOD_STATEMENT_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isMethod: true,
+                    isSuccessMsg : action.payload.message,
+                   
+                }
+            case Actions.INSERT_METHOD_STATEMENT_FORM_FAIL:
+             console.log("INSERT_METHOD_STATEMENT_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isMethod: false,
+                    isSuccessMsg : action.payload.message,
+                   
+                }
+            case Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS:
+             console.log("INSERT_ON_SITE_DECORATION_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                   
+                }
+            case Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL:
+             console.log("INSERT_ON_SITE_DECORATION_FORM_FAIL",action.payload)
+                return{
+                    ...state,
+                    isOnSite: false,
+                    isSuccessMsg : action.payload.message,
+                   
                 }
             default:
             return state;

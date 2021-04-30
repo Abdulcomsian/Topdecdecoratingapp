@@ -109,6 +109,7 @@ const HandOverForm = (props) => {
   };
   const handOverFormInsert = () => {
     console.log("HandOver Token :", token);
+    try{
     if (contructorName != "" && project != "" && block != "" && reason != "" && plotNumber != "" && supervisorName != "" && dynamicInput && agentName != "") {
       props.createHandOverHandler(
         contructorName,
@@ -130,24 +131,16 @@ const HandOverForm = (props) => {
         token,
         props.route?.params?.index
       );
+      alert("Hand Over Form Insert SuccessFully !");
+      navigation.goBack();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
-  };
-  useEffect(() => {
-    if (isHandOver) {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
+    } catch(err){
+      alert(err.message)
     }
-  }, [isHandOver,isSuccessMsg]);
+  };
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker

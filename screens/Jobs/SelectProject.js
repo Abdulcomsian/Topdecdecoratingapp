@@ -9,6 +9,7 @@ var rightArrow=require('../../assets/authScreen/right.png')
 const SelectProject = ( props ) =>{
     const { navigation, token } = props;
     const [jobId,setJobId] = useState(props.route.params.jobID)
+    const [type,setType] = useState(props.route.params.type)
     const [loading, setLoading] = useState(false);
     const [plotArray,setPlotArray]=useState([
         {ploatName:"Plot 1",url:"SelectSummary"},
@@ -19,7 +20,7 @@ const SelectProject = ( props ) =>{
     useEffect(() => {
         try {
             const job_id = jobId;
-          const body = {job_id};
+          const body = {job_id,type};
           (async () => {
             setLoading(true);
             const request = await axios(

@@ -9,8 +9,13 @@ import {
 } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
+import { connect } from "react-redux";
+import { insertRecordOfProject } from "../../../Redux/action/auth/authActionTypes";
 
-const RecordOfProject = () => {
+const RecordOfProject = (props) => {
+  const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [recordArray, setRecordArray] = useState([
     {
       title:
@@ -63,34 +68,65 @@ const RecordOfProject = () => {
       setRecordArray(preData);
     }
   };
-  const [surName, setSurName] = useState("")
-  const [mobileNo, setMobileNo] = useState("")
-  const [firstName, setFirstName] = useState("")
-  const [jobTitle, setJobTitle] = useState("")
-  const [address, setAddress] = useState("")
-  const [cardNumber, setCardNumber] = useState("")
-  const [otherDetails, setOtherDetails] = useState("")
-  const [nextKin, setNextKin] = useState("")
-  const [relation, setRelation] = useState("")
-  const [kinContactDetail, setKinContactDetail] = useState("")
-  const [mainContractor, setMainContractor] = useState("")
-  const [projectName, setProjectName] = useState("")
+  const [surName, setSurName] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [address, setAddress] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [otherDetails, setOtherDetails] = useState("");
+  const [nextKin, setNextKin] = useState("");
+  const [relation, setRelation] = useState("");
+  const [kinContactDetail, setKinContactDetail] = useState("");
+  const [mainContractor, setMainContractor] = useState("");
+  const [projectName, setProjectName] = useState("");
 
-  const recordProjectFormInsert = () =>{
-    console.log("SurName :",surName)
-    console.log("Mobile Nuber :",mobileNo)
-    console.log("First Name :",firstName)
-    console.log("Job Title:",jobTitle)
-    console.log("Address :",address)
-    console.log("Card No :",cardNumber)
-    console.log("Other Details :",otherDetails)
-    console.log("Next of Kin :",nextKin)
-    console.log("Relation :",relation)
-    console.log("Contact Detail :",kinContactDetail)
-    console.log("Contractor :",mainContractor)
-    console.log("Project Name :",projectName)
-    console.log("Array :",recordArray)
-  }
+  const recordProjectFormInsert = () => {
+    try {
+      
+
+      if (
+        surName != "" &&
+        mobileNo != "" &&
+        firstName != "" &&
+        jobTitle != "" &&
+        address != "" &&
+        cardNumber != "" &&
+        otherDetails != "" &&
+        nextKin != "" &&
+        relation != "" &&
+        kinContactDetail != "" &&
+        mainContractor != "" &&
+        projectName != "" &&
+        recordArray != ""
+      ) {
+        props.createRecordOfProjectHandler(
+          surName,
+          mobileNo,
+          firstName,
+          jobTitle,
+          address,
+          cardNumber,
+          otherDetails,
+          nextKin,
+          relation,
+          kinContactDetail,
+          mainContractor,
+          projectName,
+          recordArray,
+          jobID,
+          tabId,
+          token,
+          props.route.params?.index
+        );
+      } else {
+        alert("Please Insert All Fields CareFully !");
+        return false;
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
   return (
     <View style={styles.mainContainer}>
       <View
@@ -116,30 +152,50 @@ const RecordOfProject = () => {
       <ScrollView>
         <View style={styles.formCodnatiner}>
           <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"SURNAME"} onChangeText={(e)=>setSurName(e)}
-              value={surName}/>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"SURNAME"}
+              onChangeText={(e) => setSurName(e)}
+              value={surName}
+            />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"MOBILE NO"} onChangeText={(e)=>setMobileNo(e)}
-              value={mobileNo}/>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"MOBILE NO"}
+              onChangeText={(e) => setMobileNo(e)}
+              value={mobileNo}
+            />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"FIRST NAME"} onChangeText={(e)=>setFirstName(e)}
-              value={firstName}/>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"FIRST NAME"}
+              onChangeText={(e) => setFirstName(e)}
+              value={firstName}
+            />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"JOB TITLE"} onChangeText={(e)=>setJobTitle(e)}
-              value={jobTitle} />
+            <TextInput
+              style={styles.inputField}
+              placeholder={"JOB TITLE"}
+              onChangeText={(e) => setJobTitle(e)}
+              value={jobTitle}
+            />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"ADDRESS"} onChangeText={(e)=>setAddress(e)}
-              value={address} />
+            <TextInput
+              style={styles.inputField}
+              placeholder={"ADDRESS"}
+              onChangeText={(e) => setAddress(e)}
+              value={address}
+            />
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
               placeholder={"TRADE/ CSCS REGISTRATION SCHEME/CARD NO"}
-              onChangeText={(e)=>setCardNumber(e)}
+              onChangeText={(e) => setCardNumber(e)}
               value={cardNumber}
             />
           </View>
@@ -147,19 +203,23 @@ const RecordOfProject = () => {
             <TextInput
               style={styles.inputField}
               placeholder={"OTHER TRAINING DETAILS"}
-              onChangeText={(e)=>setOtherDetails(e)}
+              onChangeText={(e) => setOtherDetails(e)}
               value={otherDetails}
             />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"NEXT OF KIN"} onChangeText={(e)=>setNextKin(e)}
-              value={nextKin} />
+            <TextInput
+              style={styles.inputField}
+              placeholder={"NEXT OF KIN"}
+              onChangeText={(e) => setNextKin(e)}
+              value={nextKin}
+            />
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
               placeholder={"Your relationship to Next of KIN"}
-              onChangeText={(e)=>setRelation(e)}
+              onChangeText={(e) => setRelation(e)}
               value={relation}
             />
           </View>
@@ -167,7 +227,7 @@ const RecordOfProject = () => {
             <TextInput
               style={styles.inputField}
               placeholder={"NEXT OF KIN Contact details"}
-              onChangeText={(e)=>setKinContactDetail(e)}
+              onChangeText={(e) => setKinContactDetail(e)}
               value={kinContactDetail}
             />
           </View>
@@ -213,11 +273,14 @@ const RecordOfProject = () => {
                       ]}
                     >
                       <View style={{ width: "20%" }}>
-                        <CheckBox value={item.yes} onValueChange={() =>
-                              checkedReportValue("yes", index, "true")
-                            }/>
+                        <CheckBox
+                          value={item.yes}
+                          onValueChange={() =>
+                            checkedReportValue("yes", index, "true")
+                          }
+                        />
                       </View>
-                      <View style={{ width: "80%",paddingTop:5 }}>
+                      <View style={{ width: "80%", paddingTop: 5 }}>
                         <Text
                           style={{
                             fontSize: 12,
@@ -236,11 +299,14 @@ const RecordOfProject = () => {
                       ]}
                     >
                       <View style={{ width: "20%" }}>
-                        <CheckBox  value={item.no} onValueChange={() =>
-                              checkedReportValue("no", index, "true")
-                            }/>
+                        <CheckBox
+                          value={item.no}
+                          onValueChange={() =>
+                            checkedReportValue("no", index, "true")
+                          }
+                        />
                       </View>
-                      <View style={{ width: "80%",paddingTop:5 }}>
+                      <View style={{ width: "80%", paddingTop: 5 }}>
                         <Text
                           style={{
                             fontSize: 12,
@@ -273,13 +339,17 @@ const RecordOfProject = () => {
               <TextInput
                 style={styles.inputField}
                 placeholder={"Main Contractor"}
-                onChangeText={(e)=>setMainContractor(e)}
-              value={mainContractor}
+                onChangeText={(e) => setMainContractor(e)}
+                value={mainContractor}
               />
             </View>
             <View style={styles.inputFieldContainer}>
-              <TextInput style={styles.inputField} placeholder={"Project"} onChangeText={(e)=>setProjectName(e)}
-              value={projectName} />
+              <TextInput
+                style={styles.inputField}
+                placeholder={"Project"}
+                onChangeText={(e) => setProjectName(e)}
+                value={projectName}
+              />
             </View>
           </View>
           <View
@@ -304,4 +374,52 @@ const RecordOfProject = () => {
     </View>
   );
 };
-export default RecordOfProject;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isOnSite: state.auth.isOnSite,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  createRecordOfProjectHandler: (
+    surName,
+    mobileNo,
+    firstName,
+    jobTitle,
+    address,
+    cardNumber,
+    otherDetails,
+    nextKin,
+    relation,
+    kinContactDetail,
+    mainContractor,
+    projectName,
+    recordArray,
+    jobID,
+    tabId,
+    token,
+    index
+  ) =>
+    dispatch(
+      insertRecordOfProject(
+        surName,
+    mobileNo,
+    firstName,
+    jobTitle,
+    address,
+    cardNumber,
+    otherDetails,
+    nextKin,
+    relation,
+    kinContactDetail,
+    mainContractor,
+    projectName,
+    recordArray,
+    jobID,
+    tabId,
+    token,
+    index
+      )
+    ),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(RecordOfProject);

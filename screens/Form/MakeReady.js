@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, CheckBox, TouchableOpacity, ScrollView, TextIn
 import { Text } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { insertMakeReadyForm } from "../../Redux/action/auth/authActionTypes";
+import SignatureComponent from "../../components/SignatureComponent";
 import { connect } from "react-redux";
 
 var plus = require("../../assets/authScreen/plus.png");

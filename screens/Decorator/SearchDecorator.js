@@ -48,6 +48,7 @@ const SearchDecorator = (props) =>{
 }
 const mapStateToProps = (state) => ({
     token : state.auth.token,
+    isSearch : state.auth.isSearch
   });
   const mapDispatchToProps = (dispatch) => ({
     searchDecoratorHandler: (decoratorID,token) =>

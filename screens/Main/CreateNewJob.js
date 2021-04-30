@@ -46,17 +46,24 @@ const NewJob = (props) => {
     setdynamicInput(preData);
   };
   const newJob = () => {
-    console.log(date.toLocaleDateString())
-    console.log(date.toLocaleTimeString())
-    props.createNewJobHandler(
-      constructorName,
-      projectName,
-      weekProject,
-      selectedValue,
-      date.toLocaleDateString(),
-      dynamicInput,
-      token
-    );
+    try{
+      if(constructorName!="" && projectName!="" && weekProject!="" && selectedValue!="" && date!="" && dynamicInput!=""){
+        props.createNewJobHandler(
+          constructorName,
+          projectName,
+          weekProject,
+          selectedValue,
+          date.toLocaleDateString(),
+          dynamicInput,
+          token
+        );
+      } else{
+        alert("Please Enter All Missing Fields CareFully !")
+      }
+      
+    } catch(err){
+      alert(err.message)
+    }
   };
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -96,8 +103,7 @@ const NewJob = (props) => {
   useEffect(() => {
     if(isJob){     
       if(isJobMsg){
-          alert(isJobMsg)
-          console.log("Job Id :",isJobId)
+        console.log(isJobId)
           props.navigation.navigate('TotalSummary',{jobID: isJobId})
       }
       }
@@ -107,7 +113,7 @@ const NewJob = (props) => {
               return false;
           }
       }
-  },[props.isJobMsg])
+  },[isJob,isJobMsg])
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -259,18 +265,18 @@ const NewJob = (props) => {
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
-              {/* <TouchableOpacity
+            </TouchableOpacity> */}
+              <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={()=>newJob(this)}
               >
                 <Text style={styles.commonText}>Save</Text>
-              </TouchableOpacity> */}
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
