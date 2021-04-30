@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -8,10 +7,6 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-=======
-import React, { useState } from "react";
-import { View, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
 import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePicker from "react-native-modal-datetime-picker";

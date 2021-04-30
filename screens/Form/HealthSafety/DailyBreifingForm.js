@@ -3,12 +3,7 @@ import { View, Image, TouchableOpacity, TextInput, ScrollView, CheckBox } from "
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-<<<<<<< HEAD
 import SignatureComponent from "../../../components/SignatureComponent";
-=======
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
-import { connect } from "react-redux";
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var work = require("../../../assets/authScreen/work.png");
@@ -127,7 +122,6 @@ const DailyBreifingForm = () => {
   const [supervisorName, setSupervisorName] = useState("");
   const [statementNumber, setStatementNumber] = useState("");
 
-<<<<<<< HEAD
       const dailyBrefilyFormInsert = () =>{
         console.log("Main Contractor :",mainContractor)
         console.log("Project Name :",projectName)
@@ -223,70 +217,6 @@ const DailyBreifingForm = () => {
                           borderBottomColor: "#96A8B2",
                           padding: 5}}>{new Date(date).toLocaleDateString()}</Text>
                     </View>
-=======
-  const dailyBrefilyFormInsert = () => {
-    console.log("Main Contractor :", mainContractor);
-    console.log("Project Name :", projectName);
-    console.log("Supervisor Name :", supervisorName);
-    console.log("Statment Number :", statementNumber);
-    console.log("Date :", date);
-    console.log("Daily array :", dailyArray);
-    console.log("Job Safe Array :", jobSafetyArray);
-    console.log("Brefily Array :", berifingArray);
-    console.log("Operative Array :", operativeArray);
-    console.log("Hazrd Array :", hazrdArray);
-    props.updateHealthReport(props?.route?.params?.index);
-    props.navigation.pop();
-  };
-  return (
-    <View style={styles.mainContainer}>
-      <DateTimePickerModal
-        isVisible={show}
-        date={date ? date : new Date()}
-        mode={"date"}
-        is24Hour={true}
-        display='default'
-        onConfirm={(date) => onChange(date)}
-        onCancel={() => setShow(false)}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
-      />
-      <View style={{ paddingTop: 30, justifyContent: "center", alignItems: "center" }}>
-        <Text style={styles.titleText}>Top Dec’s Daily Briefing Form - SAFE START</Text>
-      </View>
-      <ScrollView>
-        <View style={styles.formCodnatiner}>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Main Contractor"} value={mainContractor} onChangeText={(e) => setMainContractor(e)} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Project"} value={projectName} onChangeText={(e) => setProjectName(e)} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Supervisor"} value={supervisorName} onChangeText={(e) => setSupervisorName(e)} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Method statement No"} value={statementNumber} onChangeText={(e) => setStatementNumber(e)} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker()}
-              style={{
-                width: "100%",
-                width: "100%",
-                height: 52,
-                paddingTop: 20,
-                fontSize: 12,
-                color: "#96A8B2",
-                fontFamily: "poppins-regular",
-                borderBottomWidth: 1,
-                borderBottomColor: "#96A8B2",
-                padding: 5,
-              }}>
-              {new Date(date).toLocaleDateString()}
-            </Text>
-          </View>
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
 
           <View style={{ marginTop: 20 }}>
             <Text style={{ fontFamily: "poppins-bold", fontSize: 10, textAlign: "center" }}>Before each Team Briefing……Ask yourself do I need to discuss!</Text>
@@ -419,7 +349,6 @@ const DailyBreifingForm = () => {
                       placeholder={"HAZARD"}
                       value={item.name}
                       onChangeText={(txt) => updateOperativeValue("name", index, txt)}
-<<<<<<< HEAD
                                                 />
                                             </View>
                                             <View style={styles.inputOprativesBodyContainer}>
@@ -478,36 +407,6 @@ const DailyBreifingForm = () => {
                                 </View>
                     </View>
                     <View
-=======
-                    />
-                  </View>
-                  <View style={styles.inputOprativesBodyContainer}>
-                    <TextInput
-                      style={styles.bodyTextInput}
-                      placeholder={"ACTION"}
-                      value={item.sign}
-                      onChangeText={(txt) => updateOperativeValue("sign", index, txt)}
-                    />
-                  </View>
-                </View>
-              ))}
-              <Text style={{ fontFamily: "poppins-regular", fontSize: 10, textAlign: "center", marginTop: 20 }}>
-                Site Supervisor: I confirm that I have brief the operative on the task method statement, generic and specific risk assessment, COSHH
-                assessments, any hazards whilst working, emergency procedures, control measures , P.PE etc.
-              </Text>
-              <Text style={{ fontFamily: "poppins-regular", fontSize: 10, textAlign: "center", marginTop: 20 }}>
-                The supervisor sign to confirm that they have been instructed and understand the above items.
-              </Text>
-              <Text style={{ fontFamily: "poppins-regular", fontSize: 10, textAlign: "center", marginTop: 20 }}>
-                Operative has shown any sign of been under the influence of alcohol or drugs
-              </Text>
-              <Text style={{ fontFamily: "poppins-semiBold", fontSize: 10, textAlign: "center", marginTop: 20 }}>
-                Once completed, please place a copy in the Site Folder and send a copy to Top Dec’s head Office. Also, please give a copy to the Site Staff.
-              </Text>
-            </View>
-          </View>
-          <View
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
             style={{
               backgroundColor: "#000",
               width: "100%",
@@ -520,13 +419,10 @@ const DailyBreifingForm = () => {
               <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity>
           </View>
-<<<<<<< HEAD
                 </View>
             </ScrollView>
             </>
       )}
-=======
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
         </View>
       </ScrollView>
     </View>

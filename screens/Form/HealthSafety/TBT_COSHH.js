@@ -3,13 +3,8 @@ import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-nati
 import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-<<<<<<< HEAD
 import TBTForm from "../../../components/common/TBTForm";
 import SignatureComponent from "../../../components/SignatureComponent";
-=======
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
-import { connect } from "react-redux";
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -73,7 +68,6 @@ const TBTCOSHH = (props) => {
   const [meetingConductBy, setMeetingConductBy] = useState("");
   const [comment, setComment] = useState("");
 
-<<<<<<< HEAD
   const tbtCoshhFormInsert = () =>{
     console.log("Main Contractor :",mainContractor)
     console.log("Project Name :",projectName)
@@ -114,31 +108,6 @@ const TBTCOSHH = (props) => {
         />
       ) : (
         <>
-=======
-  const tbtCoshhFormInsert = () => {
-    console.log("Main Contractor :", mainContractor);
-    console.log("Project Name :", projectName);
-    console.log("Meeting Conduct :", meetingConductBy);
-    console.log("Date :", date);
-    console.log("Comments :", comment);
-    console.log("Array :", attendenceArray);
-    props.updateHealthReport(props?.route?.params?.index);
-    props.navigation.pop();
-  };
-  return (
-    <View style={styles.mainContainer}>
-      <DateTimePickerModal
-        isVisible={show}
-        date={date ? date : new Date()}
-        mode={"date"}
-        is24Hour={true}
-        display='default'
-        onConfirm={(date) => onChange(date)}
-        onCancel={() => setShow(false)}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
-      />
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
       <View style={styles.imageView}>
         <Image source={mainImage} style={styles.bannerImage} />
       </View>
@@ -171,7 +140,6 @@ const TBTCOSHH = (props) => {
               )
             )}
           </View>
-<<<<<<< HEAD
           {/* <View style={styles.inputFieldContainer}>
             <TextInput
               style={styles.inputField}
@@ -179,10 +147,6 @@ const TBTCOSHH = (props) => {
               value={mainContractor}
               onChangeText={(e) => setMainContractor(e)}
             />
-=======
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Main Contractor"} value={mainContractor} onChangeText={(e) => setMainContractor(e)} />
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput style={styles.inputField} placeholder={"Project"} value={projectName} onChangeText={(e) => setProjectName(e)} />
@@ -219,7 +183,6 @@ const TBTCOSHH = (props) => {
               onChangeText={(e) => setComment(e)}
             />
           </View>
-<<<<<<< HEAD
           <Text style={{ fontFamily: "poppins-bold", fontSize: 16 }}>
             Attendees
           </Text> */}
@@ -231,10 +194,6 @@ const TBTCOSHH = (props) => {
                 
               />
           {/* <View style={styles.tableViewContainer}>
-=======
-          <Text style={{ fontFamily: "poppins-bold", fontSize: 16 }}>Attendees</Text>
-          <View style={styles.tableViewContainer}>
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
             <View style={styles.tableHeader}>
               <View style={styles.headerWitnessTitleView}>
                 <Text style={styles.headerTitle}>Print</Text>

@@ -2,13 +2,8 @@ import React, { useState } from "react";
 import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
-<<<<<<< HEAD
 import SignatureComponent from "../../../components/SignatureComponent";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-=======
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
-import { connect } from "react-redux";
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
 
 var plus = require("../../../assets/authScreen/plus.png");
 const IssueCard = (props) => {
@@ -228,7 +223,6 @@ const IssueCard = (props) => {
                   <TextInput style={styles.bodyTextInput} placeholder={"Type"} onChangeText={(txt) => updateValue("type", index, txt)} value={item.type} />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-<<<<<<< HEAD
                 <Text
                             onPress={() => showDatepicker(index)}
                             style={{
@@ -246,9 +240,6 @@ const IssueCard = (props) => {
                           >
                             {new Date(item.date).toLocaleDateString()}
                           </Text>
-=======
-                  <TextInput style={styles.bodyTextInput} placeholder={"Date"} onChangeText={(txt) => updateValue("date", index, txt)} value={item.date} />
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
                   <TextInput
@@ -259,7 +250,6 @@ const IssueCard = (props) => {
                   />
                 </View>
                 <View style={styles.inputHarmFullBodyContainer}>
-<<<<<<< HEAD
                 <TouchableOpacity
                           onPress={() =>
                             setSignature({
@@ -309,37 +299,6 @@ const IssueCard = (props) => {
                 </View>
               </View>
             ))}
-=======
-                  <TextInput style={styles.bodyTextInput} placeholder={"Signature"} onChangeText={(txt) => updateValue("sign", index, txt)} value={item.sign} />
-                </View>
-              </View>
-            ))}
-            <View style={styles.tableBody}>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput style={styles.bodyTextInput} placeholder={"Item"} onChangeText={(txt) => setData({ ...data, item: txt })} value={data.item} />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput style={styles.bodyTextInput} placeholder={"No"} onChangeText={(txt) => setData({ ...data, no: txt })} value={data.no} />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput style={styles.bodyTextInput} placeholder={"Type"} onChangeText={(txt) => setData({ ...data, type: txt })} value={data.type} />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput style={styles.bodyTextInput} placeholder={"Date"} onChangeText={(txt) => setData({ ...data, date: txt })} value={data.date} />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Supervisor"}
-                  onChangeText={(txt) => setData({ ...data, supervisor: txt })}
-                  value={data.supervisor}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput style={styles.bodyTextInput} placeholder={"Signature"} onChangeText={(txt) => setData({ ...data, sign: txt })} value={data.sign} />
-              </View>
-            </View>
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
             <Text
               style={{
                 fontSize: 12,

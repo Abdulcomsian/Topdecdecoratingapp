@@ -3,7 +3,6 @@ import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-nati
 import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-<<<<<<< HEAD
 import SignatureComponent from "../../../components/SignatureComponent";
 
 
@@ -12,13 +11,6 @@ const PuwerInspection = (props) => {
   const { navigation, token, isScope, isSuccessMsg, isJobId } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
-=======
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
-import { connect } from "react-redux";
-
-var plus = require("../../../assets/authScreen/plus.png");
-const PuwerInspection = (props) => {
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
   const [puwerArrayList, setPuwerArrayList] = useState([
     {
       title: "Step ladders",

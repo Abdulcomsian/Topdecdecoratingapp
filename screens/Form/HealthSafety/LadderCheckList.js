@@ -4,11 +4,7 @@ import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
-<<<<<<< HEAD
 import { insertScopeForm } from "../../../Redux/action/auth/authActionTypes";
-=======
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
 import { connect } from "react-redux";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
@@ -516,7 +512,6 @@ const LadderCheckList = (props) => {
     </View>
   );
 };
-<<<<<<< HEAD
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isScope: state.auth.isScope,
@@ -527,9 +522,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 export default connect(mapStateToProps, mapDispatchToProps)(LadderCheckList);
 
-=======
-const mapDispatchToProps = (dispatch) => ({
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
-});
-export default connect(null, mapDispatchToProps)(LadderCheckList);
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf

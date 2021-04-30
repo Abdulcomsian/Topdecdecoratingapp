@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, Image, TouchableOpacity, TextInput, ScrollView, CheckBox } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
-<<<<<<< HEAD
 import { connect } from "react-redux";
 import { insertRecordOfProject } from "../../../Redux/action/auth/authActionTypes";
 
@@ -10,12 +9,6 @@ const RecordOfProject = (props) => {
   const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
-=======
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
-import { connect } from "react-redux";
-
-const RecordOfProject = (props) => {
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
   const [recordArray, setRecordArray] = useState([
     {
       title:
@@ -79,7 +72,6 @@ const RecordOfProject = (props) => {
   const [projectName, setProjectName] = useState("");
 
   const recordProjectFormInsert = () => {
-<<<<<<< HEAD
     try {
       
 
@@ -124,23 +116,6 @@ const RecordOfProject = (props) => {
     } catch (err) {
       alert(err);
     }
-=======
-    console.log("SurName :", surName);
-    console.log("Mobile Nuber :", mobileNo);
-    console.log("First Name :", firstName);
-    console.log("Job Title:", jobTitle);
-    console.log("Address :", address);
-    console.log("Card No :", cardNumber);
-    console.log("Other Details :", otherDetails);
-    console.log("Next of Kin :", nextKin);
-    console.log("Relation :", relation);
-    console.log("Contact Detail :", kinContactDetail);
-    console.log("Contractor :", mainContractor);
-    console.log("Project Name :", projectName);
-    console.log("Array :", recordArray);
-    props.updateHealthReport(props?.route?.params?.index);
-    props.navigation.pop();
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
   };
   return (
     <View style={styles.mainContainer}>
@@ -163,7 +138,6 @@ const RecordOfProject = (props) => {
       <ScrollView>
         <View style={styles.formCodnatiner}>
           <View style={styles.inputFieldContainer}>
-<<<<<<< HEAD
             <TextInput
               style={styles.inputField}
               placeholder={"SURNAME"}
@@ -202,21 +176,6 @@ const RecordOfProject = (props) => {
               onChangeText={(e) => setAddress(e)}
               value={address}
             />
-=======
-            <TextInput style={styles.inputField} placeholder={"SURNAME"} onChangeText={(e) => setSurName(e)} value={surName} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"MOBILE NO"} onChangeText={(e) => setMobileNo(e)} value={mobileNo} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"FIRST NAME"} onChangeText={(e) => setFirstName(e)} value={firstName} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"JOB TITLE"} onChangeText={(e) => setJobTitle(e)} value={jobTitle} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"ADDRESS"} onChangeText={(e) => setAddress(e)} value={address} />
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
@@ -227,7 +186,6 @@ const RecordOfProject = (props) => {
             />
           </View>
           <View style={styles.inputFieldContainer}>
-<<<<<<< HEAD
             <TextInput
               style={styles.inputField}
               placeholder={"OTHER TRAINING DETAILS"}
@@ -250,15 +208,6 @@ const RecordOfProject = (props) => {
               onChangeText={(e) => setRelation(e)}
               value={relation}
             />
-=======
-            <TextInput style={styles.inputField} placeholder={"OTHER TRAINING DETAILS"} onChangeText={(e) => setOtherDetails(e)} value={otherDetails} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"NEXT OF KIN"} onChangeText={(e) => setNextKin(e)} value={nextKin} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Your relationship to Next of KIN"} onChangeText={(e) => setRelation(e)} value={relation} />
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput
@@ -303,16 +252,12 @@ const RecordOfProject = (props) => {
                   <View style={{ flexDirection: "row", width: "100%" }}>
                     <View style={[styles.inputProjectBodyContainer, { flexDirection: "row" }]}>
                       <View style={{ width: "20%" }}>
-<<<<<<< HEAD
                         <CheckBox
                           value={item.yes}
                           onValueChange={() =>
                             checkedReportValue("yes", index, "true")
                           }
                         />
-=======
-                        <CheckBox value={item.yes} onValueChange={() => checkedReportValue("yes", index, "true")} />
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
                       </View>
                       <View style={{ width: "80%", paddingTop: 5 }}>
                         <Text
@@ -327,16 +272,12 @@ const RecordOfProject = (props) => {
                     </View>
                     <View style={[styles.inputProjectBodyContainer, { flexDirection: "row" }]}>
                       <View style={{ width: "20%" }}>
-<<<<<<< HEAD
                         <CheckBox
                           value={item.no}
                           onValueChange={() =>
                             checkedReportValue("no", index, "true")
                           }
                         />
-=======
-                        <CheckBox value={item.no} onValueChange={() => checkedReportValue("no", index, "true")} />
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
                       </View>
                       <View style={{ width: "80%", paddingTop: 5 }}>
                         <Text
@@ -364,7 +305,6 @@ const RecordOfProject = (props) => {
               REQUIREMENTS YOU ARE TO ADHERE WHILST WORKING ON THIS PROJECT.{" "}
             </Text>
             <View style={styles.inputFieldContainer}>
-<<<<<<< HEAD
               <TextInput
                 style={styles.inputField}
                 placeholder={"Main Contractor"}
@@ -379,12 +319,6 @@ const RecordOfProject = (props) => {
                 onChangeText={(e) => setProjectName(e)}
                 value={projectName}
               />
-=======
-              <TextInput style={styles.inputField} placeholder={"Main Contractor"} onChangeText={(e) => setMainContractor(e)} value={mainContractor} />
-            </View>
-            <View style={styles.inputFieldContainer}>
-              <TextInput style={styles.inputField} placeholder={"Project"} onChangeText={(e) => setProjectName(e)} value={projectName} />
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
             </View>
           </View>
           <View
@@ -405,7 +339,6 @@ const RecordOfProject = (props) => {
     </View>
   );
 };
-<<<<<<< HEAD
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isOnSite: state.auth.isOnSite,
@@ -455,9 +388,3 @@ const mapDispatchToProps = (dispatch) => ({
     ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(RecordOfProject);
-=======
-const mapDispatchToProps = (dispatch) => ({
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
-});
-export default connect(null, mapDispatchToProps)(RecordOfProject);
->>>>>>> 8963071f89a3d01cc8c91cb986015da9fe50ddcf
