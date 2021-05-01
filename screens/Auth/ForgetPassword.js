@@ -65,7 +65,7 @@ const ForgotPassword = (props) => {
       alert("Please Enter Valid Code");
     }
   };
-  const checkPassword = () =>{
+  const checkPassword = async () =>{
     let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     console.log("Password",password,regPass.test(password) === false)
       console.log("Reset Password",resetPassword,regPass.test(resetPassword) === false)
@@ -78,7 +78,9 @@ const ForgotPassword = (props) => {
     } 
     else{
         if(password==resetPassword){
-          props.postResetPasswordHandler(isValidateUserID,password);
+          await props.postResetPasswordHandler(isValidateUserID,password);
+          setCode(isCode);
+          setShow(true);
         }
         else{
           alert("Your Password Not Match");
@@ -93,23 +95,7 @@ const ForgotPassword = (props) => {
   }
   }
   /* Email Send & recive Code */
-  useEffect(() => {
-    if (show == false) {
-      if (isSuccess) {
-        if (isSuccessMsg) {
-          alert(isSuccessMsg);
-          setCode(isCode);
-          setShow(true);
-        }
-      } else {
-        console.log("Else Condition :", isSuccessMsg);
-        if (isSuccessMsg) {
-          alert(isSuccessMsg);
-          setShow(true);
-        }
-      }
-    }
-  },[show,isSuccessMsg]);
+
   /* Check Validate Code User Exsit or Not */
   useEffect(()=>{
     if(isValidateUserID){

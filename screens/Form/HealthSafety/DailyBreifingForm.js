@@ -12,6 +12,8 @@ import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
 import { connect } from "react-redux";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { insertDailyBreifingForm } from "../../../Redux/action/auth/authActionTypes";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var work = require("../../../assets/authScreen/work.png");
@@ -27,10 +29,11 @@ var permit = require("../../../assets/authScreen/permit.png");
 var weather = require("../../../assets/authScreen/weather.png");
 
 var plus = require("../../../assets/authScreen/plus.png");
-const DailyBreifingForm = () => {
-  const [hazrdArray, setHazrdArray] = useState([
-    { hazrd: "", action: "", responsible: "" },
-  ]);
+const DailyBreifingForm = (props) => {
+  const { navigation, token, isSuccessMsg, isSuccess } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
+  const [hazrdArray, setHazrdArray] = useState([]);
   const addHazrdArray = () => {
     setHazrdArray((oldArray) => [
       ...oldArray,
@@ -91,9 +94,7 @@ const DailyBreifingForm = () => {
       check: false,
     },
   ]);
-  const [operativeArray, setOperativeArray] = useState([
-    { name: "", sign: "" },
-  ]);
+  const [operativeArray, setOperativeArray] = useState([]);
   const addOperativeArray = () =>
     setOperativeArray((oldArray) => [...oldArray, { name: "", sign: "" }]);
   const updateOperativeValue = (key, index, value) => {
@@ -130,12 +131,12 @@ const DailyBreifingForm = () => {
     }
     setJobSafetyArray(preData);
   };
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
   const [show, setShow] = useState(false);
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
-    setDate(new Date(currentDate));
+    setDate(new Date(currentDate).toLocaleDateString());
   };
   const showDatepicker = () => {
     setShow(true);
@@ -145,17 +146,18 @@ const DailyBreifingForm = () => {
   const [supervisorName, setSupervisorName] = useState("");
   const [statementNumber, setStatementNumber] = useState("");
 
-  const dailyBrefilyFormInsert = () => {
-    console.log("Main Contractor :", mainContractor);
-    console.log("Project Name :", projectName);
-    console.log("Supervisor Name :", supervisorName);
-    console.log("Statment Number :", statementNumber);
-    console.log("Date :", date);
-    console.log("Daily array :", dailyArray);
-    console.log("Job Safe Array :", jobSafetyArray);
-    console.log("Brefily Array :", berifingArray);
-    console.log("Operative Array :", operativeArray);
-    console.log("Hazrd Array :", hazrdArray);
+  const dailyBrefilyFormInsert = async () => {
+  
+    try{
+      if(mainContractor && projectName && projectName && supervisorName && statementNumber && date && dailyArray && jobSafetyArray && berifingArray && operativeArray && hazrdArray){
+        await props.createDailyBreifingHandler(mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,jobID,tabId,token, props.route.params?.index)
+        props.updateHealthReport(props?.route?.params?.index);
+        alert("Ladder Check List Insert SuccessFully !");
+        props.navigation.pop();
+      }
+    }catch(err){
+      alert(err.message)
+    }
   };
   const [signature, setSignature] = useState({
     bool: false,
@@ -166,14 +168,13 @@ const DailyBreifingForm = () => {
     <View style={styles.mainContainer}>
       <DateTimePickerModal
         isVisible={show}
-        date={date ? date : new Date()}
+        testID='dateTimePicker'
+        value={date}
         mode={"date"}
-        is24Hour={true}
-        display="default"
-        onConfirm={(date) => onChange(date)}
+        display='default'
+        onConfirm={onChange}
         onCancel={() => setShow(false)}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        format='DD-MM-YYYY'
       />
       {signature.bool ? (
         <SignatureComponent
@@ -679,7 +680,15 @@ const DailyBreifingForm = () => {
     </View>
   );
 };
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isScope: state.auth.isScope,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
 const mapDispatchToProps = (dispatch) => ({
+  createDailyBreifingHandler: (mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,jobID,tabId,token, index) =>
+    dispatch(insertDailyBreifingForm(mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,jobID,tabId,token, index)),
   updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
-export default connect(null, mapDispatchToProps)(DailyBreifingForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DailyBreifingForm);

@@ -25,17 +25,7 @@ const CleanUp = (props) => {
   const [mode, setMode] = useState("date");
   const [showDate, setShowDate] = useState(false);
   const [showSupervisor, setShowSupervisor] = useState(false);
-  const [dynamicInput, setdynamicInput] = useState([
-    {
-      block: "",
-      level: "",
-      plot: "",
-      area: "",
-      items: "",
-      completed_date: new Date().toLocaleDateString(),
-      comment: "",
-    },
-  ]);
+  const [dynamicInput, setdynamicInput] = useState([]);
   const [supervisorSignature, setSupervisorSignature] = useState("");
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -86,7 +76,7 @@ const CleanUp = (props) => {
     setShowSupervisor(false);
     setDateSupervisor(new Date(currentDate).toLocaleDateString());
   };
-  const cleanUpFormInsert = () => {
+  const cleanUpFormInsert = async () => {
     // console.log("Name Of Contractor :", contractorName);
     // console.log("Project Name :", projectName);
     // console.log("Name of Operatives :", nameOperatives);
@@ -103,7 +93,7 @@ const CleanUp = (props) => {
       supervisorSignature !== "" &&
       dateSupervisor !== ""
     ) {
-      props.createCleanUpHandler(
+      await props.createCleanUpHandler(
         contractorName,
         projectName,
         nameOperatives,
@@ -117,6 +107,7 @@ const CleanUp = (props) => {
         props.route.params?.index
       );
       props.updateHealthReport(props?.route?.params?.index);
+      alert("Clean Up Insert SuccessFully !");
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
@@ -148,19 +139,6 @@ const CleanUp = (props) => {
     copyArr[showCompleteDate.index].completed_date = currentDate.toLocaleDateString();
     setdynamicInput(copyArr);
   };
-  React.useEffect(() => {
-    if (isSuccess) {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isSuccess, isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker

@@ -18,24 +18,18 @@ const HarmFulSubstance = (props) => {
   const [dynamicInput, setdynamicInput] = useState([]);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
-  const [data, setData] = useState({
-    paint: "",
-    location: "",
-    potential_hazard: "",
-    safer_alternatives: "",
-    protective_clothes: "",
-    supplierMSDS: "",
-  });
+
   const addHarmfullRow = () => {
-    setdynamicInput((oldArray) => [...oldArray, data]);
-    setData({
-      paint: "",
-      location: "",
-      potential_hazard: "",
-      safer_alternatives: "",
-      protective_clothes: "",
-      supplierMSDS: "",
-    });
+   setdynamicInput((oldArray) => [
+      ...oldArray,{
+        paint: "",
+        location: "",
+        potential_hazard: "",
+        safer_alternatives: "",
+        protective_clothes: "",
+        supplierMSDS: "",
+      }]
+   )
   };
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -45,29 +39,21 @@ const HarmFulSubstance = (props) => {
   const showDatepicker = () => {
     setShow(true);
   };
-  const harmFulSubstanceFormInsert = () => {
+  const harmFulSubstanceFormInsert = async () => {
+    try{
     if (contractorName != "" && projectName != "" && date != "" && dynamicInput != "") {
-      props.createHarmFullHandler(contractorName, projectName, date, dynamicInput, jobID, tabId, token, props.route.params?.index);
+      await props.createHarmFullHandler(contractorName, projectName, date, dynamicInput, jobID, tabId, token, props.route.params?.index);
       props.updateHealthReport(props?.route?.params?.index);
+      alert("HAramFul Substance Insert SuccessFully !")
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
-  useEffect(() => {
-    if (isSuccess) {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
@@ -200,51 +186,6 @@ const HarmFulSubstance = (props) => {
                   </View>
                 </View>
               ))}
-            <View style={styles.tableBody}>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput style={styles.bodyTextInput} placeholder={"Substance"} onChangeText={(txt) => setData({ ...data, paint: txt })} value={data.paint} />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Location"}
-                  onChangeText={(txt) => setData({ ...data, location: txt })}
-                  value={data.location}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Potential hazard"}
-                  onChangeText={(txt) => setData({ ...data, potential_hazard: txt })}
-                  value={data.potential_hazard}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Safer alternatives"}
-                  onChangeText={(txt) => setData({ ...data, safer_alternatives: txt })}
-                  value={data.safer_alternatives}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Protective clothing required Y/N"}
-                  onChangeText={(txt) => setData({ ...data, protective_clothes: txt })}
-                  value={data.protective_clothes}
-                />
-              </View>
-              <View style={styles.inputHarmFullBodyContainer}>
-                <TextInput
-                  style={styles.bodyTextInput}
-                  placeholder={"Supplier MSDS Held Y/N"}
-                  onChangeText={(txt) => setData({ ...data, supplierMSDS: txt })}
-                  value={data.supplierMSDS}
-                />
-              </View>
-            </View>
           </View>
           <View
             style={{

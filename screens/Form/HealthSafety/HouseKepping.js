@@ -242,7 +242,7 @@ const HouseKepping = (props) => {
       setCheckListArray(copyArray);
     }
   };
-  const houseKeppingForm = () => {
+  const houseKeppingForm = async () => {
     // console.log("Main Contractor  :", constructorName);
     // console.log("Project Name :", projectName);
     // console.log("Week Commencing :", weekCommencing);
@@ -252,9 +252,9 @@ const HouseKepping = (props) => {
     // //   console.log("Job ID :", jobID);
     // //   console.log("Tab Name :", tabId);
     // console.log("Token :", token);
-
+try{
     if (constructorName != "" && projectName != "" && weekCommencing != "" && checkListArray != "" && supervisorSign != "" && dateSupervisor != "") {
-      props.createHouseKeepingHandler(
+     await props.createHouseKeepingHandler(
         constructorName,
         projectName,
         weekCommencing,
@@ -267,11 +267,15 @@ const HouseKepping = (props) => {
         props.route.params?.index
       );
       props.updateHealthReport(props?.route?.params?.index);
+      alert("Hose Keeping Insert SuccessFully !")
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
   return (
     <View style={styles.mainContainer}>

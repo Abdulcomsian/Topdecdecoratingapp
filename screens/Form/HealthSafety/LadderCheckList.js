@@ -4,8 +4,9 @@ import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
-import { insertScopeForm } from "../../../Redux/action/auth/authActionTypes";
+import { insertLAdderCheckListForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 const LadderCheckList = (props) => {
@@ -244,8 +245,8 @@ const LadderCheckList = (props) => {
       other: false,
     },
   ]);
-  const [dateTimeComplete, setDateTimeComplete] = useState(new Date());
-  const [nextDateInspection, setNextDateInspection] = useState(new Date());
+  const [dateTimeComplete, setDateTimeComplete] = useState(new Date().toLocaleDateString());
+  const [nextDateInspection, setNextDateInspection] = useState(new Date().toLocaleDateString());
   const [showDateTimeComplete, setShowDateTimeComplete] = useState(false);
   const [showNextDateInspection, setShowNextDateInspection] = useState(false);
   const [furtherComments, setFurtherComments] = useState("");
@@ -259,12 +260,12 @@ const LadderCheckList = (props) => {
   const onDateCompleteChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShowDateTimeComplete(false);
-    setDateTimeComplete(new Date(currentDate));
+    setDateTimeComplete(new Date(currentDate).toLocaleDateString());
   };
   const onNextDateInspectionChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShowNextDateInspection(false);
-    setNextDateInspection(new Date(currentDate));
+    setNextDateInspection(new Date(currentDate).toLocaleDateString());
   };
   const showNextDateInspectionPicker = () => {
     setShowNextDateInspection(true);
@@ -295,17 +296,26 @@ const LadderCheckList = (props) => {
       setLadderArrayList(copyArray);
     }
   };
-  const ladderCheckListForm = () => {
+  const ladderCheckListForm = async () => {
     console.log("Main Contractor  :", contractorName);
     console.log("Project Name :", projectName);
     console.log("Supervisor Sign :", supervisorSign);
-    console.log("Date Complete :", dateTimeComplete.toLocaleDateString());
-    console.log("Date Complete Time :", dateTimeComplete.toLocaleTimeString());
-    console.log("Next Inspection Date :", nextDateInspection.toLocaleDateString());
+    console.log("Date Complete :", dateTimeComplete);
+    console.log("Next Inspection Date :", nextDateInspection);
     console.log("Further Comments :", furtherComments);
     console.log("Array :", ladderArrayList);
-    props.updateHealthReport(props?.route?.params?.index);
+    try{
+    if(contractorName!="" && projectName!="" && supervisorSign!="" && dateTimeComplete!="" && nextDateInspection!="" && furtherComments!="" && ladderArrayList){
+    await props.createLadderCheckListHandler(contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList, props.route.params?.index)
+      props.updateHealthReport(props?.route?.params?.index);
+    alert("Ladder Check List Insert SuccessFully !");
     props.navigation.pop();
+    } else{
+      alert("Please Insert All Fields CareFully !");
+    }
+  } catch(err){
+    alert(err.message)
+  }
   };
   return (
     <View style={styles.mainContainer}>
@@ -519,6 +529,9 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
+  createLadderCheckListHandler: (contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList, jobID, tabId, token, index) =>
+    dispatch(insertLAdderCheckListForm(contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList, jobID, tabId, token, index)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(LadderCheckList);
 

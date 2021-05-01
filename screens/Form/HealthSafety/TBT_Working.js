@@ -5,10 +5,18 @@ import styles from "../../../assets/css/styles";
 import { color } from "react-native-reanimated";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import { connect } from "react-redux";
+import TBTForm from "../../../components/common/TBTForm";
+import SignatureComponent from "../../../components/SignatureComponent";
+import { connect } from "react-redux";
+import { insertTbtWorking } from "../../../Redux/action/auth/authActionTypes";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const TBTWORKING = (props) => {
+  const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [coshhArray, setCoshhArray] = useState([
     {
       mainTitle: "Work at Height:",
@@ -36,8 +44,46 @@ const TBTWORKING = (props) => {
   const addToolBox = () => setToolBoxArray((oldArray) => [...oldArray, { name: "", sign: "", date: "" }]);
   const [attendenceArray, setAttendenceArray] = useState([]);
   const addAttendence = () => setAttendenceArray((oldArray) => [...oldArray, { print: "", sign: "" }]);
+  const [openSign, setOpenSign] = useState({
+    index: -1,
+    bool: false,
+  });
+  const [data, setData] = useState({
+    contractor: "",
+    project: "",
+    meeting: "",
+    date: null,
+    comment: "",
+    jobSummary: [],
+  });
+  const tbtFormInsert = async () => {
+    try{
+      if(data!=""){
+        await props.creatTbtWorkingHandler(data,jobID,tabId,token,props.route.params?.index)
+        props.updateHealthReport(props?.route?.params?.index);
+        props.navigation.pop();
+        alert("TBT SLIP Insert SuccessFully !");
+      } 
+      else{
+        alert("Please Insert All Fields CareFully !");
+      }
+    } catch(err){
+      alert(err.message)
+    }
+  };
   return (
     <View style={styles.mainContainer}>
+      {openSign.bool ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            let copydata = [...data.jobSummary];
+            copydata[openSign.index].sign = uri;
+            setData({ ...data, jobSummary: [...copydata] });
+            setOpenSign({ bool: false, index: -1 });
+          }}
+        />
+      ) : (
+        <>
       <View style={styles.imageView}>
         <Image source={mainImage} style={styles.bannerImage} />
       </View>
@@ -60,51 +106,27 @@ const TBTWORKING = (props) => {
               )
             )}
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Main Contractor"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Project"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Meeting Conducted By"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Date"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput multiline={true} numberOfLines={4} style={styles.inputField} placeholder={"Comments"} />
-          </View>
-          <Text style={{ fontFamily: "poppins-bold", fontSize: 16 }}>Attendees</Text>
-          <View style={styles.tableViewContainer}>
-            <View style={styles.tableHeader}>
-              <View style={styles.headerWitnessTitleView}>
-                <Text style={styles.headerTitle}>Print</Text>
-              </View>
-              <View style={styles.headerWitnessTitleView}>
-                <Text style={styles.headerTitle}>Signature</Text>
-              </View>
-            </View>
-            <View style={{ justifyContent: "flex-end", width: "100%", alignItems: "flex-end", marginBottom: 10 }}>
-              <TouchableOpacity style={styles.addBtn} onPress={() => addAttendence()}>
-                <Image style={styles.plusBtn} source={plus} />
-              </TouchableOpacity>
-
-              {attendenceArray.map((item, index) => (
-                <View style={styles.tableBody} key={index}>
-                  <Text style={{ width: "10%", justifyContent: "center", alignItems: "center", paddingTop: 20, ontFamily: "poppins-regular", fontSize: 10 }}>
-                    {index}
-                  </Text>
-                  <View style={styles.inputOprativesBodyContainer}>
-                    <TextInput style={styles.bodyTextInput} placeholder={"Print"} />
-                  </View>
-                  <View style={styles.inputOprativesBodyContainer}>
-                    <TextInput style={styles.bodyTextInput} placeholder={"Sign"} />
-                  </View>
-                </View>
-              ))}
-            </View>
-          </View>
+          <TBTForm
+                data={data}
+                getSignature={(index) =>
+                  setOpenSign({ ...openSign, bool: true, index })
+                }
+                addAttendence={() =>
+                  setData({
+                    ...data,
+                    jobSummary: [...data.jobSummary, { print: "", sign: "" }],
+                  })
+                }
+                onChangeData={(key, value, index = -1) => {
+                  if (index >= 0) {
+                    let copyAttendance = [...data.jobSummary];
+                    copyAttendance[index].print = value;
+                    setData({ ...data, jobSummary: [...copyAttendance] });
+                  } else {
+                    setData({ ...data, [key]: value });
+                  }
+                }}
+              />
           <Text style={{ fontFamily: "poppins-bold", fontSize: 12, textAlign: "center" }}>
             Once completed, please file a copy in the Site Folder and send a copy to our Head Office and give a copy to the site staff.
           </Text>
@@ -130,13 +152,46 @@ const TBTWORKING = (props) => {
             <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
               VAT Registration Number: <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}> 203 474 927</Text>
             </Text>
+            <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => tbtFormInsert()}
+                >
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
           </View>
         </View>
       </ScrollView>
+      </>
+      )}
     </View>
   );
 };
-const mapDispatchToProps = (dispatch) => ({
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isOnSite: state.auth.isOnSite,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
 });
-export default connect(null, mapDispatchToProps)(TBTWORKING);
+const mapDispatchToProps = (dispatch) => ({
+  creatTbtWorkingHandler: (
+    data,
+    jobID,
+    tabId,
+    token,
+    index
+  ) =>
+    dispatch(
+      insertTbtWorking(
+        data,
+        jobID,
+        tabId,
+        token,
+        index
+      )
+    ),
+    updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(TBTWORKING);
+

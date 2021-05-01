@@ -5,7 +5,7 @@ import {
   ScrollView,
   CheckBox,
   TouchableOpacity,
-  Image
+  Image,
 } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
@@ -26,87 +26,87 @@ const FridayPack = (props) => {
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Method Statement Register",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Safe Start Briefing",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Housekeeping Checklist",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Electrical Equipment Record",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Harmful Substance Register",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Health and Safety Inspection and Monitoring Form",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Personal Protective Equipment Issued Record",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "PUWER Inspection Checklist / Register",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Toolbox Talk (Please list topic discussed)",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Working at Height Equipment / Inventory Control  ",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
     {
       title: "Ladders and Podium Step Inspection Checklist ",
       yes: false,
       no: false,
       other: false,
-      comment: "",
+      commet: "",
     },
   ]);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
   const [show, setShow] = useState(false);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -143,53 +143,64 @@ const FridayPack = (props) => {
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
-    setDate(new Date(currentDate));
+    setDate(new Date(currentDate).toLocaleDateString());
   };
   const showDatepicker = () => {
     setShow(true);
   };
-  const fridayPackFormInsert = () => {
+  const fridayPackFormInsert = async () => {
     console.log("Name Of Contractor :", contractorName);
     console.log("Project Name :", projectName);
     console.log("Supervisor Sign :", supervisorSign);
     console.log("Document Row :", documentRow);
     console.log("Week Ending :", weekEnding);
     console.log("further Comments :", furtherComments);
-    console.log("Date :", date.toLocaleDateString());
-
-    if (contractorName != "" && projectName != "" && supervisorSign != "" && documentRow != "" && weekEnding != "" && furtherComments !== "" && date !== "") {
-      props.createFridayPackHandler(
-        contractorName,
-        projectName,
-        supervisorSign,
-        documentRow,
-        weekEnding,
-        date,
-        furtherComments,
-        jobID,
-        tabId,
-        token,
-        props.route.params?.index
-      );
-      props.updateHealthReport(props?.route?.params?.index);
-      props.navigation.pop();
-    } else {
-      alert("Please Insert All Fields CareFully !");
-      return false;
+    console.log("Date :", date);
+    try {
+      if (
+        contractorName != "" &&
+        projectName != "" &&
+        supervisorSign != "" &&
+        documentRow != "" &&
+        weekEnding != "" &&
+        furtherComments !== "" &&
+        date !== ""
+      ) {
+        await props.createFridayPackHandler(
+          contractorName,
+          projectName,
+          supervisorSign,
+          documentRow,
+          weekEnding,
+          date,
+          furtherComments,
+          jobID,
+          tabId,
+          token,
+          props.route.params?.index
+        );
+        props.updateHealthReport(props?.route?.params?.index);
+        alert("Friday Pack Insert SuccessFully !");
+        props.navigation.pop();
+      } else {
+        alert("Please Insert All Fields CareFully !");
+        return false;
+      }
+    } catch (err) {
+      alert(err.message);
     }
   };
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
         isVisible={show}
-        date={date ? date : new Date()}
+        testID='dateTimePicker'
+        value={date}
         mode={"date"}
-        is24Hour={true}
         display='default'
-        onConfirm={(date) => onChange(date)}
+        onConfirm={onChange}
         onCancel={() => setShow(false)}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        format='DD-MM-YYYY'
       />
       {getSign ? (
         <SignatureComponent
@@ -205,32 +216,60 @@ const FridayPack = (props) => {
               paddingTop: 30,
               justifyContent: "center",
               alignItems: "center",
-            }}>
+            }}
+          >
             <Text style={styles.titleText}>FRIDAY PACK</Text>
           </View>
           <ScrollView>
             <View style={styles.formCodnatiner}>
               <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Main Contractor"} value={contractorName} onChangeText={(e) => setContractorName(e)} />
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Main Contractor"}
+                  value={contractorName}
+                  onChangeText={(e) => setContractorName(e)}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Project"} value={projectName} onChangeText={(e) => setProjectName(e)} />
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Project"}
+                  value={projectName}
+                  onChangeText={(e) => setProjectName(e)}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Week Ending"} value={weekEnding} onChangeText={(e) => setWeekEnding(e)} />
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Week Ending"}
+                  value={weekEnding}
+                  onChangeText={(e) => setWeekEnding(e)}
+                />
               </View>
               <View style={{ flexDirection: "column" }}>
                 {documentRow.map((item, index) => (
-                  <View style={styles.detailsInstructionContactView} key={index}>
+                  <View
+                    style={styles.detailsInstructionContactView}
+                    key={index}
+                  >
                     <View style={{ flexDirection: "row" }}>
                       <View style={styles.instructionFridayView}>
-                        <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>{item.title}</Text>
+                        <Text
+                          style={{ fontFamily: "poppins-bold", fontSize: 10 }}
+                        >
+                          {item.title}
+                        </Text>
                       </View>
                       <View style={styles.checkBoxInstructionView}>
                         <View style={styles.firstInstructionCheckBoxRow}>
                           <View style={styles.parentCheckBox}>
                             <View style={styles.leftCheckBox}>
-                              <CheckBox value={item.no} onValueChange={() => checkedValue("No", index, "no")} />
+                              <CheckBox
+                                value={item.no}
+                                onValueChange={() =>
+                                  checkedValue("No", index, "no")
+                                }
+                              />
                             </View>
                             <View style={styles.rightCheckBox}>
                               <Text style={styles.accidentText}>No</Text>
@@ -238,7 +277,12 @@ const FridayPack = (props) => {
                           </View>
                           <View style={styles.parentCheckBox}>
                             <View style={styles.leftCheckBox}>
-                              <CheckBox value={item.yes} onValueChange={() => checkedValue("Yes", index, "yes")} />
+                              <CheckBox
+                                value={item.yes}
+                                onValueChange={() =>
+                                  checkedValue("Yes", index, "yes")
+                                }
+                              />
                             </View>
                             <View style={styles.rightCheckBox}>
                               <Text style={styles.accidentText}>Yes</Text>
@@ -246,7 +290,12 @@ const FridayPack = (props) => {
                           </View>
                           <View style={styles.parentCheckBox}>
                             <View style={styles.leftCheckBox}>
-                              <CheckBox value={item.other} onValueChange={() => checkedValue("other", index, "other")} />
+                              <CheckBox
+                                value={item.other}
+                                onValueChange={() =>
+                                  checkedValue("other", index, "other")
+                                }
+                              />
                             </View>
                             <View style={styles.rightCheckBox}>
                               <Text style={styles.accidentText}>N/A</Text>
@@ -259,8 +308,10 @@ const FridayPack = (props) => {
                       <TextInput
                         style={styles.inputField}
                         placeholder={"Comments"}
-                        value={item.comment}
-                        onChangeText={(txt) => updateCommentValue("comment", index, txt)}
+                        value={item.commet}
+                        onChangeText={(txt) =>
+                          updateCommentValue("commet", index, txt)
+                        }
                       />
                     </View>
                   </View>
@@ -277,9 +328,20 @@ const FridayPack = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
+                <TouchableOpacity
+                  onPress={() => setGetSign(true)}
+                  style={styles.inputFieldContainer}
+                >
                   {supervisorSign ? (
-                    <Image style={{ marginTop: 20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: supervisorSign }} />
+                    <Image
+                      style={{
+                        marginTop: 20,
+                        height: 100,
+                        width: 100,
+                        backgroundColor: "gray",
+                      }}
+                      source={{ uri: supervisorSign }}
+                    />
                   ) : (
                     <Text
                       style={{
@@ -292,7 +354,8 @@ const FridayPack = (props) => {
                         color: "#96A8B2",
                         fontFamily: "poppins-regular",
                         paddingTop: 15,
-                      }}>
+                      }}
+                    >
                       Signature
                     </Text>
                   )}
@@ -311,7 +374,8 @@ const FridayPack = (props) => {
                     borderBottomWidth: 1,
                     borderBottomColor: "#96A8B2",
                     padding: 5,
-                  }}>
+                  }}
+                >
                   {new Date(date).toLocaleDateString()}
                 </Text>
               </View>
@@ -321,8 +385,10 @@ const FridayPack = (props) => {
                   fontSize: 12,
                   paddingTop: 10,
                   textAlign: "center",
-                }}>
-                Once completed, please file a copy in the Site Folder and send a copy to our Head Office.
+                }}
+              >
+                Once completed, please file a copy in the Site Folder and send a
+                copy to our Head Office.
               </Text>
               <View
                 style={{
@@ -331,9 +397,13 @@ const FridayPack = (props) => {
                   height: 2,
                   marginBottom: 20,
                   marginTop: 20,
-                }}></View>
+                }}
+              ></View>
               <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => fridayPackFormInsert()}>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => fridayPackFormInsert()}
+                >
                   <Text style={styles.commonText}>Save</Text>
                 </TouchableOpacity>
               </View>
@@ -351,8 +421,34 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createFridayPackHandler: (contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, index) =>
-    dispatch(insertFridayPackForm(contractorName, projectName, supervisorSign, documentRow, weekEnding, date, furtherComments, jobID, tabId, token, index)),
+  createFridayPackHandler: (
+    contractorName,
+    projectName,
+    supervisorSign,
+    documentRow,
+    weekEnding,
+    date,
+    furtherComments,
+    jobID,
+    tabId,
+    token,
+    index
+  ) =>
+    dispatch(
+      insertFridayPackForm(
+        contractorName,
+        projectName,
+        supervisorSign,
+        documentRow,
+        weekEnding,
+        date,
+        furtherComments,
+        jobID,
+        tabId,
+        token,
+        index
+      )
+    ),
   updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(FridayPack);

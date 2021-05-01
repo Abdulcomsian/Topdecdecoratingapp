@@ -12,6 +12,7 @@ import SignatureComponent from "../../../components/SignatureComponent";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { connect } from "react-redux";
 import { insertOnSiteDecorationForm } from "../../../Redux/action/auth/authActionTypes";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -27,14 +28,7 @@ const OnSiteDecoration = (props) => {
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [siteArray, setSiteArray] = useState([]);
-  const [dynamicInput, setdynamicInput] = useState([
-    {
-      name: "",
-      Card_no: "",
-      date: new Date().toLocaleDateString(),
-      signature: "",
-    },
-  ]);
+  const [dynamicInput, setdynamicInput] = useState([]);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
   const addSiteArray = () => {
@@ -53,10 +47,10 @@ const OnSiteDecoration = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  const onSiteDecorationFormInsert = () => {
+  const onSiteDecorationFormInsert = async () => {
     try {
       if (contractorName != "" && projectName != "" && dynamicInput != "") {
-        props.createOnSiteDecorationHandler(
+        await props.createOnSiteDecorationHandler(
           contractorName,
           projectName,
           dynamicInput,
@@ -65,12 +59,15 @@ const OnSiteDecoration = (props) => {
           token,
           props.route.params?.index
         );
+        props.updateHealthReport(props?.route?.params?.index);
+        props.navigation.pop();
+        alert("Ons Site Decoration Insert SuccessFully !");
       } else {
         alert("Please Insert All Fields CareFully !");
         return false;
       }
     } catch (err) {
-      alert(err);
+      alert(err.message);
     }
   };
   const [signature, setSignature] = useState({
@@ -99,14 +96,13 @@ const OnSiteDecoration = (props) => {
     <View style={styles.mainContainer}>
       <DateTimePickerModal
         isVisible={show.isVisible}
-        date={date ? date : new Date()}
+        testID='dateTimePicker'
+        value={date}
         mode={"date"}
-        is24Hour={true}
-        display="default"
-        onConfirm={(date) => onChange(date)}
+        display='default'
+        onConfirm={onChange}
         onCancel={() => setShow({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
+        format='DD-MM-YYYY'
       />
       {signature.bool ? (
         <SignatureComponent
@@ -400,5 +396,6 @@ const mapDispatchToProps = (dispatch) => ({
         index
       )
     ),
+    updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(OnSiteDecoration);

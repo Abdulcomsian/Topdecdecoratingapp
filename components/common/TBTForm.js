@@ -5,8 +5,8 @@ var plus = require("../../assets/authScreen/plus.png");
 import styles from "../../assets/css/styles";
 const TBTForm = (props) => {
   const { data, addAttendence, onChangeData, getSignature } = props;
-  console.log(data);
-  const { mainContractor, project, meeting, date, comments, attendess } = data;
+  // console.log(data);
+  const { contractor, project, meeting, date, comment, jobSummary } = data;
   const [openData, setOpenDate] = React.useState(false);
 
   return (
@@ -15,7 +15,7 @@ const TBTForm = (props) => {
         isVisible={openData}
         testID='dateTimePicker'
         value={date ? date : new Date()}
-        mode={"datetime"}
+        mode={"date"}
         display='default'
         onConfirm={(txt) => {
           setOpenDate(false);
@@ -28,8 +28,8 @@ const TBTForm = (props) => {
       />
       <View style={styles.inputFieldContainer}>
         <TextInput
-          value={mainContractor}
-          onChangeText={(txt) => onChangeData("mainContractor", txt)}
+          value={contractor}
+          onChangeText={(txt) => onChangeData("contractor", txt)}
           style={styles.inputField}
           placeholder={"Main Contractor"}
         />
@@ -45,8 +45,8 @@ const TBTForm = (props) => {
       </TouchableOpacity>
       <View style={styles.inputFieldContainer}>
         <TextInput
-          onChangeText={(txt) => onChangeData("comments", txt)}
-          value={comments}
+          onChangeText={(txt) => onChangeData("comment", txt)}
+          value={comment}
           multiline={true}
           numberOfLines={4}
           style={styles.inputField}
@@ -68,7 +68,7 @@ const TBTForm = (props) => {
             <Image style={styles.plusBtn} source={plus} />
           </TouchableOpacity>
 
-          {attendess.map((item, index) => (
+          {jobSummary.map((item, index) => (
             <View style={styles.tableBody} key={index}>
               <Text style={{ width: "10%", justifyContent: "center", alignItems: "center", paddingTop: 20, ontFamily: "poppins-regular", fontSize: 10 }}>
                 {index}

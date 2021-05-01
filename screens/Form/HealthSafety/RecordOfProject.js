@@ -4,6 +4,7 @@ import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import { connect } from "react-redux";
 import { insertRecordOfProject } from "../../../Redux/action/auth/authActionTypes";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 const RecordOfProject = (props) => {
   const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
@@ -71,7 +72,7 @@ const RecordOfProject = (props) => {
   const [mainContractor, setMainContractor] = useState("");
   const [projectName, setProjectName] = useState("");
 
-  const recordProjectFormInsert = () => {
+  const recordProjectFormInsert = async () => {
     try {
       
 
@@ -90,7 +91,7 @@ const RecordOfProject = (props) => {
         projectName != "" &&
         recordArray != ""
       ) {
-        props.createRecordOfProjectHandler(
+       await props.createRecordOfProjectHandler(
           surName,
           mobileNo,
           firstName,
@@ -109,12 +110,15 @@ const RecordOfProject = (props) => {
           token,
           props.route.params?.index
         );
+        props.updateHealthReport(props?.route?.params?.index);
+        alert("Record Of Project Insert SuccessFully !");
+        props.navigation.pop();
       } else {
         alert("Please Insert All Fields CareFully !");
         return false;
       }
     } catch (err) {
-      alert(err);
+      alert(err.message);
     }
   };
   return (
@@ -386,5 +390,6 @@ const mapDispatchToProps = (dispatch) => ({
     index
       )
     ),
+    updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(RecordOfProject);

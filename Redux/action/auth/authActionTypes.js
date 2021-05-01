@@ -3,9 +3,9 @@ import axios from "axios";
 
 var base_url = "https://airtimetesting.airtime4u.com/public/tajs/public/api/";
 
-export const resetLoginFlag = () =>{
-  return({type: Actions.RESET_LOGIN_FLAG})
-}
+export const resetLoginFlag = () => {
+  return { type: Actions.RESET_LOGIN_FLAG };
+};
 
 export const adminLogin = (email, password) => {
   return async (dispatch, getState) => {
@@ -25,7 +25,7 @@ export const adminLogin = (email, password) => {
           payload: response,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -49,7 +49,7 @@ export const emailLink = (email) => {
           payload: response,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -73,7 +73,7 @@ export const codeValidate = (code) => {
           payload: response.data.user[0].id,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -96,14 +96,22 @@ export const resetPassword = (id, password) => {
           payload: response,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
-export const createNewJobCreation = (contractor, project, weeks, supervisor_id, start_date, jobSummary, token) => {
+export const createNewJobCreation = (
+  contractor,
+  project,
+  weeks,
+  supervisor_id,
+  start_date,
+  jobSummary,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log(contractor)
@@ -131,7 +139,7 @@ export const createNewJobCreation = (contractor, project, weeks, supervisor_id, 
           payload: response,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -157,12 +165,14 @@ export const searchJob = (reference_number, date, token) => {
     }
   };
 };
-export const createDecorator = ( firstname,
+export const createDecorator = (
+  firstname,
   lastname,
   email,
   phone,
   password,
-  token) => {
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("firstname :", firstname);
@@ -172,7 +182,7 @@ export const createDecorator = ( firstname,
       // console.log("password :", password);
       // console.log("Token :", token);
 
-      const body = { email,password,firstname,phone,lastname };
+      const body = { email, password, firstname, phone, lastname };
       const request = await axios(base_url + "admin/create/decorator", {
         method: "POST",
         headers: {
@@ -188,7 +198,7 @@ export const createDecorator = ( firstname,
           payload: response,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       console.log("API Error :", err.message);
@@ -217,7 +227,7 @@ export const searchDecorator = (id, token) => {
           payload: response,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -244,7 +254,7 @@ export const createSupervisor = (name, email, password, phone, token) => {
           payload: response,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -278,7 +288,7 @@ export const searchSupervisor = (id, name, email, token) => {
         //   type: Actions.SEARCH_SUPERVISOR_FAIL,
         //   payload: response.data.user,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -309,7 +319,7 @@ export const updateSupervisor = (id, email, name, number, status, token) => {
         //   type: Actions.UPDATE_SUPERVISOR_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -374,13 +384,16 @@ export const insertHandOverForm = (
         tab_id,
         jobSummary,
       };
-      const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insert_handover",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -397,7 +410,7 @@ export const insertHandOverForm = (
         //   type: Actions.CREATE_HAND_OVER_SHEET_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       console.log("Error Response :", err);
@@ -473,13 +486,16 @@ export const insertMakeReadyForm = (
         dynamicInput,
       };
 
-      const request = await axios(base_url + "supervisor/make/workflow/makeReadySheet", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/make/workflow/makeReadySheet",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -496,7 +512,7 @@ export const insertMakeReadyForm = (
         //   type: Actions.CREATE_MAKE_READY_SHEET_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -556,13 +572,16 @@ export const insertSnaggingForm = (
         dynamicInputComplete,
       };
 
-      const request = await axios(base_url + "supervisor/make/workflow/insertWarenty", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insertWarenty",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -579,7 +598,7 @@ export const insertSnaggingForm = (
         //   type: Actions.CREATE_PRE_WRRANTY_FORM_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       console.log("Insert Error Response :", err.message);
@@ -587,7 +606,20 @@ export const insertSnaggingForm = (
     }
   };
 };
-export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, task_id, tab_id, token, index) => {
+export const insertAnsuranceForm = (
+  project,
+  unit,
+  dynamicInput,
+  dynamicInputcomplete,
+  mc,
+  md,
+  sms,
+  bscs,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       console.log("Project Name :", project);
@@ -614,13 +646,16 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
         dynamicInputcomplete,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/quaity",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -637,7 +672,7 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
         //   type: Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       console.log("Insert Error Response :", err.message);
@@ -719,13 +754,16 @@ export const insertRemedialForm = (
         totalHours,
       };
 
-      const request = await axios(base_url + "supervisor/insert/workflow/RemendialSheet", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/workflow/RemendialSheet",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -742,14 +780,25 @@ export const insertRemedialForm = (
         //   type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
-export const insertScopeForm = (dynamicInput, painter, signature, plotNumber, type, date, task_id, tab_id, token, index) => {
+export const insertScopeForm = (
+  dynamicInput,
+  painter,
+  signature,
+  plotNumber,
+  type,
+  date,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic Input :", dynamicInput);
@@ -771,13 +820,16 @@ export const insertScopeForm = (dynamicInput, painter, signature, plotNumber, ty
         dynamicInput,
       };
 
-      const request = await axios(base_url + "supervisor/make/workflow/insertScope", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insertScope",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -794,7 +846,7 @@ export const insertScopeForm = (dynamicInput, painter, signature, plotNumber, ty
         //   type: Actions.CREATE_SCOPE_FORM_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
@@ -862,13 +914,16 @@ export const insertWorkSheet = (
         PRELIMINARIES,
       };
 
-      const request = await axios(base_url + "supervisor/insert/verification/accurate", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/verification/accurate",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -885,7 +940,7 @@ export const insertWorkSheet = (
         //   type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       console.log("Erroe :", err.message);
@@ -893,7 +948,13 @@ export const insertWorkSheet = (
     }
   };
 };
-export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, tab_id, token) => {
+export const insertDecorationRecord = (
+  jobSummary,
+  jobSummarycomplete,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic First Input :", jobSummary);
@@ -908,13 +969,16 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
         jobSummarycomplete,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/decoration", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/decoration",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -927,7 +991,7 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
         //   type: Actions.INSERT_DECORATION_RECORD_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       console.log("error:", err.message);
@@ -935,7 +999,14 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
     }
   };
 };
-export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, token) => {
+export const insertMiscoat = (
+  contractor,
+  project,
+  jobSummary,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contructor :", contractor);
@@ -952,13 +1023,16 @@ export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, 
         jobSummary,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Miscoat", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Miscoat",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -971,7 +1045,7 @@ export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, 
         //   type: Actions.INSERT_MISCOAT_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       console.log("error:", err.message);
@@ -979,7 +1053,19 @@ export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, 
     }
   };
 };
-export const insertSiteInstruction = (contractor, instruction, raised_by, date, details, condition, supervisor, s_date, task_id, tab_id, token) => {
+export const insertSiteInstruction = (
+  contractor,
+  instruction,
+  raised_by,
+  date,
+  details,
+  condition,
+  supervisor,
+  s_date,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1006,13 +1092,16 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
         supervisor,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Instruction", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Instruction",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1025,7 +1114,7 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
         //   type: Actions.INSERT_SITE_INSTRUCTION_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       // console.log("error:", err.message);
@@ -1033,7 +1122,15 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
     }
   };
 };
-export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES, task_id, tab_id, token) => {
+export const insertVerificationForm = (
+  project,
+  id_ref,
+  decorator,
+  PRELIMINARIES,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       console.log("Project Name :", project);
@@ -1053,13 +1150,16 @@ export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES
         PRELIMINARIES,
       };
 
-      const request = await axios(base_url + "supervisor/insert/verification/verrify_worksheet", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/verification/verrify_worksheet",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1068,14 +1168,26 @@ export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES
           payload: response,
         });
       } else {
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
-export const insertCleanUpForm = (contractor, project, operation, date, jobSummary, signature,date1, task_id, tab_id, token, index) => {
+export const insertCleanUpForm = (
+  contractor,
+  project,
+  operation,
+  date,
+  jobSummary,
+  signature,
+  date1,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1098,16 +1210,19 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
         date1,
         task_id,
         tab_id,
-        jobSummary
+        jobSummary,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/cleanup", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/cleanup",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1120,24 +1235,34 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
         //   type: Actions.INSERT_CLEAN_UP_FORM_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
-export const insertElectricalEquipemntForm = (contractor, project, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
+export const insertElectricalEquipemntForm = (
+  contractor,
+  project,
+  supervisor,
+  date,
+  jobSummary,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
-    // console.log("Name Of Contractor :", contractor);
-    // console.log("Project Name :", project);
-    // console.log("Supervisor Sign :", supervisor);
-    // console.log("Date :", date);
-    // console.log("Dynamic Input :", jobSummary);
-    // console.log("Job ID :", task_id);
-    // console.log("Tab Name :", tab_id);
-    // console.log("Token :", token);
+      // console.log("Name Of Contractor :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Supervisor Sign :", supervisor);
+      // console.log("Date :", date);
+      // console.log("Dynamic Input :", jobSummary);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
 
       const body = {
         contractor,
@@ -1149,7 +1274,73 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
         jobSummary,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/electric_equipment", {
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/electric_equipment",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertFridayPackForm = (
+  contractor,
+  project,
+  supervisor,
+  jobSummary,
+  week_ending,
+  date,
+  furhter_comment,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Name Of Contractor :", contractor);
+      console.log("Project Name :", project);
+      console.log("Supervisor Sign :", supervisor);
+      console.log("Document Row :", jobSummary);
+      console.log("Week Ending :", week_ending);
+      console.log("further Comments :", furhter_comment);
+      console.log("Date :", date);
+      console.log("Job ID :", task_id);
+      console.log("Tab Name :", tab_id);
+      console.log("Token :", token);
+      const body = {
+        contractor,
+        project,
+        week_ending,
+        supervisor,
+        furhter_comment,
+        date,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
+
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/friday_pack", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
@@ -1168,70 +1359,23 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
         //   type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
         //   payload: response,
         // });
-        throw new Error(response.message)
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
-export const insertFridayPackForm = (contractor, project, supervisor, jobSummary, week_ending, date, furtherComments, task_id, tab_id, token, index) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("Name Of Contractor :", contractor);
-      console.log("Project Name :", project);
-      console.log("Supervisor Sign :", supervisor);
-      console.log("Document Row :", jobSummary);
-      console.log("Week Ending :", week_ending);
-      console.log("further Comments :", furtherComments);
-      console.log("Date :", date.toLocaleDateString());
-      console.log("Job ID :", task_id);
-      console.log("Tab Name :", tab_id);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   supervisor,
-      //   date,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(base_url + "supervisor/insert/healthAndSecurity/electric_equipment", {
-      //   method: "POST",
-      //   headers: {
-      //     authorization: "Bearer " + token,
-      //   },
-      //   data: body,
-      // });
-      // const response = request.data;
-      // console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertHarmFulForm = ( contractor,
+export const insertHarmFulForm = (
+  contractor,
   project,
   date,
   jobSummary,
   task_id,
   tab_id,
   token,
-  index) => {
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -1242,7 +1386,6 @@ export const insertHarmFulForm = ( contractor,
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const body = {
         contractor,
         project,
@@ -1252,13 +1395,16 @@ export const insertHarmFulForm = ( contractor,
         jobSummary,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1277,7 +1423,84 @@ export const insertHarmFulForm = ( contractor,
     }
   };
 };
-export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Supervisor, date, task_id, tab_id, token, index) => {
+export const insertHealthSafetyForm = (
+  contractorName,
+  siteSupervisor,
+  dateInspection,
+  projectAddress,
+  dynamicInput,
+  inspectionName,
+  inspectionFor,
+  dateUpdateComplete,
+  signature,
+  arrayDocument,
+  jobID,
+  tabId,
+  token,
+  index
+) => {
+  return async (dispatch, getState) => {
+    try {
+        console.log("Contractor Name :", contractorName);
+        console.log("Site Supervisor :", siteSupervisor);
+        console.log("Date :", dateInspection);
+        console.log("Project Address :", projectAddress);
+        console.log("Array:", dynamicInput);
+        console.log("Inspection Name :", inspectionName);
+        console.log("Inspection For :", inspectionFor);
+        console.log("Inspection Date :", dateUpdateComplete);
+        console.log("Inspection Signature :", signature);
+        console.log("Document Array :", arrayDocument);
+        console.log("Job ID :", jobID);
+        console.log("Tab Name :", tabId);
+        console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   date,
+      //   tab_id,
+      //   task_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance", {
+      //   method: "POST",
+      //   headers: {
+      //     authorization: "Bearer " + token,
+      //   },
+      //   data: body,
+      // });
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_HARMFUL_SUBSTANCE_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_HARMFUL_SUBSTANCE_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertHouseKeepingForm = (
+  contractor,
+  project,
+  week,
+  jobSummary,
+  Supervisor,
+  date,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       console.log("Main Contractor  :", contractor);
@@ -1287,7 +1510,6 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
       console.log("Supervisor Sign :", Supervisor);
       console.log("Supervisor Date :", date);
 
-
       const body = {
         contractor,
         project,
@@ -1296,16 +1518,19 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
         date,
         task_id,
         tab_id,
-        jobSummary
+        jobSummary,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepings", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/housekeepings",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1314,30 +1539,98 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_HOUSE_KEEPING_FORM_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_HOUSE_KEEPING_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
-export const insertMethodStatementForm = (title, contractor, project, ref, jobSummary, supervisor, supervisor_sign, task_id, tab_id, token, index) => {
+export const insertLAdderCheckListForm = (
+  contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList, jobID, tabId, token, index
+) => {
   return async (dispatch, getState) => {
     try {
-    //   console.log("Statement Title  :", title);
-    // console.log("Main Contractor  :", contractor);
-    // console.log("Project Name :", project);
-    // console.log("Ref No :", ref);
-    // console.log("Name Of Supervisor :", supervisor);
-    // console.log("Supervisor Sign :", supervisor_sign);
-    // console.log("Array Data :", jobSummary);
-    // console.log("Job ID :", task_id);
-    // console.log("Tab Name :", tab_id);
-    // console.log("Token :", token);
+      console.log("Main Contractor  :", contractorName);
+      console.log("Project Name :", projectName);
+      console.log("Supervisor Sign :", supervisorSign);
+      console.log("Date Complete :", dateTimeComplete);
+      console.log("Next Inspection Date :", nextDateInspection);
+      console.log("Further Comments :", furtherComments);
+      console.log("Array :", ladderArrayList);
+      console.log("Job ID :", jobID);
+        console.log("Tab Name :", tabId);
+        console.log("Token :", token);
 
+      // const body = {
+      //   contractor,
+      //   project,
+      //   week,
+      //   Supervisor,
+      //   date,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/housekeepings",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_HOUSE_KEEPING_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   // dispatch({
+      //   //   type: Actions.INSERT_HOUSE_KEEPING_FORM_FAIL,
+      //   //   payload: response,
+      //   // });
+      //   throw new Error(response.message);
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertMethodStatementForm = (
+  title,
+  contractor,
+  project,
+  ref,
+  jobSummary,
+  supervisor,
+  supervisor_sign,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      //   console.log("Statement Title  :", title);
+      // console.log("Main Contractor  :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Ref No :", ref);
+      // console.log("Name Of Supervisor :", supervisor);
+      // console.log("Supervisor Sign :", supervisor_sign);
+      // console.log("Array Data :", jobSummary);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
 
       const body = {
         title,
@@ -1348,112 +1641,176 @@ export const insertMethodStatementForm = (title, contractor, project, ref, jobSu
         supervisor_sign,
         task_id,
         tab_id,
-        jobSummary
+        jobSummary,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/methodStatement", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/methodStatement",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
-      //console.log("Insert Response :", response);
+      console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.INSERT_METHOD_STATEMENT_FORM_SUCCESS,
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_METHOD_STATEMENT_FORM_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_METHOD_STATEMENT_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
-export const insertOnSiteDecorationForm = (contractor, project, jobSummary, task_id, tab_id, token, index) => {
-  return async (dispatch, getState) => {
-    try {
-    //   console.log("Statement Title  :", title);
-    // console.log("Main Contractor  :", contractor);
-    // console.log("Project Name :", project);
-    // console.log("Ref No :", ref);
-    // console.log("Name Of Supervisor :", supervisor);
-    // console.log("Supervisor Sign :", supervisor_sign);
-    // console.log("Array Data :", jobSummary);
-    // console.log("Job ID :", task_id);
-    // console.log("Tab Name :", tab_id);
-    // console.log("Token :", token);
-
-
-      const body = {
-        contractor,
-        project,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/top_decorting", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
-      const response = request.data;
-      //console.log("Insert Response :", response);
-      if (response.success == true) {
-        dispatch({
-          type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-          payload: response,
-        });
-      } else {
-        dispatch({
-          type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-          payload: response,
-        });
-      }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertRecordOfProject = (surname,
-  mobile,
-  firstname,
-  job,
-  address,
-  cscscard,
-  detail,
-  nextofkin,
-  relation,
-  kincontact,
+export const insertIssueRecordForm = (
   contractor,
-  project,
-  recordArray,
+  comapanyproject,
+  employees,
+  dynamicInput,
   jobID,
   tabId,
   token,
-  index) => {
+  index
+) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Statement Title  :", title);
-    console.log("Main Contractor  :", contractor);
-    console.log("Project Name :", project);
-    console.log("Ref No :", ref);
-    console.log("Name Of Supervisor :", supervisor);
-    console.log("Supervisor Sign :", supervisor_sign);
-    console.log("Array Data :", jobSummary);
-    console.log("Job ID :", task_id);
-    console.log("Tab Name :", tab_id);
-    console.log("Token :", token);
+      console.log("Main Contractor  :", contractor);
+      console.log("Project Name :", comapanyproject);
+      console.log("Operative Name :", employees);
+      console.log("Array :", dynamicInput);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
 
+      // const body = {
+      //   title,
+      //   contractor,
+      //   project,
+      //   ref,
+      //   supervisor,
+      //   supervisor_sign,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/methodStatement",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_METHOD_STATEMENT_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   // dispatch({
+      //   //   type: Actions.INSERT_METHOD_STATEMENT_FORM_FAIL,
+      //   //   payload: response,
+      //   // });
+      //   throw new Error(response.message);
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertPuwerInspectionForm = (
+  contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId, token, index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Main Contractor  :", contractorName);
+      console.log("Project Name :", projectName);
+      console.log("Further Comments :", furtherComment);
+      console.log("Supervisor Sign :", supervisorSign);
+      console.log("Supervisor Date :", dateSupervisor);
+      console.log("Array Data :", puwerArrayList);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   title,
+      //   contractor,
+      //   project,
+      //   ref,
+      //   supervisor,
+      //   supervisor_sign,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/methodStatement",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_METHOD_STATEMENT_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   // dispatch({
+      //   //   type: Actions.INSERT_METHOD_STATEMENT_FORM_FAIL,
+      //   //   payload: response,
+      //   // });
+      //   throw new Error(response.message);
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertOnSiteDecorationForm = (
+  contractor,
+  project,
+  jobSummary,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      //   console.log("Statement Title  :", title);
+      // console.log("Main Contractor  :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Ref No :", ref);
+      // console.log("Name Of Supervisor :", supervisor);
+      // console.log("Supervisor Sign :", supervisor_sign);
+      // console.log("Array Data :", jobSummary);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
 
       const body = {
         contractor,
@@ -1463,13 +1820,85 @@ export const insertRecordOfProject = (surname,
         jobSummary,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/top_decorting", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertRecordOfProject = (
+  surname,
+  mobile,
+    firstname,
+    job,
+    address,
+    cscscard,
+    detail,
+    nextofkin,
+    relation_to_kin,
+    kincontact,
+    contractor,
+    project,
+    recordArray,
+    jobID,
+    tabId,
+    token,
+    index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Statement Title  :", title);
+      console.log("Main Contractor  :", contractor);
+      console.log("Project Name :", project);
+      console.log("Ref No :", ref);
+      console.log("Name Of Supervisor :", supervisor);
+      console.log("Supervisor Sign :", supervisor_sign);
+      console.log("Array Data :", jobSummary);
+      console.log("Job ID :", task_id);
+      console.log("Tab Name :", tab_id);
+      console.log("Token :", token);
+
+      const body = {
+        contractor,
+        project,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1489,9 +1918,477 @@ export const insertRecordOfProject = (surname,
   };
 };
 
+export const insertDailyBreifingForm = (
+  mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,
+    jobID,
+    tabId,
+    token,
+    index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Main Contractor :", mainContractor);
+      console.log("Project Name :", projectName);
+      console.log("Supervisor Name :", supervisorName);
+      console.log("Statment Number :", statementNumber);
+      console.log("Date :", date);
+      console.log("Daily array :", dailyArray);
+      console.log("Job Safe Array :", jobSafetyArray);
+      console.log("Brefily Array :", berifingArray);
+      console.log("Operative Array :", operativeArray);
+      console.log("Hazrd Array :", hazrdArray);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
 
-// export const resetCreateJobFlag=()=>{
-// return({
-//   type:
-// })
-// }
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTBTCOSH = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtFire = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtSlip = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtCovid = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtHouseKeepingForm = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtMobileForm = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtRespiratory = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtSilicaDust = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtWorking = (
+  data,jobID,tabId,token,index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+

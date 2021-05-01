@@ -8,9 +8,13 @@ import SignatureComponent from "../../../components/SignatureComponent";
 import { set } from "react-native-reanimated";
 import { connect } from "react-redux";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { insertHealthSafetyForm } from "../../../Redux/action/auth/authActionTypes";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const HealthSafetyInspection = (props) => {
+  const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
@@ -19,16 +23,7 @@ const HealthSafetyInspection = (props) => {
   const [dateComplete, setDateComplete] = useState(new Date());
   const [dateUpdateComplete, setDateUpdateComplete] = useState(new Date());
   const [inspectionRow, setInspectionRow] = useState([]);
-  const [dynamicInput, setdynamicInput] = useState([
-    {
-      itemNo: "",
-      location: "",
-      actionReq: "",
-      priority: "",
-      actionBy: "",
-      dateComplte: new Date().toLocaleDateString(),
-    },
-  ]);
+  const [dynamicInput, setdynamicInput] = useState([]);
   const [getSign, setGetSign] = useState(false);
   const [signature, setSignature] = useState("");
   const [showUpdateDateComplete, setShowUpdateDateComplete] = useState({
@@ -170,7 +165,7 @@ const HealthSafetyInspection = (props) => {
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
-    setDate(new Date(currentDate));
+    setDate(new Date(currentDate).toLocaleDateString());
   };
   const showDatepicker = () => {
     setShow(true);
@@ -178,7 +173,7 @@ const HealthSafetyInspection = (props) => {
   const onInspectionChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShowInspection(false);
-    setDateInspection(new Date(currentDate));
+    setDateInspection(new Date(currentDate).toLocaleDateString());
   };
   const showInspectionDatepicker = () => {
     setShowInspection(true);
@@ -222,16 +217,17 @@ const HealthSafetyInspection = (props) => {
   };
 
   const healthSafetyFormInsert = () => {
-    console.log("Contractor Name :", contractorName);
-    console.log("Site Supervisor :", siteSupervisor);
-    console.log("Date :", date.toLocaleDateString());
-    console.log("Project Address :", projectAddress);
-    console.log("Array:", dynamicInput);
-    console.log("Inspection Name :", inspectionName);
-    console.log("Inspection For :", inspectionFor);
-    console.log("Inspection Date :", dateInspection.toLocaleDateString());
-    console.log("Inspection Signature :", signature);
-    console.log("Document Array :", arrayDocument);
+  
+    try{
+      if(contractorName!="" && siteSupervisor!="" && dateInspection!="" && projectAddress!="" && dynamicInput!="" && inspectionName!="" && inspectionFor!="" && dateUpdateComplete!="" && signature!="" && arrayDocument!="" ){
+        props.createHealthSafetyInspectionHandler(contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, props.route.params?.index)
+      }
+      else{
+        alert("Please Insert All Fields CareFully !")
+      }
+    } catch(err){
+      alert(err.message)
+    }
     props.updateHealthReport(props?.route?.params?.index);
     props.navigation.pop();
   };
@@ -244,36 +240,33 @@ const HealthSafetyInspection = (props) => {
     <View style={styles.mainContainer}>
       <DateTimePickerModal
         isVisible={show}
-        date={date ? date : new Date()}
+        testID='dateTimePicker'
+        value={date}
         mode={"date"}
-        is24Hour={true}
         display='default'
-        onConfirm={(date) => onChange(date)}
         onCancel={() => setShow(false)}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        onConfirm={onChange}
+        format='DD-MM-YYYY'
       />
       <DateTimePickerModal
         isVisible={showInspection}
-        date={dateInspection ? dateInspection : new Date()}
+        testID='dateTimePicker'
+        value={dateInspection}
         mode={"date"}
-        is24Hour={true}
         display='default'
-        onConfirm={(date) => onInspectionChange(date)}
         onCancel={() => setShowInspection(false)}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        onConfirm={onInspectionChange}
+        format='DD-MM-YYYY'
       />
       <DateTimePickerModal
         isVisible={showComplete.isVisible}
-        date={dateComplete ? dateComplete : new Date()}
+        testID='dateTimePicker'
+        value={dateComplete}
         mode={"date"}
-        is24Hour={true}
         display='default'
-        onConfirm={(date) => onDateCompleteChange(date)}
         onCancel={() => setShowComplete({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        onConfirm={onDateCompleteChange}
+        format='DD-MM-YYYY'
       />
       <DateTimePickerModal
         isVisible={showUpdateDateComplete.isVisible}
@@ -408,7 +401,8 @@ const HealthSafetyInspection = (props) => {
                             onPress={() => showDateCompletepicker(index)}
                             style={{
                               width: "100%",
-                              paddingTop: 18,
+                              height:38,
+                              paddingTop: 12,
                               fontSize: 8,
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
@@ -732,7 +726,15 @@ const HealthSafetyInspection = (props) => {
     </View>
   );
 };
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
 const mapDispatchToProps = (dispatch) => ({
+  createHealthSafetyInspectionHandler: (contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, index) =>
+    dispatch(insertHealthSafetyForm(contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, index)),
   updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(null, mapDispatchToProps)(HealthSafetyInspection);

@@ -5,10 +5,12 @@ import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
 import { connect } from "react-redux";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { insertPuwerInspectionForm } from "../../../Redux/action/auth/authActionTypes";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const PuwerInspection = (props) => {
-  const { navigation, token, isScope, isSuccessMsg, isJobId } = props;
+  const { navigation, token, isSuccessMsg, isSuccess } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [puwerArrayList, setPuwerArrayList] = useState([
@@ -220,7 +222,7 @@ const PuwerInspection = (props) => {
     },
   ]);
   const [date, setDate] = useState(new Date(1598051730000));
-  const [dateSupervisor, setDateSupervisor] = useState(new Date());
+  const [dateSupervisor, setDateSupervisor] = useState(new Date().toLocaleDateString());
   const [showSupervisor, setShowSupervisor] = useState(false);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -244,7 +246,7 @@ const PuwerInspection = (props) => {
   const onDateSupervisorChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShowSupervisor(false);
-    setDateSupervisor(new Date(currentDate));
+    setDateSupervisor(new Date(currentDate).toLocaleDateString());
   };
   const showSupervisorDatepicker = () => {
     setShowSupervisor(true);
@@ -254,39 +256,42 @@ const PuwerInspection = (props) => {
     preData[index][key] = value;
     setPuwerArrayList(preData);
   };
-  const puwerInspectionFormInsert = () => {
-    console.log("Main Contractor  :", contractorName);
-    console.log("Project Name :", projectName);
-    console.log("Further Comments :", furtherComment);
-    console.log("Supervisor Sign :", supervisorSign);
-    console.log("Supervisor Date :", dateSupervisor.toLocaleDateString());
-    console.log("Array Data :", puwerArrayList);
-    props.updateHealthReport(props?.route?.params?.index);
-    props.navigation.pop();
+  const puwerInspectionFormInsert = async () => {
+  
+    try{
+      if(contractorName && projectName && furtherComment && supervisorSign && dateSupervisor && puwerArrayList){
+       await props.createPuwerInspectionHandler(contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId,token,props.route.params?.index)
+       props.updateHealthReport(props?.route?.params?.index);
+        props.navigation.pop();
+      } else{
+        alert("Please Insert All Fields CareFully !");
+      }
+    } catch(err){
+      alert(err.message)
+    }
+    
   };
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
         isVisible={show.isVisible}
-        date={date ? date : new Date()}
+        testID='dateTimePicker'
+        value={date}
         mode={"date"}
-        is24Hour={true}
         display='default'
-        onConfirm={(date) => onChange(date)}
+        onConfirm={onChange}
         onCancel={() => setShow({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        format='DD-MM-YYYY'
       />
       <DateTimePickerModal
         isVisible={showSupervisor}
-        date={dateSupervisor ? dateSupervisor : new Date()}
+        testID='dateTimePicker'
+        value={dateSupervisor}
         mode={"date"}
-        is24Hour={true}
         display='default'
-        onConfirm={(date) => onDateSupervisorChange(date)}
+        onConfirm={onDateSupervisorChange}
         onCancel={() => setShowSupervisor({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        format='DD-MM-YYYY'
       />
       {getSign ? (
         <SignatureComponent
@@ -588,7 +593,17 @@ const PuwerInspection = (props) => {
     </View>
   );
 };
+
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isScope: state.auth.isScope,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
 const mapDispatchToProps = (dispatch) => ({
+  createPuwerInspectionHandler: (contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId, token, index) =>
+    dispatch(insertPuwerInspectionForm(contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId, token, index)),
   updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
-export default connect(null, mapDispatchToProps)(PuwerInspection);
+export default connect(mapStateToProps, mapDispatchToProps)(PuwerInspection);
+

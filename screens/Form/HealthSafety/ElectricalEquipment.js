@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -19,33 +25,21 @@ const ElectricalEquipment = (props) => {
   const [showDate, setShowDate] = useState(false);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
-  const [dynamicInput, setdynamicInput] = useState([
-    {
-      equipment: "",
-      site_date: new Date().toLocaleDateString(),
-      serial: "",
-      local: "",
-      owner_if_not_dec: "",
-      last_test_date: new Date().toLocaleDateString(),
-      next_date: new Date().toLocaleDateString(),
-      offsite: new Date().toLocaleDateString(),
-      comment: "",
-    },
-  ]);
+  const [dynamicInput, setdynamicInput] = useState([]);
   const [supervisorSignature, setSupervisorSignature] = useState("");
   const addEquipmentRegister = () => {
     setdynamicInput((oldArray) => [
       ...oldArray,
       {
-        equ: "",
-        onSiteDate: new Date().toLocaleDateString(),
+        equipment: "",
+        site_date: new Date().toLocaleDateString(),
         serial: "",
         local: "",
-        owner: "",
-        lastTestDate: new Date().toLocaleDateString(),
-        testDueDate: new Date().toLocaleDateString(),
-        dateOfSite: new Date().toLocaleDateString(),
-        comments: "",
+        owner_if_not_dec: "",
+        last_test_date: new Date().toLocaleDateString(),
+        next_date: new Date().toLocaleDateString(),
+        offsite: new Date().toLocaleDateString(),
+        comment: "",
       },
     ]);
   };
@@ -113,7 +107,9 @@ const ElectricalEquipment = (props) => {
     const currentDate = selectedDate;
     setShowLastTestDate({ ...showLastTestDate, isVisible: false, index: -1 });
     let copyArr = [...dynamicInput];
-    copyArr[showLastTestDate.index].last_test_date = currentDate.toLocaleDateString();
+    copyArr[
+      showLastTestDate.index
+    ].last_test_date = currentDate.toLocaleDateString();
     setdynamicInput(copyArr);
   };
 
@@ -121,7 +117,9 @@ const ElectricalEquipment = (props) => {
     const currentDate = selectedDate;
     setShowTestDueDate({ ...showTestDueDate, isVisible: false, index: -1 });
     let copyArr = [...dynamicInput];
-    copyArr[showTestDueDate.index].next_date = currentDate.toLocaleDateString();
+    copyArr[
+      showTestDueDate.index
+    ].next_date = currentDate.toLocaleDateString();
     setdynamicInput(copyArr);
   };
 
@@ -134,95 +132,91 @@ const ElectricalEquipment = (props) => {
   };
   const [getSign, setGetSign] = useState(false);
 
-  const electricalEquipmentFormInsert = () => {
-    if (contractorName != "" && projectName != "" && supervisorSignature != "" && date != "" && dynamicInput != "") {
-      props.createElectricalEquipmentHandler(
-        contractorName,
-        projectName,
-        supervisorSignature,
-        date,
-        dynamicInput,
-        jobID,
-        tabId,
-        token,
-        props.route.params?.index
-      );
-      props.updateHealthReport(props?.route?.params?.index);
-      props.navigation.pop();
-    } else {
-      alert("Please Insert All Fields CareFully !");
-      return false;
-    }
-  };
-
-  React.useEffect(() => {
-    if (isSuccess) {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
+  const electricalEquipmentFormInsert = async () => {
+    try {
+      if (
+        contractorName != "" &&
+        projectName != "" &&
+        supervisorSignature != "" &&
+        date != "" &&
+        dynamicInput != ""
+      ) {
+        await props.createElectricalEquipmentHandler(
+          contractorName,
+          projectName,
+          supervisorSignature,
+          date,
+          dynamicInput,
+          jobID,
+          tabId,
+          token,
+          props.route.params?.index
+        );
+        props.updateHealthReport(props?.route?.params?.index);
+        alert("Electrical Equipment Insert SuccessFully !");
+        props.navigation.pop();
+      } else {
+        alert("Please Insert All Fields CareFully !");
         return false;
       }
+    } catch (err) {
+      alert(err.message);
     }
-  }, [isSuccess, isSuccessMsg]);
+  };
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
         isVisible={showDate}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={date}
         mode={mode}
-        display='default'
+        display="default"
         onCancel={() => setShowDate(false)}
         onConfirm={onDateChange}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       <DateTimePicker
         isVisible={showDateOnSite.isVisible}
-        date={dateOnsite ? dateOnsite : new Date()}
+        testID='dateTimePicker'
+        value={dateOnsite}
         mode={"date"}
-        is24Hour={true}
         display='default'
-        onConfirm={(date) => onDateOnSiteChange(date)}
+        onConfirm={onDateOnSiteChange}
         onCancel={() => setShowDateOnSite({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        format='DD-MM-YYYY'
       />
       <DateTimePicker
         isVisible={showLastTestDate.isVisible}
         date={lastTestDate ? lastTestDate : new Date()}
         mode={"date"}
         is24Hour={true}
-        display='default'
+        display="default"
         onConfirm={(date) => onLastTestDateChange(date)}
         onCancel={() => setShowLastTestDate({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
       />
       <DateTimePicker
         isVisible={showTestDueDate.isVisible}
         date={testDueDate ? testDueDate : new Date()}
         mode={"date"}
         is24Hour={true}
-        display='default'
+        display="default"
         onConfirm={(date) => onNextTestDateChange(date)}
         onCancel={() => setShowTestDueDate({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
       />
       <DateTimePicker
         isVisible={showDateOfSite.isVisible}
         date={dateOffSite ? dateOffSite : new Date()}
         mode={"date"}
         is24Hour={true}
-        display='default'
+        display="default"
         onConfirm={(date) => onDateOfSiteChange(date)}
         onCancel={() => setShowDateOfSite({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        cancelTextIOS="Cancel"
+        confirmTextIOS="Confirm"
       />
       {getSign ? (
         <SignatureComponent
@@ -238,22 +232,46 @@ const ElectricalEquipment = (props) => {
               paddingTop: 30,
               justifyContent: "center",
               alignItems: "center",
-            }}>
+            }}
+          >
             <Text style={styles.titleText}>ELECTRICAL EQUIPMENT REGISTER</Text>
-            <Text style={{ fontSize: 8, fontFamily: "poppins-regular" }}>(Electrical portable tools, lights and leads test record)</Text>
+            <Text style={{ fontSize: 8, fontFamily: "poppins-regular" }}>
+              (Electrical portable tools, lights and leads test record)
+            </Text>
           </View>
           <ScrollView>
             <View style={styles.formCodnatiner}>
               <View style={styles.inputFieldContainer}>
-                <TextInput value={contractorName} onChangeText={(e) => setContractorName(e)} style={styles.inputField} placeholder={"Main Contractor"} />
+                <TextInput
+                  value={contractorName}
+                  onChangeText={(e) => setContractorName(e)}
+                  style={styles.inputField}
+                  placeholder={"Main Contractor"}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput value={projectName} onChangeText={(e) => setProjectName(e)} style={styles.inputField} placeholder={"Project"} />
+                <TextInput
+                  value={projectName}
+                  onChangeText={(e) => setProjectName(e)}
+                  style={styles.inputField}
+                  placeholder={"Project"}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
+                <TouchableOpacity
+                  onPress={() => setGetSign(true)}
+                  style={styles.inputFieldContainer}
+                >
                   {supervisorSignature ? (
-                    <Image style={{ marginTop: 20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: supervisorSignature }} />
+                    <Image
+                      style={{
+                        marginTop: 20,
+                        height: 100,
+                        width: 100,
+                        backgroundColor: "gray",
+                      }}
+                      source={{ uri: supervisorSignature }}
+                    />
                   ) : (
                     <Text
                       style={{
@@ -266,14 +284,18 @@ const ElectricalEquipment = (props) => {
                         color: "#96A8B2",
                         fontFamily: "poppins-regular",
                         paddingTop: 15,
-                      }}>
+                      }}
+                    >
                       Supervisor Print & Sign
                     </Text>
                   )}
                 </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("Date")} style={[styles.inputField, { paddingTop: 15 }]}>
+                <Text
+                  onPress={() => showDatepicker("Date")}
+                  style={[styles.inputField, { paddingTop: 15 }]}
+                >
                   {new Date(date).toLocaleDateString()}
                 </Text>
               </View>
@@ -284,8 +306,11 @@ const ElectricalEquipment = (props) => {
                   textAlign: "center",
                   paddingTop: 10,
                   paddingBottom: 20,
-                }}>
-                All portable electrical equipment is subject to 3 monthly portable appliance testing to be carried out by a competent person
+                }}
+              >
+                All portable electrical equipment is subject to 3 monthly
+                portable appliance testing to be carried out by a competent
+                person
               </Text>
               <View style={styles.tableViewContainer}>
                 <View style={styles.tableHeader}>
@@ -323,8 +348,12 @@ const ElectricalEquipment = (props) => {
                     width: "100%",
                     alignItems: "flex-end",
                     marginBottom: 10,
-                  }}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addEquipmentRegister()}>
+                  }}
+                >
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => addEquipmentRegister()}
+                  >
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
@@ -335,7 +364,9 @@ const ElectricalEquipment = (props) => {
                         <View style={styles.inputEquipmentBodyContainer}>
                           <TextInput
                             value={el.equipment}
-                            onChangeText={(txt) => updateValue("equipment", index, txt)}
+                            onChangeText={(txt) =>
+                              updateValue("equipment", index, txt)
+                            }
                             style={styles.bodyTextInput}
                             placeholder={"Equipment"}
                           />
@@ -344,22 +375,25 @@ const ElectricalEquipment = (props) => {
                           <Text
                             onPress={() => showOnSiteDatepicker(index)}
                             style={{
-                              height: 39,
+                              height: 38,
                               marginRight: 3,
                               borderBottomWidth: 1,
                               borderBottomColor: "#96A8B2",
                               fontSize: 7,
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
-                              paddingTop: 15,
-                            }}>
+                              paddingTop: 12,
+                            }}
+                          >
                             {new Date(el.site_date).toLocaleDateString()}
                           </Text>
                         </View>
                         <View style={styles.inputEquipmentBodyContainer}>
                           <TextInput
                             value={el.serial}
-                            onChangeText={(txt) => updateValue("serial", index, txt)}
+                            onChangeText={(txt) =>
+                              updateValue("serial", index, txt)
+                            }
                             style={styles.bodyTextInput}
                             placeholder={"Serial No"}
                           />
@@ -367,7 +401,9 @@ const ElectricalEquipment = (props) => {
                         <View style={styles.inputEquipmentBodyContainer}>
                           <TextInput
                             value={el.local}
-                            onChangeText={(txt) => updateValue("local", index, txt)}
+                            onChangeText={(txt) =>
+                              updateValue("local", index, txt)
+                            }
                             style={styles.bodyTextInput}
                             placeholder={"Local No"}
                           />
@@ -375,7 +411,9 @@ const ElectricalEquipment = (props) => {
                         <View style={styles.inputEquipmentBodyContainer}>
                           <TextInput
                             value={el.owner_if_not_dec}
-                            onChangeText={(txt) => updateValue("owner_if_not_dec", index, txt)}
+                            onChangeText={(txt) =>
+                              updateValue("owner_if_not_dec", index, txt)
+                            }
                             style={styles.bodyTextInput}
                             placeholder={"Top Dec"}
                           />
@@ -384,15 +422,16 @@ const ElectricalEquipment = (props) => {
                           <Text
                             onPress={() => showLastTestDatepicker(index)}
                             style={{
-                              height: 39,
+                              height: 38,
                               marginRight: 3,
                               borderBottomWidth: 1,
                               borderBottomColor: "#96A8B2",
                               fontSize: 7,
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
-                              paddingTop: 15,
-                            }}>
+                              paddingTop: 12,
+                            }}
+                          >
                             {new Date(el.last_test_date).toLocaleDateString()}
                           </Text>
                         </View>
@@ -400,15 +439,16 @@ const ElectricalEquipment = (props) => {
                           <Text
                             onPress={() => showTestDueDatepicker(index)}
                             style={{
-                              height: 39,
+                              height: 38,
                               marginRight: 3,
                               borderBottomWidth: 1,
                               borderBottomColor: "#96A8B2",
                               fontSize: 7,
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
-                              paddingTop: 15,
-                            }}>
+                              paddingTop: 12,
+                            }}
+                          >
                             {new Date(el.next_date).toLocaleDateString()}
                           </Text>
                         </View>
@@ -416,22 +456,25 @@ const ElectricalEquipment = (props) => {
                           <Text
                             onPress={() => showOffDatepicker(index)}
                             style={{
-                              height: 39,
+                              height: 38,
                               marginRight: 3,
                               borderBottomWidth: 1,
                               borderBottomColor: "#96A8B2",
                               fontSize: 7,
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
-                              paddingTop: 15,
-                            }}>
+                              paddingTop: 12,
+                            }}
+                          >
                             {new Date(el.offsite).toLocaleDateString()}
                           </Text>
                         </View>
                         <View style={styles.inputEquipmentBodyContainer}>
                           <TextInput
                             value={el.comment}
-                            onChangeText={(txt) => updateValue("comment", index, txt)}
+                            onChangeText={(txt) =>
+                              updateValue("comment", index, txt)
+                            }
                             style={styles.bodyTextInput}
                             placeholder={"Comments"}
                           />
@@ -445,38 +488,82 @@ const ElectricalEquipment = (props) => {
                     height: 2,
                     backgroundColor: "#000",
                     marginTop: 20,
-                  }}></View>
+                  }}
+                ></View>
                 <Text
                   style={{
                     fontFamily: "poppins-bold",
                     fontSize: 12,
                     paddingTop: 10,
                     textAlign: "center",
-                  }}>
-                  Once completed, please file a copy in the Site Folder and send a copy to our Head Office.
+                  }}
+                >
+                  Once completed, please file a copy in the Site Folder and send
+                  a copy to our Head Office.
                 </Text>
                 <View style={styles.footerView}>
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
                     Address: 2,
-                    <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}> Green Lane, Penge, London SE20 7JA</Text>
+                    <Text
+                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                    >
+                      {" "}
+                      Green Lane, Penge, London SE20 7JA
+                    </Text>
                   </Text>
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    T: <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}> 0208 676 060</Text>
+                    T:{" "}
+                    <Text
+                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                    >
+                      {" "}
+                      0208 676 060
+                    </Text>
                   </Text>
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    F: <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}> 0208 676 0671</Text>
+                    F:{" "}
+                    <Text
+                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                    >
+                      {" "}
+                      0208 676 0671
+                    </Text>
                   </Text>
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    M: <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}> 07737 632206</Text>
+                    M:{" "}
+                    <Text
+                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                    >
+                      {" "}
+                      07737 632206
+                    </Text>
                   </Text>
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    E: <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}> info@topdecdecorating.com</Text>
+                    E:{" "}
+                    <Text
+                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                    >
+                      {" "}
+                      info@topdecdecorating.com
+                    </Text>
                   </Text>
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    W: <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}> www.topdecdecorating.com</Text>
+                    W:{" "}
+                    <Text
+                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                    >
+                      {" "}
+                      www.topdecdecorating.com
+                    </Text>
                   </Text>
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    VAT Registration Number: <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}> 203 474 927</Text>
+                    VAT Registration Number:{" "}
+                    <Text
+                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                    >
+                      {" "}
+                      203 474 927
+                    </Text>
                   </Text>
                 </View>
               </View>
@@ -487,9 +574,13 @@ const ElectricalEquipment = (props) => {
                   height: 2,
                   marginBottom: 20,
                   marginTop: 20,
-                }}></View>
+                }}
+              ></View>
               <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => electricalEquipmentFormInsert()}>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => electricalEquipmentFormInsert()}
+                >
                   <Text style={styles.commonText}>Save</Text>
                 </TouchableOpacity>
               </View>
@@ -507,9 +598,34 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createElectricalEquipmentHandler: (contractorName, projectName, supervisorSignature, date, dynamicInput, jobID, tabId, token, index) =>
-    dispatch(insertElectricalEquipemntForm(contractorName, projectName, supervisorSignature, date, dynamicInput, jobID, tabId, token, index)),
+  createElectricalEquipmentHandler: (
+    contractorName,
+    projectName,
+    supervisorSignature,
+    date,
+    dynamicInput,
+    jobID,
+    tabId,
+    token,
+    index
+  ) =>
+    dispatch(
+      insertElectricalEquipemntForm(
+        contractorName,
+        projectName,
+        supervisorSignature,
+        date,
+        dynamicInput,
+        jobID,
+        tabId,
+        token,
+        index
+      )
+    ),
 
   updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(ElectricalEquipment);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ElectricalEquipment);
