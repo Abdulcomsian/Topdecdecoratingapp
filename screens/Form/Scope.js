@@ -9,7 +9,8 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const Scope = (props) => {
   const { navigation, token, isScope, isSuccessMsg, isJobId } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  //const jobID = Math.floor(Math.random() * 100) + 1;
+   const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [date, setDate] = useState(new Date());
@@ -57,27 +58,21 @@ const Scope = (props) => {
   const showDatepicker = () => {
     showMode("date");
   };
-  const scopeFormInsert = () => {
+  const scopeFormInsert = async () => {
+    try{
     if (dynamicInput != "" && painterName != "" && plotNumber != "" && type != "" && date != "") {
-      props.createScopeHandler(dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, props.route.params?.index);
+    
+     await props.createScopeHandler(dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, props.route.params?.index);
+      alert("Scope Insert SuccessFully !")
+      navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
-  useEffect(() => {
-    if (isScope) {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isScope,isSuccessMsg]);
   const CancelPicker = (type) =>{
       setShow(false)
   

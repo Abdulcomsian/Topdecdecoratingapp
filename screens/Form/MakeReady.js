@@ -9,7 +9,8 @@ import { connect } from "react-redux";
 var plus = require("../../assets/authScreen/plus.png");
 const MakeReady = (props) => {
   const { navigation, token, isMakeReady, isSuccessMsg, isJobId } = props;
-  const jobID = "123456";
+  //const jobID = Math.floor(Math.random() * 100) + 1;
+   const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [data, setData] = useState({
@@ -115,7 +116,8 @@ const MakeReady = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  const makeReadyFormInsert = () => {
+  const makeReadyFormInsert = async () => {
+    try{
     if (
       clientName != "" &&
       projectName != "" &&
@@ -128,7 +130,7 @@ const MakeReady = (props) => {
       supervisorName != "" &&
       agentName != ""
     ) {
-      props.createMakeReadyHandler(
+      await props.createMakeReadyHandler(
         clientName,
         projectName,
         block,
@@ -151,24 +153,16 @@ const MakeReady = (props) => {
         token,
         props.route.params?.index
       );
+      alert("Make Ready Sheet Insert SuccessFully !");
+      navigation.goBack();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message);
+  }
   };
-  useEffect(() => {
-    if (isMakeReady) {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isMakeReady,isSuccessMsg]);
   const CancelPicker = (type) =>{
     console.log(type)
     if(type=="show"){

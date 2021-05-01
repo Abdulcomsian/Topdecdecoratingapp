@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import {adminLogin} from '../../Redux/action/auth/authActionTypes';
 import { useDispatch, useSelector,connect } from 'react-redux'
 import AwesomeAlert from 'react-native-awesome-alerts';
-
+import { StackActions } from "@react-navigation/native";
 
 var logo=require('../../assets/authScreen/logo.png');
 var user=require('../../assets/authScreen/icon.png')
@@ -17,7 +17,7 @@ const LoginScreen = (props) =>{
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const postSignInHandler = (type)=>{
+    const postSignInHandler =  async (type)=>{
         try{
             if(type=="admin"){
                 let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -29,9 +29,10 @@ const LoginScreen = (props) =>{
                     }
                     else{
                         setEmail(email)
-                        alert("Email is Correct");
+                       // alert("Email is Correct");
                         try{
-                            props.loginHandler(email,password);
+                            await props.loginHandler(email,password);
+                          
                         } catch(err){
                             alert(err.message)
                         }
@@ -53,15 +54,15 @@ const LoginScreen = (props) =>{
                 }
                 else{
                     setEmail(email)
-                    alert("Email is Correct");
+                    //alert("Email is Correct");
                     if(regPass.test(password) === false){
                         alert("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
                         setPassword(password)
                         return false;
                     }
                     else{
-                        alert("Password is Correct");
-                        props.loginHandler(email,password);
+                        //alert("Password is Correct");
+                        await props.loginHandler(email,password);
                     }
                 }
             }
@@ -72,28 +73,28 @@ const LoginScreen = (props) =>{
             
         }
           catch(err){
-            alert(err.message)
+           // alert(err.message)
           }
     }
     useEffect (() =>{
         if(isLogin){
             if(isLoginMsg){
-                alert(isLoginMsg)
+                //alert(isLoginMsg)
                 if(role=="ADMIN"){
-                    props.navigation.navigate('MainScreen')
+                    props.navigation.dispatch(StackActions.replace('MainScreen'))
                 }
                 else if(role=="DECORATOR"){
-                    props.navigation.navigate('DecoratorDetails',{role:"decorator",id: isUserID})
+                    props.navigation.dispatch(StackActions.replace('DecoratorDetails',{role:"decorator",id: isUserID}))
                 }
                 else{
-                    props.navigation.navigate('DetailSupervisor',{role:"supervisor",id: isUserID})
+                    props.navigation.dispatch(StackActions.replace('DetailSupervisor',{role:"supervisor",id: isUserID}))
                 }
             }
         }
         else
        { 
         if(isLoginMsg){
-            alert(isLoginMsg)
+            //alert(isLoginMsg)
         }
        }
     },[isLogin,isLoginMsg])

@@ -32,7 +32,14 @@ const DetailsJob = (props) =>{
                     <View style={styles.formConatiner}>
                         <View style={styles.inputFieldContainer}>
                             <Text style={styles.decoratorTitle}>Contructor Name:</Text>
-                            <Text style={{width:"50%",textAlign:"center"}}>{contractorName}</Text>
+                            <Text  style={{
+                      fontSize: 16,
+                      width: "50%",
+                      justifyContent: "center",
+                      fontFamily: "poppins-regular",
+                      textAlign:"center",
+                      
+                    }}>{contractorName}</Text>
                         </View>
                         <View style={styles.inputFieldContainer}>
                             <Text style={styles.decoratorTitle}>Project Name:</Text>

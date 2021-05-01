@@ -4,26 +4,15 @@ import { Text } from "native-base";
 import { insertMiscoat } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { updateVerificationReport } from "../../../Redux/action/summary/Summary";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const MistCoat = (props) => {
   const { navigation, token, isSuccessMsg, isVerifyMiscoat } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
-  const [dynamicInput, setdynamicInput] = useState([
-    {
-      name: "",
-      block: "",
-      level: "",
-      plot: "",
-      bed: "",
-      price: "",
-      days: "",
-      start: new Date().toLocaleDateString(),
-      complete: new Date().toLocaleDateString(),
-    },
-  ]);
+  const [dynamicInput, setdynamicInput] = useState([]);
   const [mainContructor, setMainContructor] = useState([]);
   const [projectName, setProjectName] = useState([]);
 
@@ -48,31 +37,22 @@ const MistCoat = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  const mistCoatFormInsert = () => {
+  const mistCoatFormInsert = async () => {
+    try{
     if (dynamicInput != "" && mainContructor != "" && projectName != "") {
-      props.createMisCoatHandler(mainContructor, projectName, dynamicInput, jobID, tabId, token);
-      props.updateHealthReport(props?.route?.params?.index);
+      console.log((dynamicInput))
+       await props.createMisCoatHandler(mainContructor, projectName, dynamicInput, jobID, tabId, token);
+       props.updateVerificationReport(props?.route?.params?.index);
+      alert("MisCoat Insert SuccessFully !")
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
-  useEffect(() => {
-    if (isVerifyMiscoat) {
-      if (isSuccessMsg) {
-        console.log("here !");
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isVerifyMiscoat, isSuccessMsg]);
-
   const [show, setShow] = useState({
     isVisible: false,
     index: -1,
@@ -228,11 +208,13 @@ const MistCoat = (props) => {
                         <Text
                           onPress={() => showStartDatepicker(index)}
                           style={{
+                            height:37,
                             borderBottomWidth: 1,
                             borderBottomColor: "#96A8B2",
                             fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
+                            paddingTop:7
                           }}>
                           {new Date(el.start).toLocaleDateString()}
                         </Text>
@@ -241,11 +223,13 @@ const MistCoat = (props) => {
                         <Text
                           onPress={() => showCompleteDatepicker(index)}
                           style={{
+                            height:37,
                             borderBottomWidth: 1,
                             borderBottomColor: "#96A8B2",
                             fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
+                            paddingTop:7
                           }}>
                           {new Date(el.complete).toLocaleDateString()}
                         </Text>
@@ -281,7 +265,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createMisCoatHandler: (mainContructor, projectName, dynamicInput, jobID, tabId, token) =>
     dispatch(insertMiscoat(mainContructor, projectName, dynamicInput, jobID, tabId, token)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+    updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(MistCoat);
 const styles = StyleSheet.create({

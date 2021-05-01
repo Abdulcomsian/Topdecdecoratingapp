@@ -66,7 +66,7 @@ const TBTFire = (props) => {
           returnImage={(uri) => {
             let copydata = [...data.attendess];
             copydata[openSign.index].sign = uri;
-            setData({ ...data, copydata });
+            setData({ ...data, attendess:[...copydata ]});
             setOpenSign({ bool: false, index: -1 });
           }}
         />
@@ -98,7 +98,15 @@ const TBTFire = (props) => {
                 data={data}
                 getSignature={(index) => setOpenSign({ ...openSign, bool: true, index })}
                 addAttendence={() => setData({ ...data, attendess: [...data.attendess, { print: "", sign: "" }] })}
-                onChangeData={(key, value) => setData({ ...data, [key]: value })}
+                onChangeData={(key, value,index=-1) => {
+                  if(index>=0){
+let copyAttendance=[...data.attendess];
+copyAttendance[index].print=value
+setData({...data,attendess:[...copyAttendance]})
+                  }else{
+                    setData({ ...data, [key]: value })
+                  }
+                }}
               />
               {/* <View style={styles.inputFieldContainer}>
             <TextInput style={styles.inputField} placeholder={"Main Contractor"} />

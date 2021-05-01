@@ -71,6 +71,7 @@ import Tbtvolience from '../screens/Form/HealthSafety/TBT_Volience'
 import Tbtworking from '../screens/Form/HealthSafety/TBT_Working'
 import TbtRegister from '../screens/Form/HealthSafety/TBT_TalkRegister'
 import TbtInventory from '../screens/Form/HealthSafety/TBT_Inventory'
+import {Text} from "react-native"
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = 'Splash';
@@ -561,7 +562,10 @@ export default function MainNavigator({ navigation, route }) {
                 name="TotalSummary"
                 component={TotalSummary}
                 options={{
-                    headerShown: false,
+                    headerLeft: (props) => (
+                     <Text onPress={()=>props.navigation.navigate("MainScreen")}>Back</Text>
+                    ),
+                    headerShown: true,
                 }}
             />
             <Stack.Screen

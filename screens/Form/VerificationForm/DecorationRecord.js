@@ -9,33 +9,11 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 var plus = require("../../../assets/authScreen/plus.png");
 const DecorationRecord = (props) => {
   const { navigation, token, isSuccessMsg, isDecoration } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
-  const [dynamicFirstInput, setdynamicFirstInput] = useState([
-    {
-      name: "",
-      block: "",
-      level: "",
-      bed: "",
-      price: "",
-      plot: "",
-      days: "",
-      start: new Date().toLocaleDateString(),
-      complete: new Date().toLocaleDateString(),
-    },
-  ]);
-  const [dynamicSecondInput, setdynamicSeconfInput] = useState([
-    {
-      name: "",
-      block: "",
-      level: "",
-      bed: "",
-      price: "",
-      plot: "",
-      start: new Date().toLocaleDateString(),
-      complete: new Date().toLocaleDateString(),
-    },
-  ]);
+  const [dynamicFirstInput, setdynamicFirstInput] = useState([]);
+  const [dynamicSecondInput, setdynamicSeconfInput] = useState([]);
 
   const addDecorationRow = () => {
     setdynamicFirstInput((oldArray) => [
@@ -78,30 +56,21 @@ const DecorationRecord = (props) => {
     preData[index][key] = value;
     setdynamicSeconfInput(preData);
   };
-  const decorationRecordInsert = () => {
+  const decorationRecordInsert = async () => {
+    try{
     if (dynamicFirstInput && dynamicSecondInput && jobID !== "" && tabId != "") {
-      props.createDecorationRecordHandler(dynamicFirstInput, dynamicSecondInput, jobID, tabId, token);
+      await props.createDecorationRecordHandler(dynamicFirstInput, dynamicSecondInput, jobID, tabId, token);
       props.updateHealthReport(props?.route?.params?.index);
+      alert("Decoration Record Insert SuccessFully !");
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
-  useEffect(() => {
-    if (isDecoration) {
-      if (isSuccessMsg) {
-        console.log("here !");
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isDecoration, isSuccessMsg]);
   const [show, setShow] = useState({
     isVisible: false,
     index: -1,

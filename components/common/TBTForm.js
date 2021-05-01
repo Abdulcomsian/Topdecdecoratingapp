@@ -74,7 +74,7 @@ const TBTForm = (props) => {
                 {index}
               </Text>
               <View style={styles.inputOprativesBodyContainer}>
-                <TextInput style={styles.bodyTextInput} placeholder={"Print"}  onChangeText={(txt) => onChangeData("print", txt)} />
+                <TextInput style={styles.bodyTextInput} value={item.print} placeholder={"Print"}  onChangeText={(txt) => onChangeData("print", txt,index)} />
               </View>
               <TouchableOpacity
                 onPress={() => getSignature(index)}

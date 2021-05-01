@@ -4,11 +4,12 @@ import { Text } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { insertSiteInstruction } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { updateVerificationReport } from "../../../Redux/action/summary/Summary";
 
 const DecorationRecord = (props) => {
   const { navigation, token, isSuccessMsg, isSiteInstruction } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -37,7 +38,8 @@ const DecorationRecord = (props) => {
   const showSupervisorDatepicker = () => {
     setShowSupervisor(true);
   };
-  const siteInstructionForm = () => {
+  const siteInstructionForm = async () => {
+    try{
     if (
       contractName != "" &&
       instructionNo != "" &&
@@ -48,7 +50,7 @@ const DecorationRecord = (props) => {
       supervisorName != "" &&
       dateSupervisor != ""
     ) {
-      props.createSiteInstructionHandler(
+      await props.createSiteInstructionHandler(
         contractName,
         instructionNo,
         raisedBy,
@@ -61,27 +63,17 @@ const DecorationRecord = (props) => {
         tabId,
         token
       );
-      props.updateHealthReport(props?.route?.params?.index);
+      props.updateVerificationReport(props?.route?.params?.index);
+      alert("Site Instruction Insert SuccessFully !")
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
-  useEffect(() => {
-    if (isSiteInstruction) {
-      if (isSuccessMsg) {
-        console.log("here !");
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isSiteInstruction, isSuccessMsg]);
   return (
     <ScrollView style={{ height: "100%" }}>
       <DateTimePickerModal
@@ -276,7 +268,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       insertSiteInstruction(contractName, instructionNo, raisedBy, date, description, specialNotes, supervisorName, dateSupervisor, jobID, tabId, token)
     ),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DecorationRecord);
 const styles = StyleSheet.create({

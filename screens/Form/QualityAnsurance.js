@@ -17,7 +17,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const QualityInssurance = (props) => {
   const { navigation, token, isSuccessMsg, isQuality, isJobId } = props;
-  const jobID = "123";
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [issuranceArray, setInsuraanceArray] = useState([
     {
@@ -186,7 +186,6 @@ const QualityInssurance = (props) => {
     ]);
   };
   const [date, setDate] = useState(new Date(1598051730000));
-  const [dateActivity, setDateActivity] = useState(new Date(1598051730000));
   const [show, setShow] = useState({
     isVisible: false,
     index: -1,
@@ -228,12 +227,13 @@ const QualityInssurance = (props) => {
   const [smsSign, setSmsSign] = useState("");
   const [bscsSign, setBscsSign] = useState("");
 
-  const qualityAnsuranceFormInsert = () => {
+  const qualityAnsuranceFormInsert = async () => {
+    try{
     if (
       projectName != "" &&
       unitPlot != "" 
     ) {
-      props.createAnsuranceHandler(
+      await props.createAnsuranceHandler(
         projectName,
         unitPlot,
         issuranceArray,
@@ -247,10 +247,15 @@ const QualityInssurance = (props) => {
         token,
         props.route.params?.index
       );
+      alert("Quality Ansurance Insert SuccessFully !");
+      navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
   const updateSignValue = (key, index, value) => {
     let preData = [...activityArray];
@@ -280,20 +285,6 @@ const QualityInssurance = (props) => {
       uri: "",
     },
   });
-  useEffect(() => {
-    if (isQuality) {
-      if (isSuccessMsg) {
-        console.log("here !");
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isQuality, isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
@@ -410,7 +401,7 @@ const QualityInssurance = (props) => {
               Quality Assurance Inpection CheckList
             </Text>
           </View>
-          <ScrollView style={{ height: "100%" }}>
+          <ScrollView style={{width:"100%" }}>
             <View style={styles.formConatiner}>
               <View style={styles.inputFieldContainer}>
                 <TextInput
@@ -1145,7 +1136,7 @@ const styles = StyleSheet.create({
   btnContainer: {
     width: "100%",
     height: "15%",
-    marginBottom: 40,
+    marginBottom: 80,
     marginTop: 20,
   },
   commonBtn: {

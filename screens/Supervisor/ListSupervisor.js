@@ -76,7 +76,7 @@ const ListSupervisor = (props) => {
       </ScrollView> 
      :
       <View style={{justifyContent:"center",alignItems:"center",width:"100%",height:"85%"}}>
-        <Text>Sorry No Data Found !</Text>
+        <Text>Sorry No Supervisor Found !</Text>
       </View>
      }
      

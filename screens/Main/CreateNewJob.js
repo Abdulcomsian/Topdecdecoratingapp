@@ -45,10 +45,17 @@ const NewJob = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  const newJob = () => {
-    try{
-      if(constructorName!="" && projectName!="" && weekProject!="" && selectedValue!="" && date!="" && dynamicInput!=""){
-        props.createNewJobHandler(
+  const newJob = async () => {
+    try {
+      if (
+        constructorName != "" &&
+        projectName != "" &&
+        weekProject != "" &&
+        selectedValue != "" &&
+        date != "" &&
+        dynamicInput != ""
+      ) {
+        await props.createNewJobHandler(
           constructorName,
           projectName,
           weekProject,
@@ -57,12 +64,13 @@ const NewJob = (props) => {
           dynamicInput,
           token
         );
-      } else{
-        alert("Please Enter All Missing Fields CareFully !")
+        props.navigation.navigate("TotalSummary")
+        alert("Job Saved Successfully");
+      } else {
+        alert("Please Enter All Missing Fields CareFully !");
       }
-      
-    } catch(err){
-      alert(err.message)
+    } catch (err) {
+      alert(err.message);
     }
   };
   const onChange = (selectedDate) => {
@@ -71,9 +79,9 @@ const NewJob = (props) => {
     setDate(new Date(currentDate));
   };
   const showDatepicker = () => {
-    setShow(true)
+    setShow(true);
   };
-  
+
   useEffect(() => {
     try {
       const body = {};
@@ -97,23 +105,26 @@ const NewJob = (props) => {
       console.log(err);
       setLoading(false);
     }
-    
-   
   }, []);
-  useEffect(() => {
-    if(isJob){     
-      if(isJobMsg){
-        console.log(isJobId)
-          props.navigation.navigate('TotalSummary',{jobID: isJobId})
-      }
-      }
-      else{
-          if(isJobMsg){
-              alert(isJobMsg)
-              return false;
-          }
-      }
-  },[isJob,isJobMsg])
+  // useEffect(() => {
+  //   if(isJob){
+  //     if(isJobMsg){
+  //       console.log(isJobId)
+  //         props.navigation.navigate('TotalSummary',{jobID: isJobId})
+  //     }
+  //     }
+  //     else{
+  //         if(isJobMsg){
+  //             alert(isJobMsg)
+  //             return false;
+  //         }
+  //     }
+  // },[isJob,isJobMsg])
+  // React.useEffect(() => {
+  //   if (isJob) {
+  //     props.navigation.navigate("TotalSummary", { jobID: isJobId });
+  //   }
+  // }, [isJob]);
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -124,16 +135,16 @@ const NewJob = (props) => {
     return (
       <View style={styles.mainContainer}>
         <DateTimePickerModal
-            isVisible={show}
-            date={date ? date : new Date()}
-            mode={'date'}
-            is24Hour={true}
-            display="default"
-            onConfirm={(date) => onChange(date)}
-            onCancel={() => setShow(false)}
-            cancelTextIOS="Cancel"
-            confirmTextIOS="Confirm"
-          />
+          isVisible={show}
+          date={date ? date : new Date()}
+          mode={"date"}
+          is24Hour={true}
+          display="default"
+          onConfirm={(date) => onChange(date)}
+          onCancel={() => setShow(false)}
+          cancelTextIOS="Cancel"
+          confirmTextIOS="Confirm"
+        />
         <View style={styles.dateTimeContainer}>
           <Text style={styles.refText}>Date: 12-2-2021</Text>
           <Text style={styles.refText}>Ref id: 10099499</Text>
@@ -165,7 +176,7 @@ const NewJob = (props) => {
                 style={styles.inputField}
                 placeholder={"Number of weeks for project"}
                 value={weekProject}
-                onChangeText={(e) => setWeekProject(e)}
+                onChangeText={(e) => setWeekProject(e.replace(/[^0-9]/g, ''))}
               />
             </View>
             <View style={styles.inputFieldContainer}>
@@ -173,7 +184,10 @@ const NewJob = (props) => {
                 mode="dropdown"
                 placeholder="Countries"
                 // iosIcon={<Icon name='arrow-down' />}
-                itemTextStyle={{ color: "#96A8B2",fontFamily: "poppins-regular" }}
+                itemTextStyle={{
+                  color: "#96A8B2",
+                  fontFamily: "poppins-regular",
+                }}
                 textStyle={{
                   color: "#96A8B2",
                   fontSize: 16,
@@ -203,12 +217,19 @@ const NewJob = (props) => {
               </Picker>
             </View>
             <View style={styles.inputFieldContainer}>
-              <Text onPress={()=>showDatepicker()} style={{width: "100%",
-                  height:60,
-                  paddingTop:20,
+              <Text
+                onPress={() => showDatepicker()}
+                style={{
+                  width: "100%",
+                  height: 60,
+                  paddingTop: 20,
                   fontSize: 16,
                   color: "#96A8B2",
-                  fontFamily: "poppins-regular",}}>{new Date(date).toLocaleDateString()}</Text>
+                  fontFamily: "poppins-regular",
+                }}
+              >
+                {new Date(date).toLocaleDateString()}
+              </Text>
             </View>
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>Job Summary</Text>
@@ -218,7 +239,7 @@ const NewJob = (props) => {
                 {dynamicInput.map((el, index) => (
                   <View style={styles.inputContainer} key={index}>
                     <TextInput
-                      onChangeText={(txt) => updateValue("qty", index, txt)}
+                      onChangeText={(txt) => updateValue("qty", index, txt.replace(/[^0-9]/g, ''))}
                       style={styles.quantityInput}
                       value={el.qty}
                       placeholder={"Quantity"}
@@ -238,7 +259,7 @@ const NewJob = (props) => {
             <View style={styles.dynamicInput}>
               <View style={styles.inputContainer}>
                 <TextInput
-                  onChangeText={(txt) => setData({ ...data, qty: txt })}
+                  onChangeText={(txt) => setData({ ...data, qty: txt.replace(/[^0-9]/g, '') })}
                   style={styles.quantityInput}
                   placeholder={"Quantity"}
                   value={data.qty}
@@ -259,7 +280,7 @@ const NewJob = (props) => {
             </View>
 
             <View style={styles.btnContainer}>
-            {/* <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("TotalSummary")}
             >
@@ -273,7 +294,7 @@ const NewJob = (props) => {
             </TouchableOpacity> */}
               <TouchableOpacity
                 style={styles.commonBtn}
-                onPress={()=>newJob(this)}
+                onPress={() => newJob(this)}
               >
                 <Text style={styles.commonText}>Save</Text>
               </TouchableOpacity>
@@ -288,7 +309,7 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   isJob: state.auth.isJob,
   isJobMsg: state.auth.isJobMsg,
-  isJobId: state.auth.isJobId
+  isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
   createNewJobHandler: (

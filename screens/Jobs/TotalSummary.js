@@ -6,13 +6,14 @@ import axios from "axios";
 
 var rightArrow=require('../../assets/authScreen/right.png')
 const TotalSummary = ( props ) =>{
-    const { navigation, token } = props;
-    const [jobId,setJobId] = useState(props.route.params.jobID)
+    const { navigation, token ,isJobId} = props;
+    // const [jobId,setJobId] = useState(props.route.params.jobID)
     const [totalSummary, setTotalSummary] = useState([])
     const [loading, setLoading] = useState(false);
     useEffect(() => {
+      if(isJobId){
         try {
-            const job_id = jobId;
+            const job_id = isJobId;
           const body = {job_id};
           (async () => {
             setLoading(true);
@@ -41,9 +42,9 @@ const TotalSummary = ( props ) =>{
           console.log(err);
           setLoading(false);
         }
-        
+      }
        
-      }, []);
+      }, [props.isJobId]);
     if (loading) {
         return (
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -58,7 +59,7 @@ const TotalSummary = ( props ) =>{
             </View>
             <View style={{padding:30}}>
             {totalSummary.map((item,index)=>(
-                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("SelectProject",{jobID: jobId,type:item.name2})} key={index}>
+                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("SelectProject",{jobID: props?.isJobId,type:item.name2})} key={index}>
                     <Text style={styles.commonText}>{item.total}</Text>
                     <Text style={styles.commonText}>{item.name2}</Text>
                     <Image  source={rightArrow}/>
@@ -71,6 +72,7 @@ const TotalSummary = ( props ) =>{
 }
 const mapStateToProps = (state) => ({
     token: state.auth.token,
+    isJobId: state.auth.isJobId,
   });
   const mapDispatchToProps = (dispatch) => ({});
   export default connect(mapStateToProps, mapDispatchToProps)(TotalSummary);

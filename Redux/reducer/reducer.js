@@ -60,6 +60,11 @@ export default (state = initialState, action)=> {
                     isUserID: action.payload.user.id
                     
                 }
+                case Actions.RESET_LOGIN_FLAG:
+                    return{
+                        ...state,
+                        isLogin: false,
+                    }
             case Actions.LOGIN_FAIL:
              alert("Wrong Credential")
                 return{
@@ -82,7 +87,7 @@ export default (state = initialState, action)=> {
                     createSuperVisorMsg : action.payload.message
                 }
             case Actions.CREATE_NEW_JOB_SUCCESS:
-             alert("Job Saved SuccessFully")
+            //  alert("Job Saved SuccessFully")
                 return{
                     ...state,
                     isJob: true,

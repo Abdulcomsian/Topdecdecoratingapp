@@ -4,6 +4,7 @@ import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
 import SignatureComponent from "../../../components/SignatureComponent";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { connect } from "react-redux";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const IssueCard = (props) => {

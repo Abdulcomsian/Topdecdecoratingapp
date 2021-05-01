@@ -11,7 +11,8 @@ var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.
 var plus = require("../../../assets/authScreen/plus.png");
 const AccurateDayWork = (props) => {
   const { navigation, token, isDayWork, isSuccessMsg } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [dynamicLabourInput, setdynamicLabourInput] = useState([]);
   const [dynamicMaterialInput, setdynamicMaterialInput] = useState([]);
@@ -113,7 +114,8 @@ const AccurateDayWork = (props) => {
     setShow(true);
   };
 
-  const workSheetInsert = () => {
+  const workSheetInsert = async () => {
+    try{
     if (
       mainContructor != "" &&
       contructorTitle != "" &&
@@ -149,25 +151,16 @@ const AccurateDayWork = (props) => {
         token
       );
       props.updateHealthReport(props?.route?.params?.index);
+      alert("Accurate Day Work Insert SuccessFully !")
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
-  useEffect(() => {
-    if (isDayWork) {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isDayWork, isSuccessMsg]);
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal

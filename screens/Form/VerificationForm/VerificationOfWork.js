@@ -5,27 +5,15 @@ import styles from "../../../assets/css/styles";
 import { insertVerificationForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { updateVerificationReport } from "../../../Redux/action/summary/Summary";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const VerificationOfWork = (props) => {
   const { navigation, token, isVerifyWork, isSuccessMsg } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  //const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
-  const [dynamicInput, setdynamicInput] = useState([
-    {
-      days: "",
-      work: "",
-      date: new Date().toLocaleDateString(),
-      project: "",
-      plot: "",
-      description: "",
-      price: "",
-      remedial: "",
-      si: "",
-      c_work: "",
-    },
-  ]);
+  const [dynamicInput, setdynamicInput] = useState([]);
   const [projectName, setProjectName] = useState([]);
   const [idRef, setIdRef] = useState([]);
   const [decoratorName, setDecoratorName] = useState([]);
@@ -51,15 +39,20 @@ const VerificationOfWork = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  const verificationWorkFormInsert = () => {
+  const verificationWorkFormInsert = async () => {
+    try{
     if (projectName != "" && idRef != "" && decoratorName != "") {
-      props.createVerificationWorkHandler(projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token);
-      props.updateHealthReport(props?.route?.params?.index);
+      await props.createVerificationWorkHandler(projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token);
+      props.updateVerificationReport(props?.route?.params?.index);
+      alert("Verification Of Work Insert SuccessFully !")
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
   const [show, setShow] = useState({
     isVisible: false,
@@ -76,20 +69,6 @@ const VerificationOfWork = (props) => {
   const showStartDatepicker = (index = -1) => {
     setShow({ ...show, isVisible: true, index: index });
   };
-  useEffect(() => {
-    if (isVerifyWork) {
-      if (isSuccessMsg) {
-        console.log("here !");
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isVerifyWork, isSuccessMsg]);
   return (
     <View style={[styles.mainContainer, { paddingLeft: 20, paddingRight: 20, marginTop: 50 }]}>
       <DateTimePickerModal
@@ -245,6 +224,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createVerificationWorkHandler: (projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token) =>
     dispatch(insertVerificationForm(projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(VerificationOfWork);

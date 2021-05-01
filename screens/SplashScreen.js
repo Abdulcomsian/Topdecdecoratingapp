@@ -1,16 +1,29 @@
 import React,{useEffect} from 'react';
 import { View,StyleSheet,Image} from 'react-native';
 import {Text} from 'native-base';
-
+import { connect } from 'react-redux'
+import { resetLoginFlag } from '../Redux/action/auth/authActionTypes';
 
 var logo=require('../assets/authScreen/logo.png');
-const SplashScreen = ({props,navigation}) =>{
-    useEffect(() => {
-        const timer = setTimeout(()=>{
-            navigation.navigate('LoginScreen');
-        },5000);
-        return () => clearTimeout(timer);
-    }, []);
+const SplashScreen = ( props ) =>{
+    const {navigation}=props;
+    // useEffect(() => {
+    //     const timer = setTimeout(()=>{
+    //         navigation.navigate('LoginScreen');
+    //     },5000);
+    //     return () => clearTimeout(timer);
+    // }, []);
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            props.resetLoginFlag()
+            setTimeout(()=>{
+                        navigation.navigate('LoginScreen');
+                     },5000);
+        });
+    
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        return unsubscribe;
+      }, [navigation]);
     return(
             <View style={styles.mainContainer}>
                 <View style={styles.logoContainer}>
@@ -25,7 +38,10 @@ const SplashScreen = ({props,navigation}) =>{
             </View>
     )
 }
-export default SplashScreen;
+const mapDispatchToProps=dispatch=>({
+    resetLoginFlag:()=>dispatch(resetLoginFlag())
+})
+export default connect(null,  mapDispatchToProps)(SplashScreen);
 
 const styles = StyleSheet.create({
     mainContainer:{

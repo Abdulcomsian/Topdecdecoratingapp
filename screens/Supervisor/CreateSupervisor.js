@@ -13,13 +13,14 @@ const CreateSupervisor = (props) =>{
     const [token,setToken]=useState(props.token)
     const [showAlert,setShowAlert]=useState(false)
 
-    const postCreateSupervisor = () =>{
+    const postCreateSupervisor = async () =>{
 
         try{
+            if(name!="", email!="", password!="", phone!=""){
             let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
             if (regEmail.test(email) === false) {
-                console.log("Email is Not Correct");
+                alert("Email is Not Correct");
                 setEmail(email)
                 return false;
             }
@@ -27,34 +28,26 @@ const CreateSupervisor = (props) =>{
                 setEmail(email)
                 console.log("Email is Correct");
                 if(regPass.test(password) === false){
-                    console.log("Password is Not Correct");
+                    alert("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
                     setPassword(password)
                     return false;
                 }
                 else{
                     console.log("Password is Correct");
-                    props.createSupervisorHandler(name,email,password,phone,token);
+                    await props.createSupervisorHandler(name,email,password,phone,token);
+                    alert("Supervisor Create SuccessFully !")
+                    props.navigation.navigate('MainScreen')
                 }
             }
         }
+        else{
+            alert("Please Insert All Fields CareFully !")
+        }
+        }
         catch(err){
-            console.log(err.message);
+            alert(err.message);
         }
     }
-    React.useEffect(()=>{
-        if(props.createSuperVisor){
-            
-            if(props.createSuperVisorMsg){
-                alert(props.createSuperVisorMsg)
-                props.navigation.navigate('MainScreen')
-            }
-        }
-        else{
-            if(props.createSuperVisorMsg){
-                alert(props.createSuperVisorMsg)
-            }
-        }
-    },[props.createSuperVisorMsg])
     return(
         <View style={styles.mainContainer}>
             
@@ -73,7 +66,7 @@ const CreateSupervisor = (props) =>{
                 </View>
                 <View style={styles.inputFieldContainer}>
                     <TextInput
-                        onChangeText={(e) => setPhone(e)}
+                        onChangeText={(e) => setPhone(e.replace(/[^0-9]/g, ''))}
                         style={styles.inputField}
                         placeholder={"Contact Number"}
                         value={phone}

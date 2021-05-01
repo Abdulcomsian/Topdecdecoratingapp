@@ -4,7 +4,7 @@ import { Text, CheckBox } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
-
+import { connect } from "react-redux";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const PuwerInspection = (props) => {

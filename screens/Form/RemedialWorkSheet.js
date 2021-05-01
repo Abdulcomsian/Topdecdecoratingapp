@@ -9,7 +9,7 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const RemedialWork = (props) => {
   const { navigation, token, isSuccessMsg, isRemedial, isJobId } = props;
-  const jobID = "1234";
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [data, setData] = useState({
     area: "",
@@ -101,7 +101,8 @@ const RemedialWork = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  const remedialFormInsert = () => {
+  const remedialFormInsert = async () => {
+    try{
     if (
       contructorName != "" &&
       projectName != "" &&
@@ -117,7 +118,7 @@ const RemedialWork = (props) => {
       supervisorName != "" &&
       managerName != ""
     ) {
-      props.createRemedialHandler(
+     await props.createRemedialHandler(
         contructorName,
         projectName,
         operative,
@@ -142,10 +143,15 @@ const RemedialWork = (props) => {
         token,
         props.route.params?.index
       );
+      alert("Remedial Work Sheet Insert SuccessFully !");
+      navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
       return false;
     }
+  } catch(err){
+    alert(err.message)
+  }
   };
   useEffect(() => {
     if (isRemedial) {

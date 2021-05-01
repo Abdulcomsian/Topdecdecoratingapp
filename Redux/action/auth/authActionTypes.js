@@ -3,6 +3,10 @@ import axios from "axios";
 
 var base_url = "https://airtimetesting.airtime4u.com/public/tajs/public/api/";
 
+export const resetLoginFlag = () =>{
+  return({type: Actions.RESET_LOGIN_FLAG})
+}
+
 export const adminLogin = (email, password) => {
   return async (dispatch, getState) => {
     try {
@@ -21,10 +25,7 @@ export const adminLogin = (email, password) => {
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.LOGIN_FAIL,
-          payload: response,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -48,10 +49,7 @@ export const emailLink = (email) => {
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.FORGOT_EMAIL_CHECK_FAIL,
-          payload: response,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -75,10 +73,7 @@ export const codeValidate = (code) => {
           payload: response.data.user[0].id,
         });
       } else {
-        dispatch({
-          type: Actions.CODE_VALIDATE_FAIL,
-          payload: response.data.user[0].id,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -101,10 +96,7 @@ export const resetPassword = (id, password) => {
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.RESET_PASSWORD_FAIL,
-          payload: response,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -139,10 +131,7 @@ export const createNewJobCreation = (contractor, project, weeks, supervisor_id, 
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_NEW_JOB_FAIL,
-          payload: response,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -176,12 +165,12 @@ export const createDecorator = ( firstname,
   token) => {
   return async (dispatch, getState) => {
     try {
-      console.log("firstname :", firstname);
-      console.log("lastname :", lastname);
-      console.log("email :", email);
-      console.log("phone :", phone);
-      console.log("password :", password);
-      console.log("Token :", token);
+      // console.log("firstname :", firstname);
+      // console.log("lastname :", lastname);
+      // console.log("email :", email);
+      // console.log("phone :", phone);
+      // console.log("password :", password);
+      // console.log("Token :", token);
 
       const body = { email,password,firstname,phone,lastname };
       const request = await axios(base_url + "admin/create/decorator", {
@@ -199,10 +188,7 @@ export const createDecorator = ( firstname,
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_DECORATOR_FAIL,
-          payload: response,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       console.log("API Error :", err.message);
@@ -231,10 +217,7 @@ export const searchDecorator = (id, token) => {
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.SEARCH_DECORATOR_FAIL,
-          payload: response,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -261,10 +244,7 @@ export const createSupervisor = (name, email, password, phone, token) => {
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_SUPERVISOR_FAIL,
-          payload: response,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -294,10 +274,11 @@ export const searchSupervisor = (id, name, email, token) => {
           payload: response.data.user,
         });
       } else {
-        dispatch({
-          type: Actions.SEARCH_SUPERVISOR_FAIL,
-          payload: response.data.user,
-        });
+        // dispatch({
+        //   type: Actions.SEARCH_SUPERVISOR_FAIL,
+        //   payload: response.data.user,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -324,10 +305,11 @@ export const updateSupervisor = (id, email, name, number, status, token) => {
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.UPDATE_SUPERVISOR_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.UPDATE_SUPERVISOR_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -411,10 +393,11 @@ export const insertHandOverForm = (
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_HAND_OVER_SHEET_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.CREATE_HAND_OVER_SHEET_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       console.log("Error Response :", err);
@@ -509,10 +492,11 @@ export const insertMakeReadyForm = (
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_MAKE_READY_SHEET_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.CREATE_MAKE_READY_SHEET_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -591,10 +575,11 @@ export const insertSnaggingForm = (
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_PRE_WRRANTY_FORM_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.CREATE_PRE_WRRANTY_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       console.log("Insert Error Response :", err.message);
@@ -648,10 +633,11 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.CREATE_QUALITY_ANSURANCE_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       console.log("Insert Error Response :", err.message);
@@ -752,10 +738,11 @@ export const insertRemedialForm = (
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -803,10 +790,11 @@ export const insertScopeForm = (dynamicInput, painter, signature, plotNumber, ty
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.CREATE_SCOPE_FORM_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.CREATE_SCOPE_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -893,10 +881,11 @@ export const insertWorkSheet = (
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       console.log("Erroe :", err.message);
@@ -934,10 +923,11 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_DECORATION_RECORD_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_DECORATION_RECORD_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       console.log("error:", err.message);
@@ -945,7 +935,7 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
     }
   };
 };
-export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, token, index) => {
+export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contructor :", contractor);
@@ -973,18 +963,15 @@ export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, 
       //console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
-        dispatch({
           type: Actions.INSERT_MISCOAT_SUCCESS,
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_MISCOAT_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_MISCOAT_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       console.log("error:", err.message);
@@ -1034,13 +1021,14 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_SITE_INSTRUCTION_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_SITE_INSTRUCTION_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
-      console.log("error:", err.message);
+      // console.log("error:", err.message);
       throw new Error(err.message);
     }
   };
@@ -1080,10 +1068,7 @@ export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_VERIFICATION_WORK_SUCCESS,
-          payload: response,
-        });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -1131,10 +1116,11 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_CLEAN_UP_FORM_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_CLEAN_UP_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -1144,14 +1130,14 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
 export const insertElectricalEquipemntForm = (contractor, project, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
-    console.log("Name Of Contractor :", contractor);
-    console.log("Project Name :", project);
-    console.log("Supervisor Sign :", supervisor);
-    console.log("Date :", date);
-    console.log("Dynamic Input :", jobSummary);
-    console.log("Job ID :", task_id);
-    console.log("Tab Name :", tab_id);
-    console.log("Token :", token);
+    // console.log("Name Of Contractor :", contractor);
+    // console.log("Project Name :", project);
+    // console.log("Supervisor Sign :", supervisor);
+    // console.log("Date :", date);
+    // console.log("Dynamic Input :", jobSummary);
+    // console.log("Job ID :", task_id);
+    // console.log("Tab Name :", tab_id);
+    // console.log("Token :", token);
 
       const body = {
         contractor,
@@ -1178,10 +1164,11 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message)
       }
     } catch (err) {
       throw new Error(err.message);
@@ -1501,3 +1488,10 @@ export const insertRecordOfProject = (surname,
     }
   };
 };
+
+
+// export const resetCreateJobFlag=()=>{
+// return({
+//   type:
+// })
+// }
