@@ -3,6 +3,8 @@ import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-nati
 import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import { color } from "react-native-reanimated";
+import TBTForm from "../../../components/common/TBTForm";
+import SignatureComponent from "../../../components/SignatureComponent";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -44,31 +46,87 @@ const TBTDRUGS = (props) => {
   ]);
   const [toolBoxArray, setToolBoxArray] = useState([]);
   const addToolBox = () => setToolBoxArray((oldArray) => [...oldArray, { name: "", sign: "", date: "" }]);
+
+  const [openSign, setOpenSign] = useState({
+    index: -1,
+    bool: false,
+    isArray: false,
+  });
+  const [data, setData] = useState({
+    contractor: "",
+    project: "",
+    signature: "",
+    date: null,
+    supervisor: "",
+    jobSummary: [],
+  });
+  console.log(data);
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.imageView}>
-        <Image source={mainImage} style={styles.bannerImage} />
-      </View>
-      <View style={{ paddingTop: 30, justifyContent: "center", alignItems: "center" }}>
-        <Text style={styles.titleText}>Toolbox Talk – Drugs and Alcohol </Text>
-      </View>
-      <ScrollView>
-        <View style={{ paddingLeft: 20, paddingRight: 20 }}>
-          <View style={{ marginTop: 20 }}>
-            {coshhArray.map((item, index) =>
-              item.mainTitle ? (
-                <View key={index}>
-                  <Text style={{ fontFamily: "poppins-bold", fontSize: 16 }}>{item.mainTitle}</Text>
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 12, backgroundColor: item.bgcolor }}>{item.title}</Text>
-                </View>
-              ) : (
-                <View key={index}>
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 12, backgroundColor: item.bgcolor }}>{item.title}</Text>
-                </View>
-              )
-            )}
+      {openSign.bool ? (
+        <SignatureComponent
+          returnImage={(uri) => {
+            if (openSign.isArray) {
+              let copydata = [...data.jobSummary];
+              copydata[openSign.index].sign = uri;
+              setData({ ...data, jobSummary: [...copydata] });
+            } else {
+              setData({ ...data, signature: uri });
+            }
+            setOpenSign({ bool: false, index: -1, isArray: false });
+          }}
+        />
+      ) : (
+        <>
+          <View style={styles.imageView}>
+            <Image source={mainImage} style={styles.bannerImage} />
           </View>
-          <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>I confirm that I have received the above tool box talk</Text>
+          <View style={{ paddingTop: 30, justifyContent: "center", alignItems: "center" }}>
+            <Text style={styles.titleText}>Toolbox Talk – Drugs and Alcohol </Text>
+          </View>
+          <ScrollView>
+            <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+              <View style={{ marginTop: 20 }}>
+                {coshhArray.map((item, index) =>
+                  item.mainTitle ? (
+                    <View key={index}>
+                      <Text style={{ fontFamily: "poppins-bold", fontSize: 16 }}>{item.mainTitle}</Text>
+                      <Text style={{ fontFamily: "poppins-regular", fontSize: 12, backgroundColor: item.bgcolor }}>{item.title}</Text>
+                    </View>
+                  ) : (
+                    <View key={index}>
+                      <Text style={{ fontFamily: "poppins-regular", fontSize: 12, backgroundColor: item.bgcolor }}>{item.title}</Text>
+                    </View>
+                  )
+                )}
+              </View>
+              <TBTForm
+                isDrugs={true}
+                data={data}
+                getSignature={(index, bool) => setOpenSign({ ...openSign, bool: true, index, isArray: bool })}
+                addToolBox={() =>
+                  setData({
+                    ...data,
+                    jobSummary: [...data.jobSummary, { print: "", sign: "", date: null }],
+                  })
+                }
+                onChangeData={(key, value, index = -1, addDate = false) => {
+                  if (index >= 0) {
+                    let copyAttendance = [...data.jobSummary];
+
+                    if (addDate) {
+                      copyAttendance[index].date = value;
+                    } else {
+                      copyAttendance[index].print = value;
+                    }
+
+                    setData({ ...data, jobSummary: [...copyAttendance] });
+                  } else {
+                    setData({ ...data, [key]: value });
+                  }
+                }}
+              />
+              {/* <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>I confirm that I have received the above tool box talk</Text>
           <View style={styles.tableViewContainer}>
             <View style={styles.tableHeader}>
               <View style={styles.headerProjectTitleView}>
@@ -114,9 +172,11 @@ const TBTDRUGS = (props) => {
           </View>
           <View style={styles.inputFieldContainer}>
             <TextInput style={styles.inputField} placeholder={"Date"} />
-          </View>
-        </View>
-      </ScrollView>
+          </View>*/}
+            </View>
+          </ScrollView>
+        </>
+      )}
     </View>
   );
 };
