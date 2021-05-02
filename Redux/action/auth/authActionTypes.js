@@ -6,7 +6,6 @@ var base_url = "https://airtimetesting.airtime4u.com/public/tajs/public/api/";
 export const resetLoginFlag = () => {
   return { type: Actions.RESET_LOGIN_FLAG };
 };
-
 export const adminLogin = (email, password) => {
   return async (dispatch, getState) => {
     try {
@@ -1340,13 +1339,16 @@ export const insertFridayPackForm = (
         jobSummary,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/friday_pack", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/friday_pack",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1441,19 +1443,19 @@ export const insertHealthSafetyForm = (
 ) => {
   return async (dispatch, getState) => {
     try {
-        console.log("Contractor Name :", contractorName);
-        console.log("Site Supervisor :", siteSupervisor);
-        console.log("Date :", dateInspection);
-        console.log("Project Address :", projectAddress);
-        console.log("Array:", dynamicInput);
-        console.log("Inspection Name :", inspectionName);
-        console.log("Inspection For :", inspectionFor);
-        console.log("Inspection Date :", dateUpdateComplete);
-        console.log("Inspection Signature :", signature);
-        console.log("Document Array :", arrayDocument);
-        console.log("Job ID :", jobID);
-        console.log("Tab Name :", tabId);
-        console.log("Token :", token);
+      console.log("Contractor Name :", contractorName);
+      console.log("Site Supervisor :", siteSupervisor);
+      console.log("Date :", dateInspection);
+      console.log("Project Address :", projectAddress);
+      console.log("Array:", dynamicInput);
+      console.log("Inspection Name :", inspectionName);
+      console.log("Inspection For :", inspectionFor);
+      console.log("Inspection Date :", dateUpdateComplete);
+      console.log("Inspection Signature :", signature);
+      console.log("Document Array :", arrayDocument);
+      console.log("Job ID :", jobID);
+      console.log("Tab Name :", tabId);
+      console.log("Token :", token);
 
       // const body = {
       //   contractor,
@@ -1551,56 +1553,67 @@ export const insertHouseKeepingForm = (
   };
 };
 export const insertLAdderCheckListForm = (
-  contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList, jobID, tabId, token, index
+  contractor,
+  project,
+  supervisor,
+  date,
+  next_inspection,
+  comment,
+  jobSummary,
+  task_id,
+  tab_id,
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Main Contractor  :", contractorName);
-      console.log("Project Name :", projectName);
-      console.log("Supervisor Sign :", supervisorSign);
-      console.log("Date Complete :", dateTimeComplete);
-      console.log("Next Inspection Date :", nextDateInspection);
-      console.log("Further Comments :", furtherComments);
-      console.log("Array :", ladderArrayList);
-      console.log("Job ID :", jobID);
-        console.log("Tab Name :", tabId);
-        console.log("Token :", token);
+      // console.log("Main Contractor  :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Supervisor Sign :", supervisor);
+      // console.log("Date Complete :", date);
+      // console.log("Next Inspection Date :", next_inspection);
+      // console.log("Further Comments :", comment);
+      // console.log("Array :", jobSummary);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
 
-      // const body = {
-      //   contractor,
-      //   project,
-      //   week,
-      //   Supervisor,
-      //   date,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
+      const body = {
+        contractor,
+        project,
+        date,
+        supervisor,
+        next_inspection,
+        comment,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
 
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/housekeepings",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_HOUSE_KEEPING_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   // dispatch({
-      //   //   type: Actions.INSERT_HOUSE_KEEPING_FORM_FAIL,
-      //   //   payload: response,
-      //   // });
-      //   throw new Error(response.message);
-      // }
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Ladders",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_LADDER_CHECKLIST_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_LADDER_CHECKLIST_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -1675,104 +1688,109 @@ export const insertMethodStatementForm = (
 };
 export const insertIssueRecordForm = (
   contractor,
-  comapanyproject,
+  project,
   employees,
-  dynamicInput,
-  jobID,
-  tabId,
+  jobSummary,
+  task_id,
+  tab_id,
   token,
   index
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Main Contractor  :", contractor);
-      console.log("Project Name :", comapanyproject);
-      console.log("Operative Name :", employees);
-      console.log("Array :", dynamicInput);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
+      // console.log("Main contractor  :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Operative Name :", employees);
+      // console.log("Array :", jobSummary);
+      // console.log("Job ID :", jobID);
+      // console.log("Tab Name :", tabId);
+      // console.log("Token :", token);
 
-      // const body = {
-      //   title,
-      //   contractor,
-      //   project,
-      //   ref,
-      //   supervisor,
-      //   supervisor_sign,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
+      const body = {
+        contractor,
+        employees,
+        project,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
 
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/methodStatement",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_METHOD_STATEMENT_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   // dispatch({
-      //   //   type: Actions.INSERT_METHOD_STATEMENT_FORM_FAIL,
-      //   //   payload: response,
-      //   // });
-      //   throw new Error(response.message);
-      // }
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/personal_protective",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_PERSONAL_PROTECTIVE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_PERSONAL_PROTECTIVE_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
 export const insertPuwerInspectionForm = (
-  contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId, token, index
+  contractor,
+  project,
+  comments,
+  supervisor,
+  date,
+  jobSummary,
+  task_id,
+  tab_id,
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Main Contractor  :", contractorName);
-      console.log("Project Name :", projectName);
-      console.log("Further Comments :", furtherComment);
-      console.log("Supervisor Sign :", supervisorSign);
-      console.log("Supervisor Date :", dateSupervisor);
-      console.log("Array Data :", puwerArrayList);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
+      // console.log("Main Contractor  :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Further Comments :", comments);
+      // console.log("Supervisor Sign :", supervisor);
+      // console.log("Supervisor Date :", date);
+      // console.log("Array Data :", puwerArrayList);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
 
-      // const body = {
-      //   title,
-      //   contractor,
-      //   project,
-      //   ref,
-      //   supervisor,
-      //   supervisor_sign,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
+      const body = {
+        contractor,
+        project,
+        comments,
+        supervisor,
+        date,
+        task_id,
+        tab_id,
+        jobSummary,
+      };
 
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/methodStatement",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // console.log("Insert Response :", response);
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Puwer",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
       // if (response.success == true) {
       //   dispatch({
       //     type: Actions.INSERT_METHOD_STATEMENT_FORM_SUCCESS,
@@ -1852,45 +1870,61 @@ export const insertOnSiteDecorationForm = (
 export const insertRecordOfProject = (
   surname,
   mobile,
-    firstname,
-    job,
-    address,
-    cscscard,
-    detail,
-    nextofkin,
-    relation_to_kin,
-    kincontact,
-    contractor,
-    project,
-    recordArray,
-    jobID,
-    tabId,
-    token,
-    index
+  firstname,
+  job,
+  address,
+  cscscard,
+  detail,
+  nexttokin,
+  relation_to_kin,
+  kincontact,
+  contractor,
+  project,
+  jobSummary,
+  task_id,
+  tab_id,
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Statement Title  :", title);
-      console.log("Main Contractor  :", contractor);
-      console.log("Project Name :", project);
-      console.log("Ref No :", ref);
-      console.log("Name Of Supervisor :", supervisor);
-      console.log("Supervisor Sign :", supervisor_sign);
-      console.log("Array Data :", jobSummary);
-      console.log("Job ID :", task_id);
-      console.log("Tab Name :", tab_id);
-      console.log("Token :", token);
+      // console.log("Surname :", surname);
+      // console.log("Mobile  :", mobile);
+      // console.log("First Name :", firstname);
+      // console.log("Job:", job);
+      // console.log("Address :", address);
+      // console.log("Card No :", cscscard);
+      // console.log("Detail :", detail);
+      // console.log("Next to Kin  :", nexttokin);
+      // console.log("Realation  :", relation_to_kin);
+      // console.log("Kin Contact :", kincontact);
+      // console.log("Contractor Name :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Job Summary thi :", jobSummary);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
 
       const body = {
+        surname,
+        firstname,
+        relation_to_kin,
+        mobile,
+        job,
+        address,
+        cscscard,
+        detail,
+        nexttokin,
+        kincontact,
         contractor,
         project,
         task_id,
         tab_id,
-        jobSummary,
+        jobSummary
       };
 
       const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+        base_url + "supervisor/insert/healthAndSecurity/IntroTraining",
         {
           method: "POST",
           headers: {
@@ -1900,30 +1934,39 @@ export const insertRecordOfProject = (
         }
       );
       const response = request.data;
-      //console.log("Insert Response :", response);
+     // console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
-          type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+          type: Actions.INSERT_RECORD_OF_PROJECT_FORM_SUCCESS,
           payload: response,
         });
       } else {
-        dispatch({
-          type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-          payload: response,
-        });
+        // dispatch({
+        //   type: Actions.INSERT_RECORD_OF_PROJECT_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
       }
     } catch (err) {
       throw new Error(err.message);
     }
   };
 };
-
 export const insertDailyBreifingForm = (
-  mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,
-    jobID,
-    tabId,
-    token,
-    index
+  mainContractor,
+  projectName,
+  supervisorName,
+  statementNumber,
+  date,
+  dailyArray,
+  jobSafetyArray,
+  berifingArray,
+  operativeArray,
+  hazrdArray,
+  jobID,
+  tabId,
+  token,
+  index
 ) => {
   return async (dispatch, getState) => {
     try {
@@ -1977,12 +2020,559 @@ export const insertDailyBreifingForm = (
     }
   };
 };
-export const insertTBTCOSH = (
-  data,jobID,tabId,token,index
-) => {
+export const insertTBTCOSH = (data, token, index) => {
   return async (dispatch, getState) => {
     try {
       console.log("array :", data);
+      // console.log("Job ID :", jobID);
+      // console.log("Tab Name :", tabId);
+      //console.log("Token :", token);
+
+      
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/COSHH",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_COSH_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+
+      }
+    } catch (err) {
+      console.log(err?.response?.request)
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtFire = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/fire_safety",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_FIRE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      console.log(err?.response?.request)
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtSlip = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/SlitTrip",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_SLIP_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtCovid = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/covid",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtHouseKeepingForm = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/housekeepings",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_HOUSEKEEPING_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      throw new Error(response.message);
+       }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtMobileForm = (data, jobID, tabId, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/MobileEvelated",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_MOBILE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtRespiratory = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/DustMask",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_RESPIRATORY_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtSilicaDust = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/SilicaDust",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_SILICA_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtDrugs = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/DrugAndAlcohol",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_DRUGS_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtVolience = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+     
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/VoilenceAndAggression",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_VOLIENCE_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      console.log(err?.response?.request)
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtWorking = (data, token, index) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("array :", data);
+      console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeight",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: data,
+        }
+      );
+      const response = request.data;
+      //console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_TBT_WORKING_FORM_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtRegister = (
+  client,
+  projectName,
+  subject,
+  outline,
+  registerDate,
+  startTime,
+  finishTime,
+  toolBoxArray,
+  supervisorName,
+  supevisorSign,
+  jobID,
+  tabId,
+  token,
+  index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Client :", client);
+      // console.log("Project :", projectName);
+      // console.log("Subject :", subject);
+      // console.log("Outline :", outline);
+      // console.log("Register Date :", registerDate);
+      // console.log("Start Time :", startTime);
+      // console.log("Finish Time :", finishTime);
+      // console.log("Array :", toolBoxArray);
+      // console.log("Supervisor Name :", supervisorName);
+      // console.log("Supervisor Signature :", supevisorSign);
+      // console.log("Job ID :", jobID);
+      // console.log("Tab Name :", tabId);
+      // console.log("Token :", token);
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      // const request = await axios(
+      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       authorization: "Bearer " + token,
+      //     },
+      //     data: body,
+      //   }
+      // );
+      // const response = request.data;
+      // //console.log("Insert Response :", response);
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   dispatch({
+      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+      //     payload: response,
+      //   });
+      // }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+export const insertTbtInventory = (
+  mainContractor,
+  projectName,
+  supervisorSignature,
+  dateSupervisor,
+  inventoryArray,
+  jobID,
+  tabId,
+  token,
+  index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log("Main Contractor :", mainContractor);
+      console.log("Project Name :", projectName);
+      console.log("Supervisor Sign :", supervisorSignature);
+      console.log("Supervisor Date :", dateSupervisor);
+      console.log("Array:", inventoryArray);
       console.log("Job ID :", jobID);
       console.log("Tab Name :", tabId);
       console.log("Token :", token);
@@ -2023,372 +2613,3 @@ export const insertTBTCOSH = (
     }
   };
 };
-export const insertTbtFire = (
-  data,jobID,tabId,token,index
-) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("array :", data);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // //console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertTbtSlip = (
-  data,jobID,tabId,token,index
-) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("array :", data);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // //console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertTbtCovid = (
-  data,jobID,tabId,token,index
-) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("array :", data);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // //console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertTbtHouseKeepingForm = (
-  data,jobID,tabId,token,index
-) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("array :", data);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // //console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertTbtMobileForm = (
-  data,jobID,tabId,token,index
-) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("array :", data);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // //console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertTbtRespiratory = (
-  data,jobID,tabId,token,index
-) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("array :", data);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // //console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertTbtSilicaDust = (
-  data,jobID,tabId,token,index
-) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("array :", data);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // //console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-export const insertTbtWorking = (
-  data,jobID,tabId,token,index
-) => {
-  return async (dispatch, getState) => {
-    try {
-      console.log("array :", data);
-      console.log("Job ID :", jobID);
-      console.log("Tab Name :", tabId);
-      console.log("Token :", token);
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-
-      // const request = await axios(
-      //   base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       authorization: "Bearer " + token,
-      //     },
-      //     data: body,
-      //   }
-      // );
-      // const response = request.data;
-      // //console.log("Insert Response :", response);
-      // if (response.success == true) {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_SUCCESS,
-      //     payload: response,
-      //   });
-      // } else {
-      //   dispatch({
-      //     type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-      //     payload: response,
-      //   });
-      // }
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-

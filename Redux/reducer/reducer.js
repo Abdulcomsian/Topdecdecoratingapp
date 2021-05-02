@@ -414,6 +414,104 @@ export default (state = initialState, action)=> {
                     isSuccessMsg : action.payload.message,
                    
                 }
+            case Actions.INSERT_RECORD_OF_PROJECT_FORM_SUCCESS:
+             console.log("INSERT_RECORD_OF_PROJECT_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_LADDER_CHECKLIST_FORM_SUCCESS:
+             console.log("INSERT_LADDER_CHECKLIST_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_PERSONAL_PROTECTIVE_FORM_SUCCESS:
+             console.log("INSERT_PERSONAL_PROTECTIVE_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_COSH_FORM_SUCCESS:
+             console.log("INSERT_TBT_COSH_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_FIRE_FORM_SUCCESS:
+             console.log("INSERT_TBT_FIRE_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_SLIP_FORM_SUCCESS:
+             console.log("INSERT_TBT_SLIP_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_COVID_FORM_SUCCESS:
+             console.log("INSERT_TBT_COVID_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_HOUSEKEEPING_FORM_SUCCESS:
+             console.log("INSERT_TBT_HOUSEKEEPING_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_MOBILE_FORM_SUCCESS:
+             console.log("INSERT_TBT_MOBILE_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_RESPIRATORY_FORM_SUCCESS:
+             console.log("INSERT_TBT_RESPIRATORY_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_SILICA_FORM_SUCCESS:
+             console.log("INSERT_TBT_SILICA_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_DRUGS_FORM_SUCCESS:
+             console.log("INSERT_TBT_DRUGS_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_VOLIENCE_FORM_SUCCESS:
+             console.log("INSERT_TBT_VOLIENCE_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_WORKING_FORM_SUCCESS:
+             console.log("INSERT_TBT_WORKING_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
             default:
             return state;
       }

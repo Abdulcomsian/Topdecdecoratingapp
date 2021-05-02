@@ -121,15 +121,15 @@ const TBTFire = (props) => {
   const [data, setData] = useState({
     contractor: "",
     project: "",
-    meeting: "",
+    supervisor: "",
     date: null,
-    comment: "",
+    comments: "",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
     try{
       if(data!=""){
-        await props.creatTbtFireHandler(data,jobID,tabId,token,props.route.params?.index)
+        await props.creatTbtFireHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT FIRE Insert SuccessFully !");
@@ -308,16 +308,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   creatTbtFireHandler: (
     data,
-    jobID,
-    tabId,
     token,
     index
   ) =>
     dispatch(
       insertTbtFire(
         data,
-        jobID,
-        tabId,
         token,
         index
       )

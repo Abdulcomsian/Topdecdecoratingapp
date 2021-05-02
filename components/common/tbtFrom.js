@@ -82,7 +82,7 @@ const tbtForm = (props)=>{
                         
                         {props.secondArray.map((item,index)=>(
                             <View style={styles.tableBody} key={index}>
-                            <Text style={{width: "10%",justifyContent:'center',alignItems:'center',paddingTop:20,ontFamily:'poppins-regular',fontSize:10}}>{index}</Text>
+                            <Text style={{width: "10%",justifyContent:'center',alignItems:'center',paddingTop:20,fontFamily:'poppins-regular',fontSize:10}}>{index}</Text>
                                 <View style={styles.inputOprativesBodyContainer}>
                                     <TextInput
                                         style={styles.bodyTextInput}

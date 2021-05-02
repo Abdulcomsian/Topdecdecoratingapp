@@ -11,7 +11,7 @@ const HandOverForm = (props) => {
   const { navigation, token, isHandOver, isSuccessMsg, isJobId } = props;
   const jobID = isJobId;
   const tabId = props.route.params.tabName;
-  const [dynamicInput, setdynamicInput] = useState([]);
+  const [dynamicInput, setdynamicInput] = useState([{ area: "", description: "", completed: "", comments: "" }]);
   const [date, setDate] = useState(new Date());
   const [dateIssue, setDateIssue] = useState(new Date());
   const [dateComplete, setDateComplete] = useState(new Date());
@@ -51,9 +51,8 @@ const HandOverForm = (props) => {
   });
   /* Add Dynamic Input value & Add New Row*/
   const addRow = () => {
-    setdynamicInput((oldArray) => [...oldArray, data]);
+    setdynamicInput((oldArray) => [...oldArray, { area: "", description: "", completed: "", comments: "" }]);
 
-    setData({ area: "", description: "", completed: "", comments: "" });
   };
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -320,42 +319,20 @@ const HandOverForm = (props) => {
                           placeholder={"Comments"}
                         />
                       </View>
+                      <View style={styles.inputBodyContainer}>
+                        <TouchableOpacity style={styles.addBtn} onPress={() => {
+                          if(dynamicInput.length>0 && !dynamicInput[dynamicInput.length-1].area && !dynamicInput[dynamicInput.length-1].description && !dynamicInput[dynamicInput.length-1].completed && !dynamicInput[dynamicInput.length-1].comments){
+                            alert("Please Enter All Value and then move to next Item Add !")
+                          }
+                          else {
+                            addRow()
+                          }
+                        }}>
+                          <Image style={styles.plusBtn} source={plus} />
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   ))}
-              </View>
-              <View style={styles.tableBody}>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput onChangeText={(txt) => setData({ ...data, area: txt })} style={styles.bodyTextInput} placeholder={"Area/unit"} value={data.area} />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, description: txt })}
-                    style={styles.bodyTextInput}
-                    placeholder={"Description"}
-                    value={data.description}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    value={data.completed}
-                    onChangeText={(txt) => setData({ ...data, completed: txt })}
-                    style={styles.bodyTextInput}
-                    placeholder={"Yes / No"}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    value={data.comments}
-                    onChangeText={(txt) => setData({ ...data, comments: txt })}
-                    style={styles.bodyTextInput}
-                    placeholder={"Comments"}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addRow()}>
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
               </View>
               <Text
                 style={{

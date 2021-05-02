@@ -11,10 +11,16 @@ import styles from "../../../assets/css/styles";
 import { color } from "react-native-reanimated";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
+import { connect } from "react-redux";
+import { insertTbtInventory } from "../../../Redux/action/auth/authActionTypes";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 
-const TBTINVENTORY = () => {
+const TBTINVENTORY = (props) => {
+  const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [getSign, setGetSign] = useState(false);
   const [inventoryArray, setInventoryArray] = useState([
     {
@@ -129,12 +135,21 @@ const TBTINVENTORY = () => {
     setSupervisorShow(true);
   };
 
-  const tbtInventoryFormInsert = () => {
-    console.log("Main Contractor :", mainContractor);
-    console.log("Project Name :", projectName);
-    console.log("Supervisor Sign :", supervisorSignature);
-    console.log("Supervisor Date :", dateSupervisor);
-    console.log("Array:", inventoryArray);
+  const tbtInventoryFormInsert = async () => {
+    
+    try {
+     
+      if(mainContractor!="" && projectName!=""  && supervisorSignature!="" && dateSupervisor!="" && inventoryArray!="" ){
+        await props.creatTbtInventoryHandler(mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,props.route.params?.index)
+        props.updateHealthReport(props?.route?.params?.index);
+        props.navigation.pop();
+        alert("TBT INVENTORY Insert SuccessFully !");
+      }else{
+        alert("Please Insert All Fields CareFully !");
+      }
+    } catch (err) {
+      alert(err.message);
+    }
   };
   const updateLabourValue = (key, index, value) => {
     let preData = [...inventoryArray];
@@ -503,4 +518,15 @@ const TBTINVENTORY = () => {
     </View>
   );
 };
-export default TBTINVENTORY;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isOnSite: state.auth.isOnSite,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  creatTbtInventoryHandler: (mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,index) =>
+    dispatch(insertTbtInventory(mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,index)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(TBTINVENTORY);

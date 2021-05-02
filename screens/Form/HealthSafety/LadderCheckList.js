@@ -297,16 +297,10 @@ const LadderCheckList = (props) => {
     }
   };
   const ladderCheckListForm = async () => {
-    console.log("Main Contractor  :", contractorName);
-    console.log("Project Name :", projectName);
-    console.log("Supervisor Sign :", supervisorSign);
-    console.log("Date Complete :", dateTimeComplete);
-    console.log("Next Inspection Date :", nextDateInspection);
-    console.log("Further Comments :", furtherComments);
-    console.log("Array :", ladderArrayList);
+  
     try{
     if(contractorName!="" && projectName!="" && supervisorSign!="" && dateTimeComplete!="" && nextDateInspection!="" && furtherComments!="" && ladderArrayList){
-    await props.createLadderCheckListHandler(contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList, props.route.params?.index)
+    await props.createLadderCheckListHandler(contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList,jobID,tabId,token, props.route.params?.index)
       props.updateHealthReport(props?.route?.params?.index);
     alert("Ladder Check List Insert SuccessFully !");
     props.navigation.pop();

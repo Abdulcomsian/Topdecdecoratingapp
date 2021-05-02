@@ -236,6 +236,11 @@ const HealthSafetyInspection = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
+  const updateArrayDocumentValue = (key, index, value) => {
+    let preData = [...arrayDocument];
+    preData[index][key] = value;
+    setArrayDocument(preData);
+  };
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
@@ -580,7 +585,7 @@ const HealthSafetyInspection = (props) => {
                         <TextInput
                           style={styles.inputField}
                           placeholder={"Comments"}
-                          onChangeText={(txt) => updateValue("comment", index, txt)}
+                          onChangeText={(txt) => updateArrayDocumentValue("comment", index, txt)}
                           value={item.comment}
                         />
                       </View>

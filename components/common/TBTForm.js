@@ -6,7 +6,7 @@ import styles from "../../assets/css/styles";
 const TBTForm = (props) => {
   const { data, addAttendence, onChangeData, getSignature, isDrugs = false, addToolBox, isVoilence = false } = props;
   // console.log(data);
-  const { contractor, project, meeting, date, comment, jobSummary, signature } = data;
+  const { contractor, project, supervisor, date, comments, jobSummary, signature } = data;
   const [openData, setOpenDate] = React.useState({ bool: false, index: -1 });
 
   return (
@@ -19,7 +19,7 @@ const TBTForm = (props) => {
         display='default'
         onConfirm={(txt) => {
           setOpenDate({ ...openData, bool: false, index: -1 });
-          onChangeData("date", txt, openData.index, true);
+          onChangeData("date", txt.toLocaleDateString(), openData.index, true);
         }}
         onCancel={() => {
           setOpenDate({ ...openData, bool: false, index: -1 });
@@ -39,15 +39,15 @@ const TBTForm = (props) => {
       {!isDrugs && !isVoilence ? (
         <>
           <View style={styles.inputFieldContainer}>
-            <TextInput onChangeText={(txt) => onChangeData("meeting", txt)} value={meeting} style={styles.inputField} placeholder={"Meeting Conducted By"} />
+            <TextInput onChangeText={(txt) => onChangeData("supervisor", txt)} value={supervisor} style={styles.inputField} placeholder={"Meeting Conducted By"} />
           </View>
           <TouchableOpacity onPress={() => setOpenDate({ ...openData, bool: true, index: -1 })} style={styles.inputFieldContainer}>
             <TextInput editable={false} style={styles.inputField} placeholder={date ? new Date(date).toLocaleDateString() : "Date"} />
           </TouchableOpacity>
           <View style={styles.inputFieldContainer}>
             <TextInput
-              onChangeText={(txt) => onChangeData("comment", txt)}
-              value={comment}
+              onChangeText={(txt) => onChangeData("comments", txt)}
+              value={comments}
               multiline={true}
               numberOfLines={4}
               style={styles.inputField}
@@ -58,13 +58,33 @@ const TBTForm = (props) => {
       ) : (
         <>
           <View style={styles.inputFieldContainer}>
-            <TextInput onChangeText={(txt) => onChangeData("supervisor", txt)} value={meeting} style={styles.inputField} placeholder={"Supervisor name"} />
+            <TextInput onChangeText={(txt) => onChangeData("supervisor", txt)} value={supervisor} style={styles.inputField} placeholder={"Supervisor name"} />
           </View>
-          <TouchableOpacity
-            onPress={() => getSignature(-1, false)}
-            style={[styles.inputOprativesBodyContainer, { justifyContent: "flex-end", alignItems: "center" }]}>
-            <Image style={{ height: 30, width: 30, backgroundColor: "gray" }} source={{ uri: signature }} />
-          </TouchableOpacity>
+          <View style={styles.inputFieldContainer}>
+                      <TouchableOpacity
+                        onPress={() => getSignature(-1, false)}
+                        style={[styles.inputOprativesBodyContainer, { justifyContent: "flex-start", alignItems: "flex-start",width:"100%" }]}>
+                        {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
+                        {signature ? (
+                          <Image style={{ marginTop: 10, height: 100, width: 100, backgroundColor: "gray" }}  source={{ uri: signature }} />
+                        ) : (
+                          <Text
+                            style={{
+                              height: 52,
+                              width: "100%",
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#96A8B2",
+                              padding: 5,
+                              fontSize: 12,
+                              color: "#96A8B2",
+                              fontFamily: "poppins-regular",
+                              paddingTop: 15,
+                            }}>
+                            Signature
+                          </Text>
+                        )}
+                      </TouchableOpacity>
+                    </View>
           <TouchableOpacity onPress={() => setOpenDate({ ...openData, bool: true, index: -1 })} style={styles.inputFieldContainer}>
             <TextInput editable={false} style={styles.inputField} placeholder={date ? new Date(date).toLocaleDateString() : "Date"} />
           </TouchableOpacity>
@@ -87,7 +107,14 @@ const TBTForm = (props) => {
               </View>
             </View>
             <View style={{ justifyContent: "flex-end", width: "100%", alignItems: "flex-end", marginBottom: 10 }}>
-              <TouchableOpacity style={styles.addBtn} onPress={() => addToolBox()}>
+              <TouchableOpacity style={styles.addBtn} onPress={() => {
+                  if(jobSummary.length>0 && !jobSummary[jobSummary.length-1].print && !jobSummary[jobSummary.length-1].sign && !jobSummary[jobSummary.length-1].date){
+                    alert("Please Enter All Value and then move to next Item Add !")
+                  }
+                  else {
+                    addToolBox()
+                  }
+              }}>
                 <Image style={styles.plusBtn} source={plus} />
               </TouchableOpacity>
             </View>
@@ -100,7 +127,18 @@ const TBTForm = (props) => {
                   activeOpacity={1}
                   onPress={() => getSignature(index, true)}
                   style={[styles.inputHazrdBodyContainer, { justifyContent: "flex-end", alignItems: "center" }]}>
-                  <Image style={{ height: 25, width: 25, backgroundColor: "gray" }} source={{ uri: item?.sign }} />
+                    {item?.sign ?
+                  <Image style={{ height: 40, width: 40, backgroundColor: "gray" }} source={{ uri: item?.sign }} />
+                  :
+                  <Text style={{ height: 38,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 8,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 15,}}>Signature</Text>}
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={1} onPress={() => setOpenDate({ ...openData, bool: true, index })} style={styles.inputHazrdBodyContainer}>
                   <TextInput
@@ -127,13 +165,20 @@ const TBTForm = (props) => {
               </View>
             </View>
             <View style={{ justifyContent: "flex-end", width: "100%", alignItems: "flex-end", marginBottom: 10 }}>
-              <TouchableOpacity style={styles.addBtn} onPress={() => addAttendence()}>
+              <TouchableOpacity style={styles.addBtn} onPress={() => {
+                if(jobSummary.length>0 && !jobSummary[jobSummary.length-1].print && !jobSummary[jobSummary.length-1].sign){
+                  alert("Please Enter All Value and then move to next Item Add !")
+                }
+                else {
+                  addAttendence()
+                }
+              }}>
                 <Image style={styles.plusBtn} source={plus} />
               </TouchableOpacity>
 
               {jobSummary.map((item, index) => (
                 <View style={styles.tableBody} key={index}>
-                  <Text style={{ width: "10%", justifyContent: "center", alignItems: "center", paddingTop: 20, ontFamily: "poppins-regular", fontSize: 10 }}>
+                  <Text style={{ width: "10%", justifyContent: "center", alignItems: "center", paddingTop: 20, fontFamily: "poppins-regular", fontSize: 10 }}>
                     {index}
                   </Text>
                   <View style={styles.inputOprativesBodyContainer}>

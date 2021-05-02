@@ -4,11 +4,17 @@ import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import { color } from "react-native-reanimated";
 import SignatureComponent from "../../../components/SignatureComponent";
+import { connect } from "react-redux";
+import { insertTbtVolience } from "../../../Redux/action/auth/authActionTypes";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import TBTForm from "../../../components/common/TBTForm";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const TBTVOLIENCE = (props) => {
+  const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [coshhArray, setCoshhArray] = useState([
     {
       title:
@@ -38,7 +44,22 @@ const TBTVOLIENCE = (props) => {
     supervisor: "",
     jobSummary: [],
   });
-  console.log(data);
+  const tbtVolienceFormInsert = async () =>{
+    console.log("Token :",token)
+    try {
+       
+      if(data!="" ){
+        await props.creatTbtVolienceHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
+        props.updateHealthReport(props?.route?.params?.index);
+        props.navigation.pop();
+        alert("TBT VOLIENCE Insert SuccessFully !");
+      }else{
+        alert("Please Insert All Fields CareFully !");
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+   }
   return (
     <View style={styles.mainContainer}>
       {openSign.bool ? (
@@ -148,6 +169,23 @@ const TBTVOLIENCE = (props) => {
               <Text style={{ fontFamily: "poppins-bold", fontSize: 10, textAlign: "center", paddingTop: 10 }}>
                 Once completed, please file a copy in the Site Folder and send a copy to our Head Office and a copy should be given to the site team{" "}
               </Text>
+              <View
+                style={{
+                  backgroundColor: "#000",
+                  width: "100%",
+                  height: 2,
+                  marginBottom: 20,
+                  marginTop: 20,
+                }}
+              ></View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => tbtVolienceFormInsert()}
+                >
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </ScrollView>
         </>
@@ -155,4 +193,16 @@ const TBTVOLIENCE = (props) => {
     </View>
   );
 };
-export default TBTVOLIENCE;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isOnSite: state.auth.isOnSite,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  creatTbtVolienceHandler: (data,token,index) =>
+    dispatch(insertTbtVolience(data,token,index)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(TBTVOLIENCE);
+

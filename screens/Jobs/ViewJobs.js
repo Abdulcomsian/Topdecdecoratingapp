@@ -1,25 +1,41 @@
 import React,{useState} from 'react';
 import { View,StyleSheet,Image,TextInput,TouchableOpacity} from 'react-native';
 import {Text} from 'native-base';
+import { connect } from "react-redux";
 
-const ViewJob = ({props,navigation}) =>{
+const ViewJob = ( props ) =>{
+    const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
+    console.log("Role : ",props)
     return(
         <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Search/View Jobs</Text>
             </View>
+            {role=="ADMIN" ? 
             <View style={{padding:30}}>
-                {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SelectProject')}>
-                    <Text style={styles.commonText}>View your assigned Jobs</Text>
-                </TouchableOpacity> */}
                 <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchJob')}>
                     <Text style={styles.commonText}>Search job</Text>
                 </TouchableOpacity>
             </View>
+            :
+            <View style={{padding:30}}>
+                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('')}>
+                    <Text style={styles.commonText}>View your assigned Jobs</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchJob')}>
+                    <Text style={styles.commonText}>Search job</Text>
+                </TouchableOpacity>
+            </View>
+            }
         </View>
     )
 }
-export default ViewJob;
+const mapStateToProps = state => ({
+    role: state.auth.role
+  });
+  const mapDispatchToProps=dispatch=>({
+  })
+export default connect(mapStateToProps,  mapDispatchToProps)(ViewJob);
 const styles = StyleSheet.create({
     mainContainer:{
         height:'100%',

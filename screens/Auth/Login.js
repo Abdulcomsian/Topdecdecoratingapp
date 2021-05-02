@@ -15,7 +15,7 @@ const LoginScreen = (props) =>{
     const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
    // const dispatch = useDispatch()
     const [email, setEmail] = useState("admin@accrualgroup.com")
-    const [password, setPassword] = useState("1234567890A@a")
+    const [password, setPassword] = useState("asdfghjkl")
 
     const postSignInHandler =  async (type)=>{
         try{

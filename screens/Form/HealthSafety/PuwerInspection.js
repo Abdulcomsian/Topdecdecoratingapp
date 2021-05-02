@@ -17,208 +17,208 @@ const PuwerInspection = (props) => {
     {
       title: "Step ladders",
       subTitle: "No. 1",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 2",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 3",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "Ladders",
       subTitle: "No. 1",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 2",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "Hop Ups",
       subTitle: "No. 1",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 2",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 3",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 4",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 5",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 6",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "Mobile / Stair Tower",
       subTitle: "No. 1",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 2",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "Cherry picker / Scissor lift",
       subTitle: "No. 1",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "Envirowash ES800",
       subTitle: "No. 1",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "Spray Machines: Aristo sprayer QTECH Q-P021/ QP025, Graco GMAX II 3900 ProContractor Series ",
       subTitle: "No. 1",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "Others (please specify)",
       subTitle: "Task lights, filling knives,",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "Pasting table, wallpaper scissors",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "Paint mixer, extension/sanding poles",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {title: "",
       subTitle: "Stripping knife, window scraper",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "Caulker, caulking gun",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "PPE",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "Skuttle kits & trays",
-      equpment: "",
+      equipment: "",
       location: "",
-      inspectionName: "",
+      inspection_name: "",
       condition: "",
-      inspectionDate: new Date().toLocaleDateString(),
+      inspection_date: new Date().toLocaleDateString(),
     },
   ]);
   const [date, setDate] = useState(new Date(1598051730000));
@@ -237,7 +237,7 @@ const PuwerInspection = (props) => {
     const currentDate = selectedDate;
     setShow({ ...show, isVisible: false, index: -1 });
     let copyArr = [...puwerArrayList];
-    copyArr[show.index].inspectionDate = currentDate.toLocaleDateString();
+    copyArr[show.index].inspection_date = currentDate.toLocaleDateString();
     setPuwerArrayList(copyArr);
   };
   const showDatepicker = (index = -1) => {
@@ -263,6 +263,7 @@ const PuwerInspection = (props) => {
        await props.createPuwerInspectionHandler(contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId,token,props.route.params?.index)
        props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
+        alert("Puwer Inspection Insert SuccessFully !");
       } else{
         alert("Please Insert All Fields CareFully !");
       }
@@ -404,8 +405,8 @@ const PuwerInspection = (props) => {
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Equipments"}
-                          onChangeText={(txt) => updateValue("equpment", index, txt)}
-                          value={item.equpment}
+                          onChangeText={(txt) => updateValue("equipment", index, txt)}
+                          value={item.equipment}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
@@ -420,8 +421,8 @@ const PuwerInspection = (props) => {
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Inspection"}
-                          onChangeText={(txt) => updateValue("inspectionName", index, txt)}
-                          value={item.inspectionName}
+                          onChangeText={(txt) => updateValue("inspection_name", index, txt)}
+                          value={item.inspection_name}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
@@ -447,7 +448,7 @@ const PuwerInspection = (props) => {
                             padding: 5,
                             color: "#96A8B2",
                           }}>
-                          {new Date(item.inspectionDate).toLocaleDateString()}
+                          {new Date(item.inspection_date).toLocaleDateString()}
                         </Text>
                       </View>
                     </View>
@@ -469,8 +470,8 @@ const PuwerInspection = (props) => {
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Equipments"}
-                          onChangeText={(txt) => updateValue("equpment", index, txt)}
-                          value={item.equpment}
+                          onChangeText={(txt) => updateValue("equipment", index, txt)}
+                          value={item.equipment}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
@@ -485,8 +486,8 @@ const PuwerInspection = (props) => {
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Inspection"}
-                          onChangeText={(txt) => updateValue("inspectionName", index, txt)}
-                          value={item.inspectionName}
+                          onChangeText={(txt) => updateValue("inspection_name", index, txt)}
+                          value={item.inspection_name}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
@@ -512,7 +513,7 @@ const PuwerInspection = (props) => {
                             padding: 5,
                             color: "#96A8B2",
                           }}>
-                          {new Date(item.inspectionDate).toLocaleDateString()}
+                          {new Date(item.inspection_date).toLocaleDateString()}
                         </Text>
                       </View>
                     </View>

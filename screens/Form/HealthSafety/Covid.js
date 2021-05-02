@@ -50,16 +50,16 @@ const Covid = (props) =>{
       });
       const [data, setData] = useState({
         contractor: "",
-        project: "",
-        meeting: "",
-        date: null,
-        comment: "",
-        jobSummary: [],
+    project: "",
+    supervisor: "",
+    date: null,
+    comments: "",
+    jobSummary: [],
       });
       const tbtFormInsert = async () => {
         try{
           if(data!=""){
-            await props.creatTbtCovidHandler(data,jobID,tabId,token,props.route.params?.index)
+            await props.creatTbtCovidHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
             props.updateHealthReport(props?.route?.params?.index);
             props.navigation.pop();
             alert("TBT COVID Insert SuccessFully !");
@@ -164,16 +164,12 @@ const mapStateToProps = (state) => ({
   const mapDispatchToProps = (dispatch) => ({
     creatTbtCovidHandler: (
       data,
-      jobID,
-      tabId,
       token,
       index
     ) =>
       dispatch(
         insertTbtCovid(
           data,
-          jobID,
-          tabId,
           token,
           index
         )

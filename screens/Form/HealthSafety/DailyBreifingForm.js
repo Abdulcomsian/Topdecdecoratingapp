@@ -541,7 +541,7 @@ const DailyBreifingForm = (props) => {
                           justifyContent: "center",
                           alignItems: "center",
                           paddingTop: 20,
-                          ontFamily: "poppins-regular",
+                          fontFamily: "poppins-regular",
                           fontSize: 10,
                         }}
                       >

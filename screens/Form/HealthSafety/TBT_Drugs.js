@@ -3,12 +3,19 @@ import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-nati
 import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import { color } from "react-native-reanimated";
-import TBTForm from "../../../components/common/TBTForm";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
+import { connect } from "react-redux";
+import { insertTbtDrugs } from "../../../Redux/action/auth/authActionTypes";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import TBTForm from "../../../components/common/TBTForm";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const TBTDRUGS = (props) => {
+  const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
+  const jobID = Math.floor(Math.random() * 100) + 1;
+  const tabId = props.route.params.tabName;
   const [coshhArray, setCoshhArray] = useState([
     {
       mainTitle: "ALCOHOL:",
@@ -60,7 +67,21 @@ const TBTDRUGS = (props) => {
     supervisor: "",
     jobSummary: [],
   });
-  console.log(data);
+ const tbtDrugFormInsert = async () =>{
+  try {
+     
+    if(data!="" ){
+      await props.creatTbtDrugsHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
+      props.updateHealthReport(props?.route?.params?.index);
+      props.navigation.pop();
+      alert("TBT DRUGS Insert SuccessFully !");
+    }else{
+      alert("Please Insert All Fields CareFully !");
+    }
+  } catch (err) {
+    alert(err.message);
+  }
+ }
   return (
     <View style={styles.mainContainer}>
       {openSign.bool ? (
@@ -126,58 +147,40 @@ const TBTDRUGS = (props) => {
                   }
                 }}
               />
-              {/* <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>I confirm that I have received the above tool box talk</Text>
-          <View style={styles.tableViewContainer}>
-            <View style={styles.tableHeader}>
-              <View style={styles.headerProjectTitleView}>
-                <Text style={styles.headerTitle}>Print Name</Text>
-              </View>
-              <View style={styles.headerProjectTitleView}>
-                <Text style={styles.headerTitle}>Signature</Text>
-              </View>
-              <View style={styles.headerProjectTitleView}>
-                <Text style={styles.headerTitle}>Date</Text>
+               <View
+                style={{
+                  backgroundColor: "#000",
+                  width: "100%",
+                  height: 2,
+                  marginBottom: 20,
+                  marginTop: 20,
+                }}
+              ></View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => tbtDrugFormInsert()}
+                >
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
               </View>
             </View>
-            <View style={{ justifyContent: "flex-end", width: "100%", alignItems: "flex-end", marginBottom: 10 }}>
-              <TouchableOpacity style={styles.addBtn} onPress={() => addToolBox()}>
-                <Image style={styles.plusBtn} source={plus} />
-              </TouchableOpacity>
-            </View>
-            {toolBoxArray.map((item, index) => (
-              <View style={styles.tableBody} key={index}>
-                <View style={styles.inputHazrdBodyContainer}>
-                  <TextInput style={styles.bodyTextInput} placeholder={"Name"} />
-                </View>
-                <View style={styles.inputHazrdBodyContainer}>
-                  <TextInput style={styles.bodyTextInput} placeholder={"Sign"} />
-                </View>
-                <View style={styles.inputHazrdBodyContainer}>
-                  <TextInput style={styles.bodyTextInput} placeholder={"Date"} />
-                </View>
-              </View>
-            ))}
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Main Contractor"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Project"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Supervisor name"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Sign"} />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Date"} />
-          </View>*/}
-            </View>
+            
           </ScrollView>
         </>
       )}
     </View>
   );
 };
-export default TBTDRUGS;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isOnSite: state.auth.isOnSite,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  creatTbtDrugsHandler: (data,token,index) =>
+    dispatch(insertTbtDrugs(data,token,index)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(TBTDRUGS);

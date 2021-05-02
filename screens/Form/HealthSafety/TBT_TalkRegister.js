@@ -11,11 +11,14 @@ import styles from "../../../assets/css/styles";
 import { color } from "react-native-reanimated";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
+import { connect } from "react-redux";
+import { insertTbtRegister } from "../../../Redux/action/auth/authActionTypes";
+import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const TBTREGISTER = (props) => {
-  const { navigation, token, isSuccessMsg, isDecoration } = props;
+  const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
   const jobID = Math.floor(Math.random() * 100) + 1;
   const tabId = props.route.params.tabName;
   const [toolBoxArray, setToolBoxArray] = useState([]);
@@ -41,7 +44,7 @@ const TBTREGISTER = (props) => {
     new Date().toLocaleDateString()
   );
   const [startTime, setStartTime] = useState(new Date());
-  const [finishTime, setFinishTime] = useState(new Date().toLocaleDateString());
+  const [finishTime, setFinishTime] = useState(new Date());
 
   const [startTimeShow, setStartTimeShow] = useState("");
   const [finalTimeShow, setFinalTimeShow] = useState("");
@@ -58,7 +61,7 @@ const TBTREGISTER = (props) => {
   const onStartTimeChange = (selectedDate) => {
     const currentDate = selectedDate;
     setStartTimeShow(false);
-    setStartTime(new Date(currentDate));
+    setStartTime(new Date(currentDate).toLocaleTimeString());
   };
 
   const onFinishTimeChange = (selectedDate) => {
@@ -83,6 +86,33 @@ const TBTREGISTER = (props) => {
     signSupervisor: false,
   });
   const [supevisorSign, setSupervisorSign] = useState("");
+
+  const [client, setClient] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [subject, setSubject] = useState("");
+  const [outline, setOutline] = useState("");
+  const [supervisorName, setSupervisorName] = useState("");
+
+  const tbtRegisterFormInsert = async () => {
+    try {
+     
+      if(client!="" && projectName!=""  && subject!="" && outline!="" && registerDate!="" && startTime!="" && finishTime!="" && toolBoxArray!="" && supervisorName!="" && supevisorSign!="" ){
+        await props.creatTbtRegisterHandler(client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,supevisorSign,jobID,tabId,token,props.route.params?.index)
+        props.updateHealthReport(props?.route?.params?.index);
+        props.navigation.pop();
+        alert("TBT REGISTER Insert SuccessFully !");
+      }else{
+        alert("Please Insert All Fields CareFully !");
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+  const updateToolBoxArray = (key, index, value) => {
+    let preData = [...toolBoxArray];
+    preData[index][key] = value;
+    setToolBoxArray(preData);
+  };
   return (
     <View style={styles.mainContainer}>
       <DateTimePickerModal
@@ -113,6 +143,16 @@ const TBTREGISTER = (props) => {
         display="default"
         onConfirm={onStartTimeChange}
         onCancel={() => setStartTimeShow(false)}
+      />
+
+      <DateTimePickerModal
+        isVisible={finalTimeShow}
+        testID="dateTimePicker"
+        value={finishTime}
+        mode={"time"}
+        display="default"
+        onConfirm={onFinishTimeChange}
+        onCancel={() => setFinalTimeShow(false)}
       />
       {signature.bool ? (
         <SignatureComponent
@@ -155,54 +195,84 @@ const TBTREGISTER = (props) => {
           <ScrollView>
             <View style={{ paddingLeft: 20, paddingRight: 20 }}>
               <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Client"} />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Project"} />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Subject"} />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Outline"} />
-              </View>
-              <View style={styles.inputFieldContainer}>
-              <Text
-                          onPress={() => setRegisterDateShow(true)}
-                          style={{
-                            height: 40,
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#96A8B2",
-                            fontSize: 12,
-                            color: "#96A8B2",
-                            fontFamily: "poppins-regular",
-                            paddingTop: 13,
-                          }}
-                        >
-                          {new Date(registerDate).toLocaleDateString()}
-                        </Text>
-              </View>
-              <View style={styles.inputFieldContainer}>
-              <Text
-                          onPress={() => setStartTimeShow(true)}
-                          style={{
-                            height: 40,
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#96A8B2",
-                            fontSize: 12,
-                            color: "#96A8B2",
-                            fontFamily: "poppins-regular",
-                            paddingTop: 13,
-                          }}
-                        >
-                          {new Date(startTime).toLocaleTimeString()}
-                        </Text>
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Client"}
+                  value={client}
+                  onChangeText={(e) => setClient(e)}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput
                   style={styles.inputField}
-                  placeholder={"Finish Time"}
+                  placeholder={"Project"}
+                  value={projectName}
+                  onChangeText={(e) => setProjectName(e)}
                 />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Subject"}
+                  value={subject}
+                  onChangeText={(e) => setSubject(e)}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Outline"}
+                  value={outline}
+                  onChangeText={(e) => setOutline(e)}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => setRegisterDateShow(true)}
+                  style={{
+                    height: 40,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 13,
+                  }}
+                >
+                  {new Date(registerDate).toLocaleDateString()}
+                </Text>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => setStartTimeShow(true)}
+                  style={{
+                    height: 40,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 13,
+                  }}
+                >
+                  {new Date(startTime).toLocaleTimeString()}
+                </Text>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => setFinalTimeShow(true)}
+                  style={{
+                    height: 40,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 13,
+                  }}
+                >
+                  {new Date(finishTime).toLocaleTimeString()}
+                </Text>
               </View>
               <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
                 I confirm that I have received the above tool box talk
@@ -249,6 +319,8 @@ const TBTREGISTER = (props) => {
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Name"}
+                          value={el.name}
+                            onChangeText={(txt) => updateToolBoxArray("name", index, txt)}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
@@ -278,18 +350,18 @@ const TBTREGISTER = (props) => {
                           ) : (
                             <Text
                               style={{
-                                height: 52,
+                                height: 40,
                                 width: "100%",
                                 borderBottomWidth: 1,
                                 borderBottomColor: "#96A8B2",
                                 padding: 5,
-                                fontSize: 12,
+                                fontSize: 8,
                                 color: "#96A8B2",
                                 fontFamily: "poppins-regular",
-                                paddingTop: 15,
+                                paddingTop: 12,
                               }}
                             >
-                              Supervisor BSCS Signature
+                              Signature
                             </Text>
                           )}
                         </TouchableOpacity>
@@ -314,12 +386,16 @@ const TBTREGISTER = (props) => {
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Yes / No"}
+                          value={el.translation}
+                          onChangeText={(txt) => updateToolBoxArray("translation", index, txt)}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Name Of Translator"}
+                          value={el.nameoftranslator}
+                          onChangeText={(txt) => updateToolBoxArray("nameoftranslator", index, txt)}
                         />
                       </View>
                     </View>
@@ -338,6 +414,8 @@ const TBTREGISTER = (props) => {
                 <TextInput
                   style={styles.inputField}
                   placeholder={"Name of Supervisor"}
+                  value={supervisorName}
+                  onChangeText={(e) => setSupervisorName(e)}
                 />
               </View>
               <View style={styles.inputFieldContainer}>
@@ -393,6 +471,14 @@ const TBTREGISTER = (props) => {
                 Once completed, please file a copy in the Site Folder and send a
                 copy to our Office. Also, please give a copy to the Site Staff.
               </Text>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => tbtRegisterFormInsert()}
+                >
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </ScrollView>
         </>
@@ -400,4 +486,15 @@ const TBTREGISTER = (props) => {
     </View>
   );
 };
-export default TBTREGISTER;
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isOnSite: state.auth.isOnSite,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
+const mapDispatchToProps = (dispatch) => ({
+  creatTbtRegisterHandler: (client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,supevisorSign,jobID,tabId,token,index) =>
+    dispatch(insertTbtRegister(client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,supevisorSign,jobID,tabId,token,index)),
+  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(TBTREGISTER);

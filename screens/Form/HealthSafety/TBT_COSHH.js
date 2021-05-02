@@ -94,21 +94,22 @@ const TBTCOSHH = (props) => {
   const [data, setData] = useState({
     contractor: "",
     project: "",
-    meeting: "",
+    supervisor: "",
     date: null,
-    comment: "",
+    comments: "",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
-    console.log("Main Contractor :", data);
+    // console.log("Main Contractor :", data);
     // console.log("Project Name :", projectName);
     // console.log("Meeting Conduct :", meetingConductBy);
     // console.log("date :", date);
     // console.log("comments :", comment);
     // console.log("Array :", attendenceArray);
     try{
+      console.log("Token :",token)
       if(data!=""){
-        await props.creatTbtCoshHandler(data,jobID,tabId,token,props.route.params?.index)
+        await props.creatTbtCoshHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT COSH Insert SuccessFully !");
@@ -313,16 +314,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   creatTbtCoshHandler: (
     data,
-    jobID,
-    tabId,
     token,
     index
   ) =>
     dispatch(
       insertTBTCOSH(
         data,
-        jobID,
-        tabId,
         token,
         index
       )

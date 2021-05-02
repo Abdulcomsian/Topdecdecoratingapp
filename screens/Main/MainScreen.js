@@ -1,8 +1,11 @@
 import React from 'react';
 import { View,StyleSheet,Image,TextInput,TouchableOpacity} from 'react-native';
 import {Text} from 'native-base';
+import { connect } from "react-redux";
 
-const MainScreen = ({props,navigation}) =>{
+const MainScreen = ( props ) =>{
+    const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
+    console.log("Role :",role)
     return(
         <View style={styles.mainContainer}>
             <View style={styles.mutipleBtn}>
@@ -28,7 +31,14 @@ const MainScreen = ({props,navigation}) =>{
         </View>
     )
 }
-export default MainScreen;
+const mapStateToProps = state => ({
+    role: state.auth.role
+  });
+  
+  const mapDispatchToProps=dispatch=>({
+  })
+export default connect(mapStateToProps,  mapDispatchToProps)(MainScreen);
+
 const styles = StyleSheet.create({
     mainContainer:{
         height:'100%',

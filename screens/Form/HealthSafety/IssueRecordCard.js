@@ -34,7 +34,7 @@ const IssueCard = (props) => {
         type: "",
         date: new Date().toLocaleDateString(),
         supervisor: "",
-        sign: "",
+        signature: "",
       },
     ]);
   };
@@ -108,7 +108,7 @@ const IssueCard = (props) => {
         <SignatureComponent
           returnImage={(uri) => {
             let copydata = [...dynamicInput];
-            copydata[signature.index].sign = uri;
+            copydata[signature.index].signature = uri;
             setdynamicInput(copydata);
             setSignature({
               ...signature.isSign,
@@ -346,9 +346,9 @@ const IssueCard = (props) => {
                           },
                         ]}
                       >
-                        {item.sign ? (
+                        {item.signature ? (
                           <Image
-                            source={{ uri: item.sign }}
+                            source={{ uri: item.signature }}
                             style={{
                               marginTop: 10,
                               height: 30,

@@ -96,15 +96,15 @@ const TBTSLICIA = (props) => {
   const [data, setData] = useState({
     contractor: "",
     project: "",
-    meeting: "",
+    supervisor: "",
     date: null,
-    comment: "",
+    comments: "",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
     try{
       if(data!=""){
-        await props.creatTbtSilicaDustHandler(data,jobID,tabId,token,props.route.params?.index)
+        await props.creatTbtSilicaDustHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT SLIP Insert SuccessFully !");
@@ -253,16 +253,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   creatTbtSilicaDustHandler: (
     data,
-    jobID,
-    tabId,
     token,
     index
   ) =>
     dispatch(
       insertTbtSilicaDust(
         data,
-        jobID,
-        tabId,
         token,
         index
       )

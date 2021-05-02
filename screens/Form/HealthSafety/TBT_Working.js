@@ -49,15 +49,15 @@ const TBTWORKING = (props) => {
   const [data, setData] = useState({
     contractor: "",
     project: "",
-    meeting: "",
+    supervisor: "",
     date: null,
-    comment: "",
+    comments: "",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
     try{
       if(data!=""){
-        await props.creatTbtWorkingHandler(data,jobID,tabId,token,props.route.params?.index)
+        await props.creatTbtWorkingHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT WORKING Insert SuccessFully !");
@@ -175,16 +175,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   creatTbtWorkingHandler: (
     data,
-    jobID,
-    tabId,
     token,
     index
   ) =>
     dispatch(
       insertTbtWorking(
         data,
-        jobID,
-        tabId,
         token,
         index
       )
