@@ -3,7 +3,6 @@ import { View, Image, TouchableOpacity, TextInput, ScrollView } from "react-nati
 import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import { color } from "react-native-reanimated";
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import TBTForm from "../../../components/common/TBTForm";
 import SignatureComponent from "../../../components/SignatureComponent";
 import { connect } from "react-redux";
