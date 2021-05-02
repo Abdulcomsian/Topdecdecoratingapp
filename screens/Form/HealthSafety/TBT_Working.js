@@ -4,7 +4,6 @@ import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import { color } from "react-native-reanimated";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
-import { connect } from "react-redux";
 import TBTForm from "../../../components/common/TBTForm";
 import SignatureComponent from "../../../components/SignatureComponent";
 import { connect } from "react-redux";
@@ -62,7 +61,7 @@ const TBTWORKING = (props) => {
         await props.creatTbtWorkingHandler(data,jobID,tabId,token,props.route.params?.index)
         props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
-        alert("TBT SLIP Insert SuccessFully !");
+        alert("TBT WORKING Insert SuccessFully !");
       } 
       else{
         alert("Please Insert All Fields CareFully !");
