@@ -4,11 +4,11 @@ import { Text } from "native-base";
 import { connect } from "react-redux";
 import { insertDecorationRecord } from "../../../Redux/action/auth/authActionTypes";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { updateVerificationReport } from "../../../Redux/action/summary/Summary";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const DecorationRecord = (props) => {
-  const { navigation, token, isSuccessMsg, isDecoration } = props;
+  const { navigation, token, isSuccessMsg, isDecoration, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const jobID = isJobId;
   const tabId = props.route.params.tabName;
@@ -60,7 +60,7 @@ const DecorationRecord = (props) => {
     try{
     if (dynamicFirstInput && dynamicSecondInput && jobID !== "" && tabId != "") {
       await props.createDecorationRecordHandler(dynamicFirstInput, dynamicSecondInput, jobID, tabId, token);
-      props.updateHealthReport(props?.route?.params?.index);
+      props.updateVerificationReport(props?.route?.params?.index);
       alert("Decoration Record Insert SuccessFully !");
       props.navigation.pop();
     } else {
@@ -471,11 +471,12 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   isDecoration: state.auth.isDecoration,
   isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
   createDecorationRecordHandler: (dynamicFirstInput, dynamicSecondInput, jobID, tabId, token) =>
     dispatch(insertDecorationRecord(dynamicFirstInput, dynamicSecondInput, jobID, tabId, token)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DecorationRecord);
 

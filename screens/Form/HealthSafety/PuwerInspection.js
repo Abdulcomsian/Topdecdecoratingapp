@@ -11,7 +11,8 @@ import { insertPuwerInspectionForm } from "../../../Redux/action/auth/authAction
 var plus = require("../../../assets/authScreen/plus.png");
 const PuwerInspection = (props) => {
   const { navigation, token, isSuccessMsg, isSuccess } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [puwerArrayList, setPuwerArrayList] = useState([
     {

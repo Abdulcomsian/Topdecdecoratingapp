@@ -8,7 +8,7 @@ import { updateVerificationReport } from "../../../Redux/action/summary/Summary"
 
 var plus = require("../../../assets/authScreen/plus.png");
 const MistCoat = (props) => {
-  const { navigation, token, isSuccessMsg, isVerifyMiscoat } = props;
+  const { navigation, token, isSuccessMsg, isVerifyMiscoat, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const jobID = isJobId;
   const tabId = props.route.params.tabName;
@@ -261,6 +261,7 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   isVerifyMiscoat: state.auth.isVerifyMiscoat,
   isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
   createMisCoatHandler: (mainContructor, projectName, dynamicInput, jobID, tabId, token) =>

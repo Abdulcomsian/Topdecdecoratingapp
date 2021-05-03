@@ -17,7 +17,8 @@ import { insertIssueRecordForm } from "../../../Redux/action/auth/authActionType
 var plus = require("../../../assets/authScreen/plus.png");
 const IssueCard = (props) => {
   const { navigation, token, isSuccessMsg, isSuccess } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [issueArray, setIssueArray] = useState([]);
   const [dynamicInput, setdynamicInput] = useState([]);

@@ -18,7 +18,8 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 var plus = require("../../../assets/authScreen/plus.png");
 const CleanUp = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [date, setDate] = useState(new Date());
   const [dateSupervisor, setDateSupervisor] = useState(new Date());

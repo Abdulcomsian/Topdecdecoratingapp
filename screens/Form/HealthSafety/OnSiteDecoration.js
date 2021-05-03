@@ -25,7 +25,8 @@ const OnSiteDecoration = (props) => {
     isJobId,
     isMethod,
   } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [siteArray, setSiteArray] = useState([]);
   const [dynamicInput, setdynamicInput] = useState([]);

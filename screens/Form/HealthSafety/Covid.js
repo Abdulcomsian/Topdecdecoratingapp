@@ -13,7 +13,8 @@ var mainImage=require('../../../assets/authScreen/Accurate-daywork-sheet-docx.pn
 var plus=require('../../../assets/authScreen/plus.png')
 const Covid = (props) =>{
     const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
-    const jobID = Math.floor(Math.random() * 100) + 1;
+    // const jobID = Math.floor(Math.random() * 100) + 1;
+    const jobID = isJobId;
     const tabId = props.route.params.tabName;
     const[attendenceArray,setAttendenceArray]=useState([]);
     const addAttendence = () =>(

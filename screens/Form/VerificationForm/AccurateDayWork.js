@@ -5,12 +5,12 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { connect } from "react-redux";
 import { insertWorkSheet } from "../../../Redux/action/auth/authActionTypes";
 import SignatureComponent from "../../../components/SignatureComponent";
-import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { updateVerificationReport } from "../../../Redux/action/summary/Summary";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const AccurateDayWork = (props) => {
-  const { navigation, token, isDayWork, isSuccessMsg } = props;
+  const { navigation, token, isDayWork, isSuccessMsg, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const jobID = isJobId;
   const tabId = props.route.params.tabName;
@@ -150,7 +150,7 @@ const AccurateDayWork = (props) => {
         tabId,
         token
       );
-      props.updateHealthReport(props?.route?.params?.index);
+      props.updateVerificationReport(props?.route?.params?.index);
       alert("Accurate Day Work Insert SuccessFully !")
       props.navigation.pop();
     } else {
@@ -822,6 +822,7 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   isDayWork: state.auth.isDayWork,
   isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
   createWorkSheetHandler: (
@@ -866,7 +867,7 @@ const mapDispatchToProps = (dispatch) => ({
         token
       )
     ),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AccurateDayWork);
 const styles = StyleSheet.create({

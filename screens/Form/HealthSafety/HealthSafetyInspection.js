@@ -13,7 +13,8 @@ import { insertHealthSafetyForm } from "../../../Redux/action/auth/authActionTyp
 var plus = require("../../../assets/authScreen/plus.png");
 const HealthSafetyInspection = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
-  const jobID = Math.floor(Math.random() * 100) + 1;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
   const tabId = props.route.params.tabName;
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);

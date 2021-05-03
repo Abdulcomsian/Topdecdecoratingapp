@@ -9,7 +9,7 @@ import { updateVerificationReport } from "../../../Redux/action/summary/Summary"
 
 var plus = require("../../../assets/authScreen/plus.png");
 const VerificationOfWork = (props) => {
-  const { navigation, token, isVerifyWork, isSuccessMsg } = props;
+  const { navigation, token, isVerifyWork, isSuccessMsg, isJobId } = props;
   //const jobID = Math.floor(Math.random() * 100) + 1;
   const jobID = isJobId;
   const tabId = props.route.params.tabName;
@@ -220,6 +220,7 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   isVerifyWork: state.auth.isVerifyWork,
   isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
   createVerificationWorkHandler: (projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token) =>

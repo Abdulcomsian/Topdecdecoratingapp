@@ -1174,6 +1174,134 @@ export const insertVerificationForm = (
     }
   };
 };
+export const insertAccidentForm = (
+  Name_Of_Person,
+  Incident_Date,
+  Location_of_Incident,
+  Investigation_Date,
+  Occupation,
+  Type_of_Incident,
+  Name_of_Injured_Person,
+  Age,
+  Sex,
+  Employee,
+  Address,
+  Phone,
+  Nature_of_Injury,
+  Ambulance_Details,
+  Dynamic_Input,
+  Witness_Statement,
+  Whom_Accident_Reported,
+  When_Accident_Reported,
+  Supervisor_Name,
+  Supervisor_Signature,
+  Supervisor_Date,
+  Whom_Management_Reported,
+  Manager_Date_Report,
+  Comment_Initial_Investigation,
+  Action_Requried,
+  Action_Performed,
+  managmentArray,
+  Manager_Name,
+  Manager_sign,
+  Manager_date,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
+  return async (dispatch, getState) => {
+    try {
+      // console.log("Name Of Person :", Name_Of_Person);
+      // console.log("Incident Date :", Incident_Date);
+      // console.log("Location of Incident :", Location_of_Incident);
+      // console.log("Investigation Date :", Investigation_Date);
+      // console.log("Type of Incident :", Type_of_Incident);
+      // console.log("Name of Injured Person :", Name_of_Injured_Person);
+      // console.log("Age :", Age);
+      // console.log("Sex :", Sex);
+      // console.log("Employee :", Employee);
+      // console.log("State of Injured Person :", Address);
+      // console.log("Phone Number :", Phone);
+      // console.log("Occupation :", Occupation);
+      // console.log("Nature of Injury :", Nature_of_Injury);
+      // console.log("Ambulance Details :", Ambulance_Details);
+      // console.log("Dynamic Input :", Dynamic_Input);
+      // console.log("Witness Statement :", Witness_Statement);
+      // console.log("Whom Accident Reported :", Whom_Accident_Reported);
+      // console.log("When Accident Reported :", When_Accident_Reported);
+      // console.log("Supervisor Name :", Supervisor_Name);
+      // console.log("Supervisor Signature :", Supervisor_Signature);
+      // console.log("Supervisor Date :", Supervisor_Date);
+      // console.log("Whom Management Reported :", Whom_Management_Reported);
+      // console.log("Manager Date Report :", Manager_Date_Report);
+      // console.log("Comment Initial Investigation :", Comment_Initial_Investigation);
+      // console.log("Action Requried :", Action_Requried);
+      // console.log("Actiion Performed :", Action_Performed);
+      // console.log("Claender day :", managmentArray);
+      // console.log("Manager Name :", Manager_Name);
+      // console.log("Manager Signature :", Manager_sign);
+      // console.log("Manager Date :", Manager_date);
+      const body = {
+        Name_Of_Person,
+        Incident_Date,
+        Location_of_Incident,
+        Investigation_Date,
+        Type_of_Incident,
+        Name_of_Injured_Person,
+        Age,
+        Sex,
+        Employee,
+        Address,
+        Phone,
+        Occupation,
+        Nature_of_Injury,
+        Witness_Statement,
+        Whom_Accident_Reported,
+        When_Accident_Reported,
+        Supervisor_Name,
+        Supervisor_Signature,
+        Supervisor_Date,
+        Whom_Management_Reported,
+        Manager_Date_Report,
+        Comment_Initial_Investigation,
+        Action_Requried,
+        Action_Performed,
+        Manager_Name,
+        Manager_sign,
+        Manager_date,
+        task_id,
+        tab_id,
+        Ambulance_Details,
+        Dynamic_Input
+      };
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/accident",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        dispatch({
+          type: Actions.INSERT_VERIFICATION_WORK_SUCCESS,
+          payload: response,
+        });
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      console.log(err?.response?.request);
+      throw new Error(err.message);
+    }
+  };
+};
 export const insertCleanUpForm = (
   contractor,
   project,
@@ -1444,19 +1572,19 @@ export const insertHealthSafetyForm = (
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Contractor Name :", Contractor);
-      console.log("Site Supervisor :", Supervisor);
-      console.log("Date :", Date);
-      console.log("Project Address :", Address);
-      console.log("Array:", Action);
-      console.log("Inspection Name :", Inspection_Name);
-      console.log("Inspection For :", Inspection_For);
-      console.log("Inspection Date :", Inspection_Date);
-      console.log("Inspection Signature :", Inspection_Signature);
-      console.log("Document Array :", Document);
-      console.log("Job ID :", task_id);
-      console.log("Tab Name :", tab_id);
-      console.log("Token :", token);
+      // console.log("Contractor Name :", Contractor);
+      // console.log("Site Supervisor :", Supervisor);
+      // console.log("Date :", Date);
+      // console.log("Project Address :", Address);
+      // console.log("Array:", Action);
+      // console.log("Inspection Name :", Inspection_Name);
+      // console.log("Inspection For :", Inspection_For);
+      // console.log("Inspection Date :", Inspection_Date);
+      // console.log("Inspection Signature :", Inspection_Signature);
+      // console.log("Document Array :", Document);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
 
       const body = {
         Contractor,
@@ -1473,13 +1601,17 @@ export const insertHealthSafetyForm = (
         Document,
       };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/HealthAndSAfetyInspection", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url +
+          "supervisor/insert/healthAndSecurity/HealthAndSAfetyInspection",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2006,7 +2138,7 @@ export const insertDailyBreifingForm = (
         Job_Safe,
         Brefily,
         Operative,
-        Hazrd
+        Hazrd,
       };
 
       const request = await axios(
@@ -2545,7 +2677,7 @@ export const insertTbtRegister = (
         signature,
         task_id,
         tab_id,
-        jobSummary
+        jobSummary,
       };
 
       const request = await axios(
@@ -2607,7 +2739,7 @@ export const insertTbtInventory = (
         jobSummary,
         task_id,
         tab_id,
-        jobSummary
+        jobSummary,
       };
 
       const request = await axios(

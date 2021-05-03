@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { updateVerificationReport } from "../../../Redux/action/summary/Summary";
 
 const DecorationRecord = (props) => {
-  const { navigation, token, isSuccessMsg, isSiteInstruction } = props;
+  const { navigation, token, isSuccessMsg, isSiteInstruction,isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const jobID = isJobId;
   const tabId = props.route.params.tabName;
@@ -262,6 +262,7 @@ const mapStateToProps = (state) => ({
   token: state.auth.token,
   isSiteInstruction: state.auth.isSiteInstruction,
   isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
   createSiteInstructionHandler: (contractName, instructionNo, raisedBy, date, description, specialNotes, supervisorName, dateSupervisor, jobID, tabId, token) =>

@@ -4,12 +4,17 @@ import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import SignatureComponent from "../../../components/SignatureComponent";
+import { insertAccidentForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const AccidentReport = (props) => {
+  const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
+  // const jobID = Math.floor(Math.random() * 100) + 1;
+  const jobID = isJobId;
+  const tabId = props.route.params.tabName;
   const [nameOfPerson, setNameOfPerson] = useState("");
   const [locationOfIncident, setLocationOfIncident] = useState("");
   const [nameOfInjuredPerson, setNameOfInjuredPerson] = useState("");
@@ -126,22 +131,22 @@ const AccidentReport = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  // const [fatality,setFatality] = useState(false)
-  // const [overDaysInjury, setOverDaysInjury] = useState(false)
-  // const [timeLost,setTimeLost] = useState(false)
-  // const [majorInjury, setMajorInjury] = useState(false)
-  // const [hospital, setHospital] = useState(false)
-  // const [publicInjury, setPublicInjury] = useState(false)
-  // const [underDaysInjury, setUnderDaysInjury] = useState(false)
-  // const [dangerousOccurrences, setDangerousOccurrences] = useState(false)
-  // const [becameUnconscious, setBecameUnconscious] = useState(false)
+  // const [fatality,setfatality] = useState(false)
+  // const [overDaysInjury, setoverDaysInjury] = useState(false)
+  // const [timeLost,settimeLost] = useState(false)
+  // const [majorInjury, setmajorInjury] = useState(false)
+  // const [hospital, sethospital] = useState(false)
+  // const [publicInjury, setpublicInjury] = useState(false)
+  // const [underDaysInjury, setunderDaysInjury] = useState(false)
+  // const [dangerousOccurrences, setdangerousOccurrences] = useState(false)
+  // const [becameUnconscious, setbecameUnconscious] = useState(false)
   // const [reportDiesase, setReportDiesase] = useState(false)
-  // const [damaghIncident, setDamaghIncident] = useState(false)
-  // const [neededResuscitation, setNeededResuscitation] = useState(false)
+  // const [damaghIncident, setdamaghIncident] = useState(false)
+  // const [neededResuscitation, setneededResuscitation] = useState(false)
   // const [employee, setEmployee] = useState(false)
-  // const [selfEmployee, setSelfEmployee] = useState(false)
-  // const [trainee, setTrainee] = useState(false)
-  // const [tradeContructor, setTradeContructor] = useState(false)
+  // const [selfEmployee, setselfEmployee] = useState(false)
+  // const [trainee, settrainee] = useState(false)
+  // const [tradeContructor, settradeContructor] = useState(false)
   // const [otherEmployee, setOtheemployee] = useState(false)
   // const [yesAmbullanceCall, setYes] = useState(false)
 
@@ -480,41 +485,63 @@ const AccidentReport = (props) => {
       setReOccurance({ ...reOccurance, yes: false, no: true });
     }
   };
-  const incidentFormInsert = () => {
-    console.log("Name Of Person :", nameOfInjuredPerson);
-    console.log("Incident Date :", dateIncident);
-    console.log("Location of Incident :", locationOfIncident);
-    console.log("Investigation Date :", dateInvestigation);
-    console.log("Type of Incident :", incidentArray);
-    console.log("Name of Injured Person :", nameOfInjuredPerson);
-    console.log("Age :", ageOfInjuredPerson);
-    console.log("Sex :", sexOfInjuredPerson);
-    console.log("Employee :", employee);
-    console.log("State of Injured Person :", stateOfInjuredPerson);
-    console.log("Phone Number :", telephonNumber);
-    console.log("Occupation :", occupationInjured);
-    console.log("Nature of Injury :", natureOfInjury);
-    console.log("Ambulance Details :", callingDetails);
-    console.log("Statement Of Injured Person :", stateOfInjuredPerson);
-    console.log("Dynamic Input :", dynamicInput);
-    console.log("Witness Statement :", witnessStatement);
-    console.log("Whom Accident Reported :", whomAccidentReported);
-    console.log("When Accident Reported :", whenAccidentReported);
-    console.log("Supervisor Name :", supervisorName);
-    console.log("Supervisor Signature :", supervisorSignature);
-    console.log("Supervisor Date :", dateSupervisor);
-    console.log("Whom Management Reported :", mangementWhomAccidentReported);
-    console.log("Manager Date Report :", dateReport);
-    console.log("Comment Initial Investigation :", managerInitialNotes);
-    console.log("Action Requried :", actionRequried);
-    console.log("Actiion Performed :", actionPerformed);
-    console.log("Claender day :", managmentArray);
-    console.log("Manager Name :", managerName);
-    console.log("Manager Signature :", managerSignature);
-    console.log("Manager Date :", dateManager);
+  const incidentFormInsert = async () => {
+    
 
-    props.updateHealthReport(props?.route?.params?.index);
-    props.navigation.pop();
+    if (
+      nameOfInjuredPerson != "" &&
+      dateIncident != "" &&
+      locationOfIncident != "" &&
+      occupationInjured != "" &&
+      incidentArray != "" &&
+      ageOfInjuredPerson !== "" &&
+      sexOfInjuredPerson !== "" &&
+
+      employee != "" &&
+      stateOfInjuredPerson != "" &&
+      telephonNumber != "" &&
+      natureOfInjury != "" &&
+      callingDetails != "" &&
+      dynamicInput !== "" &&
+      witnessStatement !== "" &&
+
+
+
+      whomAccidentReported !=="" &&
+      whenAccidentReported !=="" &&
+      supervisorName !=="" &&
+      supervisorSignature !=="" &&
+      dateSupervisor !=="" &&
+      mangementWhomAccidentReported !=="" &&
+      dateReport !=="" &&
+      managerInitialNotes !=="" &&
+
+
+      actionRequried !=="" &&
+      actionPerformed !=="" &&
+      managmentArray !=="" &&
+      managerName !=="" &&
+      managerSignature !=="" &&
+      dateManager !=="" 
+    ) {
+      await props.createAccidentHandler(nameOfPerson,dateIncident,
+        locationOfIncident,dateInvestigation,occupationInjured,incidentArray,nameOfInjuredPerson,ageOfInjuredPerson,sexOfInjuredPerson,employee,
+        stateOfInjuredPerson,telephonNumber,natureOfInjury,callingDetails,dynamicInput,witnessStatement,
+        whomAccidentReported,whenAccidentReported,supervisorName,supervisorSignature,dateSupervisor,
+        mangementWhomAccidentReported,dateReport,managerInitialNotes,actionRequried,actionPerformed,
+        managmentArray,managerName,managerSignature,dateManager,
+        jobID,
+        tabId,
+        token,
+        props.route.params?.index
+      );
+      props.updateHealthReport(props?.route?.params?.index);
+      alert("Clean Up Insert SuccessFully !");
+      props.navigation.pop();
+    } else {
+      alert("Please Insert All Fields CareFully !");
+      return false;
+    }
   };
   const CancelPicker = (type) => {
     console.log(type);
@@ -797,6 +824,16 @@ const AccidentReport = (props) => {
                     </View>
                     <View style={styles.rightCheckBox}>
                       <Text style={styles.accidentText}>Trade Contracto</Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.firstCheckBoxRow}>
+                  <View style={styles.parentCheckBox}>
+                    <View style={styles.leftCheckBox}>
+                      <CheckBox value={employee.otherEmployee} onValueChange={() => checkedEmployeeValue("otherEmployee")} />
+                    </View>
+                    <View style={styles.rightCheckBox}>
+                      <Text style={styles.accidentText}>Other Employeed</Text>
                     </View>
                   </View>
                 </View>
@@ -1174,7 +1211,35 @@ const AccidentReport = (props) => {
     </View>
   );
 };
+const mapStateToProps = (state) => ({
+  token: state.auth.token,
+  isSuccess: state.auth.isSuccess,
+  isSuccessMsg: state.auth.isSuccessMsg,
+  isJobId: state.auth.isJobId,
+});
 const mapDispatchToProps = (dispatch) => ({
+  createAccidentHandler: (nameOfPerson,dateIncident,
+        locationOfIncident,dateInvestigation,occupationInjured,incidentArray,nameOfInjuredPerson,ageOfInjuredPerson,sexOfInjuredPerson,employee,
+        stateOfInjuredPerson,telephonNumber,natureOfInjury,callingDetails,dynamicInput,witnessStatement,
+        whomAccidentReported,whenAccidentReported,supervisorName,supervisorSignature,dateSupervisor,
+        mangementWhomAccidentReported,dateReport,managerInitialNotes,actionRequried,actionPerformed,
+        managmentArray,managerName,managerSignature,dateManager,
+        jobID,
+        tabId,
+        token,
+        index) =>
+    dispatch(
+      insertAccidentForm(nameOfPerson,dateIncident,
+        locationOfIncident,dateInvestigation,occupationInjured,incidentArray,nameOfInjuredPerson,ageOfInjuredPerson,sexOfInjuredPerson,employee,
+        stateOfInjuredPerson,telephonNumber,natureOfInjury,callingDetails,dynamicInput,witnessStatement,
+        whomAccidentReported,whenAccidentReported,supervisorName,supervisorSignature,dateSupervisor,
+        mangementWhomAccidentReported,dateReport,managerInitialNotes,actionRequried,actionPerformed,
+        managmentArray,managerName,managerSignature,dateManager,
+        jobID,
+        tabId,
+        token,
+        index)
+    ),
   updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
-export default connect(null, mapDispatchToProps)(AccidentReport);
+export default connect(mapStateToProps, mapDispatchToProps)(AccidentReport);

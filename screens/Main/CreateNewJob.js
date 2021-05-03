@@ -286,18 +286,18 @@ const NewJob = (props) => {
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
-              {/* <TouchableOpacity
+            </TouchableOpacity> */}
+              <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => newJob(this)}
               >
                 <Text style={styles.commonText}>Save</Text>
-              </TouchableOpacity> */}
+              </TouchableOpacity>
             </View>
           </View>
         </ScrollView>
