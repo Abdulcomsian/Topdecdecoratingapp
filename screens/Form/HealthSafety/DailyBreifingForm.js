@@ -149,6 +149,7 @@ const DailyBreifingForm = (props) => {
   const dailyBrefilyFormInsert = async () => {
   
     try{
+      console.log("Try Token :",token)
       if(mainContractor && projectName && projectName && supervisorName && statementNumber && date && dailyArray && jobSafetyArray && berifingArray && operativeArray && hazrdArray){
         await props.createDailyBreifingHandler(mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,jobID,tabId,token, props.route.params?.index)
         props.updateHealthReport(props?.route?.params?.index);

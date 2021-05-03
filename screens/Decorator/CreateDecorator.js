@@ -91,11 +91,14 @@ const CreateDecorataor = (props) => {
         alert("Permission to access camera roll is required!");
         return;
       }
-      let pickerResult = await ImagePicker.launchImageLibraryAsync();
+      let pickerResult = await ImagePicker.launchImageLibraryAsync({
+        base64:true
+      });
+      const encodedString = Base64.encodeToString(pickerResult, Base64.DEFAULT);
       if (pickerResult.cancelled === true) {
         return;
       }
-      console.log("Piceker Result :",pickerResult)
+      console.log("Piceker Result :",encodedString)
     
       // frmData.append('avatar', {
       //   file: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),

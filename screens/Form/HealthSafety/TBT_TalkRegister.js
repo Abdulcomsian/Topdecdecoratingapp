@@ -28,9 +28,9 @@ const TBTREGISTER = (props) => {
       {
         name: "",
         sign: "",
-        dateRegister: new Date().toLocaleDateString(),
-        translation: "",
-        nameoftranslator: "",
+        date_1: new Date().toLocaleDateString(),
+        action: "",
+        translator: "",
       },
     ]);
   };
@@ -54,7 +54,7 @@ const TBTREGISTER = (props) => {
     const currentDate = selectedDate;
     setShow({ ...show, isVisible: false, index: -1 });
     let copyArr = [...toolBoxArray];
-    copyArr[show.index].dateRegister = currentDate.toLocaleDateString();
+    copyArr[show.index].date_1 = currentDate.toLocaleDateString();
     setToolBoxArray(copyArr);
   };
 
@@ -95,6 +95,7 @@ const TBTREGISTER = (props) => {
 
   const tbtRegisterFormInsert = async () => {
     try {
+      console.log("Try Token :",token)
      
       if(client!="" && projectName!=""  && subject!="" && outline!="" && registerDate!="" && startTime!="" && finishTime!="" && toolBoxArray!="" && supervisorName!="" && supevisorSign!="" ){
         await props.creatTbtRegisterHandler(client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,supevisorSign,jobID,tabId,token,props.route.params?.index)
@@ -307,7 +308,14 @@ const TBTREGISTER = (props) => {
                 >
                   <TouchableOpacity
                     style={styles.addBtn}
-                    onPress={() => addToolBox()}
+                    onPress={() => {
+                      if(toolBoxArray.length>0 && !toolBoxArray[toolBoxArray.length-1].name && !toolBoxArray[toolBoxArray.length-1].signature && !toolBoxArray[toolBoxArray.length-1].date_1 && !toolBoxArray[toolBoxArray.length-1].action && !toolBoxArray[toolBoxArray.length-1].translator){
+                        alert("Please Enter All Value and then move to next Item Add !")
+                      }
+                      else {
+                        addToolBox()
+                      }
+                    }}
                   >
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
@@ -379,23 +387,23 @@ const TBTREGISTER = (props) => {
                             paddingTop: 13,
                           }}
                         >
-                          {new Date(el.dateRegister).toLocaleDateString()}
+                          {new Date(el.date_1).toLocaleDateString()}
                         </Text>
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Yes / No"}
-                          value={el.translation}
-                          onChangeText={(txt) => updateToolBoxArray("translation", index, txt)}
+                          value={el.action}
+                          onChangeText={(txt) => updateToolBoxArray("action", index, txt)}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Name Of Translator"}
-                          value={el.nameoftranslator}
-                          onChangeText={(txt) => updateToolBoxArray("nameoftranslator", index, txt)}
+                          value={el.translator}
+                          onChangeText={(txt) => updateToolBoxArray("translator", index, txt)}
                         />
                       </View>
                     </View>

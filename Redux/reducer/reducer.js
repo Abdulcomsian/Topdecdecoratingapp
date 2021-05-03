@@ -512,6 +512,27 @@ export default (state = initialState, action)=> {
                     isOnSite: true,
                     isSuccessMsg : action.payload.message,
                 }
+            case Actions.INSERT_TBT_TOOLBOX_FORM_SUCCESS:
+             console.log("INSERT_TBT_TOOLBOX_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_INVENTORY_FORM_SUCCESS:
+             console.log("INSERT_TBT_INVENTORY_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
+            case Actions.INSERT_TBT_DAILYBREIFING_FORM_SUCCESS:
+             console.log("INSERT_TBT_DAILYBREIFING_FORM_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isOnSite: true,
+                    isSuccessMsg : action.payload.message,
+                }
             default:
             return state;
       }

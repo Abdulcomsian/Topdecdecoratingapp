@@ -26,11 +26,11 @@ const SelectSummary = (props) => {
           ))}
         </View>
       </View>
-      <View style={styles.btnContainer}>
+      {/* <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.saveBtn} onPress={() => navigation.navigate("SelectSummary")}>
           <Text style={styles.commonText}>Next</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

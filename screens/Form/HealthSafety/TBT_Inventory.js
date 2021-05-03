@@ -26,62 +26,62 @@ const TBTINVENTORY = (props) => {
     {
       title: "Hop Ups",
       equipment: "",
-      inspectionDate: new Date().toLocaleDateString(),
-      labelled: "",
-      quantityy: "",
+      date_1: new Date().toLocaleDateString(),
+      tagged: "",
+      stock: "",
       location: "",
-      inspectionDueDate: new Date().toLocaleDateString(),
+      due_date: new Date().toLocaleDateString(),
       condition: "",
-      replaced: "",
-      comments: "",
+      needs: "",
+      comment: "",
     },
     {
       title: "Step Ladders",
       equipment: "",
-      inspectionDate: new Date().toLocaleDateString(),
-      labelled: "",
-      quantityy: "",
+      date_1: new Date().toLocaleDateString(),
+      tagged: "",
+      stock: "",
       location: "",
-      inspectionDueDate: new Date().toLocaleDateString(),
+      due_date: new Date().toLocaleDateString(),
       condition: "",
-      replaced: "",
-      comments: "",
+      needs: "",
+      comment: "",
     },
     {
       title: "Ladders",
       equipment: "",
-      inspectionDate: new Date().toLocaleDateString(),
-      labelled: "",
-      quantityy: "",
+      date_1: new Date().toLocaleDateString(),
+      tagged: "",
+      stock: "",
       location: "",
-      inspectionDueDate: new Date().toLocaleDateString(),
+      due_date: new Date().toLocaleDateString(),
       condition: "",
-      replaced: "",
-      comments: "",
+      needs: "",
+      comment: "",
     },
     {
       title: "Staircase Podium",
       equipment: "",
-      inspectionDate: new Date().toLocaleDateString(),
-      labelled: "",
-      quantityy: "",
+      date_1: new Date().toLocaleDateString(),
+      tagged: "",
+      stock: "",
       location: "",
-      inspectionDueDate: new Date().toLocaleDateString(),
+      due_date: new Date().toLocaleDateString(),
       condition: "",
-      replaced: "",
-      comments: "",
+      needs: "",
+      comment: "",
     },
     {
       title: "Mobile Towers",
       equipment: "",
-      inspectionDate: new Date().toLocaleDateString(),
-      labelled: "",
-      quantityy: "",
+      date_1: new Date().toLocaleDateString(),
+      tagged: "",
+      stock: "",
       location: "",
-      inspectionDueDate: new Date().toLocaleDateString(),
+      due_date: new Date().toLocaleDateString(),
       condition: "",
-      replaced: "",
-      comments: "",
+      needs: "",
+      comment: "",
     },
   ]);
 
@@ -108,7 +108,7 @@ const TBTINVENTORY = (props) => {
     const currentDate = selectedDate;
     setShow({ ...show, isVisible: false, index: -1 });
     let copyArr = [...inventoryArray];
-    copyArr[show.index].inspectionDate = currentDate.toLocaleDateString();
+    copyArr[show.index].date_1 = currentDate.toLocaleDateString();
     setInventoryArray(copyArr);
   };
   const showDatepicker = (index = -1) => {
@@ -123,7 +123,7 @@ const TBTINVENTORY = (props) => {
     let copyArr = [...inventoryArray];
     copyArr[
       showDueDate.index
-    ].inspectionDueDate = currentDate.toLocaleDateString();
+    ].due_date = currentDate.toLocaleDateString();
     setInventoryArray(copyArr);
   };
   const onSupervisorDateChange = (selectedDate) => {
@@ -343,7 +343,7 @@ const TBTINVENTORY = (props) => {
                             color: "#96A8B2",
                           }}
                         >
-                          {new Date(item.inspectionDate).toLocaleDateString()}
+                          {new Date(item.date_1).toLocaleDateString()}
                         </Text>
                       </View>
                       <View style={styles.inputInventoryBodyContainer}>
@@ -351,9 +351,9 @@ const TBTINVENTORY = (props) => {
                           style={styles.bodyTextInput}
                           placeholder={"Tagged"}
                           onChangeText={(txt) =>
-                            updateLabourValue("labelled", index, txt)
+                            updateLabourValue("tagged", index, txt)
                           }
-                          value={item.labelled}
+                          value={item.tagged}
                         />
                       </View>
                       <View style={styles.inputInventoryBodyContainer}>
@@ -361,9 +361,9 @@ const TBTINVENTORY = (props) => {
                           style={styles.bodyTextInput}
                           placeholder={"Qty."}
                           onChangeText={(txt) =>
-                            updateLabourValue("quantityy", index, txt)
+                            updateLabourValue("stock", index, txt)
                           }
-                          value={item.quantityy}
+                          value={item.stock}
                         />
                       </View>
                       <View style={styles.inputInventoryBodyContainer}>
@@ -392,7 +392,7 @@ const TBTINVENTORY = (props) => {
                           }}
                         >
                           {new Date(
-                            item.inspectionDueDate
+                            item.due_date
                           ).toLocaleDateString()}
                         </Text>
                       </View>
@@ -411,9 +411,9 @@ const TBTINVENTORY = (props) => {
                           style={styles.bodyTextInput}
                           placeholder={"Replaced"}
                           onChangeText={(txt) =>
-                            updateLabourValue("replaced", index, txt)
+                            updateLabourValue("needs", index, txt)
                           }
-                          value={item.replaced}
+                          value={item.needs}
                         />
                       </View>
                       <View style={styles.inputInventoryBodyContainer}>
@@ -423,9 +423,9 @@ const TBTINVENTORY = (props) => {
                           style={styles.bodyTextInput}
                           placeholder={"Comments"}
                           onChangeText={(txt) =>
-                            updateLabourValue("comments", index, txt)
+                            updateLabourValue("comment", index, txt)
                           }
-                          value={item.comments}
+                          value={item.comment}
                         />
                       </View>
                     </View>

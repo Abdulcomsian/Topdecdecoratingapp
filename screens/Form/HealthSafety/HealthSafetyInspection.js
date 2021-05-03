@@ -39,7 +39,7 @@ const HealthSafetyInspection = (props) => {
         location: "",
         actionReq: "",
         priority: "",
-        actionBy: "",
+        action_by: "",
         dateComplte: new Date().toLocaleDateString(),
       },
     ]);
@@ -53,25 +53,28 @@ const HealthSafetyInspection = (props) => {
       comment: "",
     },
     {
+      mainTitle:"",
       title: "All COSHH (Control of substances hazardous to Health) assessments available? ",
       yes: false,
       no: false,
       comment: "",
     },
     {
+      mainTitle:"",
       title: "All MSDS (Material Safety Datasheets) available? ",
       yes: false,
       no: false,
       comment: "",
     },
     {
+      mainTitle:"",
       title: "Permits to work required, has it been issued? ",
       yes: false,
       no: false,
       comment: "",
     },
-    { title: "Decorators read and sign the RAMS? ", yes: false, no: false },
-    { title: "Toolbox Talk carried out? ", yes: false, no: false },
+    { mainTitle:"",title: "Decorators read and sign the RAMS? ", yes: false, no: false,comment: "", },
+    { mainTitle:"",title: "Toolbox Talk carried out? ", yes: false, no: false,comment: "", },
     {
       mainTitle: "General",
       title: "Appropriate safety signs in place? ",
@@ -79,8 +82,8 @@ const HealthSafetyInspection = (props) => {
       no: false,
       comment: "",
     },
-    { title: "Working area isolated from others? ", yes: false, no: false },
-    { title: "Barriers in place? ", yes: false, no: false },
+    { mainTitle:"",title: "Working area isolated from others? ", yes: false, no: false,comment: "", },
+    { mainTitle:"",title: "Barriers in place? ", yes: false, no: false,comment: "", },
     {
       mainTitle: "Personal Protective Equipment (PPE) ",
       title: "Standard PPE being worn? Boots, Hat, Hi Vis, Coverall ",
@@ -88,8 +91,8 @@ const HealthSafetyInspection = (props) => {
       no: false,
       comment: "",
     },
-    { title: "Extras - goggles/ear defenders? ", yes: false, no: false },
-    { title: "Decorators Face Fit Tested? ", yes: false, no: false },
+    { mainTitle:"",title: "Extras - goggles/ear defenders? ", yes: false, no: false,comment: "", },
+    { mainTitle:"",title: "Decorators Face Fit Tested? ", yes: false, no: false,comment: "", },
     {
       mainTitle: "Tools / Equipment  ",
       title: "Have tools had a visual inspection? ",
@@ -97,8 +100,8 @@ const HealthSafetyInspection = (props) => {
       no: false,
       comment: "",
     },
-    { title: "Are casings or leads damaged? ", yes: false, no: false },
-    { title: "Have electrical tools been PAT tested? ", yes: false, no: false },
+    { mainTitle:"",title: "Are casings or leads damaged? ", yes: false, no: false,comment: "", },
+    { mainTitle:"",title: "Have electrical tools been PAT tested? ", yes: false, no: false,comment: "", },
     {
       mainTitle: "Working at Height ",
       title: "Specific Risk Assessment carried out? ",
@@ -106,22 +109,25 @@ const HealthSafetyInspection = (props) => {
       no: false,
       comment: "",
     },
-    { title: "Ladders/ steps checked and tagged? ", yes: false, no: false },
+    { mainTitle:"",title: "Ladders/ steps checked and tagged? ", yes: false, no: false,comment: "", },
     {
+      mainTitle:"",
       title: "Scaffold/ Mobile tower checked and tagged? ",
       yes: false,
       no: false,
       comment: "",
     },
     {
+      mainTitle:"",
       title: "MEWP (Mobile Elevated Work Platform) checked? ",
       yes: false,
       no: false,
       comment: "",
     },
-    { title: "PASMA/IPAF certificated personnel? ", yes: false, no: false },
-    { title: "Means of access suitable? ", yes: false, no: false },
+    { mainTitle:"",title: "PASMA/IPAF certificated personnel? ", yes: false, no: false,comment: "", },
+    { mainTitle:"",title: "Means of access suitable? ", yes: false, no: false,comment: "", },
     {
+      mainTitle:"",
       title: "Is edge protection needed, is it available? ",
       yes: false,
       no: false,
@@ -135,18 +141,20 @@ const HealthSafetyInspection = (props) => {
       comment: "",
     },
     {
+      mainTitle:"",
       title: "Is dust suppression in place when rubbing down?",
       yes: false,
       no: false,
       comment: "",
     },
     {
+      mainTitle:"",
       title: "Is noise an issue to decorator/others, is it sufficiently controlled, are specific PPE worn? ",
       yes: false,
       no: false,
       comment: "",
     },
-    { title: "Are barriers needed/ used? ", yes: false, no: false },
+    { mainTitle:"",title: "Are barriers needed/ used? ", yes: false, no: false,comment: "", },
     {
       mainTitle: "Waste Management ",
       title: "Are skips and containers clearly labelled? ",
@@ -155,6 +163,7 @@ const HealthSafetyInspection = (props) => {
       comment: "",
     },
     {
+      mainTitle:"",
       title: "Are there provisions for Product supplier to collect unused product and empty containers?",
       yes: false,
       no: false,
@@ -219,6 +228,7 @@ const HealthSafetyInspection = (props) => {
   const healthSafetyFormInsert = () => {
   
     try{
+      console.log("Try Token",token)
       if(contractorName!="" && siteSupervisor!="" && dateInspection!="" && projectAddress!="" && dynamicInput!="" && inspectionName!="" && inspectionFor!="" && dateUpdateComplete!="" && signature!="" && arrayDocument!="" ){
         props.createHealthSafetyInspectionHandler(contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, props.route.params?.index)
       }
@@ -397,8 +407,8 @@ const HealthSafetyInspection = (props) => {
                           <TextInput
                             style={styles.bodyTextInput}
                             placeholder={"Action by"}
-                            onChangeText={(txt) => updateValue("actionBy", index, txt)}
-                            value={item.actionBy}
+                            onChangeText={(txt) => updateValue("action_by", index, txt)}
+                            value={item.action_by}
                           />
                         </View>
                         <View style={styles.inputHarmFullBodyContainer}>
@@ -544,7 +554,7 @@ const HealthSafetyInspection = (props) => {
                 </Text>
               </Text>
               {arrayDocument.map((item, index) =>
-                item.mainTitle ? (
+                item.mainTitle!="" ? (
                   <View>
                     <Text
                       style={{
@@ -742,4 +752,4 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(insertHealthSafetyForm(contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, index)),
   updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
-export default connect(null, mapDispatchToProps)(HealthSafetyInspection);
+export default connect(mapStateToProps, mapDispatchToProps)(HealthSafetyInspection);

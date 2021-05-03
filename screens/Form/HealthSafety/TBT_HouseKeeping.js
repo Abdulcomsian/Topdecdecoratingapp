@@ -61,7 +61,7 @@ const TBTHOUSE = (props) => {
         await props.creatTbtHoseKeepingHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
-        alert("TBT COVID Insert SuccessFully !");
+        alert("TBT HOUSE KEEPING Insert SuccessFully !");
       } 
       else{
         alert("Please Insert All Fields CareFully !");

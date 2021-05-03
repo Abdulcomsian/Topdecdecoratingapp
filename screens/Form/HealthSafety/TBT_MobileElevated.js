@@ -61,6 +61,7 @@ const TBTMOBILE = (props) => {
   });
   const tbtFormInsert = async () => {
     try{
+      console.log("Try :",token)
       if(data!=""){
         await props.creatTbtMobileElevatedHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         props.updateHealthReport(props?.route?.params?.index);
