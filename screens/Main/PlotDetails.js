@@ -11,6 +11,9 @@ var rightArrow = require("../../assets/authScreen/right.png");
 const PlotDetails = (props) => {
   console.log(props);
   const { navigation, token, isJobId, plotInfo } = props;
+  const { plot_id } = props.route.params;
+
+  console.log("Plot ID :",plot_id)
   const [tab, setTab] = useState({
     miscoat: true,
     decoration: false,
@@ -119,7 +122,7 @@ const PlotDetails = (props) => {
                         <TouchableOpacity
                           style={styles.textArrow}
                           disabled={item.tickSign}
-                          onPress={() => navigation.navigate(item.url, { tabName: activeTab, index })}>
+                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}>
                           <Text style={{ color: "#1073AC", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
                           <Image source={rightArrow} />
                         </TouchableOpacity>
@@ -133,7 +136,7 @@ const PlotDetails = (props) => {
                       <View style={styles.textArowView}>
                         <TouchableOpacity
                           disabled={item.tickSign}
-                          onPress={() => navigation.navigate(item.url, { tabName: activeTab, index })}
+                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}
                           style={styles.disbaleTextArrow}>
                           <Text style={{ color: "#96A8B2", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
                           <Image source={disableTick} />
@@ -148,10 +151,88 @@ const PlotDetails = (props) => {
               ))}
             </View>
             <View style={styles.pageView} key='2'>
-              <Text>Second page</Text>
+            {miscotArray.map((item, index) => (
+                <View style={styles.listView}>
+                  {item.tickSign ? (
+                    <View style={{ width: "100%", flexDirection: "row" }}>
+                      {item.tickSign && (
+                        <View style={styles.tickSign}>
+                          <Image source={tick} />
+                        </View>
+                      )}
+                      <View style={styles.textArowTrueView}>
+                        <TouchableOpacity
+                          style={styles.textArrow}
+                          disabled={item.tickSign}
+                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}>
+                          <Text style={{ color: "#1073AC", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          <Image source={rightArrow} />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styles.checkBoxTueView}>
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
+                      </View>
+                    </View>
+                  ) : (
+                    <View style={{ width: "100%", flexDirection: "row", marginLeft: 20, marginRight: 20 }}>
+                      <View style={styles.textArowView}>
+                        <TouchableOpacity
+                          disabled={item.tickSign}
+                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}
+                          style={styles.disbaleTextArrow}>
+                          <Text style={{ color: "#96A8B2", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          <Image source={disableTick} />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styles.checkBoxView}>
+                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
+                      </View>
+                    </View>
+                  )}
+                </View>
+              ))}
             </View>
             <View style={styles.pageView} key='3'>
-              <Text>Third page</Text>
+            {miscotArray.map((item, index) => (
+                <View style={styles.listView}>
+                  {item.tickSign ? (
+                    <View style={{ width: "100%", flexDirection: "row" }}>
+                      {item.tickSign && (
+                        <View style={styles.tickSign}>
+                          <Image source={tick} />
+                        </View>
+                      )}
+                      <View style={styles.textArowTrueView}>
+                        <TouchableOpacity
+                          style={styles.textArrow}
+                          disabled={item.tickSign}
+                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}>
+                          <Text style={{ color: "#1073AC", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          <Image source={rightArrow} />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styles.checkBoxTueView}>
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
+                      </View>
+                    </View>
+                  ) : (
+                    <View style={{ width: "100%", flexDirection: "row", marginLeft: 20, marginRight: 20 }}>
+                      <View style={styles.textArowView}>
+                        <TouchableOpacity
+                          disabled={item.tickSign}
+                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}
+                          style={styles.disbaleTextArrow}>
+                          <Text style={{ color: "#96A8B2", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          <Image source={disableTick} />
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styles.checkBoxView}>
+                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
+                      </View>
+                    </View>
+                  )}
+                </View>
+              ))}
             </View>
           </ViewPager>
         </View>

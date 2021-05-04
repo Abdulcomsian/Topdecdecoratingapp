@@ -64,7 +64,7 @@ const NewJob = (props) => {
           dynamicInput,
           token
         );
-        props.navigation.navigate("TotalSummary")
+        props.navigation.navigate("MainScreen")
         alert("Job Saved Successfully");
       } else {
         alert("Please Enter All Missing Fields CareFully !");

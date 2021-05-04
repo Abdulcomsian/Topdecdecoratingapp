@@ -16,7 +16,8 @@ import { connect } from "react-redux";
 var plus = require("../../assets/authScreen/plus.png");
 const WrantySannging = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
-  const jobID = isJobId;
+  const { plot_Id } = props.route.params;
+  const jobID = plot_Id;
   const tabId = props.route.params.tabName;
   const [dateIssue, setDateIssue] = useState(new Date());
   const [dateComplete, setDateComplete] = useState(new Date());

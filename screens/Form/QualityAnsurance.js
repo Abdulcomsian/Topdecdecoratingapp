@@ -17,7 +17,8 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const QualityInssurance = (props) => {
   const { navigation, token, isSuccessMsg, isQuality, isJobId } = props;
-  const jobID = isJobId;
+  const { plot_Id } = props.route.params;
+  const jobID = plot_Id;
   const tabId = props.route.params.tabName;
   const [issuranceArray, setInsuraanceArray] = useState([
     {

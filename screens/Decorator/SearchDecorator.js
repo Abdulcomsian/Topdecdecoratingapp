@@ -8,7 +8,8 @@ const SearchDecorator = (props) =>{
     const { navigation } = props;
     const[decoratorID,setDecoratorID]=useState("")
     const [token,setToken] = useState(props.token)
-
+    const { role } = props.route.params;
+    console.log("Search Role :",role)
     const searchDecorator = () =>{
         console.log("Search Decorator Id :",decoratorID)
         console.log("Token :",token)
@@ -36,7 +37,7 @@ const SearchDecorator = (props) =>{
                 </View>
             </View>
             <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorDetails',{id:decoratorID,token:token})}>
+                    <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorDetails',{id:decoratorID,token:token,roleID:role})}>
                         <Text style={styles.commonText}>Search</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity style={styles.commonBtn} onPress={() => searchDecorator()}>

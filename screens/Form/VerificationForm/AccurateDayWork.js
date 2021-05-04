@@ -12,8 +12,12 @@ var plus = require("../../../assets/authScreen/plus.png");
 const AccurateDayWork = (props) => {
   const { navigation, token, isDayWork, isSuccessMsg, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+ 
+  const { plot_id } = props.route.params;
+  const jobID = plot_id;
+  console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
+  console.log("Work Tab ID :",tabId)
   const [dynamicLabourInput, setdynamicLabourInput] = useState([]);
   const [dynamicMaterialInput, setdynamicMaterialInput] = useState([]);
   const [dynamicPlantInput, setdynamicPlantInput] = useState([]);

@@ -76,6 +76,7 @@ const LoginScreen = (props) =>{
            // alert(err.message)
           }
     }
+    console.log("Login Role :",role)
     useEffect (() =>{
         if(isLogin){
             if(isLoginMsg){
@@ -84,10 +85,11 @@ const LoginScreen = (props) =>{
                     props.navigation.dispatch(StackActions.replace('MainScreen'))
                 }
                 else if(role=="DECORATOR"){
-                    props.navigation.dispatch(StackActions.replace('DecoratorDetails',{role:"decorator",id: isUserID}))
+                    props.navigation.dispatch(StackActions.replace('DecoratorDetails',{roleID:"decorator",id: isUserID}))
                 }
                 else{
-                    props.navigation.dispatch(StackActions.replace('DetailSupervisor',{role:"supervisor",id: isUserID}))
+                    // props.navigation.dispatch(StackActions.replace('DetailSupervisor',{role:"supervisor",id: isUserID}))
+                    props.navigation.dispatch(StackActions.replace('ViewJob',{role:"supervisor",id: isUserID}))
                 }
             }
         }

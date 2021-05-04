@@ -9,7 +9,9 @@ import { updateVerificationReport } from "../../../Redux/action/summary/Summary"
 const DecorationRecord = (props) => {
   const { navigation, token, isSuccessMsg, isSiteInstruction,isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const { plot_id } = props.route.params;
+  const jobID = plot_id;
+  console.log("Site Plot ID :",jobID)
   const tabId = props.route.params.tabName;
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);

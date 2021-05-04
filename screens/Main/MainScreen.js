@@ -18,7 +18,7 @@ const MainScreen = ( props ) =>{
                 <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('CreateDecorataor')}>
                      <Text style={styles.commonText}>Create Decorator</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchDecorator')}>
+                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchDecorator',{role:"admin"})}>
                      <Text style={styles.commonText}>View / Search Decorator</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('CreateSupervisor')}>

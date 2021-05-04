@@ -7,13 +7,15 @@ import axios from "axios";
 var rightArrow=require('../../assets/authScreen/right.png')
 const TotalSummary = ( props ) =>{
     const { navigation, token ,isJobId} = props;
-    // const [jobId,setJobId] = useState(props.route.params.jobID)
+    const [jobId,setJobId] = useState(props.route.params.isJobId)
     const [totalSummary, setTotalSummary] = useState([])
     const [loading, setLoading] = useState(false);
+    const [show, setShow] = useState(false);
+    const job_id=jobId;
     useEffect(() => {
-      if(isJobId){
+      if(jobId){
         try {
-            const job_id = isJobId;
+            // const job_id = isJobId;
           const body = {job_id};
           (async () => {
             setLoading(true);
@@ -28,23 +30,26 @@ const TotalSummary = ( props ) =>{
               }
             );
             const response = await request.data;
-            //console.log("Response Total Summary :",response)
+            console.log("Response Total Summary :",response)
             if (response.success == true) {
-                // 
               setTotalSummary(response.data.user);
               setLoading(false);
+              setShow(true)
             } else {
               setLoading(false);
-              setErrorMsg(request.message);
+              alert(request.message);
+              setShow(false)
             }
           })();
         } catch (err) {
           console.log(err);
           setLoading(false);
         }
+      } else{
+        alert("Your Data not Found !")
       }
        
-      }, [props.isJobId]);
+      }, [props.route.params.isJobId]);
     if (loading) {
         return (
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -57,15 +62,27 @@ const TotalSummary = ( props ) =>{
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Please select a Job Summary</Text>
             </View>
+            {show==true ?
             <View style={{padding:30}}>
             {totalSummary.map((item,index)=>(
-                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("SelectProject",{jobID: props?.isJobId,type:item.name2})} key={index}>
+                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("SelectProject",{jobID: jobId,type:item.name2})} key={index}>
                     <Text style={styles.commonText}>{item.total}</Text>
                     <Text style={styles.commonText}>{item.name2}</Text>
                     <Image  source={rightArrow}/>
                 </TouchableOpacity>
             ))}
             </View>
+            :
+            <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height:"85%"
+            }}
+          >
+            <Text>Sorry No Summary Found !</Text>
+          </View>}
         </View>
     )
             }

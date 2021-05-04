@@ -6,7 +6,9 @@ import { connect } from "react-redux";
 var rightArrow = require("../../assets/authScreen/right.png");
 const SelectSummary = (props) => {
   const { navigation, token, isJobId, summary } = props;
+  const { plot_id } = props.route.params;
 
+  console.log("Plot ID :",plot_id)
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
@@ -19,7 +21,7 @@ const SelectSummary = (props) => {
       <View style={{ height: "70%", width: "100%" }}>
         <View style={{ paddingTop: 30, paddingLeft: 20, paddingRight: 20 }}>
           {summary.map((item, index) => (
-            <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate(item.url)}>
+            <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate(item.url,{plot_id:plot_id})}>
               <Text style={styles.commonText}>{item.ploatName}</Text>
               <Image source={rightArrow} />
             </TouchableOpacity>

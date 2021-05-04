@@ -24,6 +24,7 @@ import ProfileDecorator from '../screens/Decorator/ProfileView'
 import ViewNotes from '../screens/Decorator/ViewNotesLog'
 import DecoratorProfile from '../screens/Decorator/DecoratorProfile'
 import CreateSupervisor from '../screens/Supervisor/CreateSupervisor'
+import AssignedJobsList from '../screens/Supervisor/AssignedJobsList'
 import SearchSupervisor from '../screens/Supervisor/SearchSupervisor'
 import DetailSupervisor from '../screens/Supervisor/DetailSupervisor'
 import ProfileSupervisor from '../screens/Supervisor/ProfileView'
@@ -183,6 +184,13 @@ export default function MainNavigator({ navigation, route }) {
             <Stack.Screen
                 name="CreateSupervisor"
                 component={CreateSupervisor}
+                options={{
+                    headerShown: true,
+                  }}
+            />
+             <Stack.Screen
+                name="AssignedJobsList"
+                component={AssignedJobsList}
                 options={{
                     headerShown: true,
                   }}
@@ -685,6 +693,15 @@ function getHeaderTitle(route) {
                     },  
                     headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular',  } ,
                     headerTitle:"Create Supervisor"
+                    };
+        case 'AssignedJobsList':
+            return { headerShown: true,
+                    headerTintColor: '#fff',
+                    headerStyle: {
+                    backgroundColor: '#1073AC',
+                    },  
+                    headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular',  } ,
+                    headerTitle:"Assigned Job List"
                     };
         case 'SearchSupervisor':
             return { headerShown: true,

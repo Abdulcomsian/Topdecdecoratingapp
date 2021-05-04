@@ -12,8 +12,10 @@ var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.
 const LadderCheckList = (props) => {
   const { navigation, token, isSuccessMsg, isSuccess } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const jobID = plot_Id;
+  console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
+  console.log("Work Tab ID :",tabId)
   const [getSign, setGetSign] = useState(false);
   const [ladderArrayList, setLadderArrayList] = useState([
     {

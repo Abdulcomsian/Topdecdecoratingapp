@@ -84,16 +84,20 @@ const SupervisorDetails = (props) => {
           setSupervisorData(preData);
       }
   }
-  const updateSupervisor = () => {
+  const updateSupervisor = async () => {
     try {
-      props.updateSupervisorHandler(
+      await props.updateSupervisorHandler(
         supervisorData[0].id,
         supervisorData[0].email,
         supervisorData[0].name,
         supervisorData[0].number,
         status,
         token
+        
       );
+      props.navigation.pop();
+      alert("Supervisor Update SuccessFully !")
+      
     } catch (err) {
       alert(err.message);
     }
@@ -103,20 +107,6 @@ const SupervisorDetails = (props) => {
     preData[index][key] = value;
     setSupervisorData(preData);
   };
-  useEffect (() =>{
-      if(isUpdate){
-          if(isUpdateMsg){
-              alert(isUpdateMsg)
-              props.navigation.pop()
-          }
-      }
-      else
-     {
-      if(isUpdateMsg){
-          alert(isUpdateMsg)
-      }
-     }
-  },[isUpdate,isUpdateMsg])
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -134,61 +124,8 @@ const SupervisorDetails = (props) => {
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Supervisor Detail</Text>
         </View>
-        {/* <ScrollView contentContainerStyle={{width:'100%'}}>
-              
-                        <View style={styles.formConatiner}>
-                            <View style={styles.inputFieldContainer}>
-                                <Text style={styles.decoratorTitle}>Name:</Text>
-                                <TextInput 
-                                style={styles.detailItemInput}
-                                value={supervisorData.name}
-                                onChangeText={(e)=>handleSupervisorName(e)}
-                                />
-                            </View>
-                            <View style={styles.inputFieldContainer}>
-                                <Text style={styles.decoratorTitle}>Email:</Text>
-                                <Text style={styles.detailItemInput}>{supervisorData.email}</Text>
-                            </View>
-                            <View style={styles.inputFieldContainer}>
-                                <Text style={styles.decoratorTitle}>Number:</Text>
-                                <TextInput
-                                    value={supervisorData.phone}
-                                    onChangeText={(e)=>handlePhone(e)}
-                                    style={styles.detailItemInput}
-                                />
-                            </View>
-                            <View style={styles.inputFieldContainer}>
-                                <Text style={styles.decoratorTitle}>Status:</Text>
-                                <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                                    <View style={styles.chekboxText}>
-                                        <CheckBox
-                                            value={supervisorData.status==="1" ? true:false}
-                                            onValueChange={() => checkedValue("approved")}
-                                        />
-                                        <Text style={styles.checkText}>Approved</Text>
-                                    </View>
-                                    <View style={styles.chekboxText}>
-                                        <CheckBox
-                                             value={supervisorData.status==="0" ? true:false}
-                                            onValueChange={() => checkedValue("disapproved")}
-                                        />
-                                        <Text style={styles.checkText}>Dis-Approved</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={styles.btnContainer}>
-                                 {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
-                                    <Text style={styles.commonText}>Update</Text>
-                                </TouchableOpacity>  \
-                                <TouchableOpacity style={styles.commonBtn} onPress={() => updateSupervisor()}>
-                                    <Text style={styles.commonText}>Update</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-              
-            </ScrollView> */}
         {role == "supervisor" ? (
-          <ScrollView contentContainerStyle={{ width: "100%" }}>
+          <ScrollView style={{ width: "100%" }}>
             {supervisorData.map((item,index)=>(
                 <View style={styles.formConatiner}>
                     <View style={styles.inputFieldContainer}>
@@ -217,13 +154,6 @@ const SupervisorDetails = (props) => {
                           }
                       />
                     </View>
-                    {/* <View style={styles.inputFieldContainer}>
-                      <Text style={styles.decoratorTitle}>Password:</Text>
-                      <TextInput
-                        value={"#######"}
-                        style={styles.detailItemInput}
-                      />
-                    </View> */}
                     <View style={styles.inputFieldContainer}>
                       <Text style={styles.decoratorTitle}>Status:</Text>
                       <View
@@ -267,9 +197,9 @@ const SupervisorDetails = (props) => {
            
           </ScrollView>
         ) : (
-            <ScrollView contentContainerStyle={{ width: "100%" }}>
+            <ScrollView style={{ width: "100%" }}>
           
-<View style={styles.formConatiner}>
+            <View style={styles.formConatiner}>
               <View style={styles.inputFieldContainer}>
                 <Text style={styles.decoratorTitle}>Name:</Text>
                 <TextInput style={styles.detailItemInput} value={supervisorData.name} />

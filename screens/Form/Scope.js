@@ -10,7 +10,8 @@ var plus = require("../../assets/authScreen/plus.png");
 const Scope = (props) => {
   const { navigation, token, isScope, isSuccessMsg, isJobId } = props;
   //const jobID = Math.floor(Math.random() * 100) + 1;
-   const jobID = isJobId;
+  const { plot_Id } = props.route.params;
+  const jobID = plot_Id;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [date, setDate] = useState(new Date());

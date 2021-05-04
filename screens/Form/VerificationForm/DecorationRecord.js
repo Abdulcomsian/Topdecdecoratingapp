@@ -10,7 +10,9 @@ var plus = require("../../../assets/authScreen/plus.png");
 const DecorationRecord = (props) => {
   const { navigation, token, isSuccessMsg, isDecoration, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const { plot_id } = props.route.params;
+  const jobID = plot_id;
+  console.log("Decoration Plot ID :",jobID)
   const tabId = props.route.params.tabName;
   const [dynamicFirstInput, setdynamicFirstInput] = useState([]);
   const [dynamicSecondInput, setdynamicSeconfInput] = useState([]);
@@ -137,7 +139,6 @@ const DecorationRecord = (props) => {
   const showDateCompleteSecondpicker = (index = -1) => {
     setShowCompleteDateSecond({ ...showCompleteDateSecond, isVisible: true, index: index });
   };
-  console.log(dynamicFirstInput);
   return (
     <ScrollView style={{ height: "100%" }}>
       <View style={styles.mainContainer}>

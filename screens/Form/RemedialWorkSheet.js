@@ -9,7 +9,8 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const RemedialWork = (props) => {
   const { navigation, token, isSuccessMsg, isRemedial, isJobId } = props;
-  const jobID = isJobId;
+  const { plot_Id } = props.route.params;
+  const jobID = plot_Id;
   const tabId = props.route.params.tabName;
   const [data, setData] = useState({
     area: "",

@@ -11,7 +11,9 @@ var plus = require("../../../assets/authScreen/plus.png");
 const VerificationOfWork = (props) => {
   const { navigation, token, isVerifyWork, isSuccessMsg, isJobId } = props;
   //const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const { plot_id } = props.route.params;
+  const jobID = plot_id;
+  console.log("Verification Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [projectName, setProjectName] = useState([]);

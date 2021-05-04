@@ -9,7 +9,8 @@ import SignatureComponent from "../../components/SignatureComponent";
 var plus = require("../../assets/authScreen/plus.png");
 const HandOverForm = (props) => {
   const { navigation, token, isHandOver, isSuccessMsg, isJobId } = props;
-  const jobID = isJobId;
+  const { plot_Id } = props.route.params;
+  const jobID = plot_Id;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([{ area: "", description: "", completed: "", comments: "" }]);
   const [date, setDate] = useState(new Date());
@@ -107,7 +108,7 @@ const HandOverForm = (props) => {
     setdynamicInput(preData);
   };
   const handOverFormInsert = async () => {
-    console.log("HandOver Token :", token);
+    //console.log("HandOver Token :", jobID);
     try{
     if (contructorName != "" && project != "" && block != "" && reason != "" && plotNumber != "" && supervisorName != "" && dynamicInput && agentName != "") {
       await props.createHandOverHandler(

@@ -13,8 +13,11 @@ var plus = require("../../../assets/authScreen/plus.png");
 const AccidentReport = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const { plot_Id } = props.route.params;
+  const jobID = plot_Id;
+  console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
+  console.log("Work Tab ID :",tabId)
   const [nameOfPerson, setNameOfPerson] = useState("");
   const [locationOfIncident, setLocationOfIncident] = useState("");
   const [nameOfInjuredPerson, setNameOfInjuredPerson] = useState("");

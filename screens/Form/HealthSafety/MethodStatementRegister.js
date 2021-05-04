@@ -25,8 +25,10 @@ const MethodStatement = (props) => {
     isMethod,
   } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const jobID = plot_Id;
+  console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
+  console.log("Work Tab ID :",tabId)
   const [statementArray, setStatementArray] = useState([]);
   const [statementTitle, setStatementTitle] = useState("");
   const [contractorName, setContractorName] = useState("");

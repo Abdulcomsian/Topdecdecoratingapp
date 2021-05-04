@@ -136,6 +136,13 @@ export default (state = initialState, action)=> {
                     isUpdate: true,
                     isUpdateMsg : action.payload.message
                 }
+            case Actions.UPDATE_DECORATOR_SUCCESS:
+             console.log("UPDATE_DECORATOR_SUCCESS",action.payload)
+                return{
+                    ...state,
+                    isUpdate: true,
+                    isUpdateMsg : action.payload.message
+                }
             case Actions.FORGOT_EMAIL_CHECK_SUCCESS:
              console.log("FORGOT_EMAIL_CHECK_SUCCESS",action.payload)
                 return{

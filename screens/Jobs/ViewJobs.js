@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 const ViewJob = ( props ) =>{
     const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
     console.log("Role : ",props)
+    console.log("User ID : ",isUserID)
     return(
         <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>
@@ -19,11 +20,11 @@ const ViewJob = ( props ) =>{
             </View>
             :
             <View style={{padding:30}}>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('')}>
+                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('AssignedJobsList',{role:"supervisor",id: isUserID})}>
                     <Text style={styles.commonText}>View your assigned Jobs</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchJob')}>
-                    <Text style={styles.commonText}>Search job</Text>
+                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DetailSupervisor',{role:"supervisor",id: isUserID})}>
+                    <Text style={styles.commonText}>View Profile</Text>
                 </TouchableOpacity>
             </View>
             }
@@ -31,7 +32,8 @@ const ViewJob = ( props ) =>{
     )
 }
 const mapStateToProps = state => ({
-    role: state.auth.role
+    role: state.auth.role,
+    isUserID: state.auth.isUserID
   });
   const mapDispatchToProps=dispatch=>({
   })

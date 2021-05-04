@@ -9,8 +9,10 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 const RecordOfProject = (props) => {
   const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const jobID = plot_Id;
+  console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
+  console.log("Work Tab ID :",tabId)
   const [recordArray, setRecordArray] = useState([
     {
       title:

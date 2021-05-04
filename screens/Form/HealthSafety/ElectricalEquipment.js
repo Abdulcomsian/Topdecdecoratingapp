@@ -18,8 +18,10 @@ var plus = require("../../../assets/authScreen/plus.png");
 const ElectricalEquipment = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const jobID = plot_Id;
+  console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
+  console.log("Work Tab ID :",tabId)
   const [equipmentRow, setEquipmentRow] = useState([]);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");

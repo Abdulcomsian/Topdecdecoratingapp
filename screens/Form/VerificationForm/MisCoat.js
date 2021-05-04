@@ -10,7 +10,9 @@ var plus = require("../../../assets/authScreen/plus.png");
 const MistCoat = (props) => {
   const { navigation, token, isSuccessMsg, isVerifyMiscoat, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
-  const jobID = isJobId;
+  const { plot_id } = props.route.params;
+  const jobID = plot_id;
+  console.log("Miscot Plot ID :",jobID)
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
   const [mainContructor, setMainContructor] = useState([]);

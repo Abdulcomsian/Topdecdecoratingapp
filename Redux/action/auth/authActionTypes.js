@@ -325,6 +325,43 @@ export const updateSupervisor = (id, email, name, number, status, token) => {
     }
   };
 };
+export const updateDecorator = (id, email, firstname, lastname, phone, status, token) => {
+  return async (dispatch, getState) => {
+    try {
+      // console.log("Decorator Id :",id)
+      // console.log("Decorator Email :",email)
+      // console.log("Decorator Name :",name)
+      // console.log("Decorator Number :",number)
+      // console.log("Decorator Status :",status)
+      // console.log("Token :",token)
+      const body = { id, firstname, email, phone, lastname, status };
+      const request = await axios(base_url + "admin/edit/editDecorator", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      console.log("Update Response :", response);
+      // console.log(response.data.user)
+      if (response.success == true) {
+        dispatch({
+          type: Actions.UPDATE_DECORATOR_SUCCESS,
+          payload: response,
+        });
+      } else {
+        // dispatch({
+        //   type: Actions.UPDATE_SUPERVISOR_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
 export const insertHandOverForm = (
   contractor,
   project,
@@ -790,7 +827,7 @@ export const insertScopeForm = (
   dynamicInput,
   painter,
   signature,
-  plotNumber,
+  plot_number,
   type,
   date,
   task_id,
@@ -814,6 +851,7 @@ export const insertScopeForm = (
         date,
         type,
         painter,
+        plot_number,
         task_id,
         tab_id,
         dynamicInput,
