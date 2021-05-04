@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ToboyProject",
-    "slug": "ToboyProject",
+    "name": "Top Dec Decorating",
+    "slug": "topdecdecorating",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,6 +11,7 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
+      "enabled": true,
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
@@ -18,14 +19,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "Toby"
+      "buildNumber": "0.0.2",
+      "bundleIdentifier": "com.accrualgroup.topdecdecorating",
+      "infoPlist": {
+      "NSPhotoLibraryUsageDescription": "Top dec Decortaing need you access your gallery to upload your images for Create Decorator",
+      "NSPhotoLibraryAddUsageDescription": "Top dec Decortaing need you access your gallery to upload your images for Create Decorator"
+      }
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.hamza_alam.ToboyProject"
+      "package": "com.accrualgroup.topdecdecorating",
+      "versionCode": 1,
+      "permissions": ["CAMERA", "CAMERA_ROLL", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

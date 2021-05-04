@@ -14,8 +14,8 @@ var lock=require('../../assets/authScreen/lock.png')
 const LoginScreen = (props) =>{
     const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
    // const dispatch = useDispatch()
-    const [email, setEmail] = useState("admin@accrualgroup.com")
-    const [password, setPassword] = useState("asdfghjkl")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
     const postSignInHandler =  async (type)=>{
         try{

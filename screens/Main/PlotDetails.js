@@ -11,7 +11,7 @@ var rightArrow = require("../../assets/authScreen/right.png");
 const PlotDetails = (props) => {
   console.log(props);
   const { navigation, token, isJobId, plotInfo } = props;
-  const { plot_id } = props.route.params;
+  const { plot_id,plotName } = props.route.params;
 
   console.log("Plot ID :",plot_id)
   const [tab, setTab] = useState({
@@ -72,7 +72,7 @@ const PlotDetails = (props) => {
         <Text style={styles.refText}>Ref id: 10099499</Text>
       </View>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Plot 1</Text>
+        <Text style={styles.titleText}>{plotName}</Text>
       </View>
       <View style={styles.tabsContainer}>
         <View style={styles.tabsView}>

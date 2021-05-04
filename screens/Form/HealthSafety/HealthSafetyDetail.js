@@ -14,7 +14,7 @@ const HealthSafetyDetails = (props) => {
     decoration: false,
     snag: false,
   });
-  const { plot_id } = props.route.params;
+  const { plot_id,plotName } = props.route.params;
 
   console.log("HEalth Plot ID :",plot_id)
   const [isLeft, setIsLeft] = useState(1);
@@ -68,7 +68,7 @@ const HealthSafetyDetails = (props) => {
         <Text style={styles.refText}>Ref id: 10099499</Text>
       </View>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Plot 1</Text>
+        <Text style={styles.titleText}>{plotName}</Text>
       </View>
       <View style={styles.tabsContainer}>
         <View style={styles.tabsView}>

@@ -14,10 +14,11 @@ var plus = require("../../../assets/authScreen/plus.png");
 const TBTHOUSE = (props) => {
   const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
     // const jobID = Math.floor(Math.random() * 100) + 1;
-    const jobID = plot_Id;
-    console.log("Work Plot ID :",jobID)
-    const tabId = props.route.params.tabName;
-    console.log("Work Tab ID :",tabId)
+    const { plot_Id } = props.route.params;
+  const jobID = plot_Id;
+  console.log("Work Plot ID :",jobID)
+  const tabId = props.route.params.tabName;
+  console.log("Work Tab ID :",tabId)
   const [attendenceArray, setAttendenceArray] = useState([]);
   const addAttendence = () => setAttendenceArray((oldArray) => [...oldArray, { print: "", sign: "" }]);
 

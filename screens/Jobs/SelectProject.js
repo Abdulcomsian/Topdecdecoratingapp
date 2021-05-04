@@ -67,7 +67,7 @@ const SelectProject = ( props ) =>{
             </View>
             <ScrollView style={{paddingRight:30,paddingLeft:30,width:"100%",paddingBottom:50}}>
             {selectProject.map((item,index)=>(
-                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("SelectSummary",{plot_id:item.id})} key={index}>
+                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("SelectSummary",{plot_id:item.id,plotName:item.name})} key={index}>
                     <Text style={styles.commonText}>{item.name}</Text>
                     <Image  source={rightArrow}/>
                 </TouchableOpacity>

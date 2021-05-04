@@ -11,6 +11,7 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 const HouseKepping = (props) => {
   const { navigation, token, isSuccessMsg, isSuccess } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
+  const { plot_Id } = props.route.params;
   const jobID = plot_Id;
   console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
