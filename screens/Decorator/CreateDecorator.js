@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { Text } from "native-base";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { createDecorator } from "../../Redux/action/auth/authActionTypes";
 import * as ImagePicker from "expo-image-picker";
 
 const CreateDecorataor = (props) => {
-  const { navigation,token, createDecorator, createDecoratorMsg } = props;
+  const { navigation, token, createDecorator, createDecoratorMsg } = props;
   const [photoID, setPhotoID] = useState(null);
   const [cscsFront, setCscsFront] = useState(null);
   const [cscsBack, setCscsBack] = useState(null);
@@ -23,62 +16,51 @@ const CreateDecorataor = (props) => {
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
   const postCreateDecortor = () => {
-   
-   
     try {
-      if(name!="", lastName!="", email!="", number!="", password!=""){
-      let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-      if (regEmail.test(email) === false) {
-        alert("Email is Not Correct");
-        setEmail(email);
-        return false;
-      } else {
-        setEmail(email);
-        console.log("Email is Correct");
-        if (regPass.test(password) === false) {
-          alert("Password is Not Correct");
-          setPassword(password);
+      if ((name != "", lastName != "", email != "", number != "", password != "")) {
+        let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        if (regEmail.test(email) === false) {
+          alert("Email is Not Correct");
+          setEmail(email);
           return false;
         } else {
-          // let frmData = new FormData();
-          // frmData.append('avatar', {
-          //   file: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),
-          //   name: Math.random(0, 1000).toString(),
-          //   // type: 'image/png', // it may be necessary in Android.
-          // });
-          // console.log(frmData)
-          // console.log("Password is Correct");
+          setEmail(email);
+          console.log("Email is Correct");
+          if (regPass.test(password) === false) {
+            alert("Password is Not Correct");
+            setPassword(password);
+            return false;
+          } else {
+            // let frmData = new FormData();
+            // frmData.append('avatar', {
+            //   file: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),
+            //   name: Math.random(0, 1000).toString(),
+            //   // type: 'image/png', // it may be necessary in Android.
+            // });
+            // console.log(frmData)
+            // console.log("Password is Correct");
 
-          // let localUri = photoID.localUri;
-          // let filename = localUri.split('/').pop();
-          // let match = /\.(\w+)$/.exec(filename);
-          // let type = match ? `image/${match[1]}` : `image`;
-          //  let formData = new FormData();
-          //     formData.append('photo', { uri: localUri, name: filename, type });
-          console.log("firstname :", name);
-      console.log("lastname :", lastName);
-      console.log("email :", email);
-      console.log("phone :", number);
-      console.log("password :", password);
-      console.log("Token :", token);
-          props.createDecoratorHandler(
-            name,
-            lastName,
-            email,
-            number,
-            password,
-            token
-          );
-          
-          
-          return true;
+            // let localUri = photoID.localUri;
+            // let filename = localUri.split('/').pop();
+            // let match = /\.(\w+)$/.exec(filename);
+            // let type = match ? `image/${match[1]}` : `image`;
+            //  let formData = new FormData();
+            //     formData.append('photo', { uri: localUri, name: filename, type });
+            console.log("firstname :", name);
+            console.log("lastname :", lastName);
+            console.log("email :", email);
+            console.log("phone :", number);
+            console.log("password :", password);
+            console.log("Token :", token);
+            props.createDecoratorHandler(name, lastName, email, number, password, token, photoID, cscsBack, cscsFront);
+
+            return true;
+          }
         }
+      } else {
+        alert("Please Insert All Fields CareFully !");
       }
-    }else{
-      alert("Please Insert All Fields CareFully !")
-    }
-     
     } catch (err) {
       console.log(err.message);
     }
@@ -92,20 +74,20 @@ const CreateDecorataor = (props) => {
         return;
       }
       let pickerResult = await ImagePicker.launchImageLibraryAsync({
-        base64:false
+        base64: false,
       });
       if (pickerResult.cancelled === true) {
         return;
       }
-      console.log("Piceker Result :",pickerResult)
-     let frmData = new FormData();
-      frmData.append('avatar', {
-        file: Platform.OS === 'android' ? pickerResult.uri : pickerResult.uri.replace('file://', ''),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-      console.log("Form Data :",frmData)
-      setPhotoID({ localUri: pickerResult.uri });
+      // console.log("Piceker Result :", pickerResult);
+      // let frmData = new FormData();
+      // frmData.append("avatar", {
+      //   file: Platform.OS === "android" ? pickerResult.uri : pickerResult.uri.replace("file://", ""),
+      //   name: Math.random(0, 1000).toString(),
+      //   type: "image/png", // it may be necessary in Android.
+      // });
+      // console.log("Form Data :", frmData);
+      setPhotoID(pickerResult.uri);
     } else if (type == "cscsFront") {
       let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -118,7 +100,7 @@ const CreateDecorataor = (props) => {
         return;
       }
 
-      setCscsFront({ localUri: pickerResult.uri });
+      setCscsFront(pickerResult.uri);
     } else if (type == "cscsBack") {
       let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -131,23 +113,22 @@ const CreateDecorataor = (props) => {
         return;
       }
 
-      setCscsBack({ localUri: pickerResult.uri });
+      setCscsBack(pickerResult.uri);
     }
   };
-  React.useEffect(()=>{
-    if(createDecorator){
-      console.log("here")
-        
-        if(createDecoratorMsg){
-            props.navigation.navigate('MainScreen')
-        }
+  React.useEffect(() => {
+    if (createDecorator) {
+      console.log("here");
+
+      if (createDecoratorMsg) {
+        props.navigation.navigate("MainScreen");
+      }
+    } else {
+      if (createDecoratorMsg) {
+        alert(createDecoratorMsg);
+      }
     }
-    else{
-        if(createDecoratorMsg){
-            alert(createDecoratorMsg)
-        }
-    }
-},[createDecorator,createDecoratorMsg])
+  }, [createDecorator, createDecoratorMsg]);
   return (
     <View style={styles.mainContainer}>
       <View style={styles.titleContainer}>
@@ -156,46 +137,25 @@ const CreateDecorataor = (props) => {
       <ScrollView>
         <View style={styles.formConatiner}>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Name"}
-              value={name}
-              onChangeText={(e) => setName(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Name"} value={name} onChangeText={(e) => setName(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Last Name"}
-              value={lastName}
-              onChangeText={(e) => setLastName(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Last Name"} value={lastName} onChangeText={(e) => setLastName(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-              }}
-            >
+              }}>
               <Text style={styles.decoratorTitle}>Photo ID:</Text>
               {photoID == null ? (
-                <TouchableOpacity
-                  style={styles.selectFileBtn}
-                  onPress={() => uploadPhotoImage("photoID")}
-                >
-                  <Text
-                    style={{ fontSize: 12, fontFamily: "poppins-semiBold" }}
-                  >
-                    Select File
-                  </Text>
+                <TouchableOpacity style={styles.selectFileBtn} onPress={() => uploadPhotoImage("photoID")}>
+                  <Text style={{ fontSize: 12, fontFamily: "poppins-semiBold" }}>Select File</Text>
                 </TouchableOpacity>
               ) : (
                 <View style={{ marginLeft: 30, flexDirection: "row" }}>
-                  <Image
-                    source={{ uri: photoID.localUri }}
-                    style={styles.thumbnail}
-                  />
+                  <Image source={{ uri: photoID }} style={styles.thumbnail} />
                 </View>
               )}
             </View>
@@ -205,26 +165,15 @@ const CreateDecorataor = (props) => {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-              }}
-            >
+              }}>
               <Text style={styles.decoratorTitle}>CSCS Card Front:</Text>
               {cscsFront == null ? (
-                <TouchableOpacity
-                  style={styles.selectFileBtn}
-                  onPress={() => uploadPhotoImage("cscsFront")}
-                >
-                  <Text
-                    style={{ fontSize: 12, fontFamily: "poppins-semiBold" }}
-                  >
-                    Select File
-                  </Text>
+                <TouchableOpacity style={styles.selectFileBtn} onPress={() => uploadPhotoImage("cscsFront")}>
+                  <Text style={{ fontSize: 12, fontFamily: "poppins-semiBold" }}>Select File</Text>
                 </TouchableOpacity>
               ) : (
                 <View style={{ marginLeft: 30, flexDirection: "row" }}>
-                  <Image
-                    source={{ uri: cscsFront.localUri }}
-                    style={styles.thumbnail}
-                  />
+                  <Image source={{ uri: cscsFront }} style={styles.thumbnail} />
                 </View>
               )}
             </View>
@@ -234,63 +183,33 @@ const CreateDecorataor = (props) => {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-              }}
-            >
+              }}>
               <Text style={styles.decoratorTitle}>CSCS Card Back:</Text>
               {cscsBack == null ? (
-                <TouchableOpacity
-                  style={styles.selectFileBtn}
-                  onPress={() => uploadPhotoImage("cscsBack")}
-                >
-                  <Text
-                    style={{ fontSize: 12, fontFamily: "poppins-semiBold" }}
-                  >
-                    Select File
-                  </Text>
+                <TouchableOpacity style={styles.selectFileBtn} onPress={() => uploadPhotoImage("cscsBack")}>
+                  <Text style={{ fontSize: 12, fontFamily: "poppins-semiBold" }}>Select File</Text>
                 </TouchableOpacity>
               ) : (
                 <View style={{ marginLeft: 30, flexDirection: "row" }}>
-                  <Image
-                    source={{ uri: cscsBack.localUri }}
-                    style={styles.thumbnail}
-                  />
+                  <Image source={{ uri: cscsBack }} style={styles.thumbnail} />
                 </View>
               )}
             </View>
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Email"}
-              value={email}
-              onChangeText={(e) => setEmail(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Email"} value={email} onChangeText={(e) => setEmail(e)} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Password"}
-              value={password}
-              onChangeText={(e) => setPassword(e)}
-              secureTextEntry={true}
-            />
+            <TextInput style={styles.inputField} placeholder={"Password"} value={password} onChangeText={(e) => setPassword(e)} secureTextEntry={true} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Contact Number"}
-              value={number}
-              onChangeText={(e) => setNumber(e)}
-            />
+            <TextInput style={styles.inputField} placeholder={"Contact Number"} value={number} onChangeText={(e) => setNumber(e)} />
           </View>
           <View style={styles.btnContainer}>
             {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorProfile')}>
                                 <Text style={styles.commonText}>Save</Text>
                             </TouchableOpacity> */}
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => postCreateDecortor()}
-            >
+            <TouchableOpacity style={styles.commonBtn} onPress={() => postCreateDecortor()}>
               <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -300,29 +219,13 @@ const CreateDecorataor = (props) => {
   );
 };
 const mapStateToProps = (state) => ({
-  token : state.auth.token,
-  createDecorator : state.auth.createDecorator,
-  createDecoratorMsg : state.auth.createDecoratorMsg
+  token: state.auth.token,
+  createDecorator: state.auth.createDecorator,
+  createDecoratorMsg: state.auth.createDecoratorMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createDecoratorHandler: (
-    name,
-            lastName,
-            email,
-            number,
-            password,
-            token
-  ) =>
-    dispatch(
-      createDecorator(
-        name,
-            lastName,
-            email,
-            number,
-            password,
-            token
-      )
-    ),
+  createDecoratorHandler: (name, lastName, email, number, password, token, photoID, cscsBack, cscsFront) =>
+    dispatch(createDecorator(name, lastName, email, number, password, token, photoID, cscsBack, cscsFront)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDecorataor);
 

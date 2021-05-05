@@ -1,5 +1,6 @@
 import * as Actions from "../../actionTypes";
 import axios from "axios";
+import { Platform } from "react-native";
 
 var base_url = "https://topdecdecoratingapp.com/api/";
 
@@ -102,15 +103,7 @@ export const resetPassword = (id, password) => {
     }
   };
 };
-export const createNewJobCreation = (
-  contractor,
-  project,
-  weeks,
-  supervisor_id,
-  start_date,
-  jobSummary,
-  token
-) => {
+export const createNewJobCreation = (contractor, project, weeks, supervisor_id, start_date, jobSummary, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log(contractor)
@@ -164,33 +157,50 @@ export const searchJob = (reference_number, date, token) => {
     }
   };
 };
-export const createDecorator = (
-  firstname,
-  lastname,
-  email,
-  phone,
-  password,
-  token
-) => {
+export const createDecorator = (firstname, lastname, email, phone, password, token, photoID, cscs_back, cscs_front) => {
   return async (dispatch, getState) => {
     try {
-      // console.log("firstname :", firstname);
-      // console.log("lastname :", lastname);
-      // console.log("email :", email);
-      // console.log("phone :", phone);
-      // console.log("password :", password);
-      // console.log("Token :", token);
+      let formData = new FormData();
+      console.log({ firstname, lastname, email, phone, password, token, photoID, cscs_back, cscs_front });
+      formData.append("firstname", firstname);
+      formData.append("email", email);
+      formData.append("password", password); // Aa@1234567
 
-      const body = { email, password, firstname, phone, lastname };
-      const request = await axios(base_url + "admin/create/decorator", {
+      formData.append("phone", phone);
+      formData.append("lastname", lastname);
+
+      photoID &&
+        formData.append("id_card", {
+          file: Platform.OS === "android" ? photoID : photoID.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      cscs_front &&
+        formData.append("cscs_front", {
+          file: Platform.OS === "android" ? cscs_front : cscs_front.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      cscs_back &&
+        formData.append("cscs_back", {
+          file: Platform.OS === "android" ? cscs_back : cscs_back.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+
+      console.log(formData);
+      // const body = { email, password, firstname, phone, lastname };
+      const request = await axios(`${base_url}admin/create/decorator`, {
         method: "POST",
+        data: formData,
         headers: {
-          authorization: "Bearer " + token,
+          Authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
       });
       const response = request.data;
-      console.log("API Response :", response);
+      console.log("API Response CREATE DECORATOR :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.CREATE_DECORATOR_SUCSESS,
@@ -201,6 +211,7 @@ export const createDecorator = (
       }
     } catch (err) {
       console.log("API Error :", err.message);
+      console.log(err.message);
       throw new Error(err.message);
     }
   };
@@ -420,16 +431,13 @@ export const insertHandOverForm = (
         tab_id,
         jobSummary,
       };
-      const request = await axios(
-        base_url + "supervisor/make/workflow/insert_handover",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -522,16 +530,13 @@ export const insertMakeReadyForm = (
         dynamicInput,
       };
 
-      const request = await axios(
-        base_url + "supervisor/make/workflow/makeReadySheet",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/make/workflow/makeReadySheet", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -608,16 +613,13 @@ export const insertSnaggingForm = (
         dynamicInputComplete,
       };
 
-      const request = await axios(
-        base_url + "supervisor/make/workflow/insertWarenty",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/make/workflow/insertWarenty", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -642,20 +644,7 @@ export const insertSnaggingForm = (
     }
   };
 };
-export const insertAnsuranceForm = (
-  project,
-  unit,
-  dynamicInput,
-  dynamicInputcomplete,
-  mc,
-  md,
-  sms,
-  bscs,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       console.log("Project Name :", project);
@@ -682,16 +671,13 @@ export const insertAnsuranceForm = (
         dynamicInputcomplete,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/quaity",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -790,16 +776,13 @@ export const insertRemedialForm = (
         totalHours,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/workflow/RemendialSheet",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/workflow/RemendialSheet", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -823,18 +806,7 @@ export const insertRemedialForm = (
     }
   };
 };
-export const insertScopeForm = (
-  dynamicInput,
-  painter,
-  signature,
-  plot_number,
-  type,
-  date,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertScopeForm = (dynamicInput, painter, signature, plot_number, type, date, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic Input :", dynamicInput);
@@ -857,16 +829,13 @@ export const insertScopeForm = (
         dynamicInput,
       };
 
-      const request = await axios(
-        base_url + "supervisor/make/workflow/insertScope",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/make/workflow/insertScope", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -951,16 +920,13 @@ export const insertWorkSheet = (
         PRELIMINARIES,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/verification/accurate",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/verification/accurate", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -985,13 +951,7 @@ export const insertWorkSheet = (
     }
   };
 };
-export const insertDecorationRecord = (
-  jobSummary,
-  jobSummarycomplete,
-  task_id,
-  tab_id,
-  token
-) => {
+export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic First Input :", jobSummary);
@@ -1006,16 +966,13 @@ export const insertDecorationRecord = (
         jobSummarycomplete,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/decoration",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/decoration", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1036,14 +993,7 @@ export const insertDecorationRecord = (
     }
   };
 };
-export const insertMiscoat = (
-  contractor,
-  project,
-  jobSummary,
-  task_id,
-  tab_id,
-  token
-) => {
+export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contructor :", contractor);
@@ -1060,16 +1010,13 @@ export const insertMiscoat = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/Miscoat",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Miscoat", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1090,19 +1037,7 @@ export const insertMiscoat = (
     }
   };
 };
-export const insertSiteInstruction = (
-  contractor,
-  instruction,
-  raised_by,
-  date,
-  details,
-  condition,
-  supervisor,
-  s_date,
-  task_id,
-  tab_id,
-  token
-) => {
+export const insertSiteInstruction = (contractor, instruction, raised_by, date, details, condition, supervisor, s_date, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1129,16 +1064,13 @@ export const insertSiteInstruction = (
         supervisor,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/Instruction",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Instruction", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1159,15 +1091,7 @@ export const insertSiteInstruction = (
     }
   };
 };
-export const insertVerificationForm = (
-  project,
-  id_ref,
-  decorator,
-  PRELIMINARIES,
-  task_id,
-  tab_id,
-  token
-) => {
+export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       console.log("Project Name :", project);
@@ -1187,16 +1111,13 @@ export const insertVerificationForm = (
         PRELIMINARIES,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/verification/verrify_worksheet",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/verification/verrify_worksheet", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1311,19 +1232,16 @@ export const insertAccidentForm = (
         task_id,
         tab_id,
         Ambulance_Details,
-        Dynamic_Input
+        Dynamic_Input,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/accident",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/accident", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1340,19 +1258,7 @@ export const insertAccidentForm = (
     }
   };
 };
-export const insertCleanUpForm = (
-  contractor,
-  project,
-  operation,
-  date,
-  jobSummary,
-  signature,
-  date1,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertCleanUpForm = (contractor, project, operation, date, jobSummary, signature, date1, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1378,16 +1284,13 @@ export const insertCleanUpForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/cleanup",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/cleanup", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1407,17 +1310,7 @@ export const insertCleanUpForm = (
     }
   };
 };
-export const insertElectricalEquipemntForm = (
-  contractor,
-  project,
-  supervisor,
-  date,
-  jobSummary,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertElectricalEquipemntForm = (contractor, project, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -1439,16 +1332,13 @@ export const insertElectricalEquipemntForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/electric_equipment",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/electric_equipment", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1468,19 +1358,7 @@ export const insertElectricalEquipemntForm = (
     }
   };
 };
-export const insertFridayPackForm = (
-  contractor,
-  project,
-  supervisor,
-  jobSummary,
-  week_ending,
-  date,
-  furhter_comment,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertFridayPackForm = (contractor, project, supervisor, jobSummary, week_ending, date, furhter_comment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       console.log("Name Of Contractor :", contractor);
@@ -1505,16 +1383,13 @@ export const insertFridayPackForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/friday_pack",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/friday_pack", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1534,16 +1409,7 @@ export const insertFridayPackForm = (
     }
   };
 };
-export const insertHarmFulForm = (
-  contractor,
-  project,
-  date,
-  jobSummary,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertHarmFulForm = (contractor, project, date, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -1563,16 +1429,13 @@ export const insertHarmFulForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1639,17 +1502,13 @@ export const insertHealthSafetyForm = (
         Document,
       };
 
-      const request = await axios(
-        base_url +
-          "supervisor/insert/healthAndSecurity/HealthAndSAfetyInspection",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/HealthAndSAfetyInspection", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1671,18 +1530,7 @@ export const insertHealthSafetyForm = (
     }
   };
 };
-export const insertHouseKeepingForm = (
-  contractor,
-  project,
-  week,
-  jobSummary,
-  Supervisor,
-  date,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Supervisor, date, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       console.log("Main Contractor  :", contractor);
@@ -1703,16 +1551,13 @@ export const insertHouseKeepingForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/housekeepings",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepings", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1732,19 +1577,7 @@ export const insertHouseKeepingForm = (
     }
   };
 };
-export const insertLAdderCheckListForm = (
-  contractor,
-  project,
-  supervisor,
-  date,
-  next_inspection,
-  comment,
-  jobSummary,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertLAdderCheckListForm = (contractor, project, supervisor, date, next_inspection, comment, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contractor  :", contractor);
@@ -1770,16 +1603,13 @@ export const insertLAdderCheckListForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/Ladders",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Ladders", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1799,19 +1629,7 @@ export const insertLAdderCheckListForm = (
     }
   };
 };
-export const insertMethodStatementForm = (
-  title,
-  contractor,
-  project,
-  ref,
-  jobSummary,
-  supervisor,
-  supervisor_sign,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertMethodStatementForm = (title, contractor, project, ref, jobSummary, supervisor, supervisor_sign, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       //   console.log("Statement Title  :", title);
@@ -1837,16 +1655,13 @@ export const insertMethodStatementForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/methodStatement",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/methodStatement", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1866,16 +1681,7 @@ export const insertMethodStatementForm = (
     }
   };
 };
-export const insertIssueRecordForm = (
-  contractor,
-  project,
-  employees,
-  jobSummary,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertIssueRecordForm = (contractor, project, employees, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main contractor  :", contractor);
@@ -1895,16 +1701,13 @@ export const insertIssueRecordForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/personal_protective",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/personal_protective", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1924,18 +1727,7 @@ export const insertIssueRecordForm = (
     }
   };
 };
-export const insertPuwerInspectionForm = (
-  contractor,
-  project,
-  comments,
-  supervisor,
-  date,
-  jobSummary,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertPuwerInspectionForm = (contractor, project, comments, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contractor  :", contractor);
@@ -1959,16 +1751,13 @@ export const insertPuwerInspectionForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/Puwer",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Puwer", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       // if (response.success == true) {
@@ -1988,15 +1777,7 @@ export const insertPuwerInspectionForm = (
     }
   };
 };
-export const insertOnSiteDecorationForm = (
-  contractor,
-  project,
-  jobSummary,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertOnSiteDecorationForm = (contractor, project, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       //   console.log("Statement Title  :", title);
@@ -2018,16 +1799,13 @@ export const insertOnSiteDecorationForm = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/top_decorting",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/top_decorting", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2103,16 +1881,13 @@ export const insertRecordOfProject = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/IntroTraining",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/IntroTraining", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       // console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2179,16 +1954,13 @@ export const insertDailyBreifingForm = (
         Hazrd,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/DailyBreifing",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DailyBreifing", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2216,16 +1988,13 @@ export const insertTBTCOSH = (data, token, index) => {
       // console.log("Tab Name :", tabId);
       //console.log("Token :", token);
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/COSHH",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/COSHH", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2260,16 +2029,13 @@ export const insertTbtFire = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/fire_safety",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/fire_safety", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2304,16 +2070,13 @@ export const insertTbtSlip = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/SlitTrip",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/SlitTrip", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2347,16 +2110,13 @@ export const insertTbtCovid = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/covid",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/covid", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2390,16 +2150,13 @@ export const insertTbtHouseKeepingForm = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/housekeepingTB",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepingTB", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2434,16 +2191,13 @@ export const insertTbtMobileForm = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/MobileEvelated",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/MobileEvelated", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2477,16 +2231,13 @@ export const insertTbtRespiratory = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/DustMask",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DustMask", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2520,16 +2271,13 @@ export const insertTbtSilicaDust = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/SilicaDust",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/SilicaDust", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2563,16 +2311,13 @@ export const insertTbtDrugs = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/DrugAndAlcohol",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DrugAndAlcohol", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2598,16 +2343,13 @@ export const insertTbtVolience = (data, token, index) => {
       // console.log("array :", data);
       // console.log("Token :", token);
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/VoilenceAndAggression",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/VoilenceAndAggression", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2642,16 +2384,13 @@ export const insertTbtWorking = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeight",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: data,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeight", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: data,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2671,22 +2410,7 @@ export const insertTbtWorking = (data, token, index) => {
     }
   };
 };
-export const insertTbtRegister = (
-  client,
-  project,
-  subject,
-  outline,
-  date,
-  start,
-  finish,
-  jobSummary,
-  supervisor,
-  signature,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertTbtRegister = (client, project, subject, outline, date, start, finish, jobSummary, supervisor, signature, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Client :", client);
@@ -2718,16 +2442,13 @@ export const insertTbtRegister = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/ToolBoxRegister",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/ToolBoxRegister", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2747,17 +2468,7 @@ export const insertTbtRegister = (
     }
   };
 };
-export const insertTbtInventory = (
-  contractor,
-  project,
-  supervisor,
-  date,
-  jobSummary,
-  task_id,
-  tab_id,
-  token,
-  index
-) => {
+export const insertTbtInventory = (contractor, project, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       console.log("Main contractor :", contractor);
@@ -2780,16 +2491,13 @@ export const insertTbtInventory = (
         jobSummary,
       };
 
-      const request = await axios(
-        base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeightEquip",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + token,
-          },
-          data: body,
-        }
-      );
+      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeightEquip", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
