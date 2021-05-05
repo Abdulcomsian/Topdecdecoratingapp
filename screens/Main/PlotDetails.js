@@ -1,18 +1,32 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, StyleSheet, Image, TouchableOpacity, CheckBox } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  CheckBox,
+} from "react-native";
 import { Text } from "native-base";
 import ViewPager from "@react-native-community/viewpager";
 import { connect } from "react-redux";
-import { updatePlotReport } from "../../Redux/action/summary/Summary";
-import axios from "axios";
+import { updateWorkFlowTopTabs } from "../../Redux/action/auth/authActionTypes";
+
 
 var tick = require("../../assets/authScreen/check.png");
 var disableTick = require("../../assets/authScreen/disable.png");
 var rightArrow = require("../../assets/authScreen/right.png");
 const PlotDetails = (props) => {
   //console.log(props);
-  const { navigation, token, isJobId, misCoat, decorationArray, snagArray } = props;
-  const { plot_id,plotName } = props.route.params;
+  const {
+    navigation,
+    token,
+    isJobId,
+    misCoat,
+    decorationArray,
+    snagArray,
+    updateWorkFlowTopTabs,
+  } = props;
+  const { plot_id, plotName } = props.route.params;
 
   //console.log("Plot ID :",plot_id)
   const [tab, setTab] = useState({
@@ -22,15 +36,7 @@ const PlotDetails = (props) => {
   });
   const [isLeft, setIsLeft] = useState(1);
   const _ref = useRef(null);
-  const _refMiscoat = useRef(null);
-  const _refDecoration = useRef(null);
-  const _refSnag = useRef(null);
-  const [isSelected, setSelection] = useState(false);
-  const [checkFlag, setCheckFlag] = useState(false);
-  const [checkArrayCall, setCheckArrayCall] = useState(false);
-  const [getArray, setGetArray] = useState([])
   const [activeTab, setActiveTab] = useState("Miscoat");
-  const [copyData, setCopyData] = useState([]);
   const [sendData, setSendData] = useState([]);
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
@@ -52,25 +58,27 @@ const PlotDetails = (props) => {
   };
 
   const [miscotArray, setMiscotArray] = useState(misCoat);
-  const [decoration, setDecoration] = useState(decorationArray)
-  const [snag, setSnag] = useState(snagArray)
+  const [decoration, setDecoration] = useState(decorationArray);
+  const [snag, setSnag] = useState(snagArray);
 
-  const checkedForm = (index,type) => {
-    if(type=="Miscoat"){
+  const checkedForm = (index, type) => {
+    if (type == "Miscoat") {
       const preData = [...miscotArray];
       const flag = preData[index].chekecd;
-      const tilte_name="";
+      const tilte_name = "";
 
       if (flag) {
         preData[index].chekecd = false;
         setMiscotArray(preData);
-       
       } else {
         preData[index].chekecd = true;
         setMiscotArray(preData);
-        setSendData((oldArray) => [...oldArray, { title: preData[index].text, tab_Name: activeTab}])
+        setSendData((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_Name: activeTab },
+        ]);
       }
-    } else if(type=="Decoration"){
+    } else if (type == "Decoration") {
       const preData = [...decoration];
       const flag = preData[index].chekecd;
       if (flag) {
@@ -80,110 +88,31 @@ const PlotDetails = (props) => {
         preData[index].chekecd = true;
         setDecoration(preData);
       }
-    } else{
-        const preData = [...snag];
-        const flag = preData[index].chekecd;
-        if (flag) {
-          preData[index].chekecd = false;
-          setSnag(preData);
-        } else {
-          preData[index].chekecd = true;
-          setSnag(preData);
-        }
+    } else {
+      const preData = [...snag];
+      const flag = preData[index].chekecd;
+      if (flag) {
+        preData[index].chekecd = false;
+        setSnag(preData);
+      } else {
+        preData[index].chekecd = true;
+        setSnag(preData);
+      }
     }
   };
-
   React.useEffect(() => {
     setMiscotArray(misCoat);
-    setDecoration(decorationArray)
-    setSnag(snagArray)
-  }, [misCoat,decorationArray,snagArray]);
+    setDecoration(decorationArray);
+    setSnag(snagArray);
+  }, [misCoat, decorationArray, snagArray]);
 
- 
-
-  useEffect(() => {
-    try {
-      const tab_id=activeTab;
-      console.log("Hello",tab_id,plot_id)
-      const body = {plot_id,tab_id};
-      (async () => {
-        const request = await axios(
-          "https://topdecdecoratingapp.com/api/supervisor/search/job/taskDatails",
-          {
-            method: "POST",
-            headers: {
-              authorization: "Bearer " + token,
-            },
-            data: body
-          }
-        );
-        const response = await request.data;
-        console.log("Fetch Response :",response.data.user)
-        if(response.success==true){
-          if(response.data.user[0].tab_id=="Miscoat")
-          {
-            if(checkArrayCall==false){
-              setGetArray(response.data.user)
-              comppareArray(miscotArray,getArray,"Misocat")
-              setCheckArrayCall(true)
-            }
-          } else if(response.data.user[0].tab_id=="Decoration"){
-              if(checkArrayCall==false){
-                setGetArray(response.data.user)
-                comppareArray(decorationArray,getArray,"Decoration")
-                setCheckArrayCall(true)
-              }
-          } else {
-              if(checkArrayCall==false){
-                setGetArray(response.data.user)
-                comppareArray(snagArray,getArray,"Snag")
-                setCheckArrayCall(true)
-              }
-          }
-          
-        }
-      })();
-    } catch (err) {
-      console.log(err?.response?.request);
-        alert(err.message);
-    }
-  },[activeTab]);
-  const comppareArray = (hardCodeArray,fetchArray,type) =>{
-        console.log(fetchArray)
-        var values= Object.values(fetchArray[0]);
-        console.log("Index 0 :",values[0])
-        if(type=="Misocat"){
-          console.log("MISCOAT")
-          hardCodeArray.map((item,index)=>{
-            if(values[index]=="1"){
-              let preData=[...hardCodeArray]
-              preData[index].tickSign=true
-              setMiscotArray(preData)
-            }
-          })
-        } else if(type=="Decoration"){
-          console.log("DECORATION")
-          hardCodeArray.map((item,index)=>{
-            if(values[index]=="1"){
-              let preData=[...hardCodeArray]
-              preData[index].tickSign=true
-              setDecoration(preData)
-            }
-          })
-        } else{
-          console.log("SNAG !")
-          hardCodeArray.map((item,index)=>{
-            if(values[index]=="1"){
-              let preData=[...hardCodeArray]
-              preData[index].tickSign=true
-              setSnag(preData)
-            }
-          })
-        }
-       
-        return false;
-  }
-  console.log("Send Data :",sendData)
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      await updateWorkFlowTopTabs(plot_id,  token);
+    });
+    return unsubscribe;
+  }, [navigation]);
+  console.log("Send Data :", sendData);
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
@@ -196,38 +125,68 @@ const PlotDetails = (props) => {
       <View style={styles.tabsContainer}>
         <View style={styles.tabsView}>
           <TouchableOpacity onPress={() => selectTabManually("Miscoat")}>
-            <Text style={tab.miscoat ? styles.activeTabText : styles.tabText}>Miscoat</Text>
+            <Text style={tab.miscoat ? styles.activeTabText : styles.tabText}>
+              Miscoat
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => selectTabManually("Decoration")}>
-            <Text style={tab.decoration ? styles.activeTabText : styles.tabText}>Main decoration</Text>
+            <Text
+              style={tab.decoration ? styles.activeTabText : styles.tabText}
+            >
+              Main decoration
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => selectTabManually("Snag")}>
-            <Text style={tab.snag ? styles.activeTabText : styles.tabText}>Snag</Text>
+            <Text style={tab.snag ? styles.activeTabText : styles.tabText}>
+              Snag
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.viewrPagerConatiner}>
           <ViewPager
             ref={_ref}
-            orientation='horizontal'
+            orientation="horizontal"
             scrollEnabled
             pageMargin={0}
             onPageSelected={(page) => {
               if (page.nativeEvent.position === 0) {
-                swicthTabChecked("miscoat", "decoration", "snag", true, false, false);
+                swicthTabChecked(
+                  "miscoat",
+                  "decoration",
+                  "snag",
+                  true,
+                  false,
+                  false
+                );
                 setIsLeft(1);
                 setActiveTab("Miscoat");
               } else if (page.nativeEvent.position === 1) {
-                swicthTabChecked("miscoat", "decoration", "snag", false, true, false);
+                swicthTabChecked(
+                  "miscoat",
+                  "decoration",
+                  "snag",
+                  false,
+                  true,
+                  false
+                );
                 setActiveTab("Decoration");
               } else {
-                swicthTabChecked("miscoat", "decoration", "snag", false, false, true);
+                swicthTabChecked(
+                  "miscoat",
+                  "decoration",
+                  "snag",
+                  false,
+                  false,
+                  true
+                );
                 setActiveTab("Sang");
               }
             }}
             style={styles.viewPager}
-            initialPage={0}>
-            <View style={styles.pageView} key='1'>
+            initialPage={0}
+          >
+            <View style={styles.pageView} key="1">
               {miscotArray.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
@@ -241,36 +200,85 @@ const PlotDetails = (props) => {
                         <TouchableOpacity
                           style={styles.textArrow}
                           disabled={item.tickSign}
-                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}>
-                          <Text style={{ color: "#1073AC", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          onPress={() =>
+                            navigation.navigate(item.url, {
+                              tabName: activeTab,
+                              plot_Id: plot_id,
+                              index,
+                            })
+                          }
+                        >
+                          <Text
+                            style={{
+                              color: "#1073AC",
+                              marginRight: 10,
+                              fontFamily: "poppins-semiBold",
+                              fontSize: 14,
+                            }}
+                          >
+                            {item.text}
+                          </Text>
                           <Image source={rightArrow} />
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Miscoat")} style={styles.checkbox} />
+                        <CheckBox
+                          value={item.chekecd}
+                          onValueChange={() => checkedForm(index, "Miscoat")}
+                          style={styles.checkbox}
+                        />
                       </View>
                     </View>
                   ) : (
-                    <View style={{ width: "100%", flexDirection: "row", marginLeft: 20, marginRight: 20 }}>
+                    <View
+                      style={{
+                        width: "100%",
+                        flexDirection: "row",
+                        marginLeft: 20,
+                        marginRight: 20,
+                      }}
+                    >
                       <View style={styles.textArowView}>
                         <TouchableOpacity
                           disabled={item.tickSign}
-                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}
-                          style={styles.disbaleTextArrow}>
-                          <Text style={{ color: "#96A8B2", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          onPress={() =>
+                            navigation.navigate(item.url, {
+                              tabName: activeTab,
+                              plot_Id: plot_id,
+                              index,
+                            })
+                          }
+                          style={styles.disbaleTextArrow}
+                        >
+                          <Text
+                            style={{
+                              color: "#96A8B2",
+                              marginRight: 10,
+                              fontFamily: "poppins-semiBold",
+                              fontSize: 14,
+                            }}
+                          >
+                            {item.text}
+                          </Text>
                           <Image source={disableTick} />
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index,"Miscoat") : {})} style={styles.checkbox} />
+                        <CheckBox
+                          value={item.chekecd}
+                          onValueChange={() =>
+                            item.tickSign ? checkedForm(index, "Miscoat") : {}
+                          }
+                          style={styles.checkbox}
+                        />
                       </View>
                     </View>
                   )}
                 </View>
               ))}
             </View>
-            <View style={styles.pageView} key='2'>
-            {decorationArray.map((item, index) => (
+            <View style={styles.pageView} key="2">
+              {decorationArray.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
@@ -283,36 +291,87 @@ const PlotDetails = (props) => {
                         <TouchableOpacity
                           style={styles.textArrow}
                           disabled={item.tickSign}
-                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}>
-                          <Text style={{ color: "#1073AC", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          onPress={() =>
+                            navigation.navigate(item.url, {
+                              tabName: activeTab,
+                              plot_Id: plot_id,
+                              index,
+                            })
+                          }
+                        >
+                          <Text
+                            style={{
+                              color: "#1073AC",
+                              marginRight: 10,
+                              fontFamily: "poppins-semiBold",
+                              fontSize: 14,
+                            }}
+                          >
+                            {item.text}
+                          </Text>
                           <Image source={rightArrow} />
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Decoration")} style={styles.checkbox} />
+                        <CheckBox
+                          value={item.chekecd}
+                          onValueChange={() => checkedForm(index, "Decoration")}
+                          style={styles.checkbox}
+                        />
                       </View>
                     </View>
                   ) : (
-                    <View style={{ width: "100%", flexDirection: "row", marginLeft: 20, marginRight: 20 }}>
+                    <View
+                      style={{
+                        width: "100%",
+                        flexDirection: "row",
+                        marginLeft: 20,
+                        marginRight: 20,
+                      }}
+                    >
                       <View style={styles.textArowView}>
                         <TouchableOpacity
                           disabled={item.tickSign}
-                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}
-                          style={styles.disbaleTextArrow}>
-                          <Text style={{ color: "#96A8B2", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          onPress={() =>
+                            navigation.navigate(item.url, {
+                              tabName: activeTab,
+                              plot_Id: plot_id,
+                              index,
+                            })
+                          }
+                          style={styles.disbaleTextArrow}
+                        >
+                          <Text
+                            style={{
+                              color: "#96A8B2",
+                              marginRight: 10,
+                              fontFamily: "poppins-semiBold",
+                              fontSize: 14,
+                            }}
+                          >
+                            {item.text}
+                          </Text>
                           <Image source={disableTick} />
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index,"Decoration") : {})} style={styles.checkbox} />
+                        <CheckBox
+                          value={item.chekecd}
+                          onValueChange={() =>
+                            item.tickSign
+                              ? checkedForm(index, "Decoration")
+                              : {}
+                          }
+                          style={styles.checkbox}
+                        />
                       </View>
                     </View>
                   )}
                 </View>
               ))}
             </View>
-            <View style={styles.pageView} key='3'>
-            {snag.map((item, index) => (
+            <View style={styles.pageView} key="3">
+              {snag.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
@@ -325,28 +384,77 @@ const PlotDetails = (props) => {
                         <TouchableOpacity
                           style={styles.textArrow}
                           disabled={item.tickSign}
-                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}>
-                          <Text style={{ color: "#1073AC", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          onPress={() =>
+                            navigation.navigate(item.url, {
+                              tabName: activeTab,
+                              plot_Id: plot_id,
+                              index,
+                            })
+                          }
+                        >
+                          <Text
+                            style={{
+                              color: "#1073AC",
+                              marginRight: 10,
+                              fontFamily: "poppins-semiBold",
+                              fontSize: 14,
+                            }}
+                          >
+                            {item.text}
+                          </Text>
                           <Image source={rightArrow} />
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Snag")} style={styles.checkbox} />
+                        <CheckBox
+                          value={item.chekecd}
+                          onValueChange={() => checkedForm(index, "Snag")}
+                          style={styles.checkbox}
+                        />
                       </View>
                     </View>
                   ) : (
-                    <View style={{ width: "100%", flexDirection: "row", marginLeft: 20, marginRight: 20 }}>
+                    <View
+                      style={{
+                        width: "100%",
+                        flexDirection: "row",
+                        marginLeft: 20,
+                        marginRight: 20,
+                      }}
+                    >
                       <View style={styles.textArowView}>
                         <TouchableOpacity
                           disabled={item.tickSign}
-                          onPress={() => navigation.navigate(item.url, { tabName: activeTab,plot_Id:plot_id, index })}
-                          style={styles.disbaleTextArrow}>
-                          <Text style={{ color: "#96A8B2", marginRight: 10, fontFamily: "poppins-semiBold", fontSize: 14 }}>{item.text}</Text>
+                          onPress={() =>
+                            navigation.navigate(item.url, {
+                              tabName: activeTab,
+                              plot_Id: plot_id,
+                              index,
+                            })
+                          }
+                          style={styles.disbaleTextArrow}
+                        >
+                          <Text
+                            style={{
+                              color: "#96A8B2",
+                              marginRight: 10,
+                              fontFamily: "poppins-semiBold",
+                              fontSize: 14,
+                            }}
+                          >
+                            {item.text}
+                          </Text>
                           <Image source={disableTick} />
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index,"Snag") : {})} style={styles.checkbox} />
+                        <CheckBox
+                          value={item.chekecd}
+                          onValueChange={() =>
+                            item.tickSign ? checkedForm(index, "Snag") : {}
+                          }
+                          style={styles.checkbox}
+                        />
                       </View>
                     </View>
                   )}
@@ -364,9 +472,12 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
   misCoat: state.summary.misCoat,
   decorationArray: state.summary.decorationArray,
-  snagArray: state.summary.snagArray
+  snagArray: state.summary.snagArray,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  updateWorkFlowTopTabs: (plot_Id, token) =>
+    dispatch(updateWorkFlowTopTabs(plot_Id, token)),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(PlotDetails);
 
 const styles = StyleSheet.create({

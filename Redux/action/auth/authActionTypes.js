@@ -441,10 +441,10 @@ export const insertHandOverForm = (
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
+        // dispatch({
+        //   type: Actions.UPDATE_PLOT_REPORT,
+        //   payload: index,
+        // });
         dispatch({
           type: Actions.CREATE_HAND_OVER_SHEET_SUCCESS,
           payload: response,
@@ -540,10 +540,10 @@ export const insertMakeReadyForm = (
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
+        // dispatch({
+        //   type: Actions.UPDATE_PLOT_REPORT,
+        //   payload: index,
+        // });
         dispatch({
           type: Actions.CREATE_MAKE_READY_SHEET_SUCCESS,
           payload: response,
@@ -623,10 +623,10 @@ export const insertSnaggingForm = (
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
+        // dispatch({
+        //   type: Actions.UPDATE_PLOT_REPORT,
+        //   payload: index,
+        // });
         dispatch({
           type: Actions.CREATE_PRE_WRRANTY_FORM_SUCCESS,
           payload: response,
@@ -681,10 +681,10 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
+        // dispatch({
+        //   type: Actions.UPDATE_PLOT_REPORT,
+        //   payload: index,
+        // });
         dispatch({
           type: Actions.CREATE_QUALITY_ANSURANCE_FORM_SUCCESS,
           payload: response,
@@ -786,10 +786,10 @@ export const insertRemedialForm = (
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
+        // dispatch({
+        //   type: Actions.UPDATE_PLOT_REPORT,
+        //   payload: index,
+        // });
         dispatch({
           type: Actions.CREATE_REMEDIAL_WORK_SHEET_SUCCESS,
           payload: response,
@@ -839,10 +839,10 @@ export const insertScopeForm = (dynamicInput, painter, signature, plot_number, t
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
+        // dispatch({
+        //   type: Actions.UPDATE_PLOT_REPORT,
+        //   payload: index,
+        // });
         dispatch({
           type: Actions.CREATE_SCOPE_FORM_SUCCESS,
           payload: response,
@@ -930,10 +930,10 @@ export const insertWorkSheet = (
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
-        dispatch({
-          type: Actions.UPDATE_PLOT_REPORT,
-          payload: index,
-        });
+        // dispatch({
+        //   type: Actions.UPDATE_PLOT_REPORT,
+        //   payload: index,
+        // });
         dispatch({
           type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE,
           payload: response,
@@ -2517,3 +2517,163 @@ export const insertTbtInventory = (contractor, project, supervisor, date, jobSum
     }
   };
 };
+
+export const updateWorkFlowTopTabs = ( plot_id, token ) => {
+  //return console.log({plot_id, tab_id, token })
+  return async (dispatch, getState) => {
+    try {
+      const body = {
+        plot_id
+      };
+
+      const request = await axios(base_url + "supervisor/search/job/taskDatails", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+       // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
+          // _returnUpdatedArray(getState.summary.misCoat)
+          dispatch({
+            type: Actions.UPDATE_MISCOT_WORKFLOW,
+            payload: response?.data?.user.find(el=>el.tab_id==='Miscoat')?_returnUpdatedArray(getState().summary.misCoat,response?.data?.user.find(el=>el.tab_id==='Miscoat')):getState().summary.misCoat,
+          });
+      //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+          dispatch({
+            type: Actions.UPDATE_DECORATION_WORKFLOW,
+            payload: response?.data?.user.find(el=>el.tab_id==='Decoration')?_returnUpdatedArray(getState().summary.decorationArray,response?.data?.user.find(el=>el.tab_id==='Decoration')):getState().summary.decorationArray,
+          });
+      //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+          dispatch({
+            type: Actions.UPDATE_SNAG_WORKFLOW,
+            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
+          });
+     //   }
+       
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+
+export const updateVerificationTopTabs = ( plot_id, token ) => {
+  //return console.log({plot_id, tab_id, token })
+  return async (dispatch, getState) => {
+    try {
+      const body = {
+        plot_id
+      };
+
+      const request = await axios(base_url + "supervisor/search/job/taskDatails", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+       // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
+          // _returnUpdatedArray(getState.summary.misCoat)
+          dispatch({
+            type: Actions.UPDATE_MISCOT_VERIFICATION,
+            payload: response?.data?.user.find(el=>el.tab_id==='Miscoat')?_returnUpdatedArray(getState().summary.verificationMiscoatInfo,response?.data?.user.find(el=>el.tab_id==='Miscoat')):getState().summary.verificationMiscoatInfo,
+          });
+      //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+          dispatch({
+            type: Actions.UPDATE_DECORATION_VERIFICATION,
+            payload: response?.data?.user.find(el=>el.tab_id==='Decoration')?_returnUpdatedArray(getState().summary.verificationDecorationInfo,response?.data?.user.find(el=>el.tab_id==='Decoration')):getState().summary.verificationDecorationInfo,
+          });
+      //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+          dispatch({
+            type: Actions.UPDATE_SNAG_VERIFICATION,
+            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.verificationSngInfo,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.verificationSngInfo,
+          });
+     //   }
+       
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+
+
+export const updateHealthTopTabs = ( plot_id, token ) => {
+  //return console.log({plot_id, tab_id, token })
+  return async (dispatch, getState) => {
+    try {
+      const body = {
+        plot_id
+      };
+
+      const request = await axios(base_url + "supervisor/search/job/taskDatails", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + token,
+        },
+        data: body,
+      });
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+       // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
+          // _returnUpdatedArray(getState.summary.misCoat)
+          dispatch({
+            type: Actions.UPDATE_MISCOT_HEALTH,
+            payload: response?.data?.user.find(el=>el.tab_id==='Miscoat')?_returnUpdatedArray(getState().summary.healthAndSafetyMisCoat,response?.data?.user.find(el=>el.tab_id==='Miscoat')):getState().summary.healthAndSafetyMisCoat,
+          });
+      //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+          dispatch({
+            type: Actions.UPDATE_DECORATION_HEALTH,
+            payload: response?.data?.user.find(el=>el.tab_id==='Decoration')?_returnUpdatedArray(getState().summary.healthAndSafetyDecoration,response?.data?.user.find(el=>el.tab_id==='Decoration')):getState().summary.healthAndSafetyDecoration,
+          });
+      //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+          dispatch({
+            type: Actions.UPDATE_SNAG_HEALTH,
+            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.healthAndSafetySnag,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.healthAndSafetySnag,
+          });
+     //   }
+       
+      } else {
+        // dispatch({
+        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
+        //   payload: response,
+        // });
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  };
+};
+
+
+const _returnUpdatedArray=(oldArr,updated)=>{
+  let copyData=[...oldArr];
+  
+  oldArr.forEach((el,index)=>{
+    if(updated.hasOwnProperty(el.url)){
+      copyData[index].tickSign=updated[el.url]==="1"?true:false
+    }
+  })
+  return copyData
+}
