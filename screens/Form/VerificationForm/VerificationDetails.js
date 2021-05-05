@@ -1,14 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Image, TouchableOpacity, CheckBox } from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
 import ViewPager from "@react-native-community/viewpager";
+import axios from "axios";
 
 var tick = require("../../../assets/authScreen/check.png");
 var disableTick = require("../../../assets/authScreen/disable.png");
 var rightArrow = require("../../../assets/authScreen/right.png");
 const VerificationDetails = (props) => {
-  const { navigation, token, isJobId, verificationInfo } = props;
+  const { navigation, token, isJobId, verificationMiscoatInfo, verificationDecorationInfo, verificationSngInfo } = props;
   const { plot_id,plotName } = props.route.params;
 
   console.log("Verification Plot ID :",plot_id)
@@ -25,6 +26,8 @@ const VerificationDetails = (props) => {
   const [isSelected, setSelection] = useState(false);
   const [checkFlag, setCheckFlag] = useState(false);
   const [activeTab, setActiveTab] = useState("Miscoat");
+  const [getArray, setGetArray] = useState([])
+  const [checkArrayCall, setCheckArrayCall] = useState(false);
 
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
@@ -45,22 +48,136 @@ const VerificationDetails = (props) => {
     setTab({ ...tab, [key1]: value1, [key2]: value2, [key3]: value3 });
   };
 
-  const [miscotArray, setMiscotArray] = useState(verificationInfo);
+  const [miscotArray, setMiscotArray] = useState(verificationMiscoatInfo);
+  const [decorationArray, setDecorationArray] = useState(verificationDecorationInfo);
+  const [snagArray, setSnagArray] = useState(verificationSngInfo);
 
-  const checkedForm = (index) => {
-    const preData = [...miscotArray];
-    const flag = preData[index].chekecd;
-    if (flag) {
-      preData[index].chekecd = false;
-      setMiscotArray(preData);
-    } else {
-      preData[index].chekecd = true;
-      setMiscotArray(preData);
+  const checkedForm = (index,type) => {
+    if(type=="Miscoat"){
+      const preData = [...miscotArray];
+      const flag = preData[index].chekecd;
+      const tilte_name="";
+
+      if (flag) {
+        preData[index].chekecd = false;
+        setMiscotArray(preData);
+       
+      } else {
+        preData[index].chekecd = true;
+        setMiscotArray(preData);
+        //setSendData((oldArray) => [...oldArray, { title: preData[index].text, tab_Name: activeTab}])
+      }
+    } else if(type=="Decoration"){
+      const preData = [...decoration];
+      const flag = preData[index].chekecd;
+      if (flag) {
+        preData[index].chekecd = false;
+        setDecorationArray(preData);
+      } else {
+        preData[index].chekecd = true;
+        setDecorationArray(preData);
+      }
+    } else{
+        const preData = [...snag];
+        const flag = preData[index].chekecd;
+        if (flag) {
+          preData[index].chekecd = false;
+          setSnagArray(preData);
+        } else {
+          preData[index].chekecd = true;
+          setSnagArray(preData);
+        }
     }
   };
   React.useEffect(() => {
-    setMiscotArray(verificationInfo);
-  }, [verificationInfo]);
+    setMiscotArray(verificationMiscoatInfo);
+    setDecorationArray(verificationDecorationInfo);
+    setSnagArray(verificationSngInfo)
+  }, [verificationMiscoatInfo, verificationDecorationInfo,verificationSngInfo]);
+
+
+  useEffect(() => {
+    try {
+      const tab_id=activeTab;
+      console.log("Hello",tab_id,plot_id)
+      const body = {plot_id,tab_id};
+      (async () => {
+        const request = await axios(
+          "https://topdecdecoratingapp.com/api/supervisor/search/job/taskDatails",
+          {
+            method: "POST",
+            headers: {
+              authorization: "Bearer " + token,
+            },
+            data: body
+          }
+        );
+        const response = await request.data;
+        console.log("Fetch Response :",response.data.user)
+        if(response.success==true){
+          if(response.data.user[0].tab_id=="Miscoat")
+          {
+            if(checkArrayCall==false){
+              setGetArray(response.data.user)
+              comppareArray(miscotArray,getArray,"Misocat")
+              setCheckArrayCall(true)
+            }
+          } else if(response.data.user[0].tab_id=="Decoration"){
+              if(checkArrayCall==false){
+                setGetArray(response.data.user)
+                comppareArray(decorationArray,getArray,"Decoration")
+                setCheckArrayCall(true)
+              }
+          } else {
+              if(checkArrayCall==false){
+                setGetArray(response.data.user)
+                comppareArray(snagArray,getArray,"Snag")
+                setCheckArrayCall(true)
+              }
+          }
+          
+        }
+      })();
+    } catch (err) {
+      console.log(err?.response?.request);
+        alert(err.message);
+    }
+  },[activeTab]);
+  const comppareArray = (hardCodeArray,fetchArray,type) =>{
+        console.log(fetchArray)
+        var values= Object.values(fetchArray[0]);
+        console.log("Index 0 :",values[0])
+        if(type=="Misocat"){
+          console.log("MISCOAT")
+          hardCodeArray.map((item,index)=>{
+            if(values[index]=="1"){
+              let preData=[...hardCodeArray]
+              preData[index].tickSign=true
+              setMiscotArray(preData)
+            }
+          })
+        } else if(type=="Decoration"){
+          console.log("DECORATION")
+          hardCodeArray.map((item,index)=>{
+            if(values[index]=="1"){
+              let preData=[...hardCodeArray]
+              preData[index].tickSign=true
+              setDecorationArray(preData)
+            }
+          })
+        } else{
+          console.log("SNAG !")
+          hardCodeArray.map((item,index)=>{
+            if(values[index]=="1"){
+              let preData=[...hardCodeArray]
+              preData[index].tickSign=true
+              setSnagArray(preData)
+            }
+          })
+        }
+       
+        return false;
+  }
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
@@ -132,7 +249,7 @@ const VerificationDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Miscoat")} style={styles.checkbox} />
                       </View>
                     </View>
                   ) : (
@@ -161,7 +278,7 @@ const VerificationDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item?.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => (item?.tickSign ? checkedForm(index,"Miscoat") : {})} style={styles.checkbox} />
                       </View>
                     </View>
                   )}
@@ -169,7 +286,7 @@ const VerificationDetails = (props) => {
               ))}
             </View>
             <View style={styles.pageView} key='2'>
-            {miscotArray.map((item, index) => (
+            {decorationArray.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
@@ -196,7 +313,7 @@ const VerificationDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Decoration")} style={styles.checkbox} />
                       </View>
                     </View>
                   ) : (
@@ -225,7 +342,7 @@ const VerificationDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item?.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => (item?.tickSign ? checkedForm(index,"Decoration") : {})} style={styles.checkbox} />
                       </View>
                     </View>
                   )}
@@ -233,7 +350,7 @@ const VerificationDetails = (props) => {
               ))}
             </View>
             <View style={styles.pageView} key='3'>
-            {miscotArray.map((item, index) => (
+            {snagArray.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
@@ -260,7 +377,7 @@ const VerificationDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Snag")} style={styles.checkbox} />
                       </View>
                     </View>
                   ) : (
@@ -289,7 +406,7 @@ const VerificationDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item?.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => (item?.tickSign ? checkedForm(index,"Snag") : {})} style={styles.checkbox} />
                       </View>
                     </View>
                   )}
@@ -305,7 +422,9 @@ const VerificationDetails = (props) => {
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isJobId: state.auth.isJobId,
-  verificationInfo: state.summary.verificationInfo,
+  verificationMiscoatInfo: state.summary.verificationMiscoatInfo,
+  verificationDecorationInfo: state.summary.verificationDecorationInfo,
+  verificationSngInfo: state.summary.verificationSngInfo,
 });
 const mapDispatchToProps = (dispatch) => ({});
 export default connect(mapStateToProps, mapDispatchToProps)(VerificationDetails);

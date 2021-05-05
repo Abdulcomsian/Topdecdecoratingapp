@@ -92,19 +92,19 @@ const CreateDecorataor = (props) => {
         return;
       }
       let pickerResult = await ImagePicker.launchImageLibraryAsync({
-        base64:true
+        base64:false
       });
-      const encodedString = Base64.encodeToString(pickerResult, Base64.DEFAULT);
       if (pickerResult.cancelled === true) {
         return;
       }
-      console.log("Piceker Result :",encodedString)
-    
-      // frmData.append('avatar', {
-      //   file: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),
-      //   name: Math.random(0, 1000).toString(),
-      //   // type: 'image/png', // it may be necessary in Android.
-      // });
+      console.log("Piceker Result :",pickerResult)
+     let frmData = new FormData();
+      frmData.append('avatar', {
+        file: Platform.OS === 'android' ? pickerResult.uri : pickerResult.uri.replace('file://', ''),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+      console.log("Form Data :",frmData)
       setPhotoID({ localUri: pickerResult.uri });
     } else if (type == "cscsFront") {
       let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();

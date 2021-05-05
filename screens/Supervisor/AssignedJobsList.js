@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 
 var rightArrow = require("../../assets/authScreen/right.png");
-var base_url = "https://airtimetesting.airtime4u.com/public/tajs/public/api/";
+var base_url = "https://topdecdecoratingapp.com/api/";
 const AssignedJobsList = (props) => {
   const { navigation, token, isJobId } = props;
   const { id, role } = props.route.params;

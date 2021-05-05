@@ -86,7 +86,7 @@ const DecoratorDetails = (props) => {
       (async () => {
         setLoading(true);
         const request = await axios(
-          "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/search/decorator",
+          "https://topdecdecoratingapp.com/api/admin/search/decorator",
           {
             method: "POST",
             headers: {

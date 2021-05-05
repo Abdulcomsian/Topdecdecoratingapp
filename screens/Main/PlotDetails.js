@@ -1,19 +1,20 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Image, TouchableOpacity, CheckBox } from "react-native";
 import { Text } from "native-base";
 import ViewPager from "@react-native-community/viewpager";
 import { connect } from "react-redux";
 import { updatePlotReport } from "../../Redux/action/summary/Summary";
+import axios from "axios";
 
 var tick = require("../../assets/authScreen/check.png");
 var disableTick = require("../../assets/authScreen/disable.png");
 var rightArrow = require("../../assets/authScreen/right.png");
 const PlotDetails = (props) => {
-  console.log(props);
-  const { navigation, token, isJobId, plotInfo } = props;
+  //console.log(props);
+  const { navigation, token, isJobId, misCoat, decorationArray, snagArray } = props;
   const { plot_id,plotName } = props.route.params;
 
-  console.log("Plot ID :",plot_id)
+  //console.log("Plot ID :",plot_id)
   const [tab, setTab] = useState({
     miscoat: true,
     decoration: false,
@@ -26,8 +27,11 @@ const PlotDetails = (props) => {
   const _refSnag = useRef(null);
   const [isSelected, setSelection] = useState(false);
   const [checkFlag, setCheckFlag] = useState(false);
+  const [checkArrayCall, setCheckArrayCall] = useState(false);
+  const [getArray, setGetArray] = useState([])
   const [activeTab, setActiveTab] = useState("Miscoat");
-
+  const [copyData, setCopyData] = useState([]);
+  const [sendData, setSendData] = useState([]);
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
       _ref.current.setPage(0);
@@ -47,24 +51,139 @@ const PlotDetails = (props) => {
     setTab({ ...tab, [key1]: value1, [key2]: value2, [key3]: value3 });
   };
 
-  const [miscotArray, setMiscotArray] = useState(plotInfo);
+  const [miscotArray, setMiscotArray] = useState(misCoat);
+  const [decoration, setDecoration] = useState(decorationArray)
+  const [snag, setSnag] = useState(snagArray)
 
-  const checkedForm = (index) => {
-    const preData = [...miscotArray];
-    const flag = preData[index].chekecd;
-    if (flag) {
-      preData[index].chekecd = false;
-      setMiscotArray(preData);
-    } else {
-      preData[index].chekecd = true;
-      setMiscotArray(preData);
+  const checkedForm = (index,type) => {
+    if(type=="Miscoat"){
+      const preData = [...miscotArray];
+      const flag = preData[index].chekecd;
+      const tilte_name="";
+
+      if (flag) {
+        preData[index].chekecd = false;
+        setMiscotArray(preData);
+       
+      } else {
+        preData[index].chekecd = true;
+        setMiscotArray(preData);
+        setSendData((oldArray) => [...oldArray, { title: preData[index].text, tab_Name: activeTab}])
+      }
+    } else if(type=="Decoration"){
+      const preData = [...decoration];
+      const flag = preData[index].chekecd;
+      if (flag) {
+        preData[index].chekecd = false;
+        setDecoration(preData);
+      } else {
+        preData[index].chekecd = true;
+        setDecoration(preData);
+      }
+    } else{
+        const preData = [...snag];
+        const flag = preData[index].chekecd;
+        if (flag) {
+          preData[index].chekecd = false;
+          setSnag(preData);
+        } else {
+          preData[index].chekecd = true;
+          setSnag(preData);
+        }
     }
   };
 
   React.useEffect(() => {
-    setMiscotArray(plotInfo);
-  }, [plotInfo]);
+    setMiscotArray(misCoat);
+    setDecoration(decorationArray)
+    setSnag(snagArray)
+  }, [misCoat,decorationArray,snagArray]);
 
+ 
+
+  useEffect(() => {
+    try {
+      const tab_id=activeTab;
+      console.log("Hello",tab_id,plot_id)
+      const body = {plot_id,tab_id};
+      (async () => {
+        const request = await axios(
+          "https://topdecdecoratingapp.com/api/supervisor/search/job/taskDatails",
+          {
+            method: "POST",
+            headers: {
+              authorization: "Bearer " + token,
+            },
+            data: body
+          }
+        );
+        const response = await request.data;
+        console.log("Fetch Response :",response.data.user)
+        if(response.success==true){
+          if(response.data.user[0].tab_id=="Miscoat")
+          {
+            if(checkArrayCall==false){
+              setGetArray(response.data.user)
+              comppareArray(miscotArray,getArray,"Misocat")
+              setCheckArrayCall(true)
+            }
+          } else if(response.data.user[0].tab_id=="Decoration"){
+              if(checkArrayCall==false){
+                setGetArray(response.data.user)
+                comppareArray(decorationArray,getArray,"Decoration")
+                setCheckArrayCall(true)
+              }
+          } else {
+              if(checkArrayCall==false){
+                setGetArray(response.data.user)
+                comppareArray(snagArray,getArray,"Snag")
+                setCheckArrayCall(true)
+              }
+          }
+          
+        }
+      })();
+    } catch (err) {
+      console.log(err?.response?.request);
+        alert(err.message);
+    }
+  },[activeTab]);
+  const comppareArray = (hardCodeArray,fetchArray,type) =>{
+        console.log(fetchArray)
+        var values= Object.values(fetchArray[0]);
+        console.log("Index 0 :",values[0])
+        if(type=="Misocat"){
+          console.log("MISCOAT")
+          hardCodeArray.map((item,index)=>{
+            if(values[index]=="1"){
+              let preData=[...hardCodeArray]
+              preData[index].tickSign=true
+              setMiscotArray(preData)
+            }
+          })
+        } else if(type=="Decoration"){
+          console.log("DECORATION")
+          hardCodeArray.map((item,index)=>{
+            if(values[index]=="1"){
+              let preData=[...hardCodeArray]
+              preData[index].tickSign=true
+              setDecoration(preData)
+            }
+          })
+        } else{
+          console.log("SNAG !")
+          hardCodeArray.map((item,index)=>{
+            if(values[index]=="1"){
+              let preData=[...hardCodeArray]
+              preData[index].tickSign=true
+              setSnag(preData)
+            }
+          })
+        }
+       
+        return false;
+  }
+  console.log("Send Data :",sendData)
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
@@ -128,7 +247,7 @@ const PlotDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Miscoat")} style={styles.checkbox} />
                       </View>
                     </View>
                   ) : (
@@ -143,7 +262,7 @@ const PlotDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index,"Miscoat") : {})} style={styles.checkbox} />
                       </View>
                     </View>
                   )}
@@ -151,7 +270,7 @@ const PlotDetails = (props) => {
               ))}
             </View>
             <View style={styles.pageView} key='2'>
-            {miscotArray.map((item, index) => (
+            {decorationArray.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
@@ -170,7 +289,7 @@ const PlotDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Decoration")} style={styles.checkbox} />
                       </View>
                     </View>
                   ) : (
@@ -185,7 +304,7 @@ const PlotDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index,"Decoration") : {})} style={styles.checkbox} />
                       </View>
                     </View>
                   )}
@@ -193,7 +312,7 @@ const PlotDetails = (props) => {
               ))}
             </View>
             <View style={styles.pageView} key='3'>
-            {miscotArray.map((item, index) => (
+            {snag.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
@@ -212,7 +331,7 @@ const PlotDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index)} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => checkedForm(index,"Snag")} style={styles.checkbox} />
                       </View>
                     </View>
                   ) : (
@@ -227,7 +346,7 @@ const PlotDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxView}>
-                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index) : {})} style={styles.checkbox} />
+                        <CheckBox value={item.chekecd} onValueChange={() => (item.tickSign ? checkedForm(index,"Snag") : {})} style={styles.checkbox} />
                       </View>
                     </View>
                   )}
@@ -243,7 +362,9 @@ const PlotDetails = (props) => {
 const mapStateToProps = (state) => ({
   token: state.auth.token,
   isJobId: state.auth.isJobId,
-  plotInfo: state.summary.plotInfo,
+  misCoat: state.summary.misCoat,
+  decorationArray: state.summary.decorationArray,
+  snagArray: state.summary.snagArray
 });
 const mapDispatchToProps = (dispatch) => ({});
 export default connect(mapStateToProps, mapDispatchToProps)(PlotDetails);

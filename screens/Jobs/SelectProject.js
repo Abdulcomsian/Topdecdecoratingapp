@@ -26,7 +26,7 @@ const SelectProject = ( props ) =>{
           (async () => {
             setLoading(true);
             const request = await axios(
-              "https://airtimetesting.airtime4u.com/public/tajs/public/api/supervisor/search/job/ViewPlots",
+              "https://topdecdecoratingapp.com/api/supervisor/search/job/ViewPlots",
               {
                 method: "POST",
                 headers: {

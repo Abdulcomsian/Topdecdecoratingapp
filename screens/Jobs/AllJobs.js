@@ -28,7 +28,7 @@ const AllJobs = (props) =>{
           (async () => {
             setLoading(true);
             const request = await axios(
-              "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/search/job/refid",
+              "https://topdecdecoratingapp.com/api/admin/search/job/refid",
               {
                 method: "POST",
                 headers: {

@@ -20,7 +20,7 @@ const TotalSummary = ( props ) =>{
           (async () => {
             setLoading(true);
             const request = await axios(
-              "https://airtimetesting.airtime4u.com/public/tajs/public/api/admin/job/count_jobs",
+              "https://topdecdecoratingapp.com/api/admin/job/count_jobs",
               {
                 method: "POST",
                 headers: {

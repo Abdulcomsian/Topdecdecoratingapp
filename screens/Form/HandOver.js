@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import SignatureComponent from "../../components/SignatureComponent";
 
 var plus = require("../../assets/authScreen/plus.png");
+var base_url="https://airtimetesting.airtime4u.com/public/tajs/public/api/";
 const HandOverForm = (props) => {
   const { navigation, token, isHandOver, isSuccessMsg, isJobId } = props;
   const { plot_Id } = props.route.params;
@@ -31,7 +32,6 @@ const HandOverForm = (props) => {
   const [supervisorSignature, setSupervisorSignature] = useState("");
   const [agentName, setAgentName] = useState("");
   const [agentSignature, setAgentSignature] = useState("");
-
   const [signature, setSignature] = useState({
     bool: false,
     agent: {
@@ -141,6 +141,8 @@ const HandOverForm = (props) => {
       alert(err.message)
     }
   };
+
+
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker

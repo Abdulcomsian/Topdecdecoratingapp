@@ -1,7 +1,7 @@
 import * as Actions from "../../actionTypes";
 import axios from "axios";
 
-var base_url = "https://airtimetesting.airtime4u.com/public/tajs/public/api/";
+var base_url = "https://topdecdecoratingapp.com/api/";
 
 export const resetLoginFlag = () => {
   return { type: Actions.RESET_LOGIN_FLAG };
@@ -11,7 +11,7 @@ export const adminLogin = (email, password) => {
     try {
       console.log(email, password);
       const body = { email, password };
-      const request = await axios(base_url + "login", {
+      const request = await axios(base_url + "admin/login", {
         method: "POST",
         data: body,
       });

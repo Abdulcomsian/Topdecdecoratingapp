@@ -1,6 +1,6 @@
 import * as actions from "./../actionTypes";
 const INITIAL_STATE = {
-  plotInfo: [
+  misCoat: [
     {
       tickSign: false,
       text: "Hover Over Form",
@@ -33,7 +33,117 @@ const INITIAL_STATE = {
     },
     { tickSign: false, text: "Scope", chekecd: false, url: "Scope" },
   ],
-  verificationInfo: [
+  decorationArray: [
+    {
+      tickSign: false,
+      text: "Hover Over Form",
+      chekecd: false,
+      url: "HandOverForm",
+    },
+    {
+      tickSign: false,
+      text: "Make Ready Sheet",
+      chekecd: false,
+      url: "MakeReady",
+    },
+    {
+      tickSign: false,
+      text: "Pre Wrannty Sannging",
+      chekecd: false,
+      url: "WranntySannging",
+    },
+    {
+      tickSign: false,
+      text: "Quality Inssurance",
+      chekecd: false,
+      url: "QualityInssurance",
+    },
+    {
+      tickSign: false,
+      text: "Remedial Wrok Sheet",
+      chekecd: false,
+      url: "RemedialWork",
+    },
+    { tickSign: false, text: "Scope", chekecd: false, url: "Scope" },
+  ],
+  snagArray: [
+    {
+      tickSign: false,
+      text: "Hover Over Form",
+      chekecd: false,
+      url: "HandOverForm",
+    },
+    {
+      tickSign: false,
+      text: "Make Ready Sheet",
+      chekecd: false,
+      url: "MakeReady",
+    },
+    {
+      tickSign: false,
+      text: "Pre Wrannty Sannging",
+      chekecd: false,
+      url: "WranntySannging",
+    },
+    {
+      tickSign: false,
+      text: "Quality Inssurance",
+      chekecd: false,
+      url: "QualityInssurance",
+    },
+    {
+      tickSign: false,
+      text: "Remedial Wrok Sheet",
+      chekecd: false,
+      url: "RemedialWork",
+    },
+    { tickSign: false, text: "Scope", chekecd: false, url: "Scope" },
+  ],
+  verificationMiscoatInfo: [
+    { tickSign: false, text: "Day Work Sheet", chekecd: false, url: "DayWork" },
+    {
+      tickSign: false,
+      text: "Decoration Record",
+      chekecd: false,
+      url: "DecorationRecord",
+    },
+    { tickSign: false, text: "Mis Coat", chekecd: false, url: "MisCoat" },
+    {
+      tickSign: false,
+      text: "Site Instruction",
+      chekecd: false,
+      url: "SiteInstruction",
+    },
+    {
+      tickSign: false,
+      text: "Verification Of Work",
+      chekecd: false,
+      url: "VerificationWork",
+    },
+  ],
+  verificationDecorationInfo: [
+    { tickSign: false, text: "Day Work Sheet", chekecd: false, url: "DayWork" },
+    {
+      tickSign: false,
+      text: "Decoration Record",
+      chekecd: false,
+      url: "DecorationRecord",
+    },
+    { tickSign: false, text: "Mis Coat", chekecd: false, url: "MisCoat" },
+    {
+      tickSign: false,
+      text: "Site Instruction",
+      chekecd: false,
+      url: "SiteInstruction",
+    },
+    {
+      tickSign: false,
+      text: "Verification Of Work",
+      chekecd: false,
+      url: "VerificationWork",
+    },
+  ],
+  verificationSngInfo: [
     { tickSign: false, text: "Day Work Sheet", chekecd: false, url: "DayWork" },
     {
       tickSign: false,
