@@ -43,7 +43,6 @@ export default function App() {
   if (!isLoadingComplete) {
     return (
       <View style={{ flex: 1 }}>
-        <Text>asdasd</Text>
       </View>
     );
   } else {
@@ -51,7 +50,7 @@ export default function App() {
       // <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Provider store={store}>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Navigator>
             <Stack.Screen name='Main' component={MainNavigator} />
           </Stack.Navigator>
         </NavigationContainer>

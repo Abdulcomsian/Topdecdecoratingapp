@@ -14,7 +14,7 @@ const Scope = (props) => {
   const jobID = plot_Id;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [painterName, setPainterName] = useState("");
@@ -202,9 +202,6 @@ const Scope = (props) => {
                   <View style={styles.headerTitleView}>
                     <Text style={styles.headerTitle}>En Ensuite</Text>
                   </View>
-                  <View style={styles.headerTitleView}>
-                    <Text style={styles.headerTitle}>Action</Text>
-                  </View>
                 </View>
                 <View style={{ flexDirection: "column" }}>
                   {dynamicInput.length > 0 &&
@@ -231,33 +228,31 @@ const Scope = (props) => {
                       </View>
                     ))}
                 </View>
-                <View style={styles.tableBody}>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput onChangeText={(txt) => setData({ ...data, item: txt })} value={data.item} style={styles.bodyTextInput} />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput onChangeText={(txt) => setData({ ...data, hallway: txt })} value={data.hallway} style={styles.bodyTextInput} />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput onChangeText={(txt) => setData({ ...data, bedroom: txt })} value={data.bedroom} style={styles.bodyTextInput} />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput onChangeText={(txt) => setData({ ...data, room: txt })} value={data.room} style={styles.bodyTextInput} />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput onChangeText={(txt) => setData({ ...data, bathrroms: txt })} value={data.bathrroms} style={styles.bodyTextInput} />
-                  </View>
-                  <View style={styles.inputBodyContainer}>
-                    <TextInput onChangeText={(txt) => setData({ ...data, ensuite: txt })} value={data.ensuite} style={styles.bodyTextInput} />
-                  </View>
-
-                  <View style={styles.inputBodyContainer}>
-                    <TouchableOpacity style={styles.addBtn} onPress={() => addRow()}>
-                      <Image style={styles.plusBtn} source={plus} />
-                    </TouchableOpacity>
-                  </View>
-                </View>
               </View>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].item &&
+                        !dynamicInput[dynamicInput.length - 1].hallway &&
+                        !dynamicInput[dynamicInput.length - 1].bedroom &&
+                        !dynamicInput[dynamicInput.length - 1].room &&
+                        !dynamicInput[dynamicInput.length - 1].bathrroms &&
+                        !dynamicInput[dynamicInput.length - 1].ensuite 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput value={painterName} onChangeText={(e) => setPainterName(e)} style={styles.inputField} placeholder={"Painter Name"} />
               </View>
@@ -365,7 +360,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   headerTitleView: {
-    width: "14.2%",
+    width: "16.6%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -404,7 +399,7 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-regular",
   },
   inputBodyContainer: {
-    width: "14.2%",
+    width: "16.6%",
     justifyContent: "center",
     alignItems: "center",
   },

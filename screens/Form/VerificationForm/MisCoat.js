@@ -44,7 +44,7 @@ const MistCoat = (props) => {
     if (dynamicInput != "" && mainContructor != "" && projectName != "") {
       console.log((dynamicInput))
        await props.createMisCoatHandler(mainContructor, projectName, dynamicInput, jobID, tabId, token);
-       props.updateVerificationReport(props?.route?.params?.index);
+       //props.updateVerificationReport(props?.route?.params?.index);
       alert("MisCoat Insert SuccessFully !")
       props.navigation.pop();
     } else {
@@ -154,18 +154,7 @@ const MistCoat = (props) => {
                   <Text style={styles.headerTitle}>Completion date</Text>
                 </View>
               </View>
-              <View
-                style={{
-                  width: "100%",
-                  justifyContent: "flex-end",
-                  alignItems: "flex-end",
-                }}>
-                <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addDecorationRow()}>
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
-              </View>
+              
               <View style={{ flexDirection: "column" }}>
                 {dynamicInput.length > 0 &&
                   dynamicInput.map((el, index) => (
@@ -238,6 +227,30 @@ const MistCoat = (props) => {
                       </View>
                     </View>
                   ))}
+                  <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].name &&
+                        !dynamicInput[dynamicInput.length - 1].block &&
+                        !dynamicInput[dynamicInput.length - 1].level &&
+                        !dynamicInput[dynamicInput.length - 1].price &&
+                        !dynamicInput[dynamicInput.length - 1].plot &&
+                        !dynamicInput[dynamicInput.length - 1].days 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addDecorationRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
                 <View
                   style={{
                     backgroundColor: "#000",
@@ -252,6 +265,7 @@ const MistCoat = (props) => {
                   </TouchableOpacity>
                 </View>
               </View>
+              
             </View>
           </ScrollView>
         </View>
@@ -268,7 +282,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createMisCoatHandler: (mainContructor, projectName, dynamicInput, jobID, tabId, token) =>
     dispatch(insertMiscoat(mainContructor, projectName, dynamicInput, jobID, tabId, token)),
-    updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
+    // updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(MistCoat);
 const styles = StyleSheet.create({

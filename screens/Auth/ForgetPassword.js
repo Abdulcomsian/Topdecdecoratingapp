@@ -30,20 +30,21 @@ const ForgotPassword = (props) => {
 
   console.log("Code :", isCode);
   console.log("Validate Code :", isValidateUserID);
-  const postEmailLink = () => {
+  const postEmailLink = async () => {
     try {
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if(email!=""){
             if (regEmail.test(email) === false) {
                 alert("Email is Not Correct");
                 setEmail(email);
-                setEmailShow(false)
             }
             else {
                 setEmail(email);
                 alert("Email is Correct");
-                props.postEmailLink(email);
-                setEmailShow(true)
+                await props.postEmailLink(email);
+                console.log("EMail Code :", isCode)
+                setCode(isCode)
+                setReset(false)
             }
         }
         else{
@@ -59,7 +60,7 @@ const ForgotPassword = (props) => {
       if (userCode == isCode) {
         alert("Code Match !");
         props.postCodeValidate(userCode);
-        //setReset(true)
+        setReset(true)
       }
     } else {
       alert("Please Enter Valid Code");
@@ -79,7 +80,7 @@ const ForgotPassword = (props) => {
     else{
         if(password==resetPassword){
           await props.postResetPasswordHandler(isValidateUserID,password);
-          setCode(isCode);
+          // setCode(isCode);
           setShow(true);
         }
         else{
@@ -106,20 +107,20 @@ const ForgotPassword = (props) => {
     }
   },[isValidateUserID]);
   /* Reset Password Success Or Not */
-  useEffect(() => {
-    if(isResetSucces){
-      if(isResetMsg){
-        alert(isResetMsg)
-        navigation.navigate("LoginScreen")
-      }
-    }
-    else{
-      if(isResetMsg){
-        alert(isResetMsg)
-        navigation.navigate("LoginScreen")
-      }
-    }
-  },[isValidateUserID,isResetMsg])
+  // useEffect(() => {
+  //   if(isResetSucces){
+  //     if(isResetMsg){
+  //       alert(isResetMsg)
+  //       navigation.navigate("LoginScreen")
+  //     }
+  //   }
+  //   else{
+  //     if(isResetMsg){
+  //       alert(isResetMsg)
+  //       navigation.navigate("LoginScreen")
+  //     }
+  //   }
+  // },[isValidateUserID,isResetMsg])
   return (
     <View style={styles.mainContainer}>
       <View style={styles.logoContainer}>
@@ -156,7 +157,7 @@ const ForgotPassword = (props) => {
               </TouchableOpacity>
             </View>
           ) : (
-              reset ?
+              reset==true ?
                 <View style={{ width: "100%" }}>
                     <View style={styles.inputContainer}>
                         <View style={styles.iconContainer}>
@@ -167,6 +168,7 @@ const ForgotPassword = (props) => {
                             onChangeText={(e) => setPassword(e)}
                             style={styles.inputField}
                             placeholder={"Enter New Password"}
+                            secureTextEntry={true}
                         />
                         </View>
                     </View>
@@ -179,6 +181,7 @@ const ForgotPassword = (props) => {
                             onChangeText={(e) => setResetPassword(e)}
                             style={styles.inputField}
                             placeholder={"Re-Enter New Password"}
+                            secureTextEntry={true}
                         />
                         </View>
                     </View>

@@ -35,8 +35,6 @@ const VerificationDetails = (props) => {
   const [isLeft, setIsLeft] = useState(1);
   const _ref = useRef(null);
   const [activeTab, setActiveTab] = useState("Miscoat");
-  const [getArray, setGetArray] = useState([]);
-  const [checkArrayCall, setCheckArrayCall] = useState(false);
 
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
@@ -111,7 +109,7 @@ const VerificationDetails = (props) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
-      await updateVerificationTopTabs(plot_id,  token);
+      await updateVerificationTopTabs(plot_id, token);
     });
     return unsubscribe;
   }, [navigation]);

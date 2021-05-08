@@ -28,6 +28,8 @@ const IssueCard = (props) => {
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
   const [nameOfOperative, setNameOfOperative] = useState("");
+  const [recordSignature, setRecordSignature] = useState("");
+  const [getSign, setGetSign] = useState(false);
 
   const addIssue = () => {
     setdynamicInput((oldArray) => [
@@ -80,12 +82,13 @@ const IssueCard = (props) => {
           projectName,
           nameOfOperative,
           dynamicInput,
+          recordSignature,
           jobID,
           tabId,
           token,
           props.route.params?.index
         );
-        props.updateHealthReport(props?.route?.params?.index);
+        // props.updateHealthReport(props?.route?.params?.index);
 
         props.navigation.pop();
         alert("Issue Record Insert SuccessFully !");
@@ -108,18 +111,11 @@ const IssueCard = (props) => {
         onCancel={() => setShow({ isVisible: false, index: -1 })}
         format='DD-MM-YYYY'
       />
-      {signature.bool ? (
+     {getSign ? (
         <SignatureComponent
           returnImage={(uri) => {
-            let copydata = [...dynamicInput];
-            copydata[signature.index].signature = uri;
-            setdynamicInput(copydata);
-            setSignature({
-              ...signature.isSign,
-              isSign: false,
-              bool: false,
-              index: -1,
-            });
+            setRecordSignature(uri);
+            setGetSign(false);
           }}
         />
       ) : (
@@ -257,9 +253,6 @@ const IssueCard = (props) => {
                   <View style={styles.headerHarmFulTitleView}>
                     <Text style={styles.headerTitle}>NAME OF SUPERVISOR</Text>
                   </View>
-                  <View style={styles.headerHarmFulTitleView}>
-                    <Text style={styles.headerTitle}>SIGNATURE</Text>
-                  </View>
                 </View>
                 <View
                   style={{
@@ -331,32 +324,27 @@ const IssueCard = (props) => {
                         value={item.supervisor}
                       />
                     </View>
-                    <View style={styles.inputHarmFullBodyContainer}>
+                  </View>
+                ))}
+                 <View style={[styles.inputField,{height:120}]}>
                       <TouchableOpacity
                         onPress={() =>
-                          setSignature({
-                            bool: true,
-                            isSign: false,
-                            isSupervisor: true,
-                            index: index,
-                          })
+                          setGetSign(true)
                         }
                         style={[
                           styles.inputHarmFullBodyContainer,
                           {
                             width: "100%",
-                            justifyContent: "center",
-                            alignItems: "center",
                           },
                         ]}
                       >
-                        {item.signature ? (
+                        {recordSignature ? (
                           <Image
-                            source={{ uri: item.signature }}
+                            source={{ uri: recordSignature }}
                             style={{
                               marginTop: 10,
-                              height: 30,
-                              width: 30,
+                              height: 100,
+                              width: 100,
                               backgroundColor: "gray",
                             }}
                           />
@@ -380,8 +368,6 @@ const IssueCard = (props) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                  </View>
-                ))}
                 <Text
                   style={{
                     fontSize: 12,
@@ -430,6 +416,7 @@ const mapDispatchToProps = (dispatch) => ({
     projectName,
     nameOfOperative,
     dynamicInput,
+    recordSignature,
     jobID,
     tabId,
     token,
@@ -441,12 +428,13 @@ const mapDispatchToProps = (dispatch) => ({
         projectName,
         nameOfOperative,
         dynamicInput,
+        recordSignature,
         jobID,
         tabId,
         token,
         index
       )
     ),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(IssueCard);

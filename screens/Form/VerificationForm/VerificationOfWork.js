@@ -45,7 +45,7 @@ const VerificationOfWork = (props) => {
     try{
     if (projectName != "" && idRef != "" && decoratorName != "") {
       await props.createVerificationWorkHandler(projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token);
-      props.updateVerificationReport(props?.route?.params?.index);
+      // props.updateVerificationReport(props?.route?.params?.index);
       alert("Verification Of Work Insert SuccessFully !")
       props.navigation.pop();
     } else {
@@ -127,18 +127,7 @@ const VerificationOfWork = (props) => {
               <Text style={styles.headerTitle}>CONFIRMED WORKS</Text>
             </View>
           </View>
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "flex-end",
-              alignItems: "flex-end",
-            }}>
-            <View style={styles.inputButtonBodyContainer}>
-              <TouchableOpacity style={styles.addBtn} onPress={() => addVerificationRow()}>
-                <Image style={styles.plusBtn} source={plus} />
-              </TouchableOpacity>
-            </View>
-          </View>
+         
           {dynamicInput.length > 0 &&
             dynamicInput.map((el, index) => (
               <View style={[styles.tableBody, { justifyContent: "space-between" }]} key={index}>
@@ -200,6 +189,33 @@ const VerificationOfWork = (props) => {
                 </View>
               </View>
             ))}
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].days &&
+                        !dynamicInput[dynamicInput.length - 1].work &&
+                        !dynamicInput[dynamicInput.length - 1].project &&
+                        !dynamicInput[dynamicInput.length - 1].plot &&
+                        !dynamicInput[dynamicInput.length - 1].description &&
+                        !dynamicInput[dynamicInput.length - 1].price &&
+                        !dynamicInput[dynamicInput.length - 1].remedial && 
+                        !dynamicInput[dynamicInput.length - 1].si &&
+                        !dynamicInput[dynamicInput.length - 1].c_work 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addVerificationRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
           <View
             style={{
               backgroundColor: "#000",
@@ -227,6 +243,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createVerificationWorkHandler: (projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token) =>
     dispatch(insertVerificationForm(projectName, idRef, decoratorName, dynamicInput, jobID, tabId, token)),
-  updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
+  // updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(VerificationOfWork);

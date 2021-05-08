@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image, CheckBox, TouchableOpacity, ScrollView, TextInput } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  CheckBox,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+} from "react-native";
 import { Text } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { insertHandOverForm } from "../../Redux/action/auth/authActionTypes";
@@ -7,30 +15,30 @@ import { connect } from "react-redux";
 import SignatureComponent from "../../components/SignatureComponent";
 
 var plus = require("../../assets/authScreen/plus.png");
-var base_url="https://airtimetesting.airtime4u.com/public/tajs/public/api/";
+var base_url = "https://airtimetesting.airtime4u.com/public/tajs/public/api/";
 const HandOverForm = (props) => {
   const { navigation, token, isHandOver, isSuccessMsg, isJobId } = props;
   const { plot_Id } = props.route.params;
   const jobID = plot_Id;
   const tabId = props.route.params.tabName;
-  const [dynamicInput, setdynamicInput] = useState([{ area: "", description: "", completed: "", comments: "" }]);
-  const [date, setDate] = useState(new Date());
-  const [dateIssue, setDateIssue] = useState(new Date());
-  const [dateComplete, setDateComplete] = useState(new Date());
-  const [todayDate, setTodayDate] = useState(new Date());
+  const [dynamicInput, setdynamicInput] = useState([]);
+  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [dateIssue, setDateIssue] = useState(new Date().toLocaleDateString());
+  const [dateComplete, setDateComplete] = useState(new Date().toLocaleDateString());
+  const [todayDate, setTodayDate] = useState(new Date().toLocaleDateString());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [showIssue, setShowIssue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
   const [showToday, setShowToday] = useState(false);
-  const [contructorName, setContructorName] = useState("");
-  const [project, setProject] = useState("");
-  const [block, setBlock] = useState("");
-  const [reason, setReason] = useState("");
-  const [plotNumber, setPlotNumber] = useState("");
-  const [supervisorName, setSupervisorName] = useState("");
-  const [supervisorSignature, setSupervisorSignature] = useState("");
-  const [agentName, setAgentName] = useState("");
+  const [contructorName, setContructorName] = useState("asdasd");
+  const [project, setProject] = useState("asdasd");
+  const [block, setBlock] = useState("asdasd");
+  const [reason, setReason] = useState("sdasd");
+  const [plotNumber, setPlotNumber] = useState("asdasd");
+  const [supervisorName, setSupervisorName] = useState("sadasd");
+  const [supervisorSignature, setSupervisorSignature] = useState("adsasd");
+  const [agentName, setAgentName] = useState("sadasd");
   const [agentSignature, setAgentSignature] = useState("");
   const [signature, setSignature] = useState({
     bool: false,
@@ -52,8 +60,10 @@ const HandOverForm = (props) => {
   });
   /* Add Dynamic Input value & Add New Row*/
   const addRow = () => {
-    setdynamicInput((oldArray) => [...oldArray, { area: "", description: "", completed: "", comments: "" }]);
-
+    setdynamicInput((oldArray) => [
+      ...oldArray,
+      { area: "", description: "", completed: "", comments: "" },
+    ]);
   };
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -109,91 +119,109 @@ const HandOverForm = (props) => {
   };
   const handOverFormInsert = async () => {
     //console.log("HandOver Token :", jobID);
-    try{
-    if (contructorName != "" && project != "" && block != "" && reason != "" && plotNumber != "" && supervisorName != "" && dynamicInput && agentName != "") {
-      await props.createHandOverHandler(
-        contructorName,
-        project,
-        block,
-        reason,
-        plotNumber,
-        date,
-        dateIssue,
-        supervisorName,
-        supervisorSignature,
-        dateComplete,
-        dynamicInput,
-        agentName,
-        agentSignature,
-        todayDate,
-        jobID,
-        tabId,
-        token,
-        props.route?.params?.index
-      );
-      alert("Hand Over Form Insert SuccessFully !");
-      navigation.goBack();
-    } else {
-      alert("Please Insert All Fields CareFully !");
-      return false;
-    }
-    } catch(err){
-      alert(err.message)
+    try {
+      if (
+        contructorName != "" &&
+        project != "" &&
+        block != "" &&
+        reason != "" &&
+        plotNumber != "" &&
+        supervisorName != "" &&
+        dynamicInput &&
+        agentName != "" &&
+        supervisorSignature !== "" &&
+        agentSignature !==""
+      ) {
+        await props.createHandOverHandler(
+          contructorName,
+          project,
+          block,
+          reason,
+          plotNumber,
+          date,
+          dateIssue,
+          supervisorName,
+          supervisorSignature,
+          dateComplete,
+          dynamicInput,
+          agentName,
+          agentSignature,
+          todayDate,
+          jobID,
+          tabId,
+          token,
+          props.route?.params?.index
+        );
+        alert("Hand Over Form Insert SuccessFully !");
+        navigation.goBack();
+      } else {
+        alert("Please Insert All Fields CareFully !");
+        return false;
+      }
+    } catch (err) {
+      alert(err.message);
     }
   };
-
 
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
         isVisible={show}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={date}
         mode={mode}
-        display='default'
+        display="default"
         onCancel={() => {}}
         onConfirm={onChange}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       <DateTimePicker
         isVisible={showIssue}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={dateIssue}
         mode={mode}
-        display='default'
+        display="default"
         onCancel={() => {}}
         onConfirm={onIssueChange}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
 
       <DateTimePicker
         isVisible={showComplete}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={dateComplete}
         mode={mode}
-        display='default'
+        display="default"
         onCancel={() => {}}
         onConfirm={onCompleteChange}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       <DateTimePicker
         isVisible={showToday}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={todayDate}
         mode={mode}
-        display='default'
+        display="default"
         onCancel={() => {}}
         onConfirm={onTodayDate}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       {signature.bool ? (
         <SignatureComponent
           returnImage={(uri) => {
             if (signature.agent.bool) {
-              setSignature({ ...signature, agent: { ...signature.agent, bool: false, uri: uri }, bool: false });
+              setSignature({
+                ...signature,
+                agent: { ...signature.agent, bool: false, uri: uri },
+                bool: false,
+              });
               setAgentSignature(uri);
             } else {
-              setSignature({ ...signature, normal: { ...signature.normal, bool: false, uri: uri }, bool: false });
+              setSignature({
+                ...signature,
+                normal: { ...signature.normal, bool: false, uri: uri },
+                bool: false,
+              });
               setSupervisorSignature(uri);
             }
           }}
@@ -206,27 +234,58 @@ const HandOverForm = (props) => {
           <ScrollView style={{ height: "100%" }}>
             <View style={styles.formConatiner}>
               <View style={styles.inputFieldContainer}>
-                <TextInput value={contructorName} onChangeText={(e) => setContructorName(e)} style={styles.inputField} placeholder={"Main Contractor Name"} />
+                <TextInput
+                  value={contructorName}
+                  onChangeText={(e) => setContructorName(e)}
+                  style={styles.inputField}
+                  placeholder={"Main Contractor Name"}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput value={project} onChangeText={(e) => setProject(e)} style={styles.inputField} placeholder={"Project"} />
+                <TextInput
+                  value={project}
+                  onChangeText={(e) => setProject(e)}
+                  style={styles.inputField}
+                  placeholder={"Project"}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput value={block} onChangeText={(e) => setBlock(e)} style={styles.inputField} placeholder={"Block"} />
+                <TextInput
+                  value={block}
+                  onChangeText={(e) => setBlock(e)}
+                  style={styles.inputField}
+                  placeholder={"Block"}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput value={reason} onChangeText={(e) => setReason(e)} style={styles.inputField} placeholder={"Reason"} />
+                <TextInput
+                  value={reason}
+                  onChangeText={(e) => setReason(e)}
+                  style={styles.inputField}
+                  placeholder={"Reason"}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput value={plotNumber} onChangeText={(e) => setPlotNumber(e)} style={styles.inputField} placeholder={"Plot/Area Number"} />
+                <TextInput
+                  value={plotNumber}
+                  onChangeText={(e) => setPlotNumber(e)}
+                  style={styles.inputField}
+                  placeholder={"Plot/Area Number"}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("Date")} style={styles.inputField}>
+                <Text
+                  onPress={() => showDatepicker("Date")}
+                  style={styles.inputField}
+                >
                   {new Date(date).toLocaleDateString()}
                 </Text>
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("DateIssue")} style={styles.inputField}>
+                <Text
+                  onPress={() => showDatepicker("DateIssue")}
+                  style={styles.inputField}
+                >
                   {new Date(dateIssue).toLocaleDateString()}
                 </Text>
               </View>
@@ -236,34 +295,65 @@ const HandOverForm = (props) => {
                   paddingBottom: 20,
                   color: "#96A8B2",
                   fontSize: 12,
-                }}>
-                The decoration to the following Areas/Units have been completed and are now ready for your inspection.{" "}
+                }}
+              >
+                The decoration to the following Areas/Units have been completed
+                and are now ready for your inspection.{" "}
               </Text>
 
               <View style={styles.inputFieldContainer}>
-                <TextInput value={supervisorName} onChangeText={(e) => setSupervisorName(e)} style={styles.inputField} placeholder={"Supervisor"} />
+                <TextInput
+                  value={supervisorName}
+                  onChangeText={(e) => setSupervisorName(e)}
+                  style={styles.inputField}
+                  placeholder={"Supervisor"}
+                />
               </View>
               <TouchableOpacity
                 onPress={() =>
-                  setSignature({ ...signature, bool: true, normal: { ...signature.normal, bool: true }, agent: { ...signature.agent, bool: false } })
+                  setSignature({
+                    ...signature,
+                    bool: true,
+                    normal: { ...signature.normal, bool: true },
+                    agent: { ...signature.agent, bool: false },
+                  })
                 }
-                style={styles.inputFieldContainer}>
+                style={styles.inputFieldContainer}
+              >
                 {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
-                {signature.normal.uri ? 
-                  <Image style={{ marginTop:10,height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.normal.uri }} />
-                :
-                <Text style={{height: 52,
-                  width: "100%",
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#96A8B2",
-                  padding: 5,
-                  fontSize: 12,
-                  color: "#96A8B2",
-                  fontFamily: "poppins-regular",paddingTop:15}}>Supervisor Signature</Text>}
-                
+                {signature.normal.uri ? (
+                  <Image
+                    style={{
+                      marginTop: 10,
+                      height: 100,
+                      width: 100,
+                      backgroundColor: "gray",
+                    }}
+                    source={{ uri: signature.normal.uri }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      height: 52,
+                      width: "100%",
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#96A8B2",
+                      padding: 5,
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                      paddingTop: 15,
+                    }}
+                  >
+                    Supervisor Signature
+                  </Text>
+                )}
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("CompleteDate")} style={styles.inputField}>
+                <Text
+                  onPress={() => showDatepicker("CompleteDate")}
+                  style={styles.inputField}
+                >
                   {new Date(dateComplete).toLocaleDateString()}
                 </Text>
               </View>
@@ -282,18 +372,18 @@ const HandOverForm = (props) => {
                 <View style={styles.headerTitleView}>
                   <Text style={styles.headerTitle}>Contractors COMMENTS </Text>
                 </View>
-                <View style={styles.headerTitleView}>
-                  <Text style={styles.headerTitle}>Action </Text>
-                </View>
               </View>
               <View style={{ flexDirection: "column" }}>
+                
                 {dynamicInput.length > 0 &&
                   dynamicInput.map((el, index) => (
                     <View style={styles.tableBody} key={index}>
                       <View style={styles.inputBodyContainer}>
                         <TextInput
                           value={el.area}
-                          onChangeText={(txt) => updateValue("area", index, txt)}
+                          onChangeText={(txt) =>
+                            updateValue("area", index, txt)
+                          }
                           style={styles.bodyTextInput}
                           placeholder={"Area/unit"}
                         />
@@ -301,7 +391,9 @@ const HandOverForm = (props) => {
                       <View style={styles.inputBodyContainer}>
                         <TextInput
                           value={el.description}
-                          onChangeText={(txt) => updateValue("description", index, txt)}
+                          onChangeText={(txt) =>
+                            updateValue("description", index, txt)
+                          }
                           style={styles.bodyTextInput}
                           placeholder={"Description"}
                         />
@@ -309,7 +401,9 @@ const HandOverForm = (props) => {
                       <View style={styles.inputBodyContainer}>
                         <TextInput
                           value={el.completed}
-                          onChangeText={(txt) => updateValue("completed", index, txt)}
+                          onChangeText={(txt) =>
+                            updateValue("completed", index, txt)
+                          }
                           style={styles.bodyTextInput}
                           placeholder={"Yes / No"}
                         />
@@ -317,57 +411,102 @@ const HandOverForm = (props) => {
                       <View style={styles.inputBodyContainer}>
                         <TextInput
                           value={el.comments}
-                          onChangeText={(txt) => updateValue("comments", index, txt)}
+                          onChangeText={(txt) =>
+                            updateValue("comments", index, txt)
+                          }
                           style={styles.bodyTextInput}
                           placeholder={"Comments"}
                         />
                       </View>
-                      <View style={styles.inputBodyContainer}>
-                        <TouchableOpacity style={styles.addBtn} onPress={() => {
-                          if(dynamicInput.length>0 && !dynamicInput[dynamicInput.length-1].area && !dynamicInput[dynamicInput.length-1].description && !dynamicInput[dynamicInput.length-1].completed && !dynamicInput[dynamicInput.length-1].comments){
-                            alert("Please Enter All Value and then move to next Item Add !")
-                          }
-                          else {
-                            addRow()
-                          }
-                        }}>
-                          <Image style={styles.plusBtn} source={plus} />
-                        </TouchableOpacity>
-                      </View>
                     </View>
                   ))}
               </View>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].area &&
+                        !dynamicInput[dynamicInput.length - 1].description &&
+                        !dynamicInput[dynamicInput.length - 1].completed &&
+                        !dynamicInput[dynamicInput.length - 1].comments
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
               <Text
                 style={{
                   paddingTop: 20,
                   paddingBottom: 20,
                   color: "#96A8B2",
                   fontSize: 12,
-                }}>
-                I can confirm by signing this form that I have inspect the above Areas/Units and they are completed.{" "}
+                }}
+              >
+                I can confirm by signing this form that I have inspect the above
+                Areas/Units and they are completed.{" "}
               </Text>
               <View style={styles.inputFieldContainer}>
-                <TextInput value={agentName} onChangeText={(e) => setAgentName(e)} style={styles.inputField} placeholder={"Site Agent (Print name)"} />
+                <TextInput
+                  value={agentName}
+                  onChangeText={(e) => setAgentName(e)}
+                  style={styles.inputField}
+                  placeholder={"Site Agent (Print name)"}
+                />
               </View>
               <TouchableOpacity
                 onPress={() =>
-                  setSignature({ ...signature, bool: true, normal: { ...signature.normal, bool: false }, agent: { ...signature.agent, bool: true } })
+                  setSignature({
+                    ...signature,
+                    bool: true,
+                    normal: { ...signature.normal, bool: false },
+                    agent: { ...signature.agent, bool: true },
+                  })
                 }
-                style={styles.inputFieldContainer}>
+                style={styles.inputFieldContainer}
+              >
                 {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
-                {signature.agent.uri ?
-                <Image style={{ marginTop:10,height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.agent.uri }} />
-               : <Text style={{height: 52,
-                  width: "100%",
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#96A8B2",
-                  padding: 5,
-                  fontSize: 12,
-                  color: "#96A8B2",
-                  fontFamily: "poppins-regular",paddingTop:15}}>Agent Signature</Text>}
+                {signature.agent.uri ? (
+                  <Image
+                    style={{
+                      marginTop: 10,
+                      height: 100,
+                      width: 100,
+                      backgroundColor: "gray",
+                    }}
+                    source={{ uri: signature.agent.uri }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      height: 52,
+                      width: "100%",
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#96A8B2",
+                      padding: 5,
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                      paddingTop: 15,
+                    }}
+                  >
+                    Agent Signature
+                  </Text>
+                )}
               </TouchableOpacity>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("TodayDate")} style={styles.inputField}>
+                <Text
+                  onPress={() => showDatepicker("TodayDate")}
+                  style={styles.inputField}
+                >
                   {new Date(todayDate).toLocaleDateString()}
                 </Text>
               </View>
@@ -378,9 +517,13 @@ const HandOverForm = (props) => {
                   height: ".5%",
                   marginBottom: 20,
                   marginTop: 20,
-                }}></View>
+                }}
+              ></View>
               <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => handOverFormInsert()}>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => handOverFormInsert()}
+                >
                   <Text style={styles.commonText}>Save</Text>
                 </TouchableOpacity>
               </View>
@@ -491,7 +634,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   headerTitleView: {
-    width: "20%",
+    width: "25%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -501,15 +644,16 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-bold",
   },
   inputBodyContainer: {
-    width: "20%",
+    width: "25%",
     justifyContent: "center",
     alignItems: "center",
   },
   bodyTextInput: {
+    width:"90%",
     borderBottomWidth: 1,
     borderBottomColor: "#96A8B2",
     padding: 5,
-    fontSize: 12,
+    fontSize: 10,
     color: "#96A8B2",
     marginLeft: 2,
     marginRight: 2,

@@ -72,10 +72,13 @@ import Tbtvolience from '../screens/Form/HealthSafety/TBT_Volience'
 import Tbtworking from '../screens/Form/HealthSafety/TBT_Working'
 import TbtRegister from '../screens/Form/HealthSafety/TBT_TalkRegister'
 import TbtInventory from '../screens/Form/HealthSafety/TBT_Inventory'
-import {Text} from "react-native"
+import {Text, TouchableOpacity, Image} from "react-native"
+
 
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = 'Splash';
+
+
 
 export default function MainNavigator({ navigation, route }) {
     navigation.setOptions({ ...getHeaderTitle(route) });
@@ -109,6 +112,7 @@ export default function MainNavigator({ navigation, route }) {
                 component={PlotDetail}
                 options={{
                     headerShown: true,
+                   
                   }}
             />
             <Stack.Screen
@@ -620,7 +624,12 @@ function getHeaderTitle(route) {
                     backgroundColor: '#1073AC',
                     },  
                     headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular',  } ,
-                    headerTitle:"Create New Job"
+                    headerTitle:"WorkFlow Details",
+                    // headerRight: () => (
+                    //    <TouchableOpacity style={{marginRight:50}} onPress={()=>sendEmail()}>
+                    //        <Image style={{width:30,height:30}} source={email}/>
+                    //    </TouchableOpacity>
+                    //   ),
                     };
         case 'NewSiteInspection':
             return { headerShown: true,

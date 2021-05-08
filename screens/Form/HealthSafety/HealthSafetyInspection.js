@@ -19,13 +19,13 @@ const HealthSafetyInspection = (props) => {
   console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
   console.log("Work Tab ID :",tabId)
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
   const [show, setShow] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
-  const [dateInspection, setDateInspection] = useState(new Date());
+  const [dateInspection, setDateInspection] = useState(new Date().toLocaleDateString());
   const [showInspection, setShowInspection] = useState(false);
-  const [dateComplete, setDateComplete] = useState(new Date());
-  const [dateUpdateComplete, setDateUpdateComplete] = useState(new Date());
+  const [dateComplete, setDateComplete] = useState(new Date().toLocaleDateString());
+  const [dateUpdateComplete, setDateUpdateComplete] = useState(new Date().toLocaleDateString());
   const [inspectionRow, setInspectionRow] = useState([]);
   const [dynamicInput, setdynamicInput] = useState([]);
   const [getSign, setGetSign] = useState(false);
@@ -202,7 +202,7 @@ const HealthSafetyInspection = (props) => {
     const currentDate = selectedDate;
     setShowComplete({ ...showComplete, isVisible: false, index: -1 });
     let copyArr = [...dynamicInput];
-    copyArr[showComplete.index].dateComplte = currentDate;
+    copyArr[showComplete.index].dateComplte = currentDate.toLocaleDateString();
     setdynamicInput(copyArr);
   };
   const [contractorName, setContractorName] = useState("");
@@ -229,12 +229,15 @@ const HealthSafetyInspection = (props) => {
     setArrayDocument(preData);
   };
 
-  const healthSafetyFormInsert = () => {
+  const healthSafetyFormInsert = async () => {
   
     try{
       console.log("Try Token",token)
       if(contractorName!="" && siteSupervisor!="" && dateInspection!="" && projectAddress!="" && dynamicInput!="" && inspectionName!="" && inspectionFor!="" && dateUpdateComplete!="" && signature!="" && arrayDocument!="" ){
-        props.createHealthSafetyInspectionHandler(contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, props.route.params?.index)
+        await props.createHealthSafetyInspectionHandler(contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, props.route.params?.index)
+        props.navigation.pop();
+        alert("Health & Safety Inspection Insert SuccessFully !");
+
       }
       else{
         alert("Please Insert All Fields CareFully !")
@@ -242,8 +245,8 @@ const HealthSafetyInspection = (props) => {
     } catch(err){
       alert(err.message)
     }
-    props.updateHealthReport(props?.route?.params?.index);
-    props.navigation.pop();
+    // props.updateHealthReport(props?.route?.params?.index);
+    
   };
   const updateValue = (key, index, value) => {
     let preData = [...dynamicInput];
@@ -287,7 +290,7 @@ const HealthSafetyInspection = (props) => {
         onConfirm={onDateCompleteChange}
         format='DD-MM-YYYY'
       />
-      <DateTimePickerModal
+      {/* <DateTimePickerModal
         isVisible={showUpdateDateComplete.isVisible}
         date={dateUpdateComplete ? dateUpdateComplete : new Date()}
         mode={"date"}
@@ -297,7 +300,9 @@ const HealthSafetyInspection = (props) => {
         onCancel={() => setShowUpdateDateComplete({ isVisible: false, index: -1 })}
         cancelTextIOS='Cancel'
         confirmTextIOS='Confirm'
-      />
+
+
+      /> */}
       {getSign ? (
         <SignatureComponent
           returnImage={(uri) => {
@@ -436,16 +441,26 @@ const HealthSafetyInspection = (props) => {
                       </View>
                     ))}
                 </View>
-                <View
-                  style={[
-                    styles.inputBodyContainer,
-                    {
-                      alignItems: "flex-end",
-                      justifyContent: "flex-end",
-                      width: "100%",
-                    },
-                  ]}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addInspectionRow()}>
+                <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].itemNo &&
+                        !dynamicInput[dynamicInput.length - 1].location &&
+                        !dynamicInput[dynamicInput.length - 1].actionReq &&
+                        !dynamicInput[dynamicInput.length - 1].priority &&
+                        !dynamicInput[dynamicInput.length - 1].action_by 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addInspectionRow();
+                      }
+                    }}
+                  >
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
@@ -643,88 +658,6 @@ const HealthSafetyInspection = (props) => {
                   </View>
                 )
               )}
-              {/* <Text
-            style={{
-              fontSize: 12,
-              fontFamily: "poppins-bold",
-              paddingTop: 10,
-              paddingBottom: 20,
-            }}
-          >
-            2. General
-          </Text>
-          <InputCheckBox data={generalRow} />
-          <Text
-            style={{
-              fontSize: 12,
-              fontFamily: "poppins-bold",
-              paddingTop: 10,
-              paddingBottom: 20,
-            }}
-          >
-            3. Personal Protective Equipment (PPE)
-          </Text>
-          <InputCheckBox data={protectiveRow} />
-          <Text
-            style={{
-              fontSize: 12,
-              fontFamily: "poppins-bold",
-              paddingTop: 10,
-              paddingBottom: 20,
-            }}
-          >
-            4. Tools / Equipment{" "}
-          </Text>
-          <InputCheckBox data={toolRow} />
-          <Text
-            style={{
-              fontSize: 12,
-              fontFamily: "poppins-bold",
-              paddingTop: 10,
-              paddingBottom: 20,
-            }}
-          >
-            5. Working at Height
-          </Text>
-          <InputCheckBox data={workingRow} />
-          <Text
-            style={{
-              fontSize: 12,
-              fontFamily: "poppins-bold",
-              paddingTop: 10,
-              paddingBottom: 20,
-            }}
-          >
-            6. Exposure to dust/noise
-          </Text>
-          <InputCheckBox data={exposureRow} />
-          <Text
-            style={{
-              fontSize: 12,
-              fontFamily: "poppins-bold",
-              paddingTop: 10,
-              paddingBottom: 20,
-            }}
-          >
-            7. Waste Management
-          </Text>
-          <InputCheckBox data={wasteRow} />
-          <Text
-            style={{
-              fontSize: 12,
-              fontFamily: "poppins-bold",
-              paddingTop: 10,
-              paddingBottom: 20,
-            }}
-          >
-            8. Any Issues not closed off from previous{" "}
-          </Text>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              style={styles.inputField}
-              placeholder={"Any Issues not closed off from previous"}
-            />
-          </View> */}
               <View
                 style={{
                   backgroundColor: "#000",
@@ -754,6 +687,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createHealthSafetyInspectionHandler: (contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, index) =>
     dispatch(insertHealthSafetyForm(contractorName, siteSupervisor, dateInspection, projectAddress, dynamicInput, inspectionName, inspectionFor, dateUpdateComplete, signature, arrayDocument, jobID, tabId, token, index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HealthSafetyInspection);

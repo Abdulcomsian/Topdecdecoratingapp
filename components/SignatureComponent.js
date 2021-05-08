@@ -7,14 +7,14 @@ const SignatureComponent = (props) => {
   const { returnImage } = props;
   const [img, setImg] = React.useState("");
   const handleSignature = (signature) => {
-    const path = FileSystem.cacheDirectory + `${Math.random(0, 199)}sign.jpeg`;
+    const path = FileSystem.cacheDirectory + `${Math.random(0, 199)}.jpeg`;
     FileSystem.writeAsStringAsync(path, signature.replace("data:image/jpeg;base64,", ""), { encoding: FileSystem.EncodingType.Base64 })
       .then((res) => {
         console.log(res);
         FileSystem.getInfoAsync(path, { size: true, md5: true }).then((file) => {
           // console.log(file);
           // setImg(file);
-          returnImage(file.uri);
+          returnImage(path);
         });
       })
       .catch((err) => {

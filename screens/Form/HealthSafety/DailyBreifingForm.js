@@ -149,15 +149,16 @@ const DailyBreifingForm = (props) => {
   const [projectName, setProjectName] = useState("");
   const [supervisorName, setSupervisorName] = useState("");
   const [statementNumber, setStatementNumber] = useState("");
-
+  const [safeStartSiganture, setSafeStartSiganture] = useState("");
+  const [getSign, setGetSign] = useState(false);
   const dailyBrefilyFormInsert = async () => {
   
     try{
       console.log("Try Token :",token)
-      if(mainContractor && projectName && projectName && supervisorName && statementNumber && date && dailyArray && jobSafetyArray && berifingArray && operativeArray && hazrdArray){
-        await props.createDailyBreifingHandler(mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,jobID,tabId,token, props.route.params?.index)
-        props.updateHealthReport(props?.route?.params?.index);
-        alert("Ladder Check List Insert SuccessFully !");
+      if(mainContractor && projectName && projectName && supervisorName && statementNumber && date && dailyArray && jobSafetyArray && berifingArray && operativeArray && hazrdArray && safeStartSiganture){
+        await props.createDailyBreifingHandler(mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,safeStartSiganture,jobID,tabId,token, props.route.params?.index)
+        // props.updateHealthReport(props?.route?.params?.index);
+        alert("Daily Breifing Insert SuccessFully !");
         props.navigation.pop();
       }
     }catch(err){
@@ -181,18 +182,11 @@ const DailyBreifingForm = (props) => {
         onCancel={() => setShow(false)}
         format='DD-MM-YYYY'
       />
-      {signature.bool ? (
+      {getSign ? (
         <SignatureComponent
           returnImage={(uri) => {
-            let copydata = [...operativeArray];
-            copydata[signature.index].sign = uri;
-            setOperativeArray(copydata);
-            setSignature({
-              ...signature.isSign,
-              isSign: false,
-              bool: false,
-              index: -1,
-            });
+            setSafeStartSiganture(uri);
+            setGetSign(false);
           }}
         />
       ) : (
@@ -519,9 +513,6 @@ const DailyBreifingForm = (props) => {
                         Names of operatives attending
                       </Text>
                     </View>
-                    <View style={styles.headerWitnessTitleView}>
-                      <Text style={styles.headerTitle}>Signature</Text>
-                    </View>
                   </View>
                   <View
                     style={{
@@ -562,32 +553,26 @@ const DailyBreifingForm = (props) => {
                           }
                         />
                       </View>
-                      <View style={styles.inputOprativesBodyContainer}>
+                     
+                    </View>
+                  ))}
+                   <View style={[styles.inputOprativesBodyContainer,{marginTop:20}]}>
                         <TouchableOpacity
-                          onPress={() =>
-                            setSignature({
-                              bool: true,
-                              index: index,
-                              isSign: true,
-                            })
-                          }
+                          onPress={() => setGetSign(true)}
                           style={[
                             styles.inputHarmFullBodyContainer,
                             {
-                              justifyContent: "center",
-                              alignItems: "center",
                               width: "100%",
                             },
                           ]}
                         >
-                          {item.sign ? (
+                          {safeStartSiganture ? (
                             <Image
-                              source={{ uri: item.sign }}
+                              source={{ uri: safeStartSiganture }}
                               style={{
-                                height: 30,
-                                width: 30,
+                                height: 100,
+                                width: 100,
                                 backgroundColor: "gray",
-                                justifyContent: "center",
                               }}
                             />
                           ) : (
@@ -610,8 +595,6 @@ const DailyBreifingForm = (props) => {
                           )}
                         </TouchableOpacity>
                       </View>
-                    </View>
-                  ))}
                   <Text
                     style={{
                       fontFamily: "poppins-regular",
@@ -692,8 +675,8 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createDailyBreifingHandler: (mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,jobID,tabId,token, index) =>
-    dispatch(insertDailyBreifingForm(mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,jobID,tabId,token, index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  createDailyBreifingHandler: (mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,safeStartSiganture,jobID,tabId,token, index) =>
+    dispatch(insertDailyBreifingForm(mainContractor,projectName,supervisorName,statementNumber,date,dailyArray,jobSafetyArray,berifingArray,operativeArray,hazrdArray,safeStartSiganture,jobID,tabId,token, index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DailyBreifingForm);

@@ -14,9 +14,11 @@ var lock = require("../../assets/authScreen/lock.png");
 const LoginScreen = (props) => {
   const { navigation, isLogin, isLoginMsg, role, isUserID } = props;
   // const dispatch = useDispatch()
-  const [email, setEmail] = useState("Waqas@gmail.com");
-  const [password, setPassword] = useState("Waqas@123");
+  // const [email, setEmail] = useState("Waqas@gmail.com");
+  // const [password, setPassword] = useState("Waqas@123");
 
+  const [email, setEmail] = useState("Hamza@gmail.com");
+  const [password, setPassword] = useState("Hamza@123");
   const postSignInHandler = async (type) => {
     try {
       if (type == "admin") {

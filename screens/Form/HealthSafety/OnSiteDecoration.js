@@ -35,6 +35,8 @@ const OnSiteDecoration = (props) => {
   const [dynamicInput, setdynamicInput] = useState([]);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
+  const [onSiteSignature, setOnSiteSignature] = useState("");
+  const [getSign, setGetSign] = useState(false);
   const addSiteArray = () => {
     setdynamicInput((oldArray) => [
       ...oldArray,
@@ -58,12 +60,13 @@ const OnSiteDecoration = (props) => {
           contractorName,
           projectName,
           dynamicInput,
+          onSiteSignature,
           jobID,
           tabId,
           token,
           props.route.params?.index
         );
-        props.updateHealthReport(props?.route?.params?.index);
+        // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("Ons Site Decoration Insert SuccessFully !");
       } else {
@@ -108,18 +111,11 @@ const OnSiteDecoration = (props) => {
         onCancel={() => setShow({ isVisible: false, index: -1 })}
         format='DD-MM-YYYY'
       />
-      {signature.bool ? (
+      {getSign ? (
         <SignatureComponent
           returnImage={(uri) => {
-            let copydata = [...dynamicInput];
-            copydata[signature.index].signature = uri;
-            setdynamicInput(copydata);
-            setSignature({
-              ...signature.isSign,
-              isSign: false,
-              bool: false,
-              index: -1,
-            });
+            setOnSiteSignature(uri);
+            setGetSign(false);
           }}
         />
       ) : (
@@ -176,9 +172,6 @@ const OnSiteDecoration = (props) => {
                       CSCS card expiry date
                     </Text>
                   </View>
-                  <View style={styles.headerLadderListTitleView}>
-                    <Text style={styles.headerTitle}>Signature</Text>
-                  </View>
                 </View>
                 <View
                   style={{
@@ -234,30 +227,26 @@ const OnSiteDecoration = (props) => {
                         {new Date(item.date).toLocaleDateString()}
                       </Text>
                     </View>
-                    <View style={styles.inputSiteBodyContainer}>
+                   
+                  </View>
+                ))}
+                 <View style={[styles.inputSiteBodyContainer,{width:"100%"}]}>
                       <TouchableOpacity
-                        onPress={() =>
-                          setSignature({
-                            bool: true,
-                            isSign: true,
-                            index: index,
-                          })
-                        }
+                        onPress={() => setGetSign(true)} 
                         style={[
                           styles.inputHarmFullBodyContainer,
                           {
                             width: "100%",
-                            alignItems: "center",
                           },
                         ]}
                       >
-                        {item.signature ? (
+                        {onSiteSignature ? (
                           <Image
-                            source={{ uri: item.signature }}
+                            source={{ uri: onSiteSignature }}
                             style={{
                               marginTop: 10,
-                              height: 30,
-                              width: 30,
+                              height: 100,
+                              width: 100,
                               backgroundColor: "gray",
                             }}
                           />
@@ -281,8 +270,6 @@ const OnSiteDecoration = (props) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                  </View>
-                ))}
                 <View style={styles.footerView}>
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
                     Address: 2,
@@ -384,6 +371,7 @@ const mapDispatchToProps = (dispatch) => ({
     contractorName,
     projectName,
     dynamicInput,
+    onSiteSignature,
     jobID,
     tabId,
     token,
@@ -394,12 +382,13 @@ const mapDispatchToProps = (dispatch) => ({
         contractorName,
         projectName,
         dynamicInput,
+        onSiteSignature,
         jobID,
         tabId,
         token,
         index
       )
     ),
-    updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+    // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(OnSiteDecoration);

@@ -183,7 +183,7 @@ const FridayPack = (props) => {
           token,
           props.route.params?.index
         );
-        props.updateHealthReport(props?.route?.params?.index);
+        // props.updateHealthReport(props?.route?.params?.index);
         alert("Friday Pack Insert SuccessFully !");
         props.navigation.pop();
       } else {
@@ -453,6 +453,6 @@ const mapDispatchToProps = (dispatch) => ({
         index
       )
     ),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(FridayPack);

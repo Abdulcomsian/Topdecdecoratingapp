@@ -256,8 +256,9 @@ const HealthSafetyDetails = (props) => {
                 ))}
               </View>
             </ScrollView>
+            <ScrollView>
             <View style={styles.pageView} key="2">
-              {miscotArray.map((item, index) => (
+              {decoration.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
@@ -349,8 +350,10 @@ const HealthSafetyDetails = (props) => {
                 </View>
               ))}
             </View>
+            </ScrollView>
+            <ScrollView>
             <View style={styles.pageView} key="3">
-              {miscotArray.map((item, index) => (
+              {snag.map((item, index) => (
                 <View style={styles.listView}>
                   {item.tickSign ? (
                     <View style={{ width: "100%", flexDirection: "row" }}>
@@ -442,6 +445,7 @@ const HealthSafetyDetails = (props) => {
                 </View>
               ))}
             </View>
+            </ScrollView>
           </ViewPager>
         </View>
       </View>
@@ -450,9 +454,10 @@ const HealthSafetyDetails = (props) => {
 };
 const mapStateToProps = (state) => {
   return {
+    token: state.auth.token,
     healthAndSafetyMisCoat : state.summary.healthAndSafetyMisCoat,
     healthAndSafetyDecoration: state.summary.healthAndSafetyDecoration,
-    healthAndSafetySnag: state.summary.healthAndSafety,
+    healthAndSafetySnag: state.summary.healthAndSafetySnag,
   };
 };
 const mapDispatchToProps = (dispatch) => ({

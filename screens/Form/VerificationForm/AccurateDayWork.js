@@ -105,9 +105,9 @@ const AccurateDayWork = (props) => {
     setdynamicPlantInput(preData);
   };
   const updateManagmentValue = (key, index, value) => {
-    let preData = [...dynamicPlantInput];
+    let preData = [...dynamicManagmentInput];
     preData[index][key] = value;
-    setdynamicPlantInput(preData);
+    setdynamicManagmentInput(preData);
   };
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -152,9 +152,10 @@ const AccurateDayWork = (props) => {
         date.toLocaleDateString(),
         jobID,
         tabId,
-        token
+        token,
+        props.route?.params?.index
       );
-      props.updateVerificationReport(props?.route?.params?.index);
+      //props.updateVerificationReport(props?.route?.params?.index);
       alert("Accurate Day Work Insert SuccessFully !")
       props.navigation.pop();
     } else {
@@ -244,11 +245,6 @@ const AccurateDayWork = (props) => {
                   }}>
                   LABOUR{" "}
                 </Text>
-                <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addLabour()}>
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
               </View>
 
               <View style={styles.tableViewContainer}>
@@ -370,90 +366,37 @@ const AccurateDayWork = (props) => {
                         </View>
                       </View>
                     ))}
-                  <View style={styles.tableBody}>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, name: txt })}
-                        value={dataLabour.name}
-                        style={styles.bodyTextInput}
-                        placeholder={"Name"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, trade: txt })}
-                        value={dataLabour.trade}
-                        style={styles.bodyTextInput}
-                        placeholder={"Trade"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, mon: txt })}
-                        value={dataLabour.mon}
-                        style={styles.bodyTextInput}
-                        placeholder={"Mon"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, tues: txt })}
-                        value={dataLabour.tues}
-                        style={styles.bodyTextInput}
-                        placeholder={"Tues"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, wed: txt })}
-                        value={dataLabour.wed}
-                        style={styles.bodyTextInput}
-                        placeholder={"Wed"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, thu: txt })}
-                        value={dataLabour.thu}
-                        style={styles.bodyTextInput}
-                        placeholder={"Thus"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, fri: txt })}
-                        value={dataLabour.fri}
-                        style={styles.bodyTextInput}
-                        placeholder={"Fri"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, sat: txt })}
-                        value={dataLabour.sat}
-                        style={styles.bodyTextInput}
-                        placeholder={"Sat"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, sun: txt })}
-                        value={dataLabour.sun}
-                        style={styles.bodyTextInput}
-                        placeholder={"Sun"}
-                      />
-                    </View>
-                    <View style={styles.inputWeekBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setDataLabour({ ...dataLabour, total: txt })}
-                        value={dataLabour.total}
-                        style={styles.bodyTextInput}
-                        placeholder={"Total"}
-                      />
-                    </View>
-                  </View>
                 </View>
               </View>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => {
+                      if (
+                        dynamicLabourInput.length > 0 &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].name &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].trade &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].mon &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].tues &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].wed &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].thus &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].fri &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].sat &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].sun &&
+                        !dynamicLabourInput[dynamicLabourInput.length - 1].total
+                        
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addLabour();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
               <View
                 style={{
                   width: "100%",
@@ -469,11 +412,6 @@ const AccurateDayWork = (props) => {
                   }}>
                   MATERIALS
                 </Text>
-                <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addMaterialRow()}>
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
               </View>
               <View style={styles.tableViewContainer}>
                 <View style={styles.tableHeader}>
@@ -517,34 +455,30 @@ const AccurateDayWork = (props) => {
                         </View>
                       </View>
                     ))}
-                  <View style={styles.tableBody}>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setMaterialData({ ...materialData, description: txt })}
-                        value={materialData.description}
-                        style={styles.bodyTextInput}
-                        placeholder={"Name"}
-                      />
-                    </View>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setMaterialData({ ...materialData, quantity: txt })}
-                        value={materialData.quantity}
-                        style={styles.bodyTextInput}
-                        placeholder={"Quantity"}
-                      />
-                    </View>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setMaterialData({ ...materialData, unit: txt })}
-                        value={materialData.unit}
-                        style={styles.bodyTextInput}
-                        placeholder={"Unit"}
-                      />
-                    </View>
-                  </View>
                 </View>
               </View>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => {
+                      if (
+                        dynamicMaterialInput.length > 0 &&
+                        !dynamicMaterialInput[dynamicMaterialInput.length - 1].name &&
+                        !dynamicMaterialInput[dynamicMaterialInput.length - 1].quantity &&
+                        !dynamicMaterialInput[dynamicMaterialInput.length - 1].unit
+                        
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addMaterialRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
               <View
                 style={{
                   width: "100%",
@@ -560,11 +494,6 @@ const AccurateDayWork = (props) => {
                   }}>
                   PLANTS AND OTHER ITEMS
                 </Text>
-                <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addPlantItem()}>
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
               </View>
               <View style={styles.tableViewContainer}>
                 <View style={styles.tableHeader}>
@@ -608,34 +537,30 @@ const AccurateDayWork = (props) => {
                         </View>
                       </View>
                     ))}
-                  <View style={styles.tableBody}>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setPlantData({ ...plantData, description: txt })}
-                        value={plantData.description}
-                        style={styles.bodyTextInput}
-                        placeholder={"Name"}
-                      />
-                    </View>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setPlantData({ ...plantData, quantity: txt })}
-                        value={plantData.quantity}
-                        style={styles.bodyTextInput}
-                        placeholder={"Quantity"}
-                      />
-                    </View>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setPlantData({ ...plantData, unit: txt })}
-                        value={plantData.unit}
-                        style={styles.bodyTextInput}
-                        placeholder={"Unit"}
-                      />
-                    </View>
-                  </View>
                 </View>
               </View>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => {
+                      if (
+                        dynamicPlantInput.length > 0 &&
+                        !dynamicPlantInput[dynamicPlantInput.length - 1].name &&
+                        !dynamicPlantInput[dynamicPlantInput.length - 1].quantity &&
+                        !dynamicPlantInput[dynamicPlantInput.length - 1].unit
+                        
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addPlantItem();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
               <View
                 style={{
                   width: "100%",
@@ -651,11 +576,7 @@ const AccurateDayWork = (props) => {
                   }}>
                   PRELIMINARIES AND MANAGEMENT TIME
                 </Text>
-                <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addManagmentRow()}>
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
+               
               </View>
               <View style={styles.tableViewContainer}>
                 <View style={styles.tableHeader}>
@@ -699,34 +620,30 @@ const AccurateDayWork = (props) => {
                         </View>
                       </View>
                     ))}
-                  <View style={styles.tableBody}>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setManagmentData({ ...managmentData, description: txt })}
-                        value={managmentData.description}
-                        style={styles.bodyTextInput}
-                        placeholder={"Name"}
-                      />
-                    </View>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setManagmentData({ ...managmentData, quantity: txt })}
-                        value={managmentData.quantity}
-                        style={styles.bodyTextInput}
-                        placeholder={"Quantity"}
-                      />
-                    </View>
-                    <View style={styles.inputMaterialBodyContainer}>
-                      <TextInput
-                        onChangeText={(txt) => setManagmentData({ ...managmentData, unit: txt })}
-                        value={managmentData.unit}
-                        style={styles.bodyTextInput}
-                        placeholder={"Unit"}
-                      />
-                    </View>
-                  </View>
                 </View>
               </View>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => {
+                      if (
+                        dynamicManagmentInput.length > 0 &&
+                        !dynamicManagmentInput[dynamicManagmentInput.length - 1].name &&
+                        !dynamicManagmentInput[dynamicManagmentInput.length - 1].quantity &&
+                        !dynamicManagmentInput[dynamicManagmentInput.length - 1].unit
+                        
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addManagmentRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
               <View>
                 <Text
                   style={{
@@ -847,7 +764,8 @@ const mapDispatchToProps = (dispatch) => ({
     date,
     jobID,
     tabId,
-    token
+    token,
+    index
   ) =>
     dispatch(
       insertWorkSheet(
@@ -868,10 +786,11 @@ const mapDispatchToProps = (dispatch) => ({
         date,
         jobID,
         tabId,
-        token
+        token,
+        index
       )
     ),
-  updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
+  // updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AccurateDayWork);
 const styles = StyleSheet.create({

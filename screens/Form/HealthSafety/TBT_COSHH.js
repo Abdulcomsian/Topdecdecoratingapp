@@ -76,6 +76,8 @@ const TBTCOSHH = (props) => {
   });
   const [date, setDate] = useState(new Date().toLocaleDateString());
   const [show, setShow] = useState(false);
+  const [tbtSign, settbtSign] = useState("");
+  const [getSign, setGetSign] = useState(false);
   const updateValue = (key, index, value) => {
     let preData = [...attendenceArray];
     preData[index][key] = value;
@@ -101,6 +103,7 @@ const TBTCOSHH = (props) => {
     supervisor: "",
     date: null,
     comments: "",
+    tbtSign:"",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
@@ -114,7 +117,7 @@ const TBTCOSHH = (props) => {
       console.log("Token :",token)
       if(data!=""){
         await props.creatTbtCoshHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
-        props.updateHealthReport(props?.route?.params?.index);
+        // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT COSH Insert SuccessFully !");
       } 
@@ -137,13 +140,19 @@ const TBTCOSHH = (props) => {
         onCancel={() => setShow(false)}
         format='DD-MM-YYYY'
       />
-      {openSign.bool ? (
+     {openSign.bool ? (
         <SignatureComponent
           returnImage={(uri) => {
+           // Yaha se ye chz dalni hai 
+           if(openSign?.index===2){
+            setData({ ...data, tbtSign:uri});
+            setOpenSign({ bool: false, index: -1 });
+           }else{
             let copydata = [...data.jobSummary];
             copydata[openSign.index].sign = uri;
             setData({ ...data, jobSummary: [...copydata] });
             setOpenSign({ bool: false, index: -1 });
+           }
           }}
         />
       ) : (
@@ -207,6 +216,7 @@ const TBTCOSHH = (props) => {
                 getSignature={(index) =>
                   setOpenSign({ ...openSign, bool: true, index })
                 }
+                setTBTGlobalSign={()=>{ setOpenSign({ ...openSign, bool: true, index:2 })}} //Ye chz dalni hai 
                 addAttendence={() =>
                   setData({
                     ...data,

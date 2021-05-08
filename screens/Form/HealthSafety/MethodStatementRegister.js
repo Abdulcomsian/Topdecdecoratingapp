@@ -37,6 +37,7 @@ const MethodStatement = (props) => {
   const [refNo, setRefNo] = useState("");
   const [supervisorName, setSupervisorName] = useState("");
   const [supervisorSignature, setSupervisorSignature] = useState("");
+  const [isSign, setIsSign] = useState("");
   const [dynamicInput, setdynamicInput] = useState([]);
 
   const addStatement = () => {
@@ -54,9 +55,14 @@ const MethodStatement = (props) => {
   };
   const [signature, setSignature] = useState({
     bool: false,
-    isSign: false,
-    isSupervisor: false,
-    index: -1,
+    isSign: {
+      bool: false,
+      uri: "",
+    },
+    isSupervisor: {
+      bool: false,
+      uri: "",
+    },
   });
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState({
@@ -90,7 +96,8 @@ const MethodStatement = (props) => {
         refNo != "" &&
         dynamicInput != "" &&
         supervisorName !== "" &&
-        supervisorSignature !== ""
+        supervisorSignature !== "" &&
+        isSign !==""
       ) {
         await props.createMethodStateMentHandler(
           statementTitle,
@@ -100,12 +107,13 @@ const MethodStatement = (props) => {
           dynamicInput,
           supervisorName,
           supervisorSignature,
+          isSign,
           jobID,
           tabId,
           token,
           props.route.params?.index
         );
-        props.updateHealthReport(props?.route?.params?.index);
+        // props.updateHealthReport(props?.route?.params?.index);
         alert("Method Statement Register Insert SuccessFully !");
         props.navigation.pop();
       } else {
@@ -133,25 +141,20 @@ const MethodStatement = (props) => {
         <SignatureComponent
           returnImage={(uri) => {
             let copydata = [...dynamicInput];
-            if (signature.isSign) {
-              copydata[signature.index].signature = uri;
-              setdynamicInput(copydata);
+            if (signature.isSign.bool) {
               setSignature({
-                ...signature.isSign,
-                isSign: false,
+                ...signature,
+                isSign: { ...signature.isSign, bool: false, uri: uri },
                 bool: false,
-                index: -1,
-                isSupervisor: { ...dynamicInput.isSupervisor },
               });
+              setIsSign(uri)
             } else {
-              setSupervisorSignature(uri);
               setSignature({
-                ...signature.isSupervisor,
-                isSign: false,
+                ...signature,
+                isSupervisor: { ...signature.isSupervisor, bool: false, uri: uri },
                 bool: false,
-                isSupervisor: { ...dynamicInput.isSupervisor },
-                index: -1,
               });
+              setSupervisorSignature(uri)
             }
           }}
         />
@@ -220,9 +223,6 @@ const MethodStatement = (props) => {
                     <Text style={styles.headerTitle}>Name</Text>
                   </View>
                   <View style={styles.headerHarmFulTitleView}>
-                    <Text style={styles.headerTitle}>Signature</Text>
-                  </View>
-                  <View style={styles.headerHarmFulTitleView}>
                     <Text style={styles.headerTitle}>Company</Text>
                   </View>
                   <View style={styles.headerHarmFulTitleView}>
@@ -245,12 +245,7 @@ const MethodStatement = (props) => {
                     marginBottom: 10,
                   }}
                 >
-                  <TouchableOpacity
-                    style={styles.addBtn}
-                    onPress={() => addStatement()}
-                  >
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
+                  
                 </View>
                 {dynamicInput.map((item, index) => (
                   <View style={styles.tableBody} key={index}>
@@ -261,55 +256,6 @@ const MethodStatement = (props) => {
                         onChangeText={(txt) => updateValue("name", index, txt)}
                         value={item.name}
                       />
-                    </View>
-                    <View style={styles.inputHarmFullBodyContainer}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          setSignature({
-                            bool: true,
-                            index: index,
-                            isSign: true,
-                            isSupervisor: false,
-                          })
-                        }
-                        style={[
-                          styles.inputHarmFullBodyContainer,
-                          {
-                            justifyContent: "center",
-                            alignItems: "center",
-                            width: "100%",
-                          },
-                        ]}
-                      >
-                        {item.signature ? (
-                          <Image
-                            source={{ uri: item.signature }}
-                            style={{
-                              height: 30,
-                              width: 30,
-                              backgroundColor: "gray",
-                              justifyContent: "center",
-                            }}
-                          />
-                        ) : (
-                          <Text
-                            style={{
-                              width: "90%",
-                              height: 39,
-                              borderBottomWidth: 1,
-                              borderBottomColor: "#96A8B2",
-                              padding: 5,
-                              fontSize: 8,
-                              color: "#96A8B2",
-                              fontFamily: "poppins-regular",
-                              paddingTop: 12,
-                              marginRight: 5,
-                            }}
-                          >
-                            Sign
-                          </Text>
-                        )}
-                      </TouchableOpacity>
                     </View>
                     <View style={styles.inputHarmFullBodyContainer}>
                       <TextInput
@@ -362,6 +308,73 @@ const MethodStatement = (props) => {
                     </View>
                   </View>
                 ))}
+                 <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].name &&
+                        !dynamicInput[dynamicInput.length - 1].comapany &&
+                        !dynamicInput[dynamicInput.length - 1].translation &&
+                        !dynamicInput[dynamicInput.length - 1].translatore
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addStatement();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.inputFieldContainer}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          setSignature({
+                            bool: true,
+                            isSign: { ...signature.isSign, bool: true },
+                            isSupervisor: { ...signature.isSupervisor, bool: false },
+                          })
+                        }
+                        style={[
+                          styles.inputFieldContainer,
+                          {
+                            width: "100%",
+                          },
+                        ]}
+                      >
+                        {signature.isSign.uri ? (
+                          <Image
+                            source={{ uri: signature.isSign.uri }}
+                            style={{
+                              height: 100,
+                              width: 100,
+                              backgroundColor: "gray",
+                            }}
+                          />
+                        ) : (
+                          <Text
+                            style={{
+                              width: "100%",
+                              height: 39,
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#96A8B2",
+                              padding: 5,
+                              fontSize: 12,
+                              color: "#96A8B2",
+                              fontFamily: "poppins-regular",
+                              paddingTop: 12,
+                              marginRight: 5,
+                            }}
+                          >
+                            Sign of above All Data Insert Correctly or Not
+                          </Text>
+                        )}
+                      </TouchableOpacity>
+                    </View>
                 <View style={styles.inputFieldContainer}>
                   <TextInput
                     style={styles.inputField}
@@ -375,8 +388,8 @@ const MethodStatement = (props) => {
                     onPress={() =>
                       setSignature({
                         bool: true,
-                        isSign: false,
-                        isSupervisor: true,
+                        isSign: { ...signature.isSign, bool: false },
+                        isSupervisor: { ...signature.isSupervisor, bool: true },
                       })
                     }
                     style={[
@@ -386,9 +399,9 @@ const MethodStatement = (props) => {
                       },
                     ]}
                   >
-                    {supervisorSignature ? (
+                    {signature.isSupervisor.uri ? (
                       <Image
-                        source={{ uri: supervisorSignature }}
+                        source={{ uri: signature.isSupervisor.uri }}
                         style={{
                           marginTop: 10,
                           height: 100,
@@ -467,6 +480,7 @@ const mapDispatchToProps = (dispatch) => ({
     dynamicInput,
     supervisorName,
     supervisorSignature,
+    isSign,
     jobID,
     tabId,
     token,
@@ -481,12 +495,13 @@ const mapDispatchToProps = (dispatch) => ({
         dynamicInput,
         supervisorName,
         supervisorSignature,
+        isSign,
         jobID,
         tabId,
         token,
         index
       )
     ),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(MethodStatement);

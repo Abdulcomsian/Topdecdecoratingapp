@@ -157,46 +157,49 @@ export const searchJob = (reference_number, date, token) => {
     }
   };
 };
-export const createDecorator = (firstname, lastname, email, phone, password, token, photoID, cscs_back, cscs_front) => {
+export const createDecorator = (firstname, lastname, email, phone, password, token, photoID, cscsback, cscsfront) => {
   return async (dispatch, getState) => {
     try {
-      let formData = new FormData();
-      console.log({ firstname, lastname, email, phone, password, token, photoID, cscs_back, cscs_front });
-      formData.append("firstname", firstname);
+      const formData = new FormData();
+      //console.log({ firstname, lastname, email, phone, password, token, photoID, cscsback, cscsfront });
       formData.append("email", email);
-      formData.append("password", password); // Aa@1234567
-
+      formData.append("password", password); 
+      formData.append("firstname", firstname);
       formData.append("phone", phone);
       formData.append("lastname", lastname);
 
+      
       photoID &&
-        formData.append("id_card", {
-          file: Platform.OS === "android" ? photoID : photoID.replace("file://", ""),
+        formData.append("idcard", {
+          // file: photoID,
+          uri: Platform.OS === "android" ? photoID: photoID.replace("file://", ""),
+          name: photoID.split("/").pop(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      cscsfront &&
+        formData.append("cscsfront", {
+          // uri: cscsfront,
+          uri: Platform.OS === "android" ? cscsfront : cscsfront.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
           type: "image/png", // it may be necessary in Android.
         });
-      cscs_front &&
-        formData.append("cscs_front", {
-          file: Platform.OS === "android" ? cscs_front : cscs_front.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: "image/png", // it may be necessary in Android.
-        });
-      cscs_back &&
-        formData.append("cscs_back", {
-          file: Platform.OS === "android" ? cscs_back : cscs_back.replace("file://", ""),
+      cscsback &&
+        formData.append("cscsback", {
+          uri: Platform.OS === "android" ? cscsback : cscsback.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
           type: "image/png", // it may be necessary in Android.
         });
 
       console.log(formData);
       // const body = { email, password, firstname, phone, lastname };
-      const request = await axios(`${base_url}admin/create/decorator`, {
+      const request = await axios('https://topdecdecoratingapp.com/api/admin/create/decorator', {
         method: "POST",
         data: formData,
         headers: {
-          Authorization: "Bearer " + token,
+          authorization: "Bearer " + token,
           "Content-Type": "multipart/form-data",
           "Cache-Control": "no-cache",
+          // Accept: 'application/json',
         },
       });
       const response = request.data;
@@ -267,6 +270,7 @@ export const createSupervisor = (name, email, password, phone, token) => {
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -336,7 +340,7 @@ export const updateSupervisor = (id, email, name, number, status, token) => {
     }
   };
 };
-export const updateDecorator = (id, email, firstname, lastname, phone, status, token) => {
+export const updateDecorator = (id, email, firstname, lastname, phone,photoID, cscsFront, cscsBack, status, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Decorator Id :",id)
@@ -345,13 +349,54 @@ export const updateDecorator = (id, email, firstname, lastname, phone, status, t
       // console.log("Decorator Number :",number)
       // console.log("Decorator Status :",status)
       // console.log("Token :",token)
-      const body = { id, firstname, email, phone, lastname, status };
+
+      const formData = new FormData()
+
+      formData.append("id",id)
+      formData.append("firstname",firstname)
+      formData.append("email",email)
+      formData.append("phone",phone)
+      formData.append("lastname",lastname)
+      formData.append("status",status)
+
+
+      photoID.localUri &&
+      formData.append("photoID", {
+        // file: photoID,
+        uri: Platform.OS === "android" ? photoID.localUri: photoID.localUri.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      cscsFront.localUri &&
+      formData.append("cscsFront", {
+        // file: cscsFront,
+        uri: Platform.OS === "android" ? cscsFront.localUri: cscsFront.localUri.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      cscsBack.localUri &&
+      formData.append("cscsBack", {
+        // file: cscsBack,
+        uri: Platform.OS === "android" ? cscsBack.localUri: cscsBack.localUri.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      console.log(formData)
+      //const body = { id, firstname, email, phone, lastname, status };
       const request = await axios(base_url + "admin/edit/editDecorator", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Update Response :", response);
@@ -369,6 +414,7 @@ export const updateDecorator = (id, email, firstname, lastname, phone, status, t
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -412,31 +458,81 @@ export const insertHandOverForm = (
       // console.log("Job ID :",task_id)
       // console.log("Tab Name :",tab_id)
       // console.log("Token :",token)
+      
+      const formData = new FormData();
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("block",block)
+      formData.append("reason",reason)
+      formData.append("plotNumber",plotNumber)
+      formData.append("dateWritten",dateWritten)
+      formData.append("date_isue",date_isue)
+      formData.append("supervisor",supervisor)
 
-      const body = {
-        contractor,
-        project,
-        block,
-        reason,
-        plotNumber,
-        dateWritten,
-        date_isue,
-        supervisor,
-        signature,
-        todayDate,
-        agentName,
-        agentSignature,
-        completed_date,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+      signature &&
+      formData.append("signature", {
+        // file: signature,
+        uri: Platform.OS === "android" ? signature: signature.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      formData.append("todayDate",todayDate)
+      formData.append("agentName",agentName)
+
+      agentSignature &&
+      formData.append("agentSignature", {
+        // file: agentSignature,
+        uri: Platform.OS === "android" ? agentSignature: agentSignature.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+      
+      formData.append("completed_date",completed_date)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+      // jobSummary.map(obj => {
+      
+      //   Object.keys(obj).forEach(key => {
+      //     formData.append(`jobSummary[]`, JSON.stringify([{key:obj[key]}]));
+      //   });
+      // })
+     // formData.append("jobSummary[]",jobSummary[0])
+
+      // // const body = {
+      // //   contractor,
+      // //   project,
+      // //   block,
+      // //   reason,
+      // //   plotNumber,
+      // //   dateWritten,
+      // //   date_isue,
+      // //   supervisor,
+      // //   signature,
+      // //   todayDate,
+      // //   agentName,
+      // //   agentSignature,
+      // //   completed_date,
+      // //   task_id,
+      // //   tab_id,
+      // //   jobSummary,
+      // // };
+
+      console.log("Hand Over Form Data :", formData)
       const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
         method: "POST",
+        data: formData,
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -457,7 +553,7 @@ export const insertHandOverForm = (
         throw new Error(response.message);
       }
     } catch (err) {
-      console.log("Error Response :", err);
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -508,34 +604,79 @@ export const insertMakeReadyForm = (
       // console.log("Tab ID :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        client,
-        project,
-        block,
-        sheetNumber,
-        page,
-        page2,
-        reason,
-        dateWritten,
-        date_isue,
-        plotNumber,
-        supervisorName,
-        signature,
-        dateComplete,
-        agentName,
-        agentSignature,
-        todayDate,
-        task_id,
-        tab_id,
-        dynamicInput,
-      };
+      const formData = new FormData();
+      
+      formData.append("client",client)
+      formData.append("project",project)
+      formData.append("block",block)
+      formData.append("sheetNumber",sheetNumber)
+      formData.append("page",page)
+      formData.append("page2",page2)
+      formData.append("reason",reason)
+      formData.append("dateWritten",dateWritten)
+      formData.append("date_isue",date_isue)
+      formData.append("plotNumber",plotNumber)
+      formData.append("supervisorName",supervisorName)
+
+      signature &&
+      formData.append("signature", {
+        uri: Platform.OS === "android" ? signature : signature.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: "image/png", // it may be necessary in Android.
+      });
+
+
+      formData.append("dateComplete",dateComplete)
+      formData.append("agentName",agentName)
+
+      agentSignature &&
+      formData.append("agentSignature", {
+        uri: Platform.OS === "android" ? agentSignature : agentSignature.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: "image/png", // it may be necessary in Android.
+      });
+
+
+      formData.append("todayDate",todayDate)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      dynamicInput.forEach(item => {
+        formData.append(`dynamicInput[]`, JSON.stringify([item]));
+      });
+
+      console.log(formData)
+      // const body = {
+      //   client,
+      //   project,
+      //   block,
+      //   sheetNumber,
+      //   page,
+      //   page2,
+      //   reason,
+      //   dateWritten,
+      //   date_isue,
+      //   plotNumber,
+      //   supervisorName,
+      //   signature,
+      //   dateComplete,
+      //   agentName,
+      //   agentSignature,
+      //   todayDate,
+      //   task_id,
+      //   tab_id,
+      //   dynamicInput,
+      // };
 
       const request = await axios(base_url + "supervisor/make/workflow/makeReadySheet", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -556,6 +697,7 @@ export const insertMakeReadyForm = (
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
       //console.log(err)
     }
@@ -644,7 +786,7 @@ export const insertSnaggingForm = (
     }
   };
 };
-export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, task_id, tab_id, token, index) => {
+export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, sitemanager_sign, activity_sign, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       console.log("Project Name :", project);
@@ -656,30 +798,101 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
       console.log("Job ID :", task_id);
       console.log("Tab Name :", tab_id);
       console.log("Inssurance Array :", dynamicInput);
-      console.log("Activity Array :", dynamicInputcomplete);
-      console.log("Token :", token);
-      const body = {
-        project,
-        unit,
-        mc,
-        md,
-        sms,
-        bscs,
-        task_id,
-        tab_id,
-        dynamicInput,
-        dynamicInputcomplete,
-      };
+      console.log("sitemanager_sign :", sitemanager_sign);
+      console.log("activity_sign :", activity_sign);
+
+      const formData = new FormData();
+
+      formData.append("project",project)
+      formData.append("unit",unit)
+
+      mc &&
+      formData.append("mc", {
+        // file: mc,
+        uri: Platform.OS === "android" ? mc: mc.replace("file://", ""),
+        name: mc.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      md &&
+      formData.append("md", {
+        // file: md,
+        uri: Platform.OS === "android" ? md: md.replace("file://", ""),
+        name: md.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      sms &&
+      formData.append("sms", {
+        // file: sms,
+        uri: Platform.OS === "android" ? sms: sms.replace("file://", ""),
+        name: sms.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      bscs &&
+      formData.append("bscs", {
+        // file: bscs,
+        uri: Platform.OS === "android" ? bscs: bscs.replace("file://", ""),
+        name: bscs.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      sitemanager_sign &&
+      formData.append("sitemanager_sign", {
+        // file: sitemanager_sign,
+        uri: Platform.OS === "android" ? sitemanager_sign: sitemanager_sign.replace("file://", ""),
+        name: sitemanager_sign.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      activity_sign &&
+      formData.append("activity_sign", {
+        // file: activity_sign,
+        uri: Platform.OS === "android" ? activity_sign: activity_sign.replace("file://", ""),
+        name: activity_sign.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      dynamicInput.forEach(item => {
+        formData.append(`dynamicInput[]`, JSON.stringify([item]));
+      });
+
+
+      dynamicInputcomplete.forEach(item => {
+        formData.append(`dynamicInputcomplete[]`, JSON.stringify([item]));
+      });
+
+
+
+      // const body = {
+      //   project,
+      //   unit,
+      //   mc,
+      //   md,
+      //   sms,
+      //   bscs,
+      //   task_id,
+      //   tab_id,
+      //   dynamicInput,
+      //   dynamicInputcomplete,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
+      console.log("Insert Response :", response);
       if (response.success == true) {
         // dispatch({
         //   type: Actions.UPDATE_PLOT_REPORT,
@@ -697,7 +910,7 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
         throw new Error(response.message);
       }
     } catch (err) {
-      console.log("Insert Error Response :", err.message);
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -752,36 +965,82 @@ export const insertRemedialForm = (
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        contractor,
-        project,
-        sheet_number,
-        page1,
-        page2,
-        block,
-        plot_area_number,
-        operative,
-        data_issue,
-        site_instruction_number,
-        work_reason,
-        supervisorName,
-        supervisorSignature,
-        dateSupervisor,
-        managerName,
-        managerSignature,
-        dateManager,
-        task_id,
-        tab_id,
-        dynamicInput,
-        totalHours,
-      };
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("sheet_number",sheet_number)
+      formData.append("page1",page1)
+      formData.append("page2",page2)
+      formData.append("block",block)
+      formData.append("plot_area_number",plot_area_number)
+      formData.append("operative",operative)
+      formData.append("data_issue",data_issue)
+      formData.append("site_instruction_number",site_instruction_number)
+      formData.append("work_reason",work_reason)
+      formData.append("supervisorName",supervisorName)
+
+      supervisorSignature &&
+      formData.append("supervisorSignature", {
+        // file: supervisorSignature,
+        uri: Platform.OS === "android" ? supervisorSignature: supervisorSignature.replace("file://", ""),
+        name: supervisorSignature.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("dateSupervisor",dateSupervisor)
+      formData.append("managerName",managerName)
+
+      managerSignature &&
+      formData.append("managerSignature", {
+        // file: managerSignature,
+        uri: Platform.OS === "android" ? managerSignature: managerSignature.replace("file://", ""),
+        name: managerSignature.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+      formData.append("dateManager",dateManager)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      dynamicInput.forEach(item => {
+        formData.append(`dynamicInput[]`, JSON.stringify([item]));
+      });
+
+
+      formData.append("totalHours",totalHours)
+
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   sheet_number,
+      //   page1,
+      //   page2,
+      //   block,
+      //   plot_area_number,
+      //   operative,
+      //   data_issue,
+      //   site_instruction_number,
+      //   work_reason,
+      //   supervisorName,
+      //   supervisorSignature,
+      //   dateSupervisor,
+      //   managerName,
+      //   managerSignature,
+      //   dateManager,
+      //   task_id,
+      //   tab_id,
+      //   dynamicInput,
+      //   totalHours,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/workflow/RemendialSheet", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       //console.log("Insert Response :", response);
@@ -802,6 +1061,7 @@ export const insertRemedialForm = (
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -818,23 +1078,49 @@ export const insertScopeForm = (dynamicInput, painter, signature, plot_number, t
       // console.log("Job ID :", task_id);
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
-      const body = {
-        signature,
-        date,
-        type,
-        painter,
-        plot_number,
-        task_id,
-        tab_id,
-        dynamicInput,
-      };
+
+      const formData = new FormData()
+
+      signature &&
+      formData.append("signature", {
+        // file: signature,
+        uri: Platform.OS === "android" ? signature: signature.replace("file://", ""),
+        name: signature.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("date",date)
+      formData.append("type",type)
+      formData.append("painter",painter)
+      formData.append("plot_number",plot_number)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      dynamicInput.forEach(item => {
+        formData.append(`dynamicInput[]`, JSON.stringify([item]));
+      });
+
+
+      // const body = {
+      //   signature,
+      //   date,
+      //   type,
+      //   painter,
+      //   plot_number,
+      //   task_id,
+      //   tab_id,
+      //   dynamicInput,
+      // };
 
       const request = await axios(base_url + "supervisor/make/workflow/insertScope", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -855,6 +1141,7 @@ export const insertScopeForm = (dynamicInput, painter, signature, plot_number, t
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -900,32 +1187,79 @@ export const insertWorkSheet = (
       // console.log("Job ID :", task_id);
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
-      const body = {
-        contractor,
-        title,
-        day_start,
-        week_ending,
-        indution,
-        plot,
-        description,
-        manager,
-        sign,
-        date,
-        position,
-        task_id,
-        tab_id,
-        LABOUR,
-        MATERIALS,
-        PLANTS,
-        PRELIMINARIES,
-      };
+
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("title",title)
+      formData.append("day_start",day_start)
+      formData.append("week_ending",week_ending)
+      formData.append("indution",indution)
+      formData.append("plot",plot)
+      formData.append("description",description)
+      formData.append("manager",manager)
+
+      sign &&
+      formData.append("sign", {
+        // file: sign,
+        uri: Platform.OS === "android" ? sign: sign.replace("file://", ""),
+        name: sign.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("date",date)
+      formData.append("position",position)    
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      LABOUR.forEach(item => {
+        formData.append(`LABOUR[]`, JSON.stringify([item]));
+      });
+
+
+      MATERIALS.forEach(item => {
+        formData.append(`MATERIALS[]`, JSON.stringify([item]));
+      });
+
+
+      PLANTS.forEach(item => {
+        formData.append(`PLANTS[]`, JSON.stringify([item]));
+      });
+
+
+      PRELIMINARIES.forEach(item => {
+        formData.append(`PRELIMINARIES[]`, JSON.stringify([item]));
+      });
+
+
+      // const body = {
+      //   contractor,
+      //   title,
+      //   day_start,
+      //   week_ending,
+      //   indution,
+      //   plot,
+      //   description,
+      //   manager,
+      //   sign,
+      //   date,
+      //   position,
+      //   task_id,
+      //   tab_id,
+      //   LABOUR,
+      //   MATERIALS,
+      //   PLANTS,
+      //   PRELIMINARIES,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/verification/accurate", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       //console.log("Insert Response :", response);
@@ -1139,7 +1473,7 @@ export const insertAccidentForm = (
   Location_of_Incident,
   Investigation_Date,
   Occupation,
-  Type_of_Incident,
+  incidentArray,
   Name_of_Injured_Person,
   Age,
   Sex,
@@ -1147,8 +1481,8 @@ export const insertAccidentForm = (
   Address,
   Phone,
   Nature_of_Injury,
-  Ambulance_Details,
-  Dynamic_Input,
+  callingDetails,
+  dynamicInput,
   Witness_Statement,
   Whom_Accident_Reported,
   When_Accident_Reported,
@@ -1175,7 +1509,7 @@ export const insertAccidentForm = (
       // console.log("Incident Date :", Incident_Date);
       // console.log("Location of Incident :", Location_of_Incident);
       // console.log("Investigation Date :", Investigation_Date);
-      // console.log("Type of Incident :", Type_of_Incident);
+      console.log("Type of Incident :", incidentArray);
       // console.log("Name of Injured Person :", Name_of_Injured_Person);
       // console.log("Age :", Age);
       // console.log("Sex :", Sex);
@@ -1184,8 +1518,8 @@ export const insertAccidentForm = (
       // console.log("Phone Number :", Phone);
       // console.log("Occupation :", Occupation);
       // console.log("Nature of Injury :", Nature_of_Injury);
-      // console.log("Ambulance Details :", Ambulance_Details);
-      // console.log("Dynamic Input :", Dynamic_Input);
+      // console.log("Ambulance Details :", callingDetails);
+      // console.log("Dynamic Input :", dynamicInput);
       // console.log("Witness Statement :", Witness_Statement);
       // console.log("Whom Accident Reported :", Whom_Accident_Reported);
       // console.log("When Accident Reported :", When_Accident_Reported);
@@ -1201,46 +1535,131 @@ export const insertAccidentForm = (
       // console.log("Manager Name :", Manager_Name);
       // console.log("Manager Signature :", Manager_sign);
       // console.log("Manager Date :", Manager_date);
-      const body = {
-        Name_Of_Person,
-        Incident_Date,
-        Location_of_Incident,
-        Investigation_Date,
-        Type_of_Incident,
-        Name_of_Injured_Person,
-        Age,
-        Sex,
-        Employee,
-        Address,
-        Phone,
-        Occupation,
-        Nature_of_Injury,
-        Witness_Statement,
-        Whom_Accident_Reported,
-        When_Accident_Reported,
-        Supervisor_Name,
-        Supervisor_Signature,
-        Supervisor_Date,
-        Whom_Management_Reported,
-        Manager_Date_Report,
-        Comment_Initial_Investigation,
-        Action_Requried,
-        Action_Performed,
-        Manager_Name,
-        Manager_sign,
-        Manager_date,
-        task_id,
-        tab_id,
-        Ambulance_Details,
-        Dynamic_Input,
-      };
+
+
+      const formData = new FormData();
+
+      formData.append("Name_Of_Person",Name_Of_Person)
+      formData.append("Incident_Date",Incident_Date)
+      formData.append("Location_of_Incident",Location_of_Incident)
+      formData.append("Investigation_Date",Investigation_Date)
+
+      
+      incidentArray.forEach(item => {
+        formData.append(`incidentArray[]`, JSON.stringify([item]));
+      });
+      // formData.append(`incidentArray`,JSON.stringify(incidentArray));
+   
+
+
+      formData.append("Name_of_Injured_Person",Name_of_Injured_Person)
+      formData.append("Age",Age)
+      formData.append("Sex",Sex)
+
+      // formData.append(`Employee`,JSON.stringify(Employee));
+      Employee.forEach(item => {
+        formData.append(`Employee[]`, JSON.stringify([item]));
+      });
+      
+      
+      formData.append("Address",Address)
+      formData.append("Phone",Phone)
+      formData.append("Occupation",Occupation)
+
+    
+
+      
+      formData.append("Nature_of_Injury",Nature_of_Injury)
+      formData.append("Witness_Statement",Witness_Statement)
+      formData.append("Whom_Accident_Reported",Whom_Accident_Reported)
+      formData.append("When_Accident_Reported",When_Accident_Reported)
+      formData.append("Supervisor_Name",Supervisor_Name)
+      
+      Supervisor_Signature &&
+      formData.append("Supervisor_Signature", {
+        // file: Supervisor_Signature,
+        uri: Platform.OS === "android" ? Supervisor_Signature: Supervisor_Signature.replace("file://", ""),
+        name: Supervisor_Signature.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("Supervisor_Date",Supervisor_Date)
+      formData.append("Whom_Management_Reported",Whom_Management_Reported)
+      formData.append("Manager_Date_Report",Manager_Date_Report)
+      formData.append("Comment_Initial_Investigation",Comment_Initial_Investigation)
+      formData.append("Action_Requried",Action_Requried)
+      formData.append("Action_Performed",Action_Performed)
+      formData.append("Manager_Name",Manager_Name)
+
+      Manager_sign &&
+      formData.append("Manager_sign", {
+        // file: Manager_sign,
+        uri: Platform.OS === "android" ? Manager_sign: Manager_sign.replace("file://", ""),
+        name: Manager_sign.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("Manager_date",Manager_date)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      callingDetails.forEach(item => {
+        formData.append(`callingDetails[]`, JSON.stringify([item]));
+      });
+
+
+      dynamicInput.forEach(item => {
+        formData.append(`dynamicInput[]`, JSON.stringify([item]));
+      });
+      
+    
+
+      console.log(formData)
+
+
+
+      // const body = {
+      //   Name_Of_Person,
+      //   Incident_Date,
+      //   Location_of_Incident,
+      //   Investigation_Date,
+      //   Type_of_Incident,
+      //   Name_of_Injured_Person,
+      //   Age,
+      //   Sex,
+      //   Employee,
+      //   Address,
+      //   Phone,
+      //   Occupation,
+      //   Nature_of_Injury,
+      //   Witness_Statement,
+      //   Whom_Accident_Reported,
+      //   When_Accident_Reported,
+      //   Supervisor_Name,
+      //   Supervisor_Signature,
+      //   Supervisor_Date,
+      //   Whom_Management_Reported,
+      //   Manager_Date_Report,
+      //   Comment_Initial_Investigation,
+      //   Action_Requried,
+      //   Action_Performed,
+      //   Manager_Name,
+      //   Manager_sign,
+      //   Manager_date,
+      //   task_id,
+      //   tab_id,
+      //   Ambulance_Details,
+      //   Dynamic_Input,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/accident", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1272,27 +1691,55 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        contractor,
-        project,
-        operation,
-        date,
-        signature,
-        date1,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
 
+      const formData = new FormData();
+      
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("operation",operation)
+      formData.append("date",date)
+
+      signature &&
+      formData.append("signature", {
+        // file: signature,
+        uri: Platform.OS === "android" ? signature: signature.replace("file://", ""),
+        name: signature.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+
+      formData.append("date1",date1)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   operation,
+      //   date,
+      //   signature,
+      //   date1,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+      console.log(formData)
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/cleanup", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
+      console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.INSERT_CLEAN_UP_FORM_SUCCESS,
@@ -1306,6 +1753,7 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -1322,22 +1770,47 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        contractor,
-        project,
-        supervisor,
-        date,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+      const formData = new FormData()
 
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+
+      supervisor &&
+      formData.append("supervisor", {
+        // file: supervisor,
+        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
+        name: supervisor.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("date",date)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+      // formData.append("jobSummary",jobSummary)
+      
+      // const body = {
+      //   contractor,
+      //   project,
+      //   supervisor,
+      //   date,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+      
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/electric_equipment", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1354,6 +1827,7 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -1361,34 +1835,63 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
 export const insertFridayPackForm = (contractor, project, supervisor, jobSummary, week_ending, date, furhter_comment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Name Of Contractor :", contractor);
-      console.log("Project Name :", project);
-      console.log("Supervisor Sign :", supervisor);
-      console.log("Document Row :", jobSummary);
-      console.log("Week Ending :", week_ending);
-      console.log("further Comments :", furhter_comment);
-      console.log("Date :", date);
-      console.log("Job ID :", task_id);
-      console.log("Tab Name :", tab_id);
-      console.log("Token :", token);
-      const body = {
-        contractor,
-        project,
-        week_ending,
-        supervisor,
-        furhter_comment,
-        date,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+      // console.log("Name Of Contractor :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Supervisor Sign :", supervisor);
+      // console.log("Document Row :", jobSummary);
+      // console.log("Week Ending :", week_ending);
+      // console.log("further Comments :", furhter_comment);
+      // console.log("Date :", date);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
+
+
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("week_ending",week_ending)
+
+      supervisor &&
+      formData.append("supervisor", {
+        // file: supervisor,
+        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
+        name: supervisor.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("furhter_comment",furhter_comment)
+      formData.append("date",date)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+      //formData.append("jobSummary",jobSummary)
+
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   week_ending,
+      //   supervisor,
+      //   furhter_comment,
+      //   date,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/friday_pack", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1405,6 +1908,7 @@ export const insertFridayPackForm = (contractor, project, supervisor, jobSummary
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -1464,7 +1968,7 @@ export const insertHealthSafetyForm = (
   Inspection_Name,
   Inspection_For,
   Inspection_Date,
-  Inspection_Signature,
+  inspectionSignature,
   Document,
   task_id,
   tab_id,
@@ -1481,33 +1985,72 @@ export const insertHealthSafetyForm = (
       // console.log("Inspection Name :", Inspection_Name);
       // console.log("Inspection For :", Inspection_For);
       // console.log("Inspection Date :", Inspection_Date);
-      // console.log("Inspection Signature :", Inspection_Signature);
+      // console.log("Inspection Signature :", inspectionSignature);
       // console.log("Document Array :", Document);
       // console.log("Job ID :", task_id);
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        Contractor,
-        Supervisor,
-        Date,
-        Address,
-        Inspection_Name,
-        Inspection_For,
-        Inspection_Date,
-        Inspection_Signature,
-        task_id,
-        tab_id,
-        Action,
-        Document,
-      };
+
+      const formData = new FormData();
+      
+      formData.append("Contractor",Contractor)
+      formData.append("Supervisor",Supervisor)
+      formData.append("Date",Date)
+      formData.append("Address",Address)
+      formData.append("Inspection_Name",Inspection_Name)
+      formData.append("Inspection_For",Inspection_For)
+      formData.append("Inspection_Date",Inspection_Date)
+
+      inspectionSignature &&
+      formData.append("inspectionSignature", {
+        // file: inspectionSignature,
+        uri: Platform.OS === "android" ? inspectionSignature: inspectionSignature.replace("file://", ""),
+        name: inspectionSignature.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      Action.forEach(item => {
+        formData.append(`Action[]`, JSON.stringify([item]));
+      });
+
+
+      Document.forEach(item => {
+        formData.append(`Document[]`, JSON.stringify([item]));
+      });
+ 
+      // formData.append(`Document`,JSON.stringify(Document));
+
+      
+      
+      console.log(formData)
+      // const body = {
+      //   Contractor,
+      //   Supervisor,
+      //   Date,
+      //   Address,
+      //   Inspection_Name,
+      //   Inspection_For,
+      //   Inspection_Date,
+      //   Inspection_Signature,
+      //   task_id,
+      //   tab_id,
+      //   Action,
+      //   Document,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/HealthAndSAfetyInspection", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1522,10 +2065,9 @@ export const insertHealthSafetyForm = (
         //   payload: response,
         // });
         throw new Error(response.message);
-        console.log("error:", response.message);
       }
     } catch (err) {
-      console.log("error:", err.message);
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -1533,30 +2075,57 @@ export const insertHealthSafetyForm = (
 export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Supervisor, date, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Main Contractor  :", contractor);
-      console.log("Project Name :", project);
-      console.log("Week Commencing :", week);
-      console.log("Check List Attay :", jobSummary);
-      console.log("Supervisor Sign :", Supervisor);
-      console.log("Supervisor Date :", date);
+      // console.log("Main Contractor  :", contractor);
+      // console.log("Project Name :", project);
+      // console.log("Week Commencing :", week);
+      // console.log("Check List Attay :", jobSummary);
+      // console.log("Supervisor Sign :", Supervisor);
+      // console.log("Supervisor Date :", date);
 
-      const body = {
-        contractor,
-        project,
-        week,
-        Supervisor,
-        date,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("week",week)
+
+      Supervisor &&
+      formData.append("Supervisor", {
+        // file: Supervisor,
+        uri: Platform.OS === "android" ? Supervisor: Supervisor.replace("file://", ""),
+        name: Supervisor.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+
+      formData.append("date",date)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+      // formData.append("jobSummary",jobSummary)
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   week,
+      //   Supervisor,
+      //   date,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepings", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1573,6 +2142,7 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -1591,24 +2161,52 @@ export const insertLAdderCheckListForm = (contractor, project, supervisor, date,
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        contractor,
-        project,
-        date,
-        supervisor,
-        next_inspection,
-        comment,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("date",date)
+
+      supervisor &&
+      formData.append("supervisor", {
+        // file: supervisor,
+        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
+        name: supervisor.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+
+      formData.append("next_inspection",next_inspection)
+      formData.append("comment",comment)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+      // formData.append("jobSummary",jobSummary)
+
+        console.log(formData)
+      // const body = {
+      //   contractor,
+      //   project,
+      //   date,
+      //   supervisor,
+      //   next_inspection,
+      //   comment,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Ladders", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1629,7 +2227,7 @@ export const insertLAdderCheckListForm = (contractor, project, supervisor, date,
     }
   };
 };
-export const insertMethodStatementForm = (title, contractor, project, ref, jobSummary, supervisor, supervisor_sign, task_id, tab_id, token, index) => {
+export const insertMethodStatementForm = (title, contractor, project, ref, jobSummary, supervisor, supervisor_sign,isSign, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       //   console.log("Statement Title  :", title);
@@ -1643,24 +2241,58 @@ export const insertMethodStatementForm = (title, contractor, project, ref, jobSu
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        title,
-        contractor,
-        project,
-        ref,
-        supervisor,
-        supervisor_sign,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+
+      const formData = new FormData();
+      
+      formData.append("title",title)
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("ref",ref)
+      formData.append("supervisor",supervisor)
+
+      supervisor_sign &&
+      formData.append("supervisor_sign", {
+        // file: supervisor_sign,
+        uri: Platform.OS === "android" ? supervisor_sign: supervisor_sign.replace("file://", ""),
+        name: supervisor_sign.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+
+      isSign &&
+      formData.append("isSign", {
+        // file: isSign,
+        uri: Platform.OS === "android" ? isSign: isSign.replace("file://", ""),
+        name: isSign.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+      // const body = {
+      //   title,
+      //   contractor,
+      //   project,
+      //   ref,
+      //   supervisor,
+      //   supervisor_sign,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/methodStatement", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1681,7 +2313,7 @@ export const insertMethodStatementForm = (title, contractor, project, ref, jobSu
     }
   };
 };
-export const insertIssueRecordForm = (contractor, project, employees, jobSummary, task_id, tab_id, token, index) => {
+export const insertIssueRecordForm = (contractor, project, employees, jobSummary,recordSignature, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main contractor  :", contractor);
@@ -1692,24 +2324,50 @@ export const insertIssueRecordForm = (contractor, project, employees, jobSummary
       // console.log("Tab Name :", tabId);
       // console.log("Token :", token);
 
-      const body = {
-        contractor,
-        employees,
-        project,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("employees",employees)
+      formData.append("project",project)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      recordSignature &&
+      formData.append("recordSignature", {
+        // file: recordSignature,
+        uri: Platform.OS === "android" ? recordSignature: recordSignature.replace("file://", ""),
+        name: recordSignature.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+      
+
+      // const body = {
+      //   contractor,
+      //   employees,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/personal_protective", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
-      //console.log("Insert Response :", response);
+      console.log("Insert Response :", response);
       if (response.success == true) {
         dispatch({
           type: Actions.INSERT_PERSONAL_PROTECTIVE_FORM_SUCCESS,
@@ -1740,23 +2398,51 @@ export const insertPuwerInspectionForm = (contractor, project, comments, supervi
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        contractor,
-        project,
-        comments,
-        supervisor,
-        date,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+      const formData = new FormData()
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("comments",comments)
+
+
+      supervisor &&
+      formData.append("supervisor", {
+        // file: supervisor,
+        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
+        name: supervisor.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+
+      formData.append("date",date)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   comments,
+      //   supervisor,
+      //   date,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Puwer", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1773,11 +2459,12 @@ export const insertPuwerInspectionForm = (contractor, project, comments, supervi
       //   throw new Error(response.message);
       // }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-export const insertOnSiteDecorationForm = (contractor, project, jobSummary, task_id, tab_id, token, index) => {
+export const insertOnSiteDecorationForm = (contractor, project, jobSummary,onSiteSignature, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       //   console.log("Statement Title  :", title);
@@ -1791,20 +2478,44 @@ export const insertOnSiteDecorationForm = (contractor, project, jobSummary, task
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        contractor,
-        project,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+      const formData = new FormData()
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      onSiteSignature &&
+      formData.append("onSiteSignature", {
+        // file: onSiteSignature,
+        uri: Platform.OS === "android" ? onSiteSignature: onSiteSignature.replace("file://", ""),
+        name: onSiteSignature.split("/").pop(),
+        type: 'image/jpeg', // it may be necessary in Android.
+      });
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
+      
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/top_decorting", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1821,6 +2532,7 @@ export const insertOnSiteDecorationForm = (contractor, project, jobSummary, task
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -1918,6 +2630,7 @@ export const insertDailyBreifingForm = (
   Brefily,
   Operative,
   Hazrd,
+  saveStartSignature,
   task_id,
   tab_id,
   token,
@@ -1939,27 +2652,71 @@ export const insertDailyBreifingForm = (
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        Contractor,
-        Project,
-        Supervisor,
-        Statment,
-        Date,
-        task_id,
-        tab_id,
-        Daily,
-        Job_Safe,
-        Brefily,
-        Operative,
-        Hazrd,
-      };
+      const formData = new FormData()
 
+      formData.append("Contractor",Contractor)
+      formData.append("Project",Project)
+      formData.append("Supervisor",Supervisor)
+      formData.append("Statment",Statment)
+      formData.append("Date",Date)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      Daily.forEach(item => {
+        formData.append(`Daily[]`, JSON.stringify([item]));
+      });
+
+      Job_Safe.forEach(item => {
+        formData.append(`Job_Safe[]`, JSON.stringify([item]));
+      });
+
+      Brefily.forEach(item => {
+        formData.append(`Brefily[]`, JSON.stringify([item]));
+      });
+
+      Operative.forEach(item => {
+        formData.append(`Operative[]`, JSON.stringify([item]));
+      });
+
+      Hazrd.forEach(item => {
+        formData.append(`Hazrd[]`, JSON.stringify([item]));
+      });
+
+
+      saveStartSignature &&
+      formData.append("saveStartSignature", {
+        // file: saveStartSignature,
+        uri: Platform.OS === "android" ? saveStartSignature: saveStartSignature.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+      
+      // formData.append("Contractor",Contractor)
+      // formData.append("Contractor",Contractor)
+      
+      // const body = {
+      //   Contractor,
+      //   Project,
+      //   Supervisor,
+      //   Statment,
+      //   Date,
+      //   task_id,
+      //   tab_id,
+      //   Daily,
+      //   Job_Safe,
+      //   Brefily,
+      //   Operative,
+      //   Hazrd,
+      // };
+      console.log(formData)
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DailyBreifing", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1976,6 +2733,7 @@ export const insertDailyBreifingForm = (
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -1988,12 +2746,42 @@ export const insertTBTCOSH = (data, token, index) => {
       // console.log("Tab Name :", tabId);
       //console.log("Token :", token);
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/COSHH", {
+      const formData = new FormData()
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
+console.log("Form Data",formData)
+
+
+const request = await axios(base_url + "supervisor/insert/healthAndSecurity/COSHH", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2029,12 +2817,37 @@ export const insertTbtFire = (data, token, index) => {
       //   jobSummary,
       // };
 
+      const formData = new FormData()
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
+      console.log("Form Data :",formData)
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/fire_safety", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2070,12 +2883,35 @@ export const insertTbtSlip = (data, token, index) => {
       //   jobSummary,
       // };
 
+      const formData = new FormData()
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/SlitTrip", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2109,13 +2945,36 @@ export const insertTbtCovid = (data, token, index) => {
       //   tab_id,
       //   jobSummary,
       // };
+      const formData = new FormData()
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/covid", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2132,6 +2991,7 @@ export const insertTbtCovid = (data, token, index) => {
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -2150,12 +3010,37 @@ export const insertTbtHouseKeepingForm = (data, token, index) => {
       //   jobSummary,
       // };
 
+
+      const formData = new FormData()
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepingTB", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2191,12 +3076,39 @@ export const insertTbtMobileForm = (data, token, index) => {
       //   jobSummary,
       // };
 
+
+      const formData = new FormData()
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
+
+
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/MobileEvelated", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2230,13 +3142,39 @@ export const insertTbtRespiratory = (data, token, index) => {
       //   tab_id,
       //   jobSummary,
       // };
+      const formData = new FormData()
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DustMask", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2270,13 +3208,40 @@ export const insertTbtSilicaDust = (data, token, index) => {
       //   tab_id,
       //   jobSummary,
       // };
+      const formData = new FormData()
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/SilicaDust", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2311,13 +3276,52 @@ export const insertTbtDrugs = (data, token, index) => {
       //   jobSummary,
       // };
 
+      const formData = new FormData();
+
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+
+      data.signature &&
+      formData.append("signature", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.signature:  data.signature.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      formData.append("supervisor",data.supervisor)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DrugAndAlcohol", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
+
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2343,12 +3347,46 @@ export const insertTbtVolience = (data, token, index) => {
       // console.log("array :", data);
       // console.log("Token :", token);
 
+      const formData = new FormData();
+
+
+      formData.append("date",data.date)
+      formData.append("supervisor",data.supervisor)
+
+      data.signature &&
+      formData.append("signature", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.signature:  data.signature.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: signature,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/VoilenceAndAggression", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2384,12 +3422,38 @@ export const insertTbtWorking = (data, token, index) => {
       //   jobSummary,
       // };
 
+      const formData = new FormData();
+
+
+      formData.append("contractor",data.contractor)
+      formData.append("project",data.project)
+      formData.append("meeting",data.meeting)
+      formData.append("date",data.date)
+      formData.append("comments",data.comments)
+      formData.append("task_id",data.task_id)
+      formData.append("tab_id",data.tab_id)
+
+      data.tbtSign &&
+      formData.append("tbtSign", {
+        // file: tbtSign,
+        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      })
+
+
+      data.jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeight", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: data,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2406,11 +3470,12 @@ export const insertTbtWorking = (data, token, index) => {
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-export const insertTbtRegister = (client, project, subject, outline, date, start, finish, jobSummary, supervisor, signature, task_id, tab_id, token, index) => {
+export const insertTbtRegister = (client, project, subject, outline, date, start, finish, jobSummary, supervisor, signature,tbtSign, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Client :", client);
@@ -2427,27 +3492,66 @@ export const insertTbtRegister = (client, project, subject, outline, date, start
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        client,
-        project,
-        subject,
-        date,
-        outline,
-        start,
-        finish,
-        supervisor,
-        signature,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
 
+      const formData = new FormData();
+
+      formData.append("client",client)
+      formData.append("project",project)
+      formData.append("subject",subject)
+      formData.append("date",date)
+      formData.append("outline",outline)
+      formData.append("start",start)
+      formData.append("finish",finish)
+      formData.append("supervisor",supervisor)
+
+      signature &&
+      formData.append("signature", {
+        // file: signature,
+        uri: Platform.OS === "android" ? signature:  signature.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      })
+
+
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      tbtSign &&
+      formData.append("tbtSign", {
+        // file: tbtSign,
+        uri: Platform.OS === "android" ? tbtSign:  tbtSign.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      })
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+      // const body = {
+      //   client,
+      //   project,
+      //   subject,
+      //   date,
+      //   outline,
+      //   start,
+      //   finish,
+      //   supervisor,
+      //   signature,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+      console.log(formData)
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/ToolBoxRegister", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2464,6 +3568,7 @@ export const insertTbtRegister = (client, project, subject, outline, date, start
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -2480,23 +3585,48 @@ export const insertTbtInventory = (contractor, project, supervisor, date, jobSum
       console.log("Tab Name :", tab_id);
       console.log("Token :", token);
 
-      const body = {
-        contractor,
-        project,
-        date,
-        supervisor,
-        jobSummary,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+
+      const formData = new FormData()
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("date",date)
+
+
+      supervisor &&
+      formData.append("supervisor", {
+        // file: supervisor,
+        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
+        name: Math.random(0, 1000).toString(),
+        type: 'image/png', // it may be necessary in Android.
+      });
+
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      // const body = {
+      //   contractor,
+      //   project,
+      //   date,
+      //   supervisor,
+      //   jobSummary,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeightEquip", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -2550,18 +3680,29 @@ export const updateWorkFlowTopTabs = ( plot_id, token ) => {
       //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
           dispatch({
             type: Actions.UPDATE_SNAG_WORKFLOW,
-            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
+            payload: _returnUpdatedArray(getState().summary.snagArray,null)
           });
      //   }
        
       } else {
-        // dispatch({
-        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-        //   payload: response,
-        // });
-        throw new Error(response.message);
+        dispatch({
+            type: Actions.UPDATE_MISCOT_WORKFLOW,
+            payload: _returnUpdatedArray(getState().summary.misCoat,null)
+          });
+      //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+          dispatch({
+            type: Actions.UPDATE_DECORATION_WORKFLOW,
+            payload: _returnUpdatedArray(getState().summary.decorationArray,null)
+          });
+      //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+          dispatch({
+            type: Actions.UPDATE_SNAG_WORKFLOW,
+            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
+          });
       }
     } catch (err) {
+
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -2575,7 +3716,7 @@ export const updateVerificationTopTabs = ( plot_id, token ) => {
         plot_id
       };
 
-      const request = await axios(base_url + "supervisor/search/job/taskDatails", {
+      const request = await axios(base_url + "supervisor/search/job/taskDatails/verificationOfWork", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
@@ -2604,19 +3745,27 @@ export const updateVerificationTopTabs = ( plot_id, token ) => {
      //   }
        
       } else {
-        // dispatch({
-        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-        //   payload: response,
-        // });
-        throw new Error(response.message);
+        dispatch({
+          type: Actions.UPDATE_MISCOT_VERIFICATION,
+          payload: _returnUpdatedArray(getState().summary.verificationMiscoatInfo,null),
+        });
+    //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+        dispatch({
+          type: Actions.UPDATE_DECORATION_VERIFICATION,
+          payload: _returnUpdatedArray(getState().summary.verificationDecorationInfo,null),
+        });
+    //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+        dispatch({
+          type: Actions.UPDATE_SNAG_VERIFICATION,
+          payload: _returnUpdatedArray(getState().summary.verificationSngInfo,null)
+        });
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-
-
 export const updateHealthTopTabs = ( plot_id, token ) => {
   //return console.log({plot_id, tab_id, token })
   return async (dispatch, getState) => {
@@ -2624,8 +3773,8 @@ export const updateHealthTopTabs = ( plot_id, token ) => {
       const body = {
         plot_id
       };
-
-      const request = await axios(base_url + "supervisor/search/job/taskDatails", {
+      console.log("HEalth & Safety :",token)
+      const request = await axios(base_url + "supervisor/search/job/taskDatails/healthAndSafety", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
@@ -2654,13 +3803,23 @@ export const updateHealthTopTabs = ( plot_id, token ) => {
      //   }
        
       } else {
-        // dispatch({
-        //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
-        //   payload: response,
-        // });
-        throw new Error(response.message);
+        dispatch({
+          type: Actions.UPDATE_MISCOT_HEALTH,
+          payload: _returnUpdatedArray(getState().summary.healthAndSafetyMisCoat,null),
+        });
+    //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+        dispatch({
+          type: Actions.UPDATE_DECORATION_HEALTH,
+          payload: _returnUpdatedArray(getState().summary.healthAndSafetyDecoration,null),
+        });
+    //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+        dispatch({
+          type: Actions.UPDATE_SNAG_HEALTH,
+          payload: _returnUpdatedArray(getState().summary.healthAndSafetySnag,null),
+        });
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -2671,8 +3830,10 @@ const _returnUpdatedArray=(oldArr,updated)=>{
   let copyData=[...oldArr];
   
   oldArr.forEach((el,index)=>{
-    if(updated.hasOwnProperty(el.url)){
+    if(updated?.hasOwnProperty(el?.url)){
       copyData[index].tickSign=updated[el.url]==="1"?true:false
+    }else{
+      copyData[index].tickSign=false
     }
   })
   return copyData

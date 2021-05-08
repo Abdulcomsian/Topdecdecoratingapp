@@ -305,7 +305,7 @@ const LadderCheckList = (props) => {
     try{
     if(contractorName!="" && projectName!="" && supervisorSign!="" && dateTimeComplete!="" && nextDateInspection!="" && furtherComments!="" && ladderArrayList){
     await props.createLadderCheckListHandler(contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList,jobID,tabId,token, props.route.params?.index)
-      props.updateHealthReport(props?.route?.params?.index);
+      // props.updateHealthReport(props?.route?.params?.index);
     alert("Ladder Check List Insert SuccessFully !");
     props.navigation.pop();
     } else{
@@ -529,7 +529,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createLadderCheckListHandler: (contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList, jobID, tabId, token, index) =>
     dispatch(insertLAdderCheckListForm(contractorName,projectName,supervisorSign,dateTimeComplete,nextDateInspection,furtherComments,ladderArrayList, jobID, tabId, token, index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(LadderCheckList);
 

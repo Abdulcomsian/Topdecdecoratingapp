@@ -145,7 +145,7 @@ const TBTINVENTORY = (props) => {
      
       if(mainContractor!="" && projectName!=""  && supervisorSignature!="" && dateSupervisor!="" && inventoryArray!="" ){
         await props.creatTbtInventoryHandler(mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,props.route.params?.index)
-        props.updateHealthReport(props?.route?.params?.index);
+        // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT INVENTORY Insert SuccessFully !");
       }else{
@@ -531,6 +531,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   creatTbtInventoryHandler: (mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,index) =>
     dispatch(insertTbtInventory(mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TBTINVENTORY);

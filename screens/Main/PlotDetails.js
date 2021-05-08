@@ -10,11 +10,12 @@ import { Text } from "native-base";
 import ViewPager from "@react-native-community/viewpager";
 import { connect } from "react-redux";
 import { updateWorkFlowTopTabs } from "../../Redux/action/auth/authActionTypes";
-
+import axios from "axios";
 
 var tick = require("../../assets/authScreen/check.png");
 var disableTick = require("../../assets/authScreen/disable.png");
 var rightArrow = require("../../assets/authScreen/right.png");
+var email = require("../../assets/authScreen/email.png");
 const PlotDetails = (props) => {
   //console.log(props);
   const {
@@ -25,6 +26,7 @@ const PlotDetails = (props) => {
     decorationArray,
     snagArray,
     updateWorkFlowTopTabs,
+    isUserID
   } = props;
   const { plot_id, plotName } = props.route.params;
 
@@ -37,7 +39,7 @@ const PlotDetails = (props) => {
   const [isLeft, setIsLeft] = useState(1);
   const _ref = useRef(null);
   const [activeTab, setActiveTab] = useState("Miscoat");
-  const [sendData, setSendData] = useState([]);
+  const [jobSummary, setJobSummary] = useState([]);
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
       _ref.current.setPage(0);
@@ -68,14 +70,19 @@ const PlotDetails = (props) => {
       const tilte_name = "";
 
       if (flag) {
+        console.log("here IF")
         preData[index].chekecd = false;
         setMiscotArray(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
+
+        
       } else {
+        console.log("here Else")
         preData[index].chekecd = true;
         setMiscotArray(preData);
-        setSendData((oldArray) => [
+        setJobSummary((oldArray) => [
           ...oldArray,
-          { title: preData[index].text, tab_Name: activeTab },
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
         ]);
       }
     } else if (type == "Decoration") {
@@ -84,9 +91,14 @@ const PlotDetails = (props) => {
       if (flag) {
         preData[index].chekecd = false;
         setDecoration(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
       } else {
         preData[index].chekecd = true;
         setDecoration(preData);
+        setJobSummary((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+        ]);
       }
     } else {
       const preData = [...snag];
@@ -94,9 +106,14 @@ const PlotDetails = (props) => {
       if (flag) {
         preData[index].chekecd = false;
         setSnag(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
       } else {
         preData[index].chekecd = true;
         setSnag(preData);
+        setJobSummary((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+        ]);
       }
     }
   };
@@ -112,12 +129,53 @@ const PlotDetails = (props) => {
     });
     return unsubscribe;
   }, [navigation]);
-  console.log("Send Data :", sendData);
+  // console.log("Send Data :", sendData);
+ 
+  const sendEmail = () =>{
+    try{
+      if(jobSummary!==""){
+        
+        const body = {jobSummary};
+        (async () => {
+          const request = await axios(
+            "https://topdecdecoratingapp.com/api/supervisor/send_mail",
+            {
+              method: "POST",
+              headers: {
+                authorization: "Bearer " + token,
+              },
+              data: body,
+            }
+          );
+          const response = await request.data;
+          console.log("Insert Response :",response)
+          // if(response.success){
+          //     setJobData(response.data.user)
+          //     setLoading(false);
+          //     setShowView(true)
+          // }
+          // else{
+          //     setLoading(false);
+          //     setShowView(false)
+          // }
+        })();
+      }
+    } catch(err){
+      console.log(err?.response?.request);
+      alert(err.message)
+    }
+  }
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
-        <Text style={styles.refText}>Date: 12-2-2021</Text>
         <Text style={styles.refText}>Ref id: 10099499</Text>
+        <TouchableOpacity style={{marginRight:50}} onPress={()=>sendEmail()}>
+          <Image source={email} style={{width:30,height:30}}/>
+        </TouchableOpacity>
+      </View>
+      <View style={{justifyContent:"flex-end",alignItems:"flex-end",marginRight:50}}>
+        
       </View>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>{plotName}</Text>
@@ -473,6 +531,7 @@ const mapStateToProps = (state) => ({
   misCoat: state.summary.misCoat,
   decorationArray: state.summary.decorationArray,
   snagArray: state.summary.snagArray,
+  isUserID: state.auth.isUserID,
 });
 const mapDispatchToProps = (dispatch) => ({
   updateWorkFlowTopTabs: (plot_Id, token) =>

@@ -47,7 +47,7 @@ const HarmFulSubstance = (props) => {
     try{
     if (contractorName != "" && projectName != "" && date != "" && dynamicInput != "") {
       await props.createHarmFullHandler(contractorName, projectName, date, dynamicInput, jobID, tabId, token, props.route.params?.index);
-      props.updateHealthReport(props?.route?.params?.index);
+      // props.updateHealthReport(props?.route?.params?.index);
       alert("HAramFul Substance Insert SuccessFully !")
       props.navigation.pop();
     } else {
@@ -57,6 +57,11 @@ const HarmFulSubstance = (props) => {
   } catch(err){
     alert(err.message)
   }
+  };
+  const updateValue = (key, index, value) => {
+    let preData = [...dynamicInput];
+    preData[index][key] = value;
+    setdynamicInput(preData);
   };
   return (
     <View style={styles.mainContainer}>
@@ -125,17 +130,6 @@ const HarmFulSubstance = (props) => {
               </View>
             </View>
           </View>
-          <View
-            style={{
-              justifyContent: "flex-end",
-              width: "100%",
-              alignItems: "flex-end",
-              marginBottom: 10,
-            }}>
-            <TouchableOpacity style={styles.addBtn} onPress={() => addHarmfullRow()}>
-              <Image style={styles.plusBtn} source={plus} />
-            </TouchableOpacity>
-          </View>
           <View style={{ flexDirection: "column" }}>
             {dynamicInput.length > 0 &&
               dynamicInput.map((el, index) => (
@@ -191,6 +185,30 @@ const HarmFulSubstance = (props) => {
                 </View>
               ))}
           </View>
+          <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].paint &&
+                        !dynamicInput[dynamicInput.length - 1].location &&
+                        !dynamicInput[dynamicInput.length - 1].potential_hazard &&
+                        !dynamicInput[dynamicInput.length - 1].safer_alternatives &&
+                        !dynamicInput[dynamicInput.length - 1].protective_clothes &&
+                        !dynamicInput[dynamicInput.length - 1].supplierMSDS 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addHarmfullRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
           <View
             style={{
               backgroundColor: "#000",
@@ -218,6 +236,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createHarmFullHandler: (contractorName, projectName, date, dynamicInput, jobID, tabId, token, index) =>
     dispatch(insertHarmFulForm(contractorName, projectName, date, dynamicInput, jobID, tabId, token, index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HarmFulSubstance);

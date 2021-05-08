@@ -23,206 +23,206 @@ const PuwerInspection = (props) => {
       subTitle: "No. 1",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 2",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 3",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "Ladders",
       subTitle: "No. 1",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 2",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "Hop Ups",
       subTitle: "No. 1",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 2",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 3",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 4",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 5",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 6",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "Mobile / Stair Tower",
       subTitle: "No. 1",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "No. 2",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "Cherry picker / Scissor lift",
       subTitle: "No. 1",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "Envirowash ES800",
       subTitle: "No. 1",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "Spray Machines: Aristo sprayer QTECH Q-P021/ QP025, Graco GMAX II 3900 ProContractor Series ",
       subTitle: "No. 1",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "Others (please specify)",
       subTitle: "Task lights, filling knives,",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "Pasting table, wallpaper scissors",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "Paint mixer, extension/sanding poles",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {title: "",
       subTitle: "Stripping knife, window scraper",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "Caulker, caulking gun",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "PPE",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
     {
       title: "",
       subTitle: "Skuttle kits & trays",
       equipment: "",
       location: "",
-      inspection_name: "",
+      inspectionname: "",
       condition: "",
-      inspection_date: new Date().toLocaleDateString(),
+      inspectiondate: new Date().toLocaleDateString(),
     },
   ]);
   const [date, setDate] = useState(new Date(1598051730000));
@@ -265,7 +265,7 @@ const PuwerInspection = (props) => {
     try{
       if(contractorName && projectName && furtherComment && supervisorSign && dateSupervisor && puwerArrayList){
        await props.createPuwerInspectionHandler(contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId,token,props.route.params?.index)
-       props.updateHealthReport(props?.route?.params?.index);
+      //  props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("Puwer Inspection Insert SuccessFully !");
       } else{
@@ -425,8 +425,8 @@ const PuwerInspection = (props) => {
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Inspection"}
-                          onChangeText={(txt) => updateValue("inspection_name", index, txt)}
-                          value={item.inspection_name}
+                          onChangeText={(txt) => updateValue("inspectionname", index, txt)}
+                          value={item.inspectionname}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
@@ -452,7 +452,7 @@ const PuwerInspection = (props) => {
                             padding: 5,
                             color: "#96A8B2",
                           }}>
-                          {new Date(item.inspection_date).toLocaleDateString()}
+                          {new Date(item.inspectiondate).toLocaleDateString()}
                         </Text>
                       </View>
                     </View>
@@ -490,8 +490,8 @@ const PuwerInspection = (props) => {
                         <TextInput
                           style={styles.bodyTextInput}
                           placeholder={"Inspection"}
-                          onChangeText={(txt) => updateValue("inspection_name", index, txt)}
-                          value={item.inspection_name}
+                          onChangeText={(txt) => updateValue("inspectionname", index, txt)}
+                          value={item.inspectionname}
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
@@ -608,7 +608,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createPuwerInspectionHandler: (contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId, token, index) =>
     dispatch(insertPuwerInspectionForm(contractorName, projectName, furtherComment, supervisorSign, dateSupervisor, puwerArrayList, jobID, tabId, token, index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(PuwerInspection);
 

@@ -203,7 +203,7 @@ inputLadderBodyContainer:{
     marginRight:5
 },
 headerInspectionTitleView:{
-    width:"20%"
+    width:"25%"
 },
 inputInspectionBodyContainer:{
     width:"20%",

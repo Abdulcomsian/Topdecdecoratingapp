@@ -29,14 +29,14 @@ const MakeReady = (props) => {
   const [pageSecond, setPageSecond] = useState("");
   const [plotNumber, setPlotNumber] = useState("");
   const [reason, setReason] = useState("");
-  const [dateWritten, setDateWritten] = useState(new Date());
-  const [dateIssue, setDateIssue] = useState(new Date());
+  const [dateWritten, setDateWritten] = useState(new Date().toLocaleDateString());
+  const [dateIssue, setDateIssue] = useState(new Date().toLocaleDateString());
   const [supervisorName, setSupervisorName] = useState("");
   const [supervisorSignature, setSupervisorSignature] = useState("");
-  const [dateComplete, setDateComplete] = useState(new Date());
+  const [dateComplete, setDateComplete] = useState(new Date().toLocaleDateString());
   const [agentName, setAgentName] = useState("");
   const [agentSignature, setAgentSignature] = useState("");
-  const [todayDate, setTodayDate] = useState(new Date());
+  const [todayDate, setTodayDate] = useState(new Date().toLocaleDateString());
   const [mode, setMode] = useState("date");
   const [showIssue, setShowIssue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
@@ -295,9 +295,6 @@ const MakeReady = (props) => {
                 <View style={styles.headerTitleView}>
                   <Text style={styles.headerTitle}>Top Dec Completed Yes/No</Text>
                 </View>
-                <View style={styles.headerTitleView}>
-                  <Text style={styles.headerTitle}>Action </Text>
-                </View>
               </View>
               <View style={{ flexDirection: "column" }}>
                 {dynamicInput.length > 0 &&
@@ -346,48 +343,29 @@ const MakeReady = (props) => {
                     </View>
                   ))}
               </View>
-              <View style={styles.tableBody}>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput onChangeText={(txt) => setData({ ...data, area: txt })} style={styles.bodyTextInput} placeholder={"Area/unit"} value={data.area} />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, description: txt })}
-                    value={data.description}
-                    style={styles.bodyTextInput}
-                    placeholder={"Description"}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, photos: txt })}
-                    value={data.photos}
-                    style={styles.bodyTextInput}
-                    placeholder={"No of Photos"}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, corrected: txt })}
-                    value={data.corrected}
-                    style={styles.bodyTextInput}
-                    placeholder={"Corrected"}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, completed: txt })}
-                    value={data.completed}
-                    style={styles.bodyTextInput}
-                    placeholder={"Completed"}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addRow()}>
+              
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].area &&
+                        !dynamicInput[dynamicInput.length - 1].description &&
+                        !dynamicInput[dynamicInput.length - 1].completed &&
+                        !dynamicInput[dynamicInput.length - 1].comments
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addRow();
+                      }
+                    }}
+                  >
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
-              </View>
               <Text
                 style={{
                   paddingTop: 20,
@@ -584,7 +562,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   headerTitleView: {
-    width: "16.6%",
+    width: "20%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -594,15 +572,16 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-bold",
   },
   inputBodyContainer: {
-    width: "16.6%",
+    width: "20%",
     justifyContent: "center",
     alignItems: "center",
   },
   bodyTextInput: {
+    width:"90%",
     borderBottomWidth: 1,
     borderBottomColor: "#96A8B2",
     padding: 5,
-    fontSize: 12,
+    fontSize: 10,
     color: "#96A8B2",
     marginLeft: 2,
     marginRight: 2,

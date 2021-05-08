@@ -69,6 +69,7 @@ const TBTDRUGS = (props) => {
     signature: "",
     date: null,
     supervisor: "",
+    tbtSign:"",
     jobSummary: [],
   });
  const tbtDrugFormInsert = async () =>{
@@ -76,7 +77,7 @@ const TBTDRUGS = (props) => {
      
     if(data!="" ){
       await props.creatTbtDrugsHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
-      props.updateHealthReport(props?.route?.params?.index);
+      // props.updateHealthReport(props?.route?.params?.index);
       props.navigation.pop();
       alert("TBT DRUGS Insert SuccessFully !");
     }else{
@@ -95,6 +96,9 @@ const TBTDRUGS = (props) => {
               let copydata = [...data.jobSummary];
               copydata[openSign.index].sign = uri;
               setData({ ...data, jobSummary: [...copydata] });
+            } else if(openSign?.index===2){
+              setData({ ...data, tbtSign:uri});
+              setOpenSign({ bool: false, index: -1 });
             } else {
               setData({ ...data, signature: uri });
             }
@@ -129,6 +133,7 @@ const TBTDRUGS = (props) => {
                 isDrugs={true}
                 data={data}
                 getSignature={(index, bool) => setOpenSign({ ...openSign, bool: true, index, isArray: bool })}
+                setTBTGlobalSign={()=>{ setOpenSign({ ...openSign, bool: true, index:2 })}}
                 addToolBox={() =>
                   setData({
                     ...data,
@@ -185,6 +190,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   creatTbtDrugsHandler: (data,token,index) =>
     dispatch(insertTbtDrugs(data,token,index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TBTDRUGS);

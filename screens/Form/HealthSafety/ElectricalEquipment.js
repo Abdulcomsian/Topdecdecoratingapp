@@ -24,7 +24,7 @@ const ElectricalEquipment = (props) => {
   const tabId = props.route.params.tabName;
   console.log("Work Tab ID :",tabId)
   const [equipmentRow, setEquipmentRow] = useState([]);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
   const [mode, setMode] = useState("date");
   const [showDate, setShowDate] = useState(false);
   const [contractorName, setContractorName] = useState("");
@@ -156,7 +156,7 @@ const ElectricalEquipment = (props) => {
           token,
           props.route.params?.index
         );
-        props.updateHealthReport(props?.route?.params?.index);
+        // props.updateHealthReport(props?.route?.params?.index);
         alert("Electrical Equipment Insert SuccessFully !");
         props.navigation.pop();
       } else {
@@ -346,21 +346,7 @@ const ElectricalEquipment = (props) => {
                     <Text style={styles.headerTitle}>Comments</Text>
                   </View>
                 </View>
-                <View
-                  style={{
-                    justifyContent: "flex-end",
-                    width: "100%",
-                    alignItems: "flex-end",
-                    marginBottom: 10,
-                  }}
-                >
-                  <TouchableOpacity
-                    style={styles.addBtn}
-                    onPress={() => addEquipmentRegister()}
-                  >
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
+              
                 <View style={{ flexDirection: "column" }}>
                   {dynamicInput.length > 0 &&
                     dynamicInput.map((el, index) => (
@@ -485,6 +471,29 @@ const ElectricalEquipment = (props) => {
                         </View>
                       </View>
                     ))}
+                </View>
+                <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].equipment &&
+                        !dynamicInput[dynamicInput.length - 1].serial &&
+                        !dynamicInput[dynamicInput.length - 1].local &&
+                        !dynamicInput[dynamicInput.length - 1].owner_if_not_dec &&
+                        !dynamicInput[dynamicInput.length - 1].comment 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addEquipmentRegister();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
                 </View>
                 <View
                   style={{
@@ -627,7 +636,7 @@ const mapDispatchToProps = (dispatch) => ({
       )
     ),
 
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(
   mapStateToProps,

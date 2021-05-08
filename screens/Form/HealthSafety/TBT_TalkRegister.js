@@ -47,8 +47,8 @@ const TBTREGISTER = (props) => {
   const [registerDate, setRegisterDate] = useState(
     new Date().toLocaleDateString()
   );
-  const [startTime, setStartTime] = useState(new Date());
-  const [finishTime, setFinishTime] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date().toLocaleTimeString());
+  const [finishTime, setFinishTime] = useState(new Date().toLocaleTimeString());
 
   const [startTimeShow, setStartTimeShow] = useState("");
   const [finalTimeShow, setFinalTimeShow] = useState("");
@@ -85,11 +85,18 @@ const TBTREGISTER = (props) => {
   };
   const [signature, setSignature] = useState({
     bool: false,
-    isSign: false,
-    index: -1,
-    signSupervisor: false,
+    bool: false,
+    isSign: {
+      bool: false,
+      uri: "",
+    },
+    bscsSignature: {
+      bool: false,
+      uri: "",
+    },
   });
-  const [supevisorSign, setSupervisorSign] = useState("");
+  const [isSign, setIsSign] = useState("");
+  const [bscsSignature, setBscsSignature] = useState("");
 
   const [client, setClient] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -101,9 +108,9 @@ const TBTREGISTER = (props) => {
     try {
       console.log("Try Token :",token)
      
-      if(client!="" && projectName!=""  && subject!="" && outline!="" && registerDate!="" && startTime!="" && finishTime!="" && toolBoxArray!="" && supervisorName!="" && supevisorSign!="" ){
-        await props.creatTbtRegisterHandler(client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,supevisorSign,jobID,tabId,token,props.route.params?.index)
-        props.updateHealthReport(props?.route?.params?.index);
+      if(client!="" && projectName!=""  && subject!="" && outline!="" && registerDate!="" && startTime!="" && finishTime!="" && toolBoxArray!="" && supervisorName!=""  ){
+        await props.creatTbtRegisterHandler(client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,bscsSignature,isSign,jobID,tabId,token,props.route.params?.index)
+        // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT REGISTER Insert SuccessFully !");
       }else{
@@ -162,24 +169,20 @@ const TBTREGISTER = (props) => {
       {signature.bool ? (
         <SignatureComponent
           returnImage={(uri) => {
-            if (signature.isSign) {
-              let data = [...toolBoxArray];
-              data[signature.index].sign = uri;
-              setToolBoxArray(data);
+            if (signature.isSign.bool) {
               setSignature({
-                ...signature.isSign,
-                isSign: false,
+                ...signature,
+                supervisor: { ...signature.isSign, bool: false, uri: uri },
                 bool: false,
-                index: -1,
               });
+              setIsSign(uri);
             } else {
-              setSupervisorSign(uri);
               setSignature({
-                ...signature.signSupervisor,
-                isSign: false,
+                ...signature,
+                manager: { ...signature.bscsSignature, bool: false, uri: uri },
                 bool: false,
-                signSupervisor: false,
               });
+              setBscsSignature(uri);
             }
           }}
         />
@@ -279,6 +282,7 @@ const TBTREGISTER = (props) => {
                   {new Date(finishTime).toLocaleTimeString()}
                 </Text>
               </View>
+              
               <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
                 I confirm that I have received the above tool box talk
               </Text>
@@ -286,9 +290,6 @@ const TBTREGISTER = (props) => {
                 <View style={styles.tableHeader}>
                   <View style={styles.headerInspectionTitleView}>
                     <Text style={styles.headerTitle}>Print Name</Text>
-                  </View>
-                  <View style={styles.headerInspectionTitleView}>
-                    <Text style={styles.headerTitle}>Signature</Text>
                   </View>
                   <View style={styles.headerInspectionTitleView}>
                     <Text style={styles.headerTitle}>Date</Text>
@@ -336,49 +337,6 @@ const TBTREGISTER = (props) => {
                         />
                       </View>
                       <View style={styles.inputInspectionBodyContainer}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            setSignature({
-                              bool: true,
-                              isSign: true,
-                              index: index,
-                            })
-                          }
-                          style={{
-                            width: "100%",
-                            alignItems: "center",
-                          }}
-                        >
-                          {el.sign ? (
-                            <Image
-                              source={{ uri: el.sign }}
-                              style={{
-                                marginTop: 10,
-                                height: 30,
-                                width: 30,
-                                backgroundColor: "gray",
-                              }}
-                            />
-                          ) : (
-                            <Text
-                              style={{
-                                height: 40,
-                                width: "100%",
-                                borderBottomWidth: 1,
-                                borderBottomColor: "#96A8B2",
-                                padding: 5,
-                                fontSize: 8,
-                                color: "#96A8B2",
-                                fontFamily: "poppins-regular",
-                                paddingTop: 12,
-                              }}
-                            >
-                              Signature
-                            </Text>
-                          )}
-                        </TouchableOpacity>
-                      </View>
-                      <View style={styles.inputInspectionBodyContainer}>
                         <Text
                           onPress={() => showDatepicker(index)}
                           style={{
@@ -413,6 +371,49 @@ const TBTREGISTER = (props) => {
                     </View>
                   ))}
               </View>
+              <View style={styles.inputFieldContainer}>
+                <TouchableOpacity
+                  onPress={() =>
+                    setSignature({
+                      ...signature,
+                      bool: true,
+                      isSign: { ...signature.isSign, bool: true },
+                      bscsSignature: { ...signature.bscsSignature, bool: false },
+                    })
+                  }
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {isSign ? (
+                    <Image
+                      source={{ uri: isSign }}
+                      style={{
+                        marginTop: 10,
+                        height: 100,
+                        width: 100,
+                        backgroundColor: "gray",
+                      }}
+                    />
+                  ) : (
+                    <Text
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                    >
+                     Signature
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
               <Text
                 style={{
                   fontFamily: "poppins-bold",
@@ -434,18 +435,19 @@ const TBTREGISTER = (props) => {
                 <TouchableOpacity
                   onPress={() =>
                     setSignature({
+                      ...signature,
                       bool: true,
-                      isSign: false,
-                      signSupervisor: true,
+                      isSign: { ...signature.isSign, bool: false },
+                      bscsSignature: { ...signature.bscsSignature, bool: true },
                     })
                   }
                   style={{
                     width: "100%",
                   }}
                 >
-                  {supevisorSign ? (
+                  {bscsSignature ? (
                     <Image
-                      source={{ uri: supevisorSign }}
+                      source={{ uri: bscsSignature }}
                       style={{
                         marginTop: 10,
                         height: 100,
@@ -505,8 +507,8 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  creatTbtRegisterHandler: (client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,supevisorSign,jobID,tabId,token,index) =>
-    dispatch(insertTbtRegister(client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,supevisorSign,jobID,tabId,token,index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  creatTbtRegisterHandler: (client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,bscsSignature,isSign,jobID,tabId,token,index) =>
+    dispatch(insertTbtRegister(client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,bscsSignature,isSign,jobID,tabId,token,index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TBTREGISTER);

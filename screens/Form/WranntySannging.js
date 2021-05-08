@@ -280,9 +280,6 @@ const WrantySannging = (props) => {
               <View style={styles.headerTitleView}>
                 <Text style={styles.headerTitle}>Snag Description</Text>
               </View>
-              <View style={styles.headerTitleView}>
-                <Text style={styles.headerTitle}>Action</Text>
-              </View>
             </View>
             <View style={{ flexDirection: "column" }}>
               {dynamicSnagInput.length > 0 &&
@@ -311,42 +308,32 @@ const WrantySannging = (props) => {
                   </View>
                 ))}
             </View>
-            <View style={styles.tableBody}>
-              <View style={styles.inputBodyContainer}>
-                <TextInput
-                  value={dataSnag.location}
-                  onChangeText={(txt) =>
-                    setDataSnag({ ...dataSnag, location: txt })
-                  }
-                  style={styles.bodyTextInput}
-                  placeholder={"Location"}
-                />
-              </View>
-              <View style={styles.inputBodyContainer}>
-                <TextInput
-                  value={dataSnag.description}
-                  onChangeText={(txt) =>
-                    setDataSnag({ ...dataSnag, description: txt })
-                  }
-                  style={styles.bodyTextInput}
-                  placeholder={"Description"}
-                />
-              </View>
-              <View
-                style={{
-                  width: "33.3%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity
-                  style={styles.addBtn}
-                  onPress={() => addSnagRow()}
-                >
-                  <Image style={styles.plusBtn} source={plus} />
-                </TouchableOpacity>
-              </View>
-            </View>
+          </View>
+          <View
+            style={{
+              width: "100%",
+              justifyContent: "flex-end",
+              alignItems: "flex-end",
+            }}
+          >
+            <TouchableOpacity
+              style={styles.addBtn}
+              onPress={() => {
+                if (
+                  dynamicSnagInput.length > 0 &&
+                  !dynamicSnagInput[dynamicSnagInput.length - 1].location &&
+                  !dynamicSnagInput[dynamicSnagInput.length - 1].description
+                ) {
+                  alert(
+                    "Please Enter All Value and then move to next Item Add !"
+                  );
+                } else {
+                  addSnagRow();
+                }
+              }}
+            >
+              <Image style={styles.plusBtn} source={plus} />
+            </TouchableOpacity>
           </View>
           <View style={styles.inputFieldContainer}>
             <Text
@@ -380,9 +367,6 @@ const WrantySannging = (props) => {
               <View style={styles.headerTitleView}>
                 <Text style={styles.headerTitle}>Snag Description</Text>
               </View>
-              <View style={styles.headerTitleView}>
-                <Text style={styles.headerTitle}>Action</Text>
-              </View>
             </View>
             <View style={{ flexDirection: "column" }}>
               {dynamicSnagCompletedInput.length > 0 &&
@@ -411,48 +395,32 @@ const WrantySannging = (props) => {
                   </View>
                 ))}
             </View>
-            <View style={styles.tableBody}>
-              <View style={styles.inputBodyContainer}>
-                <TextInput
-                  value={dataCompletedSnag.location}
-                  onChangeText={(txt) =>
-                    setDataCompletetedSnag({
-                      ...dataCompletedSnag,
-                      location: txt,
-                    })
-                  }
-                  style={styles.bodyTextInput}
-                  placeholder={"Location"}
-                />
-              </View>
-              <View style={styles.inputBodyContainer}>
-                <TextInput
-                  value={dataCompletedSnag.description}
-                  onChangeText={(txt) =>
-                    setDataCompletetedSnag({
-                      ...dataCompletedSnag,
-                      description: txt,
-                    })
-                  }
-                  style={styles.bodyTextInput}
-                  placeholder={"Description"}
-                />
-              </View>
-              <View
-                style={{
-                  width: "33.3%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity
-                  style={styles.addBtn}
-                  onPress={() => addSnagCompletedRow()}
-                >
-                  <Image style={styles.plusBtn} source={plus} />
-                </TouchableOpacity>
-              </View>
-            </View>
+            <View
+            style={{
+              width: "100%",
+              justifyContent: "flex-end",
+              alignItems: "flex-end",
+            }}
+          >
+            <TouchableOpacity
+              style={styles.addBtn}
+              onPress={() => {
+                if (
+                  dynamicSnagCompletedInput.length > 0 &&
+                  !dynamicSnagCompletedInput[dynamicSnagCompletedInput.length - 1].location &&
+                  !dynamicSnagCompletedInput[dynamicSnagCompletedInput.length - 1].description
+                ) {
+                  alert(
+                    "Please Enter All Value and then move to next Item Add !"
+                  );
+                } else {
+                  addSnagCompletedRow();
+                }
+              }}
+            >
+              <Image style={styles.plusBtn} source={plus} />
+            </TouchableOpacity>
+          </View>
           </View>
 
           <View
@@ -573,9 +541,10 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 30,
     borderWidth: 1,
+    marginBottom:10
   },
   headerTitleView: {
-    width: "33.3%",
+    width: "50%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -585,9 +554,10 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-bold",
   },
   inputBodyContainer: {
-    width: "33.3%",
+    width: "50%",
   },
   bodyTextInput: {
+    width:"90%",
     borderBottomWidth: 1,
     borderBottomColor: "#96A8B2",
     padding: 5,
@@ -614,6 +584,7 @@ const styles = StyleSheet.create({
     borderColor: "#E2ECF2",
     padding: 5,
     borderRadius: 14,
+    marginRight:20,
   },
   infoAbout: {
     width: "100%",

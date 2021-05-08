@@ -227,6 +227,8 @@ const QualityInssurance = (props) => {
   const [mdSign, setMdSign] = useState("");
   const [smsSign, setSmsSign] = useState("");
   const [bscsSign, setBscsSign] = useState("");
+  const [siteManagerSign, setSiteManagerSign] = useState("");
+  const [activitySign, setActivitySign] = useState("");
 
   const qualityAnsuranceFormInsert = async () => {
     try{
@@ -243,6 +245,8 @@ const QualityInssurance = (props) => {
         mdSign,
         smsSign,
         bscsSign,
+        siteManagerSign,
+        activitySign,
         jobID,
         tabId,
         token,
@@ -258,17 +262,10 @@ const QualityInssurance = (props) => {
     alert(err.message)
   }
   };
-  const updateSignValue = (key, index, value) => {
-    let preData = [...activityArray];
-    preData[index][key] = value;
-    setActivityArray(preData);
-  };
+
 
   const [signature, setSignature] = useState({
     bool: false,
-    isUpperSign: false,
-    islowerSign: false,
-    index: -1,
     mc: {
       bool: false,
       uri: "",
@@ -282,6 +279,14 @@ const QualityInssurance = (props) => {
       uri: "",
     },
     bscs: {
+      bool: false,
+      uri: "",
+    },
+    siteManagerSign: {
+      bool: false,
+      uri: "",
+    },
+    activitySign: {
       bool: false,
       uri: "",
     },
@@ -316,47 +321,11 @@ const QualityInssurance = (props) => {
             let data = signature.isUpperSign
               ? [...issuranceArray]
               : [...activityArray];
-            if (signature.isUpperSign) {
-              data[signature.index].managerSign = uri;
-              setInsuraanceArray(data);
-              setSignature({
-                ...signature.isUpperSign,
-                isUpperSign: false,
-                bool: false,
-                index: -1,
-                mc: { ...signature.mc, bool: false },
-                md: { ...signature.md, bool: false },
-                sms: { ...signature.sms, bool: false },
-                bscs: {
-                  ...signature.bscs,
-                  bool: false,
-                },
-              });
-            } else if (signature.islowerSign) {
-              data[signature.index].sign = uri;
-              setActivityArray(data);
-              setSignature({
-                ...signature.islowerSign,
-                islowerSign: false,
-                bool: false,
-                index: -1,
-                mc: { ...signature.mc, bool: false },
-                md: { ...signature.md, bool: false },
-                sms: { ...signature.sms, bool: false },
-                bscs: {
-                  ...signature.bscs,
-                  bool: false,
-                },
-              });
-            } else if (signature.mc.bool) {
+             if (signature.mc.bool) {
               setSignature({
                 ...signature,
                 mc: { ...signature.mc, bool: false, uri: uri },
                 bool: false,
-                bool: false,
-                index: -1,
-                isUpperSign: false,
-                islowerSign: false,
               });
               setMcSign(uri);
             } else if (signature.md.bool) {
@@ -364,10 +333,6 @@ const QualityInssurance = (props) => {
                 ...signature,
                 md: { ...signature.md, bool: false, uri: uri },
                 bool: false,
-                bool: false,
-                index: -1,
-                isUpperSign: false,
-                islowerSign: false,
               });
               setMdSign(uri);
             } else if (signature.sms.bool) {
@@ -375,23 +340,29 @@ const QualityInssurance = (props) => {
                 ...signature,
                 sms: { ...signature.sms, bool: false, uri: uri },
                 bool: false,
-                bool: false,
-                index: -1,
-                isUpperSign: false,
-                islowerSign: false,
               });
               setSmsSign(uri);
-            } else {
+            } else if(signature.bscs.bool){
               setSignature({
                 ...signature,
                 bscs: { ...signature.bscs, bool: false, uri: uri },
                 bool: false,
-                bool: false,
-                index: -1,
-                isUpperSign: false,
-                islowerSign: false,
               });
               setBscsSign(uri);
+            } else if(signature.siteManagerSign.bool){
+              setSignature({
+                ...signature,
+                siteManagerSign: { ...signature.siteManagerSign, bool: false, uri: uri },
+                bool: false,
+              });
+              setSiteManagerSign(uri);
+            } else{
+              setSignature({
+                ...signature,
+                activitySign: { ...signature.activitySign, bool: false, uri: uri },
+                bool: false,
+              });
+              setActivitySign(uri);
             }
           }}
         />
@@ -434,11 +405,6 @@ const QualityInssurance = (props) => {
                 </View>
                 <View style={styles.headerTitleView}>
                   <Text style={styles.headerTitle}>Comments</Text>
-                </View>
-                <View style={styles.headerTitleView}>
-                  <Text style={styles.headerTitle}>
-                    Site Manager/s to sign *{" "}
-                  </Text>
                 </View>
               </View>
               <View style={{ width: "100%" }}>
@@ -507,54 +473,55 @@ const QualityInssurance = (props) => {
                             value={item.comment}
                           />
                         </View>
-                        <TouchableOpacity
-                          onPress={() =>
-                            setSignature({
-                              bool: true,
-                              index: index,
-                              isUpperSign: true,
-                              islowerSign: false,
-                              mc: { ...signature.mc, bool: false },
-                              md: { ...signature.md, bool: false },
-                              sms: { ...signature.sms, bool: false },
-                              bscs: { ...signature.bscs, bool: false },
-                            })
-                          }
-                          style={[
-                            styles.inputBodyContainer,
-                            {
-                              justifyContent: "center",
-                              alignItems: "flex-end",
-                            },
-                          ]}
-                        >
-                          {item.managerSign ?
-                          <Image
-                            source={{ uri: item.managerSign }}
-                            style={{
-                              height: 30,
-                              width: 30,
-                              backgroundColor: "gray",
-                            }}
-                          />
-                          :
-                          <Text
-                          style={{
-                            width: "100%",
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#96A8B2",
-                            padding: 5,
-                            fontSize: 12,
-                            color: "#96A8B2",
-                            fontFamily: "poppins-regular",
-                            paddingTop: 13,
-                          }}
-                        >Sign</Text>
-}
-                        </TouchableOpacity>
                       </View>
                     </View>
                   ))}
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TouchableOpacity
+                  onPress={() =>
+                    setSignature({
+                      bool: true,
+                      mc: { ...signature.mc, bool: false },
+                      md: { ...signature.md, bool: false },
+                      sms: { ...signature.sms, bool: false },
+                      bscs: { ...signature.bscs, bool: false },
+                      siteManagerSign: { ...signature.siteManagerSign, bool: true },
+                      activitySign: { ...signature.activitySign, bool: false },
+                    })
+                  }
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {signature.siteManagerSign.uri ? (
+                    <Image
+                      source={{ uri: signature.siteManagerSign.uri }}
+                      style={{
+                        marginBottom: 20,
+                        height: 100,
+                        width: 100,
+                        backgroundColor: "gray",
+                      }}
+                    />
+                  ) : (
+                    <Text
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                    >
+                      Site Manager to Sign
+                    </Text>
+                  )}
+                </TouchableOpacity>
               </View>
               <View>
                 <Text style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}>
@@ -603,9 +570,6 @@ const QualityInssurance = (props) => {
                       <View style={styles.headerActivityTitleView}>
                         <Text style={styles.headerActivityTitle}>Date</Text>
                       </View>
-                      <View style={styles.headerActivityTitleView}>
-                        <Text style={styles.headerActivityTitle}>Sign</Text>
-                      </View>
                     </View>
                     <View style={styles.tableActivityBody}>
                       <View style={styles.activityListView}>
@@ -650,17 +614,21 @@ const QualityInssurance = (props) => {
                                   {new Date(item.date).toLocaleDateString()}
                                 </Text>
                               </View>
-                              <TouchableOpacity
+                             
+                            </View>
+                          ))}
+                      </View>
+                    </View>
+                    <TouchableOpacity
                                 onPress={() =>
                                   setSignature({
                                     bool: true,
-                                    index: index,
-                                    isUpperSign: false,
-                                    islowerSign: true,
                                     mc: { ...signature.mc, bool: false },
                                     md: { ...signature.md, bool: false },
                                     sms: { ...signature.sms, bool: false },
                                     bscs: { ...signature.bscs, bool: false },
+                                    siteManagerSign: { ...signature.siteManagerSign, bool: false },
+                                    activitySign: { ...signature.activitySign, bool: true },
                                   })
                                 }
                                 style={{
@@ -669,9 +637,9 @@ const QualityInssurance = (props) => {
                                   alignItems: "flex-end",
                                 }}
                               >
-                                {item.sign ?
+                                {signature.activitySign.uri ?
                                 <Image
-                                  source={{ uri: item.sign }}
+                                  source={{ uri: signature.activitySign.uri }}
                                   style={{
                                     height: 20,
                                     width: 20,
@@ -693,10 +661,6 @@ const QualityInssurance = (props) => {
                         >Sign</Text>
 }
                               </TouchableOpacity>
-                            </View>
-                          ))}
-                      </View>
-                    </View>
                   </View>
                 </View>
               </View>
@@ -736,12 +700,12 @@ const QualityInssurance = (props) => {
                   onPress={() =>
                     setSignature({
                       bool: true,
-                      isUpperSign: false,
-                      islowerSign: false,
                       mc: { ...signature.mc, bool: true },
                       md: { ...signature.md, bool: false },
                       sms: { ...signature.sms, bool: false },
                       bscs: { ...signature.bscs, bool: false },
+                      siteManagerSign: { ...signature.siteManagerSign, bool: false },
+                      activitySign: { ...signature.activitySign, bool: false },
                     })
                   }
                   style={{
@@ -782,12 +746,12 @@ const QualityInssurance = (props) => {
                   onPress={() =>
                     setSignature({
                       bool: true,
-                      isUpperSign: false,
-                      islowerSign: false,
                       mc: { ...signature.mc, bool: false },
                       md: { ...signature.md, bool: true },
                       sms: { ...signature.sms, bool: false },
                       bscs: { ...signature.bscs, bool: false },
+                      siteManagerSign: { ...signature.siteManagerSign, bool: false },
+                      activitySign: { ...signature.activitySign, bool: false },
                     })
                   }
                   style={{
@@ -828,12 +792,12 @@ const QualityInssurance = (props) => {
                   onPress={() =>
                     setSignature({
                       bool: true,
-                      isUpperSign: false,
-                      islowerSign: false,
                       mc: { ...signature.mc, bool: false },
                       md: { ...signature.md, bool: false },
                       sms: { ...signature.sms, bool: true },
                       bscs: { ...signature.bscs, bool: false },
+                      siteManagerSign: { ...signature.siteManagerSign, bool: false },
+                      activitySign: { ...signature.activitySign, bool: false },
                     })
                   }
                   style={{
@@ -874,12 +838,12 @@ const QualityInssurance = (props) => {
                   onPress={() =>
                     setSignature({
                       bool: true,
-                      isUpperSign: false,
-                      islowerSign: false,
                       mc: { ...signature.mc, bool: false },
                       md: { ...signature.md, bool: false },
                       sms: { ...signature.sms, bool: false },
                       bscs: { ...signature.bscs, bool: true },
+                      siteManagerSign: { ...signature.siteManagerSign, bool: false },
+                      activitySign: { ...signature.activitySign, bool: false },
                     })
                   }
                   style={{
@@ -953,6 +917,8 @@ const mapDispatchToProps = (dispatch) => ({
     mdSign,
     smsSign,
     bscsSign,
+    siteManagerSign,
+    activitySign,
     jobID,
     tabId,
     token,
@@ -968,6 +934,8 @@ const mapDispatchToProps = (dispatch) => ({
         mdSign,
         smsSign,
         bscsSign,
+        siteManagerSign,
+    activitySign,
         jobID,
         tabId,
         token,

@@ -65,7 +65,7 @@ const DecorationRecord = (props) => {
         tabId,
         token
       );
-      props.updateVerificationReport(props?.route?.params?.index);
+      //props.updateVerificationReport(props?.route?.params?.index);
       alert("Site Instruction Insert SuccessFully !")
       props.navigation.pop();
     } else {
@@ -271,7 +271,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       insertSiteInstruction(contractName, instructionNo, raisedBy, date, description, specialNotes, supervisorName, dateSupervisor, jobID, tabId, token)
     ),
-  updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
+  // updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DecorationRecord);
 const styles = StyleSheet.create({

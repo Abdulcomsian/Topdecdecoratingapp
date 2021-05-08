@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity, CheckBox, TextInput, ScrollView } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  CheckBox,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -7,6 +14,7 @@ import SignatureComponent from "../../../components/SignatureComponent";
 import { insertAccidentForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import { TabRouter } from "react-navigation";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -15,9 +23,9 @@ const AccidentReport = (props) => {
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const { plot_Id } = props.route.params;
   const jobID = plot_Id;
-  console.log("Work Plot ID :",jobID)
+  console.log("Work Plot ID :", jobID);
   const tabId = props.route.params.tabName;
-  console.log("Work Tab ID :",tabId)
+  console.log("Work Tab ID :", tabId);
   const [nameOfPerson, setNameOfPerson] = useState("");
   const [locationOfIncident, setLocationOfIncident] = useState("");
   const [nameOfInjuredPerson, setNameOfInjuredPerson] = useState("");
@@ -42,7 +50,10 @@ const AccidentReport = (props) => {
       uri: "",
     },
   });
-  const [mangementWhomAccidentReported, setMangementWhomAccidentReported] = useState("");
+  const [
+    mangementWhomAccidentReported,
+    setMangementWhomAccidentReported,
+  ] = useState("");
   const [managerInitialNotes, setManagerInitialNotes] = useState("");
   const [actionRequried, setActionRequried] = useState("");
   const [actionPerformed, setActionPerformed] = useState("");
@@ -76,11 +87,11 @@ const AccidentReport = (props) => {
       incidentNo: "",
     },
   ]);
-  const [dateIncident, setDateIncident] = useState(new Date());
-  const [dateInvestigation, setDateInvestigation] = useState(new Date());
-  const [dateSupervisor, setDateSupervisor] = useState(new Date());
-  const [dateReport, setDateReport] = useState(new Date());
-  const [dateManager, setDateManager] = useState(new Date());
+  const [dateIncident, setDateIncident] = useState(new Date().toLocaleDateString());
+  const [dateInvestigation, setDateInvestigation] = useState(new Date().toLocaleDateString());
+  const [dateSupervisor, setDateSupervisor] = useState(new Date().toLocaleDateString());
+  const [dateReport, setDateReport] = useState(new Date().toLocaleDateString());
+  const [dateManager, setDateManager] = useState(new Date().toLocaleDateString());
   const [mode, setMode] = useState("date");
   const [showIncident, setShowIncident] = useState(false);
   const [showInvestigation, setShowInvestigation] = useState(false);
@@ -88,30 +99,31 @@ const AccidentReport = (props) => {
   const [showReport, setShowReport] = useState(false);
   const [showManager, setShowManager] = useState(false);
   const [dynamicInput, setdynamicInput] = useState([]);
-  const [incidentArray, setIncidentarray] = useState({
-    fatality: false,
-    overDaysInjury: false,
-    timeLost: false,
-    majorInjury: false,
-    hospital: false,
-    publicInjury: false,
-    underDaysInjury: false,
-    dangerousOccurrences: false,
-    becameUnconscious: false,
-    reportDiesase: false,
-    damaghIncident: false,
-    neededResuscitation: false,
-  });
-  const [employee, setEmployee] = useState({
-    employeed: false,
-    selfEmployee: false,
-    trainee: false,
-    tradeContructor: false,
-    otherEmployee: false,
-  });
+  const [incidentArray, setIncidentarray] = useState([
+    { title: "Fatality", check: false },
+    { title: "Under ‘7’day injury", check: false },
+    { title: "No time lost", check: false },
+    { title: "Major Injury", check: false },
+    { title: "In hospital more than 24hrs", check: false },
+    { title: "Member of public/contractor injured ", check: false },
+    { title: "Over ‘7’ day injury", check: false },
+    { title: "Dangerous Occurrences", check: false },
+    { title: "Became unconscious", check: false },
+    { title: "Reportable disease", check: false },
+    { title: "Damage Incident", check: false },
+    { title: "Needed resuscitation", check: false },
+  ]);
+  const [employee, setEmployee] = useState([
+    {title:"Employee", check: false},
+    {title:"Self Employed", check: false},
+    {title:"Trainee", check: false},
+    {title:"Trade Contractor", check: false},
+    {title:"Others (please state)", check: false},
+  ]);
   const [managmentArray, setManagmentArray] = useState([
     {
-      title: "Will the injured person be off work for more than 7 calendar days?",
+      title:
+        "Will the injured person be off work for more than 7 calendar days?",
       yes: false,
       no: false,
     },
@@ -209,248 +221,17 @@ const AccidentReport = (props) => {
     setShowManager(false);
     setDateManager(new Date(currentDate).toLocaleDateString());
   };
-  const checkedIncidentValue = (type) => {
-    if (type == "fatality") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: true,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "underDaysInjury") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: true,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "timeLost") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: true,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "majorInjury") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: true,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "hospital") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: true,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "publicInjury") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: true,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "overDaysInjury") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: true,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "danegerousOccurrences") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: true,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "becameUnconscious") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: true,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "reportDiesase") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: true,
-        damaghIncident: false,
-        neededResuscitation: false,
-      });
-    } else if (type == "damaghIncident") {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: true,
-        neededResuscitation: false,
-      });
-    } else {
-      setIncidentarray({
-        ...incidentArray,
-        fatality: false,
-        overDaysInjury: false,
-        timeLost: false,
-        majorInjury: false,
-        hospital: false,
-        publicInjury: false,
-        underDaysInjury: false,
-        dangerousOccurrences: false,
-        becameUnconscious: false,
-        reportDiesase: false,
-        damaghIncident: false,
-        neededResuscitation: true,
-      });
-    }
-  };
-  const checkedEmployeeValue = (type) => {
-    if (type == "employeed") {
-      setEmployee({
-        ...employee,
-        employeed: true,
-        selfEmployee: false,
-        trainee: false,
-        tradeContructor: false,
-        otherEmployee: false,
-      });
-    } else if (type == "selfEmployee") {
-      setEmployee({
-        ...employee,
-        employeed: false,
-        selfEmployee: true,
-        trainee: false,
-        tradeContructor: false,
-        otherEmployee: false,
-      });
-    } else if (type == "trainee") {
-      setEmployee({
-        ...employee,
-        employeed: false,
-        selfEmployee: false,
-        trainee: true,
-        tradeContructor: false,
-        otherEmployee: false,
-      });
-    } else if (type == "tradeContructor") {
-      setEmployee({
-        ...employee,
-        employeed: false,
-        selfEmployee: false,
-        trainee: false,
-        tradeContructor: true,
-        otherEmployee: false,
-      });
-    } else {
-      setEmployee({
-        ...employee,
-        employeed: false,
-        selfEmployee: false,
-        trainee: false,
-        tradeContructor: false,
-        otherEmployee: true,
-      });
-    }
+
+  const checkedEmployeeValue = (key, index, value) => {
+    let preData = [...employee]
+    console.log("Emplopyee Key :",preData[index][key])
+    if(preData[index][key]===false){
+      preData[index][key] = true;
+      setEmployee(preData)
+    } else{
+      preData[index][key] = false;
+      setEmployee(preData)
+  }
   };
   const checkedAmbulanceValue = (key, index, value) => {
     let preData = [...callingDetails];
@@ -463,6 +244,17 @@ const AccidentReport = (props) => {
       preData[index]["yes"] = false;
       setCallingDetails(preData);
     }
+  };
+  const checkedIncidentValue = (key, index, value) => {
+    let preData = [...incidentArray]
+    if(preData[index][key]===false){
+      preData[index][key] = true;
+      setIncidentarray(preData)
+    } else{
+      preData[index][key] = false;
+      setIncidentarray(preData)
+  }
+
   };
   const checkIncidentNo = (key, index, value) => {
     let preData = [...callingDetails];
@@ -489,8 +281,6 @@ const AccidentReport = (props) => {
     }
   };
   const incidentFormInsert = async () => {
-    
-
     if (
       nameOfInjuredPerson != "" &&
       dateIncident != "" &&
@@ -499,7 +289,6 @@ const AccidentReport = (props) => {
       incidentArray != "" &&
       ageOfInjuredPerson !== "" &&
       sexOfInjuredPerson !== "" &&
-
       employee != "" &&
       stateOfInjuredPerson != "" &&
       telephonNumber != "" &&
@@ -507,39 +296,59 @@ const AccidentReport = (props) => {
       callingDetails != "" &&
       dynamicInput !== "" &&
       witnessStatement !== "" &&
-
-
-
-      whomAccidentReported !=="" &&
-      whenAccidentReported !=="" &&
-      supervisorName !=="" &&
-      supervisorSignature !=="" &&
-      dateSupervisor !=="" &&
-      mangementWhomAccidentReported !=="" &&
-      dateReport !=="" &&
-      managerInitialNotes !=="" &&
-
-
-      actionRequried !=="" &&
-      actionPerformed !=="" &&
-      managmentArray !=="" &&
-      managerName !=="" &&
-      managerSignature !=="" &&
-      dateManager !=="" 
+      whomAccidentReported !== "" &&
+      whenAccidentReported !== "" &&
+      supervisorName !== "" &&
+      supervisorSignature !== "" &&
+      dateSupervisor !== "" &&
+      mangementWhomAccidentReported !== "" &&
+      dateReport !== "" &&
+      managerInitialNotes !== "" &&
+      actionRequried !== "" &&
+      actionPerformed !== "" &&
+      managmentArray !== "" &&
+      managerName !== "" &&
+      managerSignature !== "" &&
+      dateManager !== ""
     ) {
-      await props.createAccidentHandler(nameOfPerson,dateIncident,
-        locationOfIncident,dateInvestigation,occupationInjured,incidentArray,nameOfInjuredPerson,ageOfInjuredPerson,sexOfInjuredPerson,employee,
-        stateOfInjuredPerson,telephonNumber,natureOfInjury,callingDetails,dynamicInput,witnessStatement,
-        whomAccidentReported,whenAccidentReported,supervisorName,supervisorSignature,dateSupervisor,
-        mangementWhomAccidentReported,dateReport,managerInitialNotes,actionRequried,actionPerformed,
-        managmentArray,managerName,managerSignature,dateManager,
-        jobID,
-        tabId,
-        token,
-        props.route.params?.index
-      );
-      props.updateHealthReport(props?.route?.params?.index);
-      alert("Clean Up Insert SuccessFully !");
+    await props.createAccidentHandler(
+      nameOfPerson,
+      dateIncident,
+      locationOfIncident,
+      dateInvestigation,
+      occupationInjured,
+      incidentArray,
+      nameOfInjuredPerson,
+      ageOfInjuredPerson,
+      sexOfInjuredPerson,
+      employee,
+      stateOfInjuredPerson,
+      telephonNumber,
+      natureOfInjury,
+      callingDetails,
+      dynamicInput,
+      witnessStatement,
+      whomAccidentReported,
+      whenAccidentReported,
+      supervisorName,
+      supervisorSignature,
+      dateSupervisor,
+      mangementWhomAccidentReported,
+      dateReport,
+      managerInitialNotes,
+      actionRequried,
+      actionPerformed,
+      managmentArray,
+      managerName,
+      managerSignature,
+      dateManager,
+      jobID,
+      tabId,
+      token,
+      props.route.params?.index
+    );
+    // props.updateHealthReport(props?.route?.params?.index);
+      alert("Accident Inccident Report Insert SuccessFully !");
       props.navigation.pop();
     } else {
       alert("Please Insert All Fields CareFully !");
@@ -560,66 +369,76 @@ const AccidentReport = (props) => {
       setShowManager(false);
     }
   };
+
+  console.log(employee);
   return (
     <View style={styles.mainContainer}>
       <DateTimePicker
         isVisible={showIncident}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={dateIncident}
         mode={mode}
-        display='default'
+        display="default"
         onConfirm={onIncidentChange}
         onCancel={() => CancelPicker("showIncident")}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       <DateTimePicker
         isVisible={showInvestigation}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={dateInvestigation}
         mode={mode}
-        display='default'
+        display="default"
         onConfirm={onInvestigationChange}
         onCancel={() => CancelPicker("showInvestigation")}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       <DateTimePicker
         isVisible={showSupervisor}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={dateSupervisor}
         mode={mode}
-        display='default'
+        display="default"
         onConfirm={onSupervisorDateChange}
         onCancel={() => CancelPicker("showSupervisor")}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       <DateTimePicker
         isVisible={showReport}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={dateReport}
         mode={mode}
-        display='default'
+        display="default"
         onConfirm={onReportDateChange}
         onCancel={() => CancelPicker("showReport")}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       <DateTimePicker
         isVisible={showManager}
-        testID='dateTimePicker'
+        testID="dateTimePicker"
         value={dateManager}
         mode={mode}
-        display='default'
+        display="default"
         onConfirm={onManagerDateChange}
         onCancel={() => CancelPicker("showManager")}
-        format='DD-MM-YYYY'
+        format="DD-MM-YYYY"
       />
       {signature.bool ? (
         <SignatureComponent
           returnImage={(uri) => {
             if (signature.supervisor.bool) {
-              setSignature({ ...signature, supervisor: { ...signature.supervisor, bool: false, uri: uri }, bool: false });
+              setSignature({
+                ...signature,
+                supervisor: { ...signature.supervisor, bool: false, uri: uri },
+                bool: false,
+              });
               setSupervisorSignature(uri);
             } else {
-              setSignature({ ...signature, manager: { ...signature.manager, bool: false, uri: uri }, bool: false });
+              setSignature({
+                ...signature,
+                manager: { ...signature.manager, bool: false, uri: uri },
+                bool: false,
+              });
               setManagerSignature(uri);
             }
           }}
@@ -634,7 +453,8 @@ const AccidentReport = (props) => {
               paddingTop: 30,
               justifyContent: "center",
               alignItems: "center",
-            }}>
+            }}
+          >
             <Text style={styles.titleText}>Accident/Incident Report Form</Text>
           </View>
           <ScrollView>
@@ -648,7 +468,10 @@ const AccidentReport = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("Date")} style={[styles.inputField, { paddingTop: 15 }]}>
+                <Text
+                  onPress={() => showDatepicker("Date")}
+                  style={[styles.inputField, { paddingTop: 15 }]}
+                >
                   {new Date(dateIncident).toLocaleDateString()}
                 </Text>
               </View>
@@ -661,123 +484,44 @@ const AccidentReport = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text onPress={() => showDatepicker("DateInvestigation")} style={[styles.inputField, { paddingTop: 15 }]}>
+                <Text
+                  onPress={() => showDatepicker("DateInvestigation")}
+                  style={[styles.inputField, { paddingTop: 15 }]}
+                >
                   {new Date(dateInvestigation).toLocaleDateString()}
                 </Text>
               </View>
               <View style={{ paddingTop: 20, paddingBottom: 20 }}>
                 <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  TYPE OF INCIDENT <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>(please tick relevant boxes)</Text>
+                  TYPE OF INCIDENT{" "}
+                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
+                    (please tick relevant boxes)
+                  </Text>
                 </Text>
               </View>
               <View style={styles.checkBoxDiv}>
-                <View style={styles.firstCheckBoxRow}>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.fatality} onValueChange={() => checkedIncidentValue("fatality")} />
+                <View style={[styles.firstCheckBoxRow,{flexDirection:"column"}]}>
+                  {incidentArray.map((item, index) => (
+                    <View style={styles.parentCheckBox}>
+                      <View style={styles.leftCheckBox}>
+                        <CheckBox
+                          value={item.check}
+                          onValueChange={() => checkedIncidentValue("check",index,true)}
+                        />
+                      </View>
+                      <View style={styles.rightCheckBox}>
+                        <Text style={styles.accidentText}>{item.title}</Text>
+                      </View>
                     </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Fatality</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.underDaysInjury} onValueChange={() => checkedIncidentValue("underDaysInjury")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Under ‘7’day injury</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.timeLost} onValueChange={() => checkedIncidentValue("timeLost")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>No time lost</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.firstCheckBoxRow}>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.majorInjury} onValueChange={() => checkedIncidentValue("majorInjury")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Major Injury</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.hospital} onValueChange={() => checkedIncidentValue("hospital")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>In hospital more than 24hrs</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.publicInjury} onValueChange={() => checkedIncidentValue("publicInjury")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Member of public/contractor injured </Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.firstCheckBoxRow}>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.overDaysInjury} onValueChange={() => checkedIncidentValue("overDaysInjury")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Over ‘7’ day injury</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.dangerousOccurrences} onValueChange={() => checkedIncidentValue("danegerousOccurrences")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Dangerous Occurrences </Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.becameUnconscious} onValueChange={() => checkedIncidentValue("becameUnconscious")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Became unconscious</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.firstCheckBoxRow}>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.reportDiesase} onValueChange={() => checkedIncidentValue("reportDiesase")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Reportable disease</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.damaghIncident} onValueChange={() => checkedIncidentValue("damaghIncident")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Damage Incident</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={incidentArray.neededResuscitation} onValueChange={() => checkedIncidentValue("neededResuscitation")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Needed resuscitation</Text>
-                    </View>
-                  </View>
+                  ))}
+
+                  
                 </View>
               </View>
               <View style={{ paddingTop: 20, paddingBottom: 10 }}>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>THE INJURED PERSON</Text>
+                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                  THE INJURED PERSON
+                </Text>
               </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput
@@ -788,57 +532,37 @@ const AccidentReport = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput onChangeText={(e) => setAgeOfInjuredPerson(e)} value={ageOfInjuredPerson} style={styles.inputField} placeholder={"Age"} />
+                <TextInput
+                  onChangeText={(e) => setAgeOfInjuredPerson(e)}
+                  value={ageOfInjuredPerson}
+                  style={styles.inputField}
+                  placeholder={"Age"}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput onChangeText={(e) => setSexOfInjuredPerson(e)} value={sexOfInjuredPerson} style={styles.inputField} placeholder={"Sex"} />
+                <TextInput
+                  onChangeText={(e) => setSexOfInjuredPerson(e)}
+                  value={sexOfInjuredPerson}
+                  style={styles.inputField}
+                  placeholder={"Sex"}
+                />
               </View>
               <View style={styles.checkBoxDiv}>
-                <View style={styles.firstCheckBoxRow}>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={employee.employeed} onValueChange={() => checkedEmployeeValue("employeed")} />
+                <View style={[styles.firstCheckBoxRow,{flexDirection:"column"}]}>
+                  {employee.map((item,index)=>(
+                    <View style={styles.parentCheckBox}>
+                      <View style={styles.leftCheckBox}>
+                        <CheckBox
+                          value={item.check}
+                          onValueChange={() => checkedEmployeeValue("check",index,true)}
+                        />
+                      </View>
+                      <View style={styles.rightCheckBox}>
+                        <Text style={styles.accidentText}>{item.title}</Text>
+                      </View>
                     </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Employee</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={employee.selfEmployee} onValueChange={() => checkedEmployeeValue("selfEmployee")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Self Employed</Text>
-                    </View>
-                  </View>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={employee.trainee} onValueChange={() => checkedEmployeeValue("trainee")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Trainee</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.firstCheckBoxRow}>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={employee.tradeContructor} onValueChange={() => checkedEmployeeValue("tradeContructor")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Trade Contracto</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.firstCheckBoxRow}>
-                  <View style={styles.parentCheckBox}>
-                    <View style={styles.leftCheckBox}>
-                      <CheckBox value={employee.otherEmployee} onValueChange={() => checkedEmployeeValue("otherEmployee")} />
-                    </View>
-                    <View style={styles.rightCheckBox}>
-                      <Text style={styles.accidentText}>Other Employeed</Text>
-                    </View>
-                  </View>
+                  ))}
+                  
                 </View>
               </View>
               <View style={styles.inputFieldContainer}>
@@ -850,7 +574,12 @@ const AccidentReport = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Telephone Number"} onChangeText={(e) => setTelephoneNumber(e)} value={telephonNumber} />
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Telephone Number"}
+                  onChangeText={(e) => setTelephoneNumber(e)}
+                  value={telephonNumber}
+                />
               </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput
@@ -863,7 +592,9 @@ const AccidentReport = (props) => {
               <View style={styles.inputFieldContainer}>
                 <TextInput
                   style={styles.inputField}
-                  placeholder={"Nature of Injury or condition, And the part of the body affected"}
+                  placeholder={
+                    "Nature of Injury or condition, And the part of the body affected"
+                  }
                   onChangeText={(e) => setNatureOfInjury(e)}
                   value={natureOfInjury}
                 />
@@ -873,13 +604,22 @@ const AccidentReport = (props) => {
                   {callingDetails.map((item, index) => (
                     <View style={styles.detailsContactView} key={index}>
                       <View style={styles.instructionView}>
-                        <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>{item.title}</Text>
+                        <Text
+                          style={{ fontFamily: "poppins-bold", fontSize: 10 }}
+                        >
+                          {item.title}
+                        </Text>
                       </View>
                       <View style={styles.checkBoxView}>
                         <View style={styles.firstCheckBoxRow}>
                           <View style={styles.parentCheckBox}>
                             <View style={styles.leftCheckBox}>
-                              <CheckBox value={item.no} onValueChange={() => checkedAmbulanceValue("no", index, "true")} />
+                              <CheckBox
+                                value={item.no}
+                                onValueChange={() =>
+                                  checkedAmbulanceValue("no", index, "true")
+                                }
+                              />
                             </View>
                             <View style={styles.rightCheckBox}>
                               <Text style={styles.accidentText}>No</Text>
@@ -887,7 +627,12 @@ const AccidentReport = (props) => {
                           </View>
                           <View style={styles.parentCheckBox}>
                             <View style={styles.leftCheckBox}>
-                              <CheckBox value={item.yes} onValueChange={() => checkedAmbulanceValue("yes", index, "true")} />
+                              <CheckBox
+                                value={item.yes}
+                                onValueChange={() =>
+                                  checkedAmbulanceValue("yes", index, "true")
+                                }
+                              />
                             </View>
                             <View style={styles.rightCheckBox}>
                               <Text style={styles.accidentText}>Yes</Text>
@@ -897,7 +642,13 @@ const AccidentReport = (props) => {
                       </View>
                       <View style={styles.numberView}>
                         <View style={styles.inputFieldContainer}>
-                          <TextInput style={styles.inputField} placeholder={"Incident No"} onChangeText={(txt) => checkIncidentNo("incidentNo", index, txt)} />
+                          <TextInput
+                            style={styles.inputField}
+                            placeholder={"Incident No"}
+                            onChangeText={(txt) =>
+                              checkIncidentNo("incidentNo", index, txt)
+                            }
+                          />
                         </View>
                       </View>
                     </View>
@@ -919,8 +670,10 @@ const AccidentReport = (props) => {
                       fontFamily: "poppins-bold",
                       fontSize: 12,
                       paddingTop: 10,
-                    }}>
-                    Witness’s names and contact number (attach witness statements if available)
+                    }}
+                  >
+                    Witness’s names and contact number (attach witness
+                    statements if available)
                   </Text>
                   <View
                     style={{
@@ -928,11 +681,8 @@ const AccidentReport = (props) => {
                       width: "100%",
                       alignItems: "flex-end",
                       marginBottom: 10,
-                    }}>
-                    <TouchableOpacity style={styles.addBtn} onPress={() => addRow()}>
-                      <Image style={styles.plusBtn} source={plus} />
-                    </TouchableOpacity>
-                  </View>
+                    }}
+                  ></View>
                   <View style={styles.tableViewContainer}>
                     <View style={styles.tableHeader}>
                       <View style={styles.headerWitnessTitleView}>
@@ -949,7 +699,9 @@ const AccidentReport = (props) => {
                             <View style={styles.inputWitnessBodyContainer}>
                               <TextInput
                                 value={el.name}
-                                onChangeText={(txt) => updateValue("completed", index, txt)}
+                                onChangeText={(txt) =>
+                                  updateValue("name", index, txt)
+                                }
                                 style={styles.bodyTextInput}
                                 placeholder={"Name"}
                               />
@@ -957,30 +709,41 @@ const AccidentReport = (props) => {
                             <View style={styles.inputWitnessBodyContainer}>
                               <TextInput
                                 value={el.number}
-                                onChangeText={(txt) => updateValue("completed", index, txt)}
+                                onChangeText={(txt) =>
+                                  updateValue("number", index, txt)
+                                }
                                 style={styles.bodyTextInput}
                                 placeholder={"Number"}
                               />
                             </View>
                           </View>
                         ))}
-                      <View style={styles.tableBody}>
-                        <View style={styles.inputWitnessBodyContainer}>
-                          <TextInput
-                            style={styles.bodyTextInput}
-                            placeholder={"Name"}
-                            onChangeText={(txt) => setData({ ...data, name: txt })}
-                            value={data.name}
-                          />
-                        </View>
-                        <View style={styles.inputWitnessBodyContainer}>
-                          <TextInput
-                            style={styles.bodyTextInput}
-                            placeholder={"Number"}
-                            onChangeText={(txt) => setData({ ...data, number: txt })}
-                            value={data.number}
-                          />
-                        </View>
+                      <View
+                        style={{
+                          width: "100%",
+                          justifyContent: "flex-end",
+                          alignItems: "flex-end",
+                          marginTop: 20,
+                        }}
+                      >
+                        <TouchableOpacity
+                          style={[styles.addBtn, { marginRight: 20 }]}
+                          onPress={() => {
+                            if (
+                              dynamicInput.length > 0 &&
+                              !dynamicInput[dynamicInput.length - 1].name &&
+                              !dynamicInput[dynamicInput.length - 1].number
+                            ) {
+                              alert(
+                                "Please Enter All Value and then move to next Item Add !"
+                              );
+                            } else {
+                              addRow();
+                            }
+                          }}
+                        >
+                          <Image style={styles.plusBtn} source={plus} />
+                        </TouchableOpacity>
                       </View>
                     </View>
                     <View style={styles.inputFieldContainer}>
@@ -1033,10 +796,19 @@ const AccidentReport = (props) => {
                             manager: { ...signature.manager, bool: false },
                           })
                         }
-                        style={styles.inputFieldContainer}>
+                        style={styles.inputFieldContainer}
+                      >
                         {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
                         {signature.supervisor.uri ? (
-                          <Image style={{ marginTop: 10, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.supervisor.uri }} />
+                          <Image
+                            style={{
+                              marginTop: 10,
+                              height: 100,
+                              width: 100,
+                              backgroundColor: "gray",
+                            }}
+                            source={{ uri: signature.supervisor.uri }}
+                          />
                         ) : (
                           <Text
                             style={{
@@ -1049,14 +821,18 @@ const AccidentReport = (props) => {
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
                               paddingTop: 15,
-                            }}>
+                            }}
+                          >
                             Supervisor Signature
                           </Text>
                         )}
                       </TouchableOpacity>
                     </View>
                     <View style={styles.inputFieldContainer}>
-                      <Text onPress={() => showDatepicker("DateSupervisor")} style={[styles.inputField, { paddingTop: 15 }]}>
+                      <Text
+                        onPress={() => showDatepicker("DateSupervisor")}
+                        style={[styles.inputField, { paddingTop: 15 }]}
+                      >
                         {new Date(dateSupervisor).toLocaleDateString()}
                       </Text>
                     </View>
@@ -1066,25 +842,32 @@ const AccidentReport = (props) => {
                         height: 2,
                         backgroundColor: "#000",
                         marginTop: 20,
-                      }}></View>
+                      }}
+                    ></View>
                     <Text
                       style={{
                         fontFamily: "poppins-bold",
                         fontSize: 12,
                         paddingTop: 10,
-                      }}>
+                      }}
+                    >
                       MANAGEMENT USE ONLY
                     </Text>
                     <View style={styles.inputFieldContainer}>
                       <TextInput
                         style={styles.inputField}
                         placeholder={"To whom was the accident reported?"}
-                        onChangeText={(e) => setMangementWhomAccidentReported(e)}
+                        onChangeText={(e) =>
+                          setMangementWhomAccidentReported(e)
+                        }
                         value={mangementWhomAccidentReported}
                       />
                     </View>
                     <View style={styles.inputFieldContainer}>
-                      <Text onPress={() => showDatepicker("DateReport")} style={[styles.inputField, { paddingTop: 15 }]}>
+                      <Text
+                        onPress={() => showDatepicker("DateReport")}
+                        style={[styles.inputField, { paddingTop: 15 }]}
+                      >
                         {new Date(dateReport).toLocaleDateString()}
                       </Text>
                     </View>
@@ -1093,7 +876,9 @@ const AccidentReport = (props) => {
                         multiline={true}
                         numberOfLines={4}
                         style={styles.inputField}
-                        placeholder={"Manager/Director comment and initial investigation notes"}
+                        placeholder={
+                          "Manager/Director comment and initial investigation notes"
+                        }
                         onChangeText={(e) => setManagerInitialNotes(e)}
                         value={managerInitialNotes}
                       />
@@ -1103,7 +888,9 @@ const AccidentReport = (props) => {
                         multiline={true}
                         numberOfLines={4}
                         style={styles.inputField}
-                        placeholder={"Manager/Director follow up action required"}
+                        placeholder={
+                          "Manager/Director follow up action required"
+                        }
                         onChangeText={(e) => setActionRequried(e)}
                         value={actionRequried}
                       />
@@ -1111,7 +898,9 @@ const AccidentReport = (props) => {
                     <View style={styles.inputFieldContainer}>
                       <TextInput
                         style={styles.inputField}
-                        placeholder={"Follow up action to be performed by whom?"}
+                        placeholder={
+                          "Follow up action to be performed by whom?"
+                        }
                         onChangeText={(e) => setActionPerformed(e)}
                         value={actionPerformed}
                       />
@@ -1124,7 +913,8 @@ const AccidentReport = (props) => {
                               style={{
                                 fontFamily: "poppins-bold",
                                 fontSize: 10,
-                              }}>
+                              }}
+                            >
                               {item.title}
                             </Text>
                           </View>
@@ -1132,7 +922,12 @@ const AccidentReport = (props) => {
                             <View style={styles.firstCheckBoxRow}>
                               <View style={styles.parentCheckBox}>
                                 <View style={styles.leftCheckBox}>
-                                  <CheckBox value={item.no} onValueChange={() => calendarDayChange("no", index, "true")} />
+                                  <CheckBox
+                                    value={item.no}
+                                    onValueChange={() =>
+                                      calendarDayChange("no", index, "true")
+                                    }
+                                  />
                                 </View>
                                 <View style={styles.rightCheckBox}>
                                   <Text style={styles.accidentText}>No</Text>
@@ -1140,7 +935,12 @@ const AccidentReport = (props) => {
                               </View>
                               <View style={styles.parentCheckBox}>
                                 <View style={styles.leftCheckBox}>
-                                  <CheckBox value={item.yes} onValueChange={() => calendarDayChange("yes", index, "true")} />
+                                  <CheckBox
+                                    value={item.yes}
+                                    onValueChange={() =>
+                                      calendarDayChange("yes", index, "true")
+                                    }
+                                  />
                                 </View>
                                 <View style={styles.rightCheckBox}>
                                   <Text style={styles.accidentText}>Yes</Text>
@@ -1152,7 +952,12 @@ const AccidentReport = (props) => {
                       ))}
                     </View>
                     <View style={styles.inputFieldContainer}>
-                      <TextInput style={styles.inputField} placeholder={"Manager/Director Name"} onChangeText={(e) => setManagerName(e)} value={managerName} />
+                      <TextInput
+                        style={styles.inputField}
+                        placeholder={"Manager/Director Name"}
+                        onChangeText={(e) => setManagerName(e)}
+                        value={managerName}
+                      />
                     </View>
                     <View style={styles.inputFieldContainer}>
                       <TouchableOpacity
@@ -1161,13 +966,25 @@ const AccidentReport = (props) => {
                             ...signature,
                             bool: true,
                             manager: { ...signature.manager, bool: true },
-                            supervisor: { ...signature.supervisor, bool: false },
+                            supervisor: {
+                              ...signature.supervisor,
+                              bool: false,
+                            },
                           })
                         }
-                        style={styles.inputFieldContainer}>
+                        style={styles.inputFieldContainer}
+                      >
                         {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
                         {signature.manager.uri ? (
-                          <Image style={{ marginTop: 10, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature.manager.uri }} />
+                          <Image
+                            style={{
+                              marginTop: 10,
+                              height: 100,
+                              width: 100,
+                              backgroundColor: "gray",
+                            }}
+                            source={{ uri: signature.manager.uri }}
+                          />
                         ) : (
                           <Text
                             style={{
@@ -1180,14 +997,18 @@ const AccidentReport = (props) => {
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
                               paddingTop: 15,
-                            }}>
+                            }}
+                          >
                             Manager Signature
                           </Text>
                         )}
                       </TouchableOpacity>
                     </View>
                     <View style={styles.inputFieldContainer}>
-                      <Text onPress={() => showDatepicker("DateManager")} style={[styles.inputField, { paddingTop: 15 }]}>
+                      <Text
+                        onPress={() => showDatepicker("DateManager")}
+                        style={[styles.inputField, { paddingTop: 15 }]}
+                      >
                         {new Date(dateManager).toLocaleDateString()}
                       </Text>
                     </View>
@@ -1198,9 +1019,13 @@ const AccidentReport = (props) => {
                         height: ".2%",
                         marginBottom: 20,
                         marginTop: 20,
-                      }}></View>
+                      }}
+                    ></View>
                     <View style={styles.btnContainer}>
-                      <TouchableOpacity style={styles.commonBtn} onPress={() => incidentFormInsert()}>
+                      <TouchableOpacity
+                        style={styles.commonBtn}
+                        onPress={() => incidentFormInsert()}
+                      >
                         <Text style={styles.commonText}>Save</Text>
                       </TouchableOpacity>
                     </View>
@@ -1221,28 +1046,80 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createAccidentHandler: (nameOfPerson,dateIncident,
-        locationOfIncident,dateInvestigation,occupationInjured,incidentArray,nameOfInjuredPerson,ageOfInjuredPerson,sexOfInjuredPerson,employee,
-        stateOfInjuredPerson,telephonNumber,natureOfInjury,callingDetails,dynamicInput,witnessStatement,
-        whomAccidentReported,whenAccidentReported,supervisorName,supervisorSignature,dateSupervisor,
-        mangementWhomAccidentReported,dateReport,managerInitialNotes,actionRequried,actionPerformed,
-        managmentArray,managerName,managerSignature,dateManager,
-        jobID,
-        tabId,
-        token,
-        index) =>
+  createAccidentHandler: (
+    nameOfPerson,
+    dateIncident,
+    locationOfIncident,
+    dateInvestigation,
+    occupationInjured,
+    incidentArray,
+    nameOfInjuredPerson,
+    ageOfInjuredPerson,
+    sexOfInjuredPerson,
+    employee,
+    stateOfInjuredPerson,
+    telephonNumber,
+    natureOfInjury,
+    callingDetails,
+    dynamicInput,
+    witnessStatement,
+    whomAccidentReported,
+    whenAccidentReported,
+    supervisorName,
+    supervisorSignature,
+    dateSupervisor,
+    mangementWhomAccidentReported,
+    dateReport,
+    managerInitialNotes,
+    actionRequried,
+    actionPerformed,
+    managmentArray,
+    managerName,
+    managerSignature,
+    dateManager,
+    jobID,
+    tabId,
+    token,
+    index
+  ) =>
     dispatch(
-      insertAccidentForm(nameOfPerson,dateIncident,
-        locationOfIncident,dateInvestigation,occupationInjured,incidentArray,nameOfInjuredPerson,ageOfInjuredPerson,sexOfInjuredPerson,employee,
-        stateOfInjuredPerson,telephonNumber,natureOfInjury,callingDetails,dynamicInput,witnessStatement,
-        whomAccidentReported,whenAccidentReported,supervisorName,supervisorSignature,dateSupervisor,
-        mangementWhomAccidentReported,dateReport,managerInitialNotes,actionRequried,actionPerformed,
-        managmentArray,managerName,managerSignature,dateManager,
+      insertAccidentForm(
+        nameOfPerson,
+        dateIncident,
+        locationOfIncident,
+        dateInvestigation,
+        occupationInjured,
+        incidentArray,
+        nameOfInjuredPerson,
+        ageOfInjuredPerson,
+        sexOfInjuredPerson,
+        employee,
+        stateOfInjuredPerson,
+        telephonNumber,
+        natureOfInjury,
+        callingDetails,
+        dynamicInput,
+        witnessStatement,
+        whomAccidentReported,
+        whenAccidentReported,
+        supervisorName,
+        supervisorSignature,
+        dateSupervisor,
+        mangementWhomAccidentReported,
+        dateReport,
+        managerInitialNotes,
+        actionRequried,
+        actionPerformed,
+        managmentArray,
+        managerName,
+        managerSignature,
+        dateManager,
         jobID,
         tabId,
         token,
-        index)
+        index
+      )
     ),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AccidentReport);

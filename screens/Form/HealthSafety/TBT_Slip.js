@@ -60,13 +60,14 @@ const TBTSlip = (props) => {
     supervisor: "",
     date: null,
     comments: "",
+    tbtSign:"",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
     try{
       if(data!=""){
         await props.creatTbtSlipHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
-        props.updateHealthReport(props?.route?.params?.index);
+        // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT SLIP Insert SuccessFully !");
       } 
@@ -82,10 +83,15 @@ const TBTSlip = (props) => {
       {openSign.bool ? (
         <SignatureComponent
           returnImage={(uri) => {
-            let copydata = [...data.jobSummary];
-            copydata[openSign.index].sign = uri;
-            setData({ ...data, jobSummary: [...copydata] });
-            setOpenSign({ bool: false, index: -1 });
+            if(openSign?.index===2){
+              setData({ ...data, tbtSign:uri});
+              setOpenSign({ bool: false, index: -1 });
+             }else{
+              let copydata = [...data.jobSummary];
+              copydata[openSign.index].sign = uri;
+              setData({ ...data, jobSummary: [...copydata] });
+              setOpenSign({ bool: false, index: -1 });
+             }
           }}
         />
       ) : (
@@ -117,6 +123,7 @@ const TBTSlip = (props) => {
                 getSignature={(index) =>
                   setOpenSign({ ...openSign, bool: true, index })
                 }
+                setTBTGlobalSign={()=>{ setOpenSign({ ...openSign, bool: true, index:2 })}} 
                 addAttendence={() =>
                   setData({
                     ...data,
@@ -194,6 +201,6 @@ const mapDispatchToProps = (dispatch) => ({
         index
       )
     ),
-    updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+    // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TBTSlip);

@@ -10,12 +10,12 @@ const CreateDecorataor = (props) => {
   const [photoID, setPhotoID] = useState(null);
   const [cscsFront, setCscsFront] = useState(null);
   const [cscsBack, setCscsBack] = useState(null);
-  const [name, setName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const postCreateDecortor = () => {
+  const [name, setName] = useState("Munir");
+  const [lastName, setLastName] = useState("Khan");
+  const [email, setEmail] = useState("Munir@gmail.com");
+  const [number, setNumber] = useState("03359853140");
+  const [password, setPassword] = useState("Munir@123");
+  const postCreateDecortor = async () => {
     try {
       if ((name != "", lastName != "", email != "", number != "", password != "")) {
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -32,28 +32,15 @@ const CreateDecorataor = (props) => {
             setPassword(password);
             return false;
           } else {
-            // let frmData = new FormData();
-            // frmData.append('avatar', {
-            //   file: Platform.OS === 'android' ? photoID.localUri : photoID.localUri.replace('file://', ''),
-            //   name: Math.random(0, 1000).toString(),
-            //   // type: 'image/png', // it may be necessary in Android.
-            // });
-            // console.log(frmData)
-            // console.log("Password is Correct");
-
-            // let localUri = photoID.localUri;
-            // let filename = localUri.split('/').pop();
-            // let match = /\.(\w+)$/.exec(filename);
-            // let type = match ? `image/${match[1]}` : `image`;
-            //  let formData = new FormData();
-            //     formData.append('photo', { uri: localUri, name: filename, type });
-            console.log("firstname :", name);
-            console.log("lastname :", lastName);
-            console.log("email :", email);
-            console.log("phone :", number);
-            console.log("password :", password);
-            console.log("Token :", token);
-            props.createDecoratorHandler(name, lastName, email, number, password, token, photoID, cscsBack, cscsFront);
+            // console.log("firstname :", name);
+            // console.log("lastname :", lastName);
+            // console.log("email :", email);
+            // console.log("phone :", number);
+            // console.log("password :", password);
+            // console.log("Token :", token);
+            await props.createDecoratorHandler(name, lastName, email, number, password, token, photoID, cscsBack, cscsFront);
+            alert("Create Decorator SuccessFully !")
+            props.navigation.pop();
 
             return true;
           }
@@ -62,7 +49,7 @@ const CreateDecorataor = (props) => {
         alert("Please Insert All Fields CareFully !");
       }
     } catch (err) {
-      console.log(err.message);
+      alert(err.message);
     }
   };
   const uploadPhotoImage = async (type) => {
@@ -79,14 +66,7 @@ const CreateDecorataor = (props) => {
       if (pickerResult.cancelled === true) {
         return;
       }
-      // console.log("Piceker Result :", pickerResult);
-      // let frmData = new FormData();
-      // frmData.append("avatar", {
-      //   file: Platform.OS === "android" ? pickerResult.uri : pickerResult.uri.replace("file://", ""),
-      //   name: Math.random(0, 1000).toString(),
-      //   type: "image/png", // it may be necessary in Android.
-      // });
-      // console.log("Form Data :", frmData);
+      console.log("Pick Value :",pickerResult)
       setPhotoID(pickerResult.uri);
     } else if (type == "cscsFront") {
       let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -116,19 +96,6 @@ const CreateDecorataor = (props) => {
       setCscsBack(pickerResult.uri);
     }
   };
-  React.useEffect(() => {
-    if (createDecorator) {
-      console.log("here");
-
-      if (createDecoratorMsg) {
-        props.navigation.navigate("MainScreen");
-      }
-    } else {
-      if (createDecoratorMsg) {
-        alert(createDecoratorMsg);
-      }
-    }
-  }, [createDecorator, createDecoratorMsg]);
   return (
     <View style={styles.mainContainer}>
       <View style={styles.titleContainer}>
@@ -339,7 +306,7 @@ const styles = StyleSheet.create({
   thumbnail: {
     width: 50,
     height: 50,
-    resizeMode: "contain",
+    resizeMode:"cover"
   },
   decoratorTitle: {
     color: "#96A8B2",

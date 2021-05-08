@@ -18,9 +18,9 @@ const RemedialWork = (props) => {
     photo: "",
   });
   const [dynamicInput, setdynamicInput] = useState([]);
-  const [dateIssue, setIssueDate] = useState(new Date());
-  const [dateSupervisor, setSupervisorDate] = useState(new Date());
-  const [dateManager, setManagerDate] = useState(new Date());
+  const [dateIssue, setIssueDate] = useState(new Date().toLocaleDateString());
+  const [dateSupervisor, setSupervisorDate] = useState(new Date().toLocaleDateString());
+  const [dateManager, setManagerDate] = useState(new Date().toLocaleDateString());
   const [showIssue, setIssueShow] = useState(false);
   const [showSupervisor, setSupervisorShow] = useState(false);
   const [showManager, setManagerShow] = useState(false);
@@ -154,19 +154,7 @@ const RemedialWork = (props) => {
     alert(err.message)
   }
   };
-  useEffect(() => {
-    if (isRemedial) {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        navigation.pop();
-      }
-    } else {
-      if (isSuccessMsg) {
-        alert(isSuccessMsg);
-        return false;
-      }
-    }
-  }, [isRemedial,isSuccessMsg]);
+
   const CancelPicker = (type) =>{
     console.log(type)
     if(type=="issue"){
@@ -330,32 +318,27 @@ const RemedialWork = (props) => {
                     </View>
                   ))}
               </View>
-              <View style={styles.tableBody}>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput onChangeText={(txt) => setData({ ...data, area: txt })} value={data.area} style={styles.bodyTextInput} placeholder={"Area/unit"} />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, description: txt })}
-                    value={data.description}
-                    style={styles.bodyTextInput}
-                    placeholder={"Description"}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TextInput
-                    onChangeText={(txt) => setData({ ...data, photo: txt })}
-                    value={data.photo}
-                    style={styles.bodyTextInput}
-                    placeholder={"No of photo"}
-                  />
-                </View>
-                <View style={styles.inputBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addRow()}>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].area &&
+                        !dynamicInput[dynamicInput.length - 1].description &&
+                        !dynamicInput[dynamicInput.length - 1].photo 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addRow();
+                      }
+                    }}
+                  >
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
-              </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput value={totalHours} onChangeText={(e) => setTotalHours(e)} style={styles.inputField} placeholder={"Hours"} />
               </View>
@@ -572,10 +555,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bodyTextInput: {
+    width:"90%",
     borderBottomWidth: 1,
     borderBottomColor: "#96A8B2",
     padding: 5,
-    fontSize: 12,
+    fontSize: 10,
     color: "#96A8B2",
     marginLeft: 2,
     marginRight: 2,

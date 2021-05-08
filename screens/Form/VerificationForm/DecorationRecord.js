@@ -62,7 +62,7 @@ const DecorationRecord = (props) => {
     try{
     if (dynamicFirstInput && dynamicSecondInput && jobID !== "" && tabId != "") {
       await props.createDecorationRecordHandler(dynamicFirstInput, dynamicSecondInput, jobID, tabId, token);
-      props.updateVerificationReport(props?.route?.params?.index);
+      //props.updateVerificationReport(props?.route?.params?.index);
       alert("Decoration Record Insert SuccessFully !");
       props.navigation.pop();
     } else {
@@ -311,18 +311,31 @@ const DecorationRecord = (props) => {
                     </View>
                   ))}
               </View>
-              <View
-                style={{
-                  width: "100%",
-                  justifyContent: "flex-end",
-                  alignItems: "flex-end",
-                }}>
-                <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addDecorationRow()}>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicFirstInput.length > 0 &&
+                        !dynamicFirstInput[dynamicFirstInput.length - 1].name &&
+                        !dynamicFirstInput[dynamicFirstInput.length - 1].block &&
+                        !dynamicFirstInput[dynamicFirstInput.length - 1].level &&
+                        !dynamicFirstInput[dynamicFirstInput.length - 1].bed &&
+                        !dynamicFirstInput[dynamicFirstInput.length - 1].price &&
+                        !dynamicFirstInput[dynamicFirstInput.length - 1].plot &&
+                        !dynamicFirstInput[dynamicFirstInput.length - 1].days 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addDecorationRow();
+                      }
+                    }}
+                  >
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
-              </View>
             </View>
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>Decoration Record</Text>
@@ -436,18 +449,30 @@ const DecorationRecord = (props) => {
                     </View>
                   ))}
               </View>
-              <View
-                style={{
-                  width: "100%",
-                  justifyContent: "flex-end",
-                  alignItems: "flex-end",
-                }}>
-                <View style={styles.inputButtonBodyContainer}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addDecorationSecondRow()}>
+              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicSecondInput.length > 0 &&
+                        !dynamicSecondInput[dynamicSecondInput.length - 1].name &&
+                        !dynamicSecondInput[dynamicSecondInput.length - 1].block &&
+                        !dynamicSecondInput[dynamicSecondInput.length - 1].level &&
+                        !dynamicSecondInput[dynamicSecondInput.length - 1].bed &&
+                        !dynamicSecondInput[dynamicSecondInput.length - 1].price &&
+                        !dynamicSecondInput[dynamicSecondInput.length - 1].plot 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addDecorationSecondRow();
+                      }
+                    }}
+                  >
                     <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
                 </View>
-              </View>
               <View
                 style={{
                   backgroundColor: "#000",
@@ -477,7 +502,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createDecorationRecordHandler: (dynamicFirstInput, dynamicSecondInput, jobID, tabId, token) =>
     dispatch(insertDecorationRecord(dynamicFirstInput, dynamicSecondInput, jobID, tabId, token)),
-  updateVerificationReport: (index) => dispatch(updateVerificationReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DecorationRecord);
 

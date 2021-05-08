@@ -135,12 +135,15 @@ const DecoratorDetails = (props) => {
         decoratorData[0].name,
         decoratorData[0].lastname,
         decoratorData[0].number,
+        photoID,
+        cscsFront,
+        cscsBack,
         status,
         token
         
       );
-      props.navigation.pop();
-      alert("Decorator Update SuccessFully !")
+      // props.navigation.pop();
+      alert("Profile Updated SuccessFully !")
     } catch (err) {
       alert(err.message);
     }
@@ -213,6 +216,7 @@ const DecoratorDetails = (props) => {
                 </View>
                 <View style={styles.inputFieldContainer}>
                   <Text style={styles.decoratorTitle}>Photo ID:</Text>
+                  
                   <View
                     style={{
                       width: "50%",
@@ -221,10 +225,17 @@ const DecoratorDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Image
+                   {photoID.localUri ?
+                      <Image
+                        style={styles.thumbnail}
+                        source={{ uri: photoID.localUri }}
+                      />
+                      :
+                      <Image
                       style={styles.thumbnail}
-                      source={{ uri: photoID.localUri }}
-                    />
+                      source={{ uri: "http://topdecdecoratingapp.com/public/api/" + item.photoId }}
+                    />}
+                    
                     <TouchableOpacity
                       onPress={() => uploadPhotoImage("photoID")}
                       style={{
@@ -259,10 +270,17 @@ const DecoratorDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Image
+
+                    {cscsFront.localUri ?
+                      <Image
+                        style={styles.thumbnail}
+                        source={{ uri: cscsFront.localUri }}
+                      />
+                      :
+                      <Image
                       style={styles.thumbnail}
-                      source={{ uri: cscsFront.localUri }}
-                    />
+                      source={{ uri: "http://topdecdecoratingapp.com/public/api/" + item.front }}
+                    />}
                     <TouchableOpacity
                       onPress={() => uploadPhotoImage("cscsFront")}
                       style={{
@@ -297,10 +315,16 @@ const DecoratorDetails = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Image
+                     {cscsBack.localUri ?
+                      <Image
+                        style={styles.thumbnail}
+                        source={{ uri: cscsBack.localUri }}
+                      />
+                      :
+                      <Image
                       style={styles.thumbnail}
-                      source={{ uri: cscsBack.localUri }}
-                    />
+                      source={{ uri: "http://topdecdecoratingapp.com/public/api/" + item.back }}
+                    />}
                     <TouchableOpacity
                       onPress={() => uploadPhotoImage("cscsBack")}
                       style={{
@@ -442,17 +466,17 @@ const DecoratorDetails = (props) => {
                     {item.phone}
                   </Text>
                 </View>
-                <View style={styles.inputFieldContainer}>
+                <View style={[styles.inputFieldContainer,{height:100,marginBottom:10}]}>
                   <Text style={styles.decoratorTitle}>Photo ID:</Text>
-                  <Image style={styles.thumbnail} source="" />
+                  <Image style={[styles.thumbnail,{width:100,height:100,justifyContent:"center",alignItems:"center"}]} source={{uri: "http://topdecdecoratingapp.com/public/api/"+item.photoId}} />
                 </View>
-                <View style={styles.inputFieldContainer}>
+                <View style={[styles.inputFieldContainer,{height:100,marginBottom:10}]}>
                   <Text style={styles.decoratorTitle}>CSCS Front Card:</Text>
-                  <Image style={styles.thumbnail} source="" />
+                  <Image style={[styles.thumbnail,{width:100,height:100,justifyContent:"center",alignItems:"center"}]} source={{uri: "http://topdecdecoratingapp.com/public/api/"+item.front}} />
                 </View>
-                <View style={styles.inputFieldContainer}>
+                <View style={[styles.inputFieldContainer,{height:100,marginBottom:10}]}>
                   <Text style={styles.decoratorTitle}>CSCS Back Card:</Text>
-                  <Image style={styles.thumbnail} source="" />
+                  <Image style={[styles.thumbnail,{width:100,height:100,justifyContent:"center",alignItems:"center"}]} source={{uri: "http://topdecdecoratingapp.com/public/api/"+item.back}} />
                 </View>
                 <View style={styles.inputFieldContainer}>
                   <Text style={styles.decoratorTitle}>Notes Log:</Text>
@@ -514,8 +538,8 @@ const mapStateToProps = (state) => ({
   isUpdateMsg: state.auth.isUpdateMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
-  updateDecoratorHandler: (id, email, name, lastname, number, status, token) =>
-    dispatch(updateDecorator(id, email, name, lastname, number, status, token)),
+  updateDecoratorHandler: (id, email, name, lastname, number,photoID, cscsFront, cscsBack, status, token) =>
+    dispatch(updateDecorator(id, email, name, lastname, number,photoID, cscsFront, cscsBack, status, token)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DecoratorDetails);
 const styles = StyleSheet.create({

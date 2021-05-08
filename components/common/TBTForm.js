@@ -4,9 +4,9 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 var plus = require("../../assets/authScreen/plus.png");
 import styles from "../../assets/css/styles";
 const TBTForm = (props) => {
-  const { data, addAttendence, onChangeData, getSignature, isDrugs = false, addToolBox, isVoilence = false } = props;
+  const { data, addAttendence, onChangeData, getSignature, isDrugs = false, addToolBox, isVoilence = false ,setTBTGlobalSign} = props;
   // console.log(data);
-  const { contractor, project, supervisor, date, comments, jobSummary, signature } = data;
+  const { contractor, project, supervisor, date, comments, jobSummary, signature ,} = data;
   const [openData, setOpenDate] = React.useState({ bool: false, index: -1 });
 
   return (
@@ -59,6 +59,7 @@ const TBTForm = (props) => {
               placeholder={"Comments"}
             />
           </View>
+
         </>
       ) : (
         <>
@@ -104,9 +105,9 @@ const TBTForm = (props) => {
               <View style={styles.headerProjectTitleView}>
                 <Text style={styles.headerTitle}>Print Name</Text>
               </View>
-              <View style={styles.headerProjectTitleView}>
+              {/* <View style={styles.headerProjectTitleView}>
                 <Text style={styles.headerTitle}>Signature</Text>
-              </View>
+              </View> */}
               <View style={styles.headerProjectTitleView}>
                 <Text style={styles.headerTitle}>Date</Text>
               </View>
@@ -118,7 +119,7 @@ const TBTForm = (props) => {
                   if (
                     jobSummary.length > 0 &&
                     !jobSummary[jobSummary.length - 1].print &&
-                    !jobSummary[jobSummary.length - 1].sign &&
+                    // !jobSummary[jobSummary.length - 1].sign &&
                     !jobSummary[jobSummary.length - 1].date
                   ) {
                     alert("Please Enter All Value and then move to next Item Add !");
@@ -134,7 +135,7 @@ const TBTForm = (props) => {
                 <View style={styles.inputHazrdBodyContainer}>
                   <TextInput value={item.print} onChangeText={(txt) => onChangeData("print", txt, index)} style={styles.bodyTextInput} placeholder={"Name"} />
                 </View>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   activeOpacity={1}
                   onPress={() => getSignature(index, true)}
                   style={[styles.inputHazrdBodyContainer, { justifyContent: "flex-end", alignItems: "center" }]}>
@@ -156,7 +157,7 @@ const TBTForm = (props) => {
                       Signature
                     </Text>
                   )}
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity activeOpacity={1} onPress={() => setOpenDate({ ...openData, bool: true, index })} style={styles.inputHazrdBodyContainer}>
                   <TextInput
                     editable={false}
@@ -177,9 +178,9 @@ const TBTForm = (props) => {
               <View style={styles.headerWitnessTitleView}>
                 <Text style={styles.headerTitle}>Print</Text>
               </View>
-              <View style={styles.headerWitnessTitleView}>
+              {/* <View style={styles.headerWitnessTitleView}>
                 <Text style={styles.headerTitle}>Signature</Text>
-              </View>
+              </View> */}
             </View>
             <View style={{ justifyContent: "flex-end", width: "100%", alignItems: "flex-end", marginBottom: 10 }}>
               <TouchableOpacity
@@ -207,17 +208,43 @@ const TBTForm = (props) => {
                       onChangeText={(txt) => onChangeData("print", txt, index)}
                     />
                   </View>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() => getSignature(index)}
                     style={[styles.inputOprativesBodyContainer, { justifyContent: "flex-end", alignItems: "center" }]}>
                     <Image style={{ height: 30, width: 30, backgroundColor: "gray" }} source={{ uri: item?.sign }} />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               ))}
             </View>
           </View>
         </>
       )}
+
+<View style={styles.inputFieldContainer}>
+            <TouchableOpacity
+              onPress={() => setTBTGlobalSign()}
+              style={[styles.inputOprativesBodyContainer, { justifyContent: "flex-start", alignItems: "flex-start", width: "100%" }]}>
+              {/* <TextInput style={styles.inputField} placeholder={"Signature"} editable={false} /> */}
+              {data?.tbtSign ? (
+                <Image style={{ marginTop: 10, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: data?.tbtSign }} />
+              ) : (
+                <Text
+                  style={{
+                    height: 52,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 15,
+                  }}>
+                  Signature
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
     </>
   );
 };

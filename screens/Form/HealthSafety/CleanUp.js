@@ -24,8 +24,8 @@ const CleanUp = (props) => {
   console.log("Work Plot ID :",jobID)
   const tabId = props.route.params.tabName;
   console.log("Work Tab ID :",tabId)
-  const [date, setDate] = useState(new Date());
-  const [dateSupervisor, setDateSupervisor] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [dateSupervisor, setDateSupervisor] = useState(new Date().toLocaleDateString());
   const [mode, setMode] = useState("date");
   const [showDate, setShowDate] = useState(false);
   const [showSupervisor, setShowSupervisor] = useState(false);
@@ -110,7 +110,7 @@ const CleanUp = (props) => {
         token,
         props.route.params?.index
       );
-      props.updateHealthReport(props?.route?.params?.index);
+      // props.updateHealthReport(props?.route?.params?.index);
       alert("Clean Up Insert SuccessFully !");
       props.navigation.pop();
     } else {
@@ -229,17 +229,6 @@ const CleanUp = (props) => {
                     <Text style={styles.headerTitle}>Comments</Text>
                   </View>
                 </View>
-                <View
-                  style={{
-                    justifyContent: "flex-end",
-                    width: "100%",
-                    alignItems: "flex-end",
-                    marginBottom: 10,
-                  }}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => addCleanUpRow()}>
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
                 <View style={{ flexDirection: "column" }}>
                   {dynamicInput.length > 0 &&
                     dynamicInput.map((el, index) => (
@@ -309,6 +298,30 @@ const CleanUp = (props) => {
                         </View>
                       </View>
                     ))}
+                </View>
+                <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end"}}>
+                  <TouchableOpacity
+                    style={[styles.addBtn,{marginRight:20}]}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].block &&
+                        !dynamicInput[dynamicInput.length - 1].level &&
+                        !dynamicInput[dynamicInput.length - 1].plot &&
+                        !dynamicInput[dynamicInput.length - 1].area &&
+                        !dynamicInput[dynamicInput.length - 1].items &&
+                        !dynamicInput[dynamicInput.length - 1].comment 
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addCleanUpRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.inputFieldContainer}>
                   <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
@@ -384,6 +397,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       insertCleanUpForm(contractorName, projectName, nameOperatives, date, dynamicInput, supervisorSignature, dateSupervisor, jobID, tabId, token, index)
     ),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CleanUp);

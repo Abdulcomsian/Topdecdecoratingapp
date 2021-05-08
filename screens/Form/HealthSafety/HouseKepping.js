@@ -191,8 +191,8 @@ const HouseKepping = (props) => {
       comment: "",
     },
   ]);
-  const [dateCheck, setDateCheck] = useState(new Date(1598051730000));
-  const [dateSupervisor, setDateSupervisor] = useState(new Date());
+  const [dateCheck, setDateCheck] = useState(new Date().toLocaleDateString());
+  const [dateSupervisor, setDateSupervisor] = useState(new Date().toLocaleDateString());
   const [showSupervisor, setShowSupervisor] = useState(false);
   const [constructorName, setConstructorName] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -270,7 +270,7 @@ try{
         token,
         props.route.params?.index
       );
-      props.updateHealthReport(props?.route?.params?.index);
+      // props.updateHealthReport(props?.route?.params?.index);
       alert("Hose Keeping Insert SuccessFully !")
       props.navigation.pop();
     } else {
@@ -285,14 +285,13 @@ try{
     <View style={styles.mainContainer}>
       <DateTimePickerModal
         isVisible={show.isVisible}
-        date={dateCheck ? dateCheck : new Date()}
+        testID='dateTimePicker'
+        value={dateCheck}
         mode={"date"}
-        is24Hour={true}
         display='default'
-        onConfirm={(date) => onChange(date)}
+        onConfirm={onChange}
         onCancel={() => setShow({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
+        format='DD-MM-YYYY'
       />
       <DateTimePickerModal
         isVisible={showSupervisor}
@@ -494,6 +493,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createHouseKeepingHandler: (constructorName, projectName, weekCommencing, checkListArray, supervisorSign, dateSupervisor, jobID, tabId, token, index) =>
     dispatch(insertHouseKeepingForm(constructorName, projectName, weekCommencing, checkListArray, supervisorSign, dateSupervisor, jobID, tabId, token, index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HouseKepping);

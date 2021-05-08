@@ -38,6 +38,7 @@ const AllJobs = (props) =>{
               }
             );
             const response = await request.data;
+            console.log("Insert Response :",response)
             if(response.success){
                 setJobData(response.data.user)
                 setLoading(false);
