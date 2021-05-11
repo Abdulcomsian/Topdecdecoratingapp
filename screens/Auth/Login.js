@@ -17,8 +17,8 @@ const LoginScreen = (props) => {
   // const [email, setEmail] = useState("Waqas@gmail.com");
   // const [password, setPassword] = useState("Waqas@123");
 
-  const [email, setEmail] = useState("Hamza@gmail.com");
-  const [password, setPassword] = useState("Hamza@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const postSignInHandler = async (type) => {
     try {
       if (type == "admin") {

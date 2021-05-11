@@ -10,11 +10,11 @@ const CreateDecorataor = (props) => {
   const [photoID, setPhotoID] = useState(null);
   const [cscsFront, setCscsFront] = useState(null);
   const [cscsBack, setCscsBack] = useState(null);
-  const [name, setName] = useState("Munir");
-  const [lastName, setLastName] = useState("Khan");
-  const [email, setEmail] = useState("Munir@gmail.com");
-  const [number, setNumber] = useState("03359853140");
-  const [password, setPassword] = useState("Munir@123");
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
+  const [password, setPassword] = useState("");
   const postCreateDecortor = async () => {
     try {
       if ((name != "", lastName != "", email != "", number != "", password != "")) {
@@ -38,9 +38,14 @@ const CreateDecorataor = (props) => {
             // console.log("phone :", number);
             // console.log("password :", password);
             // console.log("Token :", token);
-            await props.createDecoratorHandler(name, lastName, email, number, password, token, photoID, cscsBack, cscsFront);
-            alert("Create Decorator SuccessFully !")
-            props.navigation.pop();
+            if(name!="", lastName!="", email!="", number!="", password!="")
+            {
+              await props.createDecoratorHandler(name, lastName, email, number, password, token, photoID, cscsBack, cscsFront);
+              alert("Create Decorator SuccessFully !")
+              props.navigation.pop();
+            } else{
+              alert("Please CareFully Enter Details !")
+            }
 
             return true;
           }

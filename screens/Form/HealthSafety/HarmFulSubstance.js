@@ -17,7 +17,7 @@ const HarmFulSubstance = (props) => {
   const tabId = props.route.params.tabName;
   console.log("Work Tab ID :",tabId)
   const [harmFulRow, setHarmFullRow] = useState([]);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
   const [show, setShow] = useState(false);
   const [dynamicInput, setdynamicInput] = useState([]);
   const [contractorName, setContractorName] = useState("");
