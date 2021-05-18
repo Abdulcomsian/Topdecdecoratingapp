@@ -53,7 +53,7 @@ const TBTVOLIENCE = (props) => {
     console.log("Token :",token)
     try {
        
-      if(data!="" ){
+      if(data.signature!="" && data.date!=null && data.supervisor!="" && data.tbtSign!="" && data.jobSummary!="" ){
         await props.creatTbtVolienceHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();

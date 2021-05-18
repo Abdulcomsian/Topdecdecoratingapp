@@ -253,7 +253,7 @@ const INITIAL_STATE = {
       url: "DailyBreifing",
     },
     {
-      tickSign: false,
+      tickSign: true,
       text: "Safe Work Procedure",
       chekecd: false,
       url: "SafeWork",
@@ -383,7 +383,7 @@ const INITIAL_STATE = {
       url: "DailyBreifing",
     },
     {
-      tickSign: false,
+      tickSign: true,
       text: "Safe Work Procedure",
       chekecd: false,
       url: "SafeWork",
@@ -513,7 +513,7 @@ const INITIAL_STATE = {
       url: "DailyBreifing",
     },
     {
-      tickSign: false,
+      tickSign: true,
       text: "Safe Work Procedure",
       chekecd: false,
       url: "SafeWork",
@@ -620,8 +620,6 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           verificationSngInfo: action.payload,
         };
-
-
         case actions.UPDATE_MISCOT_HEALTH:
           return {
             ...state,

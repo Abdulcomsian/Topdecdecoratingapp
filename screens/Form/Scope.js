@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image, TouchableOpacity, TextInput, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { Text } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { insertScopeForm } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import SignatureComponent from "../../components/SignatureComponent";
+import { AssetsSelector } from "expo-images-picker";
+import * as ImagePicker from "expo-image-picker";
 
 var plus = require("../../assets/authScreen/plus.png");
 const Scope = (props) => {
@@ -60,251 +69,468 @@ const Scope = (props) => {
     showMode("date");
   };
   const scopeFormInsert = async () => {
-    try{
-    if (dynamicInput != "" && painterName != "" && plotNumber != "" && type != "" && date != "") {
-    
-     await props.createScopeHandler(dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, props.route.params?.index);
-      alert("Scope Insert SuccessFully !")
-      navigation.pop();
-    } else {
-      alert("Please Insert All Fields CareFully !");
-      return false;
+    try {
+      if (
+        dynamicInput != "" &&
+        painterName != "" &&
+        plotNumber != "" &&
+        type != "" &&
+        date != "" &&
+        signature != ""
+      ) {
+        await props.createScopeHandler(
+          dynamicInput,
+          painterName,
+          signature,
+          plotNumber,
+          type,
+          date,
+          jobID,
+          tabId,
+          token,
+          props.route.params?.index
+        );
+        alert("Scope Insert SuccessFully !");
+        navigation.pop();
+      } else {
+        alert("Please Insert All Fields CareFully !");
+        return false;
+      }
+    } catch (err) {
+      alert(err.message);
     }
-  } catch(err){
-    alert(err.message)
-  }
   };
-  const CancelPicker = (type) =>{
-      setShow(false)
-  
-  }
+  const CancelPicker = (type) => {
+    setShow(false);
+  };
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (data) => {
+    setProjectImages(data);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      <DateTimePicker
-        isVisible={show}
-        testID='dateTimePicker'
-        value={date}
-        mode={mode}
-        display='default'
-        onConfirm={onChange}
-        onCancel={() => CancelPicker()}
-        format='DD-MM-YYYY'
-      />
-
-      {getSign ? (
-        <SignatureComponent
-          returnImage={(uri) => {
-            setSignature(uri);
-            setGetSign(false);
-          }}
-        />
+      {isShow ? (
+        <View style={{ flex: 1, width: "100%" }}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
+                </View>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
+            }}
+          />
+        </View>
       ) : (
-        <>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Colour Schedule</Text>
-          </View>
-          <View style={styles.scopeDescriptionView}>
-            <View style={styles.textView}>
-              <Text
-                style={{
-                  fontFamily: "poppins-semiBold",
-                  fontSize: 10,
-                  width: "30%",
-                }}>
-                Frames, doors, skirting boxing:
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "poppins-regular",
-                  fontSize: 10,
-                  width: "70%",
-                }}>
-                to receive two undercoat, one gloss.
-              </Text>
-            </View>
-            <View style={styles.textView}>
-              <Text
-                style={{
-                  fontFamily: "poppins-semiBold",
-                  paddingRight: 10,
-                  fontSize: 10,
-                  width: "30%",
-                }}>
-                Curtain baton:
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "poppins-regular",
-                  fontSize: 10,
-                  width: "70%",
-                }}>
-                to fill, rub down caulk and receive a coat of undercoat before emulsion.
-              </Text>
-            </View>
-            <View style={styles.textView}>
-              <Text
-                style={{
-                  fontFamily: "poppins-semiBold",
-                  paddingRight: 10,
-                  fontSize: 10,
-                  width: "30%",
-                }}>
-                Frames, doors, skirting boxing:
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "poppins-regular",
-                  fontSize: 10,
-                  width: "70%",
-                }}>
-                to receive two undercoat, one gloss.
-              </Text>
-            </View>
-            <View style={styles.textView}>
-              <Text
-                style={{
-                  fontFamily: "poppins-semiBold",
-                  paddingRight: 10,
-                  fontSize: 10,
-                  width: "30%",
-                }}>
-                Frames, doors, skirting boxing:
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "poppins-regular",
-                  fontSize: 10,
-                  width: "70%",
-                }}>
-                bathroom, w/c, kitchen, dinner / living room, to receive one coat of supermatt and two coats of white eggshell.
-              </Text>
-            </View>
-          </View>
-          <ScrollView style={{ height: "100%", width: "100%" }}>
-            <View>
-              <View style={styles.tableViewContainer}>
-                <View style={styles.tableHeader}>
-                  <View style={styles.headerTitleView}>
-                    <Text style={styles.headerTitle}>Item</Text>
-                  </View>
-                  <View style={styles.headerTitleView}>
-                    <Text style={styles.headerTitle}>Hallway</Text>
-                  </View>
-                  <View style={styles.headerTitleView}>
-                    <Text style={styles.headerTitle}>Bedroom</Text>
-                  </View>
-                  <View style={styles.headerTitleView}>
-                    <Text style={styles.headerTitle}>Diner</Text>
-                  </View>
-                  <View style={styles.headerTitleView}>
-                    <Text style={styles.headerTitle}>W/C Bathrooms</Text>
-                  </View>
-                  <View style={styles.headerTitleView}>
-                    <Text style={styles.headerTitle}>En Ensuite</Text>
-                  </View>
-                </View>
-                <View style={{ flexDirection: "column" }}>
-                  {dynamicInput.length > 0 &&
-                    dynamicInput.map((el, index) => (
-                      <View style={styles.tableBody}>
-                        <View style={styles.inputBodyContainer}>
-                          <TextInput onChangeText={(txt) => updateValue("item", index, txt)} value={el.item} style={styles.bodyTextInput} />
-                        </View>
-                        <View style={styles.inputBodyContainer}>
-                          <TextInput onChangeText={(txt) => updateValue("hallway", index, txt)} value={el.hallway} style={styles.bodyTextInput} />
-                        </View>
-                        <View style={styles.inputBodyContainer}>
-                          <TextInput onChangeText={(txt) => updateValue("bedroom", index, txt)} value={el.bedroom} style={styles.bodyTextInput} />
-                        </View>
-                        <View style={styles.inputBodyContainer}>
-                          <TextInput onChangeText={(txt) => updateValue("room", index, txt)} value={el.room} style={styles.bodyTextInput} />
-                        </View>
-                        <View style={styles.inputBodyContainer}>
-                          <TextInput onChangeText={(txt) => updateValue("bathrroms", index, txt)} value={el.bathrroms} style={styles.bodyTextInput} />
-                        </View>
-                        <View style={styles.inputBodyContainer}>
-                          <TextInput onChangeText={(txt) => updateValue("ensuite", index, txt)} value={el.ensuite} style={styles.bodyTextInput} />
-                        </View>
-                      </View>
-                    ))}
-                </View>
+        <View style={{flex:1,  width: "100%" }}>
+          <DateTimePicker
+            isVisible={show}
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            display="default"
+            onConfirm={onChange}
+            onCancel={() => CancelPicker()}
+            format="DD-MM-YYYY"
+          />
+
+          {getSign ? (
+            <SignatureComponent
+              returnImage={(uri) => {
+                setSignature(uri);
+                setGetSign(false);
+              }}
+            />
+          ) : (
+            <>
+              <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>Colour Schedule</Text>
               </View>
-              <View style={{width: "100%",justifyContent:"flex-end",alignItems:"flex-end",marginTop:20}}>
-                  <TouchableOpacity
-                    style={[styles.addBtn,{marginRight:20}]}
-                    onPress={() => {
-                      if (
-                        dynamicInput.length > 0 &&
-                        !dynamicInput[dynamicInput.length - 1].item &&
-                        !dynamicInput[dynamicInput.length - 1].hallway &&
-                        !dynamicInput[dynamicInput.length - 1].bedroom &&
-                        !dynamicInput[dynamicInput.length - 1].room &&
-                        !dynamicInput[dynamicInput.length - 1].bathrroms &&
-                        !dynamicInput[dynamicInput.length - 1].ensuite 
-                      ) {
-                        alert(
-                          "Please Enter All Value and then move to next Item Add !"
-                        );
-                      } else {
-                        addRow();
-                      }
+              <View style={styles.scopeDescriptionView}>
+                <View style={styles.textView}>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-semiBold",
+                      fontSize: 10,
+                      width: "30%",
                     }}
                   >
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
+                    Frames, doors, skirting boxing:
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-regular",
+                      fontSize: 10,
+                      width: "70%",
+                    }}
+                  >
+                    to receive two undercoat, one gloss.
+                  </Text>
                 </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput value={painterName} onChangeText={(e) => setPainterName(e)} style={styles.inputField} placeholder={"Painter Name"} />
+                <View style={styles.textView}>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-semiBold",
+                      paddingRight: 10,
+                      fontSize: 10,
+                      width: "30%",
+                    }}
+                  >
+                    Curtain baton:
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-regular",
+                      fontSize: 10,
+                      width: "70%",
+                    }}
+                  >
+                    to fill, rub down caulk and receive a coat of undercoat
+                    before emulsion.
+                  </Text>
+                </View>
+                <View style={styles.textView}>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-semiBold",
+                      paddingRight: 10,
+                      fontSize: 10,
+                      width: "30%",
+                    }}
+                  >
+                    Frames, doors, skirting boxing:
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-regular",
+                      fontSize: 10,
+                      width: "70%",
+                    }}
+                  >
+                    to receive two undercoat, one gloss.
+                  </Text>
+                </View>
+                <View style={styles.textView}>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-semiBold",
+                      paddingRight: 10,
+                      fontSize: 10,
+                      width: "30%",
+                    }}
+                  >
+                    Frames, doors, skirting boxing:
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-regular",
+                      fontSize: 10,
+                      width: "70%",
+                    }}
+                  >
+                    bathroom, w/c, kitchen, dinner / living room, to receive one
+                    coat of supermatt and two coats of white eggshell.
+                  </Text>
+                </View>
               </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput value={plotNumber} onChangeText={(e) => setPlotNumber(e)} style={styles.inputField} placeholder={"Plot No"} />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput value={type} onChangeText={(e) => setType(e)} style={styles.inputField} placeholder={"Type"} />
-              </View>
-              <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
-                {signature ?
-                <Image style={{ marginTop:20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: signature }} />
-                :<Text style={{height: 52,
-                  width: "100%",
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#96A8B2",
-                  padding: 5,
-                  fontSize: 12,
-                  color: "#96A8B2",
-                  fontFamily: "poppins-regular",paddingTop:15}}>Signature</Text>
-                }
-              </TouchableOpacity>
-              <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showDatepicker()}
-                  style={{
-                    width: "100%",
-                    height: 60,
-                    paddingTop: 20,
-                    fontSize: 12,
-                    color: "#96A8B2",
-                    fontFamily: "poppins-regular",
-                  }}>
-                  {new Date(date).toLocaleDateString()}
-                </Text>
-              </View>
-              <View
-                style={{
-                  backgroundColor: "#000",
-                  width: "100%",
-                  height: ".5%",
-                  marginBottom: 20,
-                  marginTop: 20,
-                }}></View>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => scopeFormInsert()}>
-                  <Text style={styles.commonText}>Save</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
-        </>
+              <ScrollView style={{width: "100%" }}>
+                <View style={{paddingRight: 20,paddingLeft: 20,}}>
+                  <View style={styles.tableViewContainer}>
+                    <View style={styles.tableHeader}>
+                      <View style={styles.headerTitleView}>
+                        <Text style={styles.headerTitle}>Item</Text>
+                      </View>
+                      <View style={styles.headerTitleView}>
+                        <Text style={styles.headerTitle}>Hallway</Text>
+                      </View>
+                      <View style={styles.headerTitleView}>
+                        <Text style={styles.headerTitle}>Bedroom</Text>
+                      </View>
+                      <View style={styles.headerTitleView}>
+                        <Text style={styles.headerTitle}>Diner</Text>
+                      </View>
+                      <View style={styles.headerTitleView}>
+                        <Text style={styles.headerTitle}>W/C Bathrooms</Text>
+                      </View>
+                      <View style={styles.headerTitleView}>
+                        <Text style={styles.headerTitle}>En Ensuite</Text>
+                      </View>
+                    </View>
+                    <View style={{ flexDirection: "column" }}>
+                      {dynamicInput.length > 0 &&
+                        dynamicInput.map((el, index) => (
+                          <View style={styles.tableBody}>
+                            <View style={styles.inputBodyContainer}>
+                              <TextInput
+                                onChangeText={(txt) =>
+                                  updateValue("item", index, txt)
+                                }
+                                value={el.item}
+                                style={styles.bodyTextInput}
+                              />
+                            </View>
+                            <View style={styles.inputBodyContainer}>
+                              <TextInput
+                                onChangeText={(txt) =>
+                                  updateValue("hallway", index, txt)
+                                }
+                                value={el.hallway}
+                                style={styles.bodyTextInput}
+                              />
+                            </View>
+                            <View style={styles.inputBodyContainer}>
+                              <TextInput
+                                onChangeText={(txt) =>
+                                  updateValue("bedroom", index, txt)
+                                }
+                                value={el.bedroom}
+                                style={styles.bodyTextInput}
+                              />
+                            </View>
+                            <View style={styles.inputBodyContainer}>
+                              <TextInput
+                                onChangeText={(txt) =>
+                                  updateValue("room", index, txt)
+                                }
+                                value={el.room}
+                                style={styles.bodyTextInput}
+                              />
+                            </View>
+                            <View style={styles.inputBodyContainer}>
+                              <TextInput
+                                onChangeText={(txt) =>
+                                  updateValue("bathrroms", index, txt)
+                                }
+                                value={el.bathrroms}
+                                style={styles.bodyTextInput}
+                              />
+                            </View>
+                            <View style={styles.inputBodyContainer}>
+                              <TextInput
+                                onChangeText={(txt) =>
+                                  updateValue("ensuite", index, txt)
+                                }
+                                value={el.ensuite}
+                                style={styles.bodyTextInput}
+                              />
+                            </View>
+                          </View>
+                        ))}
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      width: "100%",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-end",
+                      marginTop: 20,
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={[styles.addBtn, { marginRight: 20 }]}
+                      onPress={() => {
+                        if (
+                          dynamicInput.length > 0 &&
+                          !dynamicInput[dynamicInput.length - 1].item &&
+                          !dynamicInput[dynamicInput.length - 1].hallway &&
+                          !dynamicInput[dynamicInput.length - 1].bedroom &&
+                          !dynamicInput[dynamicInput.length - 1].room &&
+                          !dynamicInput[dynamicInput.length - 1].bathrroms &&
+                          !dynamicInput[dynamicInput.length - 1].ensuite
+                        ) {
+                          alert(
+                            "Please Enter All Value and then move to next Item Add !"
+                          );
+                        } else {
+                          addRow();
+                        }
+                      }}
+                    >
+                      <Image style={styles.plusBtn} source={plus} />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={painterName}
+                      onChangeText={(e) => setPainterName(e)}
+                      style={styles.inputField}
+                      placeholder={"Painter Name"}
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={plotNumber}
+                      onChangeText={(e) => setPlotNumber(e)}
+                      style={styles.inputField}
+                      placeholder={"Plot No"}
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={type}
+                      onChangeText={(e) => setType(e)}
+                      style={styles.inputField}
+                      placeholder={"Type"}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => setGetSign(true)}
+                    style={styles.inputFieldContainer}
+                  >
+                    {signature ? (
+                      <Image
+                        style={{
+                          marginTop: 20,
+                          height: 100,
+                          width: 100,
+                          backgroundColor: "gray",
+                        }}
+                        source={{ uri: signature }}
+                      />
+                    ) : (
+                      <Text
+                        style={{
+                          height: 52,
+                          width: "100%",
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          padding: 5,
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
+                      >
+                        Signature
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                  <View style={styles.inputFieldContainer}>
+                    <Text
+                      onPress={() => showDatepicker()}
+                      style={{
+                        width: "100%",
+                        height: 60,
+                        paddingTop: 20,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                      }}
+                    >
+                      {new Date(date).toLocaleDateString()}
+                    </Text>
+                  </View>
+                  <View style={{ marginTop: 10 }}>
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Project Images
+                    </Text>
+                    {projectImages != "" ? (
+                      <View style={{ flexDirection: "row" }}>
+                        {/* <Text>Hello</Text> */}
+                        {projectImages.map((item, index) => (
+                          <Image
+                            style={{ width: 50, height: 50, marginRight: 10 }}
+                            source={{ uri: item.uri }}
+                            key={index}
+                          />
+                        ))}
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          styles.buttonOpen,
+                          { width: "100%" },
+                        ]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#000",
+                      width: "100%",
+                      height: ".5%",
+                      marginBottom: 20,
+                      marginTop: 20,
+                    }}
+                  ></View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      style={styles.commonBtn}
+                      onPress={() => scopeFormInsert()}
+                    >
+                      <Text style={styles.commonText}>Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </>
+          )}
+        </View>
       )}
     </View>
   );
@@ -316,17 +542,55 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createScopeHandler: (dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, index) =>
-    dispatch(insertScopeForm(dynamicInput, painterName, signature, plotNumber, type, date, jobID, tabId, token, index)),
+  createScopeHandler: (
+    dynamicInput,
+    painterName,
+    signature,
+    plotNumber,
+    type,
+    date,
+    jobID,
+    tabId,
+    token,
+    index
+  ) =>
+    dispatch(
+      insertScopeForm(
+        dynamicInput,
+        painterName,
+        signature,
+        plotNumber,
+        type,
+        date,
+        jobID,
+        tabId,
+        token,
+        index
+      )
+    ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Scope);
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: "100%",
+    flex:1,
     width: "100%",
-    paddingLeft: 20,
-    paddingRight: 20,
+  },
+  button: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#1073AC",
+  },
+  buttonClose: {
+    backgroundColor: "#1073AC",
+  },
+  textStyle: {
+    color: "white",
+    textAlign: "center",
+    fontFamily: "poppins-semiBold",
   },
   titleContainer: {
     height: "5%",
@@ -344,6 +608,8 @@ const styles = StyleSheet.create({
     height: "30%",
     marginTop: 20,
     width: "100%",
+    paddingRight: 20,
+    paddingLeft: 20,
   },
   textView: {
     height: "20%",

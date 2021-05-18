@@ -149,15 +149,12 @@ const PlotDetails = (props) => {
           );
           const response = await request.data;
           console.log("Insert Response :",response)
-          // if(response.success){
-          //     setJobData(response.data.user)
-          //     setLoading(false);
-          //     setShowView(true)
-          // }
-          // else{
-          //     setLoading(false);
-          //     setShowView(false)
-          // }
+          if(response=="nothing"){
+              alert("Email Not Send !")
+          }
+          else{
+            alert("Email Send SuccessFully !")
+          }
         })();
       }
     } catch(err){

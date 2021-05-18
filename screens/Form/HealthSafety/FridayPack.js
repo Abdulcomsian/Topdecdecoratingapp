@@ -14,15 +14,17 @@ import { insertFridayPackForm } from "../../../Redux/action/auth/authActionTypes
 import { connect } from "react-redux";
 import SignatureComponent from "../../../components/SignatureComponent";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import * as ImagePicker from "expo-image-picker";
+import { AssetsSelector } from "expo-images-picker";
 
 const FridayPack = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const { plot_Id } = props.route.params;
   const jobID = plot_Id;
-  console.log("Work Plot ID :",jobID)
+  console.log("Work Plot ID :", jobID);
   const tabId = props.route.params.tabName;
-  console.log("Work Tab ID :",tabId)
+  console.log("Work Tab ID :", tabId);
   const [getSign, setGetSign] = useState(false);
   const [documentRow, setDocumentRow] = useState([
     {
@@ -194,226 +196,338 @@ const FridayPack = (props) => {
       alert(err.message);
     }
   };
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (data) => {
+    setProjectImages(data);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      <DateTimePickerModal
-        isVisible={show}
-        testID='dateTimePicker'
-        value={date}
-        mode={"date"}
-        display='default'
-        onConfirm={onChange}
-        onCancel={() => setShow(false)}
-        format='DD-MM-YYYY'
-      />
-      {getSign ? (
-        <SignatureComponent
-          returnImage={(uri) => {
-            setSupervisorSign(uri);
-            setGetSign(false);
-          }}
-        />
-      ) : (
-        <>
-          <View
-            style={{
-              paddingTop: 30,
-              justifyContent: "center",
-              alignItems: "center",
+      {isShow ? (
+        <View style={{ flex: 1 }}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
+                </View>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
             }}
-          >
-            <Text style={styles.titleText}>FRIDAY PACK</Text>
-          </View>
-          <ScrollView>
-            <View style={styles.formCodnatiner}>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Main Contractor"}
-                  value={contractorName}
-                  onChangeText={(e) => setContractorName(e)}
-                />
+          />
+        </View>
+      ) : (
+        <View>
+          <DateTimePickerModal
+            isVisible={show}
+            testID="dateTimePicker"
+            value={date}
+            mode={"date"}
+            display="default"
+            onConfirm={onChange}
+            onCancel={() => setShow(false)}
+            format="DD-MM-YYYY"
+          />
+          {getSign ? (
+            <SignatureComponent
+              returnImage={(uri) => {
+                setSupervisorSign(uri);
+                setGetSign(false);
+              }}
+            />
+          ) : (
+            <>
+              <View
+                style={{
+                  paddingTop: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.titleText}>FRIDAY PACK</Text>
               </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Project"}
-                  value={projectName}
-                  onChangeText={(e) => setProjectName(e)}
-                />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Week Ending"}
-                  value={weekEnding}
-                  onChangeText={(e) => setWeekEnding(e)}
-                />
-              </View>
-              <View style={{ flexDirection: "column" }}>
-                {documentRow.map((item, index) => (
-                  <View
-                    style={styles.detailsInstructionContactView}
-                    key={index}
-                  >
-                    <View style={{ flexDirection: "row" }}>
-                      <View style={styles.instructionFridayView}>
-                        <Text
-                          style={{ fontFamily: "poppins-bold", fontSize: 10 }}
-                        >
-                          {item.title}
-                        </Text>
-                      </View>
-                      <View style={styles.checkBoxInstructionView}>
-                        <View style={styles.firstInstructionCheckBoxRow}>
-                          <View style={styles.parentCheckBox}>
-                            <View style={styles.leftCheckBox}>
-                              <CheckBox
-                                value={item.no}
-                                onValueChange={() =>
-                                  checkedValue("No", index, "no")
-                                }
-                              />
-                            </View>
-                            <View style={styles.rightCheckBox}>
-                              <Text style={styles.accidentText}>No</Text>
-                            </View>
+              <ScrollView>
+                <View style={styles.formCodnatiner}>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Main Contractor"}
+                      value={contractorName}
+                      onChangeText={(e) => setContractorName(e)}
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Project"}
+                      value={projectName}
+                      onChangeText={(e) => setProjectName(e)}
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Week Ending"}
+                      value={weekEnding}
+                      onChangeText={(e) => setWeekEnding(e)}
+                    />
+                  </View>
+                  <View style={{ flexDirection: "column" }}>
+                    {documentRow.map((item, index) => (
+                      <View
+                        style={styles.detailsInstructionContactView}
+                        key={index}
+                      >
+                        <View style={{ flexDirection: "row" }}>
+                          <View style={styles.instructionFridayView}>
+                            <Text
+                              style={{
+                                fontFamily: "poppins-bold",
+                                fontSize: 10,
+                              }}
+                            >
+                              {item.title}
+                            </Text>
                           </View>
-                          <View style={styles.parentCheckBox}>
-                            <View style={styles.leftCheckBox}>
-                              <CheckBox
-                                value={item.yes}
-                                onValueChange={() =>
-                                  checkedValue("Yes", index, "yes")
-                                }
-                              />
-                            </View>
-                            <View style={styles.rightCheckBox}>
-                              <Text style={styles.accidentText}>Yes</Text>
-                            </View>
-                          </View>
-                          <View style={styles.parentCheckBox}>
-                            <View style={styles.leftCheckBox}>
-                              <CheckBox
-                                value={item.other}
-                                onValueChange={() =>
-                                  checkedValue("other", index, "other")
-                                }
-                              />
-                            </View>
-                            <View style={styles.rightCheckBox}>
-                              <Text style={styles.accidentText}>N/A</Text>
+                          <View style={styles.checkBoxInstructionView}>
+                            <View style={styles.firstInstructionCheckBoxRow}>
+                              <View style={styles.parentCheckBox}>
+                                <View style={styles.leftCheckBox}>
+                                  <CheckBox
+                                    value={item.no}
+                                    onValueChange={() =>
+                                      checkedValue("No", index, "no")
+                                    }
+                                  />
+                                </View>
+                                <View style={styles.rightCheckBox}>
+                                  <Text style={styles.accidentText}>No</Text>
+                                </View>
+                              </View>
+                              <View style={styles.parentCheckBox}>
+                                <View style={styles.leftCheckBox}>
+                                  <CheckBox
+                                    value={item.yes}
+                                    onValueChange={() =>
+                                      checkedValue("Yes", index, "yes")
+                                    }
+                                  />
+                                </View>
+                                <View style={styles.rightCheckBox}>
+                                  <Text style={styles.accidentText}>Yes</Text>
+                                </View>
+                              </View>
+                              <View style={styles.parentCheckBox}>
+                                <View style={styles.leftCheckBox}>
+                                  <CheckBox
+                                    value={item.other}
+                                    onValueChange={() =>
+                                      checkedValue("other", index, "other")
+                                    }
+                                  />
+                                </View>
+                                <View style={styles.rightCheckBox}>
+                                  <Text style={styles.accidentText}>N/A</Text>
+                                </View>
+                              </View>
                             </View>
                           </View>
                         </View>
+                        <View style={styles.inputFieldContainer}>
+                          <TextInput
+                            style={styles.inputField}
+                            placeholder={"Comments"}
+                            value={item.commet}
+                            onChangeText={(txt) =>
+                              updateCommentValue("commet", index, txt)
+                            }
+                          />
+                        </View>
                       </View>
-                    </View>
-                    <View style={styles.inputFieldContainer}>
-                      <TextInput
-                        style={styles.inputField}
-                        placeholder={"Comments"}
-                        value={item.commet}
-                        onChangeText={(txt) =>
-                          updateCommentValue("commet", index, txt)
-                        }
-                      />
-                    </View>
+                    ))}
                   </View>
-                ))}
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  multiline={true}
-                  numberOfLines={4}
-                  style={styles.inputField}
-                  placeholder={"Any Further Comments"}
-                  value={furtherComments}
-                  onChangeText={(e) => setFurtherComments(e)}
-                />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TouchableOpacity
-                  onPress={() => setGetSign(true)}
-                  style={styles.inputFieldContainer}
-                >
-                  {supervisorSign ? (
-                    <Image
-                      style={{
-                        marginTop: 20,
-                        height: 100,
-                        width: 100,
-                        backgroundColor: "gray",
-                      }}
-                      source={{ uri: supervisorSign }}
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      multiline={true}
+                      numberOfLines={4}
+                      style={styles.inputField}
+                      placeholder={"Any Further Comments"}
+                      value={furtherComments}
+                      onChangeText={(e) => setFurtherComments(e)}
                     />
-                  ) : (
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TouchableOpacity
+                      onPress={() => setGetSign(true)}
+                      style={styles.inputFieldContainer}
+                    >
+                      {supervisorSign ? (
+                        <Image
+                          style={{
+                            marginTop: 20,
+                            height: 100,
+                            width: 100,
+                            backgroundColor: "gray",
+                          }}
+                          source={{ uri: supervisorSign }}
+                        />
+                      ) : (
+                        <Text
+                          style={{
+                            height: 52,
+                            width: "100%",
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 15,
+                          }}
+                        >
+                          Signature
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
                     <Text
+                      onPress={() => showDatepicker()}
                       style={{
-                        height: 52,
                         width: "100%",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
+                        height: 52,
+                        paddingTop: 20,
                         fontSize: 12,
                         color: "#96A8B2",
                         fontFamily: "poppins-regular",
-                        paddingTop: 15,
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
                       }}
                     >
-                      Signature
+                      {new Date(date).toLocaleDateString()}
                     </Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showDatepicker()}
-                  style={{
-                    width: "100%",
-                    height: 52,
-                    paddingTop: 20,
-                    fontSize: 12,
-                    color: "#96A8B2",
-                    fontFamily: "poppins-regular",
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#96A8B2",
-                    padding: 5,
-                  }}
-                >
-                  {new Date(date).toLocaleDateString()}
-                </Text>
-              </View>
-              <Text
-                style={{
-                  fontFamily: "poppins-bold",
-                  fontSize: 12,
-                  paddingTop: 10,
-                  textAlign: "center",
-                }}
-              >
-                Once completed, please file a copy in the Site Folder and send a
-                copy to our Head Office.
-              </Text>
-              <View
-                style={{
-                  backgroundColor: "#000",
-                  width: "100%",
-                  height: 2,
-                  marginBottom: 20,
-                  marginTop: 20,
-                }}
-              ></View>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity
-                  style={styles.commonBtn}
-                  onPress={() => fridayPackFormInsert()}
-                >
-                  <Text style={styles.commonText}>Save</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
-        </>
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-bold",
+                      fontSize: 12,
+                      paddingTop: 10,
+                      textAlign: "center",
+                    }}
+                  >
+                    Once completed, please file a copy in the Site Folder and
+                    send a copy to our Head Office.
+                  </Text>
+                  <View style={{ marginTop: 10 }}>
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Project Images
+                    </Text>
+                    {projectImages != "" ? (
+                      <View style={{ flexDirection: "row" }}>
+                        {/* <Text>Hello</Text> */}
+                        {projectImages.map((item, index) => (
+                          <Image
+                            style={{ width: 50, height: 50, marginRight: 10 }}
+                            source={{ uri: item.uri }}
+                            key={index}
+                          />
+                        ))}
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          styles.buttonOpen,
+                          { width: "100%" },
+                        ]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#000",
+                      width: "100%",
+                      height: 2,
+                      marginBottom: 20,
+                      marginTop: 20,
+                    }}
+                  ></View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      style={styles.commonBtn}
+                      onPress={() => fridayPackFormInsert()}
+                    >
+                      <Text style={styles.commonText}>Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </>
+          )}
+        </View>
       )}
     </View>
   );

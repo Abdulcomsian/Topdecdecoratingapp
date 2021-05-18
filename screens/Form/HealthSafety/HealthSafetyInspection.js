@@ -9,6 +9,8 @@ import { set } from "react-native-reanimated";
 import { connect } from "react-redux";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import { insertHealthSafetyForm } from "../../../Redux/action/auth/authActionTypes";
+import * as ImagePicker from "expo-image-picker";
+import { AssetsSelector } from "expo-images-picker";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const HealthSafetyInspection = (props) => {
@@ -258,9 +260,85 @@ const HealthSafetyInspection = (props) => {
     preData[index][key] = value;
     setArrayDocument(preData);
   };
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (data) => {
+    setProjectImages(data);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      <DateTimePickerModal
+      {isShow ? 
+      (
+        <View style={{ flex: 1 }}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
+                </View>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
+            }}
+          />
+        </View>
+      ) : 
+      (
+        <View style={{flex:1}}>
+          <DateTimePickerModal
         isVisible={show}
         testID='dateTimePicker'
         value={date}
@@ -290,19 +368,6 @@ const HealthSafetyInspection = (props) => {
         onConfirm={onDateCompleteChange}
         format='DD-MM-YYYY'
       />
-      {/* <DateTimePickerModal
-        isVisible={showUpdateDateComplete.isVisible}
-        date={dateUpdateComplete ? dateUpdateComplete : new Date()}
-        mode={"date"}
-        is24Hour={true}
-        display='default'
-        onConfirm={(date) => onDateUpdateCompleteChange(date)}
-        onCancel={() => setShowUpdateDateComplete({ isVisible: false, index: -1 })}
-        cancelTextIOS='Cancel'
-        confirmTextIOS='Confirm'
-
-
-      /> */}
       {getSign ? (
         <SignatureComponent
           returnImage={(uri) => {
@@ -658,6 +723,39 @@ const HealthSafetyInspection = (props) => {
                   </View>
                 )
               )}
+              <View style={{ marginTop: 10 }}>
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Project Images
+                    </Text>
+                    {projectImages != "" ? (
+                      <View style={{ flexDirection: "row" }}>
+                        {/* <Text>Hello</Text> */}
+                        {projectImages.map((item, index) => (
+                          <Image
+                            style={{ width: 50, height: 50, marginRight: 10 }}
+                            source={{ uri: item.uri }}
+                            key={index}
+                          />
+                        ))}
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          styles.buttonOpen,
+                          { width: "100%" },
+                        ]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
               <View
                 style={{
                   backgroundColor: "#000",
@@ -674,6 +772,8 @@ const HealthSafetyInspection = (props) => {
             </View>
           </ScrollView>
         </>
+      )}
+        </View>
       )}
     </View>
   );

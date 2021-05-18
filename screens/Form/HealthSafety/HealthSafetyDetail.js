@@ -11,10 +11,12 @@ import { Text } from "native-base";
 import ViewPager from "@react-native-community/viewpager";
 import { connect } from "react-redux";
 import { updateHealthTopTabs } from "../../../Redux/action/auth/authActionTypes";
+import axios from "axios";
 
 var tick = require("../../../assets/authScreen/check.png");
 var disableTick = require("../../../assets/authScreen/disable.png");
 var rightArrow = require("../../../assets/authScreen/right.png");
+var email = require("../../../assets/authScreen/email.png");
 const HealthSafetyDetails = (props) => {
   const {
     navigation,
@@ -24,6 +26,7 @@ const HealthSafetyDetails = (props) => {
     healthAndSafetyDecoration,
     healthAndSafetySnag,
     updateHealthTopTabs,
+    isUserID
   } = props;
   const [tab, setTab] = useState({
     miscoat: true,
@@ -41,6 +44,7 @@ const HealthSafetyDetails = (props) => {
   const [isSelected, setSelection] = useState(false);
   const [checkFlag, setCheckFlag] = useState(false);
   const [activeTab, setActiveTab] = useState("Miscoat");
+  const [jobSummary, setJobSummary] = useState([]);
 
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
@@ -64,15 +68,56 @@ const HealthSafetyDetails = (props) => {
   const [miscotArray, setMiscotArray] = useState(healthAndSafetyMisCoat);
   const [decoration, setDecoration] = useState(healthAndSafetyDecoration);
   const [snag, setSnag] = useState(healthAndSafetySnag);
-  const checkedForm = (index) => {
-    const preData = [...miscotArray];
-    const flag = preData[index].chekecd;
-    if (flag) {
-      preData[index].chekecd = false;
-      setMiscotArray(preData);
+ 
+
+  const checkedForm = (index, type) => {
+    if (type == "Miscoat") {
+      const preData = [...miscotArray];
+      const flag = preData[index].chekecd;
+      const tilte_name = "";
+
+      if (flag) {
+        preData[index].chekecd = false;
+        setMiscotArray(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
+      } else {
+        preData[index].chekecd = true;
+        setMiscotArray(preData);
+        setJobSummary((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+        ]);
+      }
+    } else if (type == "Decoration") {
+      const preData = [...decoration];
+      const flag = preData[index].chekecd;
+      if (flag) {
+        preData[index].chekecd = false;
+        setDecorationArray(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
+      } else {
+        preData[index].chekecd = true;
+        setDecorationArray(preData);
+        setJobSummary((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+        ]);
+      }
     } else {
-      preData[index].chekecd = true;
-      setMiscotArray(preData);
+      const preData = [...snag];
+      const flag = preData[index].chekecd;
+      if (flag) {
+        preData[index].chekecd = false;
+        setSnagArray(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
+      } else {
+        preData[index].chekecd = true;
+        setSnagArray(preData);
+        setJobSummary((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+        ]);
+      }
     }
   };
 
@@ -88,11 +133,47 @@ const HealthSafetyDetails = (props) => {
     });
     return unsubscribe;
   }, [navigation]);
+
+  const sendEmail = () =>{
+    try{
+      if(jobSummary!==""){
+        
+        const body = {jobSummary};
+        (async () => {
+          const request = await axios(
+            "https://topdecdecoratingapp.com/api/supervisor/send_mail",
+            {
+              method: "POST",
+              headers: {
+                authorization: "Bearer " + token,
+              },
+              data: body,
+            }
+          );
+          const response = await request.data;
+          console.log("Insert Response :",response)
+          if(response=="nothing"){
+              alert("Email Not Send !")
+          }
+          else{
+            alert("Email Send SuccessFully !")
+          }
+        })();
+      }
+    } catch(err){
+      console.log(err?.response?.request);
+      alert(err.message)
+    }
+  }
+
+
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.dateTimeContainer}>
-        <Text style={styles.refText}>Date: 12-2-2021</Text>
+       <View style={styles.dateTimeContainer}>
         <Text style={styles.refText}>Ref id: 10099499</Text>
+        <TouchableOpacity style={{marginRight:50}} onPress={()=>sendEmail()}>
+          <Image source={email} style={{width:30,height:30}}/>
+        </TouchableOpacity>
       </View>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>{plotName}</Text>
@@ -201,7 +282,7 @@ const HealthSafetyDetails = (props) => {
                           <CheckBox
                             value={item.chekecd}
                             onValueChange={() =>
-                              item?.tickSign ? checkedForm(index) : {}
+                              item?.tickSign ? checkedForm(index, "Miscoat") : {}
                             }
                             style={styles.checkbox}
                           />
@@ -245,7 +326,7 @@ const HealthSafetyDetails = (props) => {
                           <CheckBox
                             value={item.chekecd}
                             onValueChange={() =>
-                              item?.tickSign ? checkedForm(index) : {}
+                              item?.tickSign ? checkedForm(index, "Miscoat") : {}
                             }
                             style={styles.checkbox}
                           />
@@ -296,7 +377,7 @@ const HealthSafetyDetails = (props) => {
                         <CheckBox
                           value={item.chekecd}
                           onValueChange={() =>
-                            item?.tickSign ? checkedForm(index) : {}
+                            item?.tickSign ? checkedForm(index, "Decoration") : {}
                           }
                           style={styles.checkbox}
                         />
@@ -340,7 +421,7 @@ const HealthSafetyDetails = (props) => {
                         <CheckBox
                           value={item.chekecd}
                           onValueChange={() =>
-                            item?.tickSign ? checkedForm(index) : {}
+                            item?.tickSign ? checkedForm(index, "Decoration") : {}
                           }
                           style={styles.checkbox}
                         />
@@ -391,7 +472,7 @@ const HealthSafetyDetails = (props) => {
                         <CheckBox
                           value={item.chekecd}
                           onValueChange={() =>
-                            item?.tickSign ? checkedForm(index) : {}
+                            item?.tickSign ? checkedForm(index, "Snag") : {}
                           }
                           style={styles.checkbox}
                         />
@@ -435,7 +516,7 @@ const HealthSafetyDetails = (props) => {
                         <CheckBox
                           value={item.chekecd}
                           onValueChange={() =>
-                            item?.tickSign ? checkedForm(index) : {}
+                            item?.tickSign ? checkedForm(index, "Snag") : {}
                           }
                           style={styles.checkbox}
                         />
@@ -458,6 +539,7 @@ const mapStateToProps = (state) => {
     healthAndSafetyMisCoat : state.summary.healthAndSafetyMisCoat,
     healthAndSafetyDecoration: state.summary.healthAndSafetyDecoration,
     healthAndSafetySnag: state.summary.healthAndSafetySnag,
+    isUserID: state.auth.isUserID,
   };
 };
 const mapDispatchToProps = (dispatch) => ({

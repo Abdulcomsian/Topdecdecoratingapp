@@ -10,10 +10,12 @@ import { Text } from "native-base";
 import { connect } from "react-redux";
 import ViewPager from "@react-native-community/viewpager";
 import { updateVerificationTopTabs } from "../../../Redux/action/auth/authActionTypes";
+import axios from "axios";
 
 var tick = require("../../../assets/authScreen/check.png");
 var disableTick = require("../../../assets/authScreen/disable.png");
 var rightArrow = require("../../../assets/authScreen/right.png");
+var email = require("../../../assets/authScreen/email.png");
 const VerificationDetails = (props) => {
   const {
     navigation,
@@ -22,7 +24,8 @@ const VerificationDetails = (props) => {
     verificationMiscoatInfo,
     verificationDecorationInfo,
     verificationSngInfo,
-    updateVerificationTopTabs
+    updateVerificationTopTabs,
+    isUserID
   } = props;
   const { plot_id, plotName } = props.route.params;
 
@@ -35,7 +38,7 @@ const VerificationDetails = (props) => {
   const [isLeft, setIsLeft] = useState(1);
   const _ref = useRef(null);
   const [activeTab, setActiveTab] = useState("Miscoat");
-
+  const [jobSummary, setJobSummary] = useState([]);
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
       _ref.current.setPage(0);
@@ -70,10 +73,14 @@ const VerificationDetails = (props) => {
       if (flag) {
         preData[index].chekecd = false;
         setMiscotArray(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
       } else {
         preData[index].chekecd = true;
         setMiscotArray(preData);
-        //setSendData((oldArray) => [...oldArray, { title: preData[index].text, tab_Name: activeTab}])
+        setJobSummary((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+        ]);
       }
     } else if (type == "Decoration") {
       const preData = [...decoration];
@@ -81,9 +88,14 @@ const VerificationDetails = (props) => {
       if (flag) {
         preData[index].chekecd = false;
         setDecorationArray(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
       } else {
         preData[index].chekecd = true;
         setDecorationArray(preData);
+        setJobSummary((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+        ]);
       }
     } else {
       const preData = [...snag];
@@ -91,9 +103,14 @@ const VerificationDetails = (props) => {
       if (flag) {
         preData[index].chekecd = false;
         setSnagArray(preData);
+        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
       } else {
         preData[index].chekecd = true;
         setSnagArray(preData);
+        setJobSummary((oldArray) => [
+          ...oldArray,
+          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+        ]);
       }
     }
   };
@@ -113,11 +130,44 @@ const VerificationDetails = (props) => {
     });
     return unsubscribe;
   }, [navigation]);
+  const sendEmail = () =>{
+    try{
+      if(jobSummary!==""){
+        
+        const body = {jobSummary};
+        (async () => {
+          const request = await axios(
+            "https://topdecdecoratingapp.com/api/supervisor/send_mail",
+            {
+              method: "POST",
+              headers: {
+                authorization: "Bearer " + token,
+              },
+              data: body,
+            }
+          );
+          const response = await request.data;
+          console.log("Insert Response :",response)
+          if(response=="nothing"){
+              alert("Email Not Send !")
+          }
+          else{
+            alert("Email Send SuccessFully !")
+          }
+        })();
+      }
+    } catch(err){
+      console.log(err?.response?.request);
+      alert(err.message)
+    }
+  }
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
-        <Text style={styles.refText}>Date: 12-2-2021</Text>
         <Text style={styles.refText}>Ref id: 10099499</Text>
+        <TouchableOpacity style={{marginRight:50}} onPress={()=>sendEmail()}>
+          <Image source={email} style={{width:30,height:30}}/>
+        </TouchableOpacity>
       </View>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>{plotName}</Text>
@@ -477,6 +527,7 @@ const mapStateToProps = (state) => ({
   verificationMiscoatInfo: state.summary.verificationMiscoatInfo,
   verificationDecorationInfo: state.summary.verificationDecorationInfo,
   verificationSngInfo: state.summary.verificationSngInfo,
+  isUserID: state.auth.isUserID,
 });
 const mapDispatchToProps = (dispatch) => ({
   updateVerificationTopTabs: (plot_Id, token) =>

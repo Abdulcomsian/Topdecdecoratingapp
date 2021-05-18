@@ -12,6 +12,8 @@ import { Text } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { insertSnaggingForm } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
+import { AssetsSelector } from "expo-images-picker";
 
 var plus = require("../../assets/authScreen/plus.png");
 const WrantySannging = (props) => {
@@ -166,282 +168,380 @@ const WrantySannging = (props) => {
       setShowSnaggingComplete(false);
     }
   };
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (data) => {
+    setProjectImages(data);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      <DateTimePicker
-        isVisible={showIssue}
-        testID="dateTimePicker"
-        value={dateIssue}
-        mode={mode}
-        display="default"
-        onConfirm={onIssueChange}
-        onCancel={() => CancelPicker("issue")}
-        format="DD-MM-YYYY"
-      />
-      <DateTimePicker
-        isVisible={showComplete}
-        testID="dateTimePicker"
-        value={dateComplete}
-        mode={mode}
-        display="default"
-        onConfirm={onCompleteChange}
-        onCancel={() => CancelPicker("complete")}
-        format="DD-MM-YYYY"
-      />
-      <DateTimePicker
-        isVisible={showSnaggingIssue}
-        testID="dateTimePicker"
-        value={dateSnaggingIssue}
-        mode={mode}
-        display="default"
-        onConfirm={onSnaggingIssueChange}
-        onCancel={() => CancelPicker("dateSnaggingIssue")}
-        format="DD-MM-YYYY"
-      />
-      <DateTimePicker
-        isVisible={showSnaggingComplete}
-        testID="dateTimePicker"
-        value={dateSnaggingComplete}
-        mode={mode}
-        display="default"
-        onConfirm={onSnaggingCompleteChange}
-        onCancel={() => CancelPicker("dateSnaggingComplete")}
-        format="DD-MM-YYYY"
-      />
-      <ScrollView style={{ height: "100%" }}>
-        <View style={styles.formConatiner}>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={block}
-              onChangeText={(e) => setBlock(e)}
-              style={styles.inputField}
-              placeholder={"Block"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={plotNumber}
-              onChangeText={(e) => setPlotNumber(e)}
-              style={styles.inputField}
-              placeholder={"Plot No"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("DateIssue")}
-              style={styles.inputField}
-            >
-              {new Date(dateIssue).toLocaleDateString()}
-            </Text>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("CompleteDate")}
-              style={styles.inputField}
-            >
-              {new Date(dateComplete).toLocaleDateString()}
-            </Text>
-          </View>
-
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>
-              Snagging to be completed within 24 hours
-            </Text>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={wrrantySnagging}
-              onChangeText={(e) => setWrrantySnagging(e)}
-              style={styles.inputField}
-              placeholder={"Pre- warranty snagging"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={painterName}
-              onChangeText={(e) => setPainterName(e)}
-              style={styles.inputField}
-              placeholder={"Painter’s name"}
-            />
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={noOfPage}
-              onChangeText={(e) => setNoOfPage(e)}
-              style={styles.inputField}
-              placeholder={"No of page"}
-            />
-          </View>
-          <View style={styles.tableViewContainer}>
-            <View style={styles.tableHeader}>
-              <View style={styles.headerTitleView}>
-                <Text style={styles.headerTitle}>Location</Text>
-              </View>
-              <View style={styles.headerTitleView}>
-                <Text style={styles.headerTitle}>Snag Description</Text>
-              </View>
-            </View>
-            <View style={{ flexDirection: "column" }}>
-              {dynamicSnagInput.length > 0 &&
-                dynamicSnagInput.map((el, index) => (
-                  <View style={styles.tableBody} key={index}>
-                    <View style={styles.inputBodyContainer}>
-                      <TextInput
-                        value={el.location}
-                        onChangeText={(txt) =>
-                          updateValue("location", index, txt)
-                        }
-                        style={styles.bodyTextInput}
-                        placeholder={"Location"}
-                      />
-                    </View>
-                    <View style={styles.inputBodyContainer}>
-                      <TextInput
-                        value={el.description}
-                        onChangeText={(txt) =>
-                          updateValue("description", index, txt)
-                        }
-                        style={styles.bodyTextInput}
-                        placeholder={"Description"}
-                      />
-                    </View>
-                  </View>
-                ))}
-            </View>
-          </View>
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "flex-end",
-              alignItems: "flex-end",
+      {isShow ? (
+        <View style={{ flex: 1 }}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
+                </View>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
             }}
-          >
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={() => {
-                if (
-                  dynamicSnagInput.length > 0 &&
-                  !dynamicSnagInput[dynamicSnagInput.length - 1].location &&
-                  !dynamicSnagInput[dynamicSnagInput.length - 1].description
-                ) {
-                  alert(
-                    "Please Enter All Value and then move to next Item Add !"
-                  );
-                } else {
-                  addSnagRow();
-                }
-              }}
-            >
-              <Image style={styles.plusBtn} source={plus} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("SnaggingIssue")}
-              style={styles.inputField}
-            >
-              {new Date(dateSnaggingIssue).toLocaleDateString()}
-            </Text>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <Text
-              onPress={() => showDatepicker("SnaggingCompleted")}
-              style={styles.inputField}
-            >
-              {new Date(dateSnaggingComplete).toLocaleDateString()}
-            </Text>
-          </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput
-              value={totalHours}
-              onChangeText={(e) => setTotalHours(e)}
-              style={styles.inputField}
-              placeholder={"Hours"}
-            />
-          </View>
-          <View style={styles.tableViewContainer}>
-            <View style={styles.tableHeader}>
-              <View style={styles.headerTitleView}>
-                <Text style={styles.headerTitle}>Location</Text>
-              </View>
-              <View style={styles.headerTitleView}>
-                <Text style={styles.headerTitle}>Snag Description</Text>
-              </View>
-            </View>
-            <View style={{ flexDirection: "column" }}>
-              {dynamicSnagCompletedInput.length > 0 &&
-                dynamicSnagCompletedInput.map((el, index) => (
-                  <View style={styles.tableBody} key={index}>
-                    <View style={styles.inputBodyContainer}>
-                      <TextInput
-                        value={el.location}
-                        onChangeText={(txt) =>
-                          updateCompletedValue("location", index, txt)
-                        }
-                        style={styles.bodyTextInput}
-                        placeholder={"Location"}
-                      />
-                    </View>
-                    <View style={styles.inputBodyContainer}>
-                      <TextInput
-                        value={el.description}
-                        onChangeText={(txt) =>
-                          updateCompletedValue("description", index, txt)
-                        }
-                        style={styles.bodyTextInput}
-                        placeholder={"Description"}
-                      />
-                    </View>
-                  </View>
-                ))}
-            </View>
-            <View
-            style={{
-              width: "100%",
-              justifyContent: "flex-end",
-              alignItems: "flex-end",
-            }}
-          >
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={() => {
-                if (
-                  dynamicSnagCompletedInput.length > 0 &&
-                  !dynamicSnagCompletedInput[dynamicSnagCompletedInput.length - 1].location &&
-                  !dynamicSnagCompletedInput[dynamicSnagCompletedInput.length - 1].description
-                ) {
-                  alert(
-                    "Please Enter All Value and then move to next Item Add !"
-                  );
-                } else {
-                  addSnagCompletedRow();
-                }
-              }}
-            >
-              <Image style={styles.plusBtn} source={plus} />
-            </TouchableOpacity>
-          </View>
-          </View>
-
-          <View
-            style={{
-              backgroundColor: "#000",
-              width: "100%",
-              height: ".5%",
-              marginBottom: 20,
-              marginTop: 20,
-            }}
-          ></View>
-          <View style={styles.btnContainer}>
-            <TouchableOpacity
-              style={styles.commonBtn}
-              onPress={() => snaggingFormInsert()}
-            >
-              <Text style={styles.commonText}>Save</Text>
-            </TouchableOpacity>
-          </View>
+          />
         </View>
-      </ScrollView>
+      ) : (
+        <View>
+          <DateTimePicker
+            isVisible={showIssue}
+            testID="dateTimePicker"
+            value={dateIssue}
+            mode={mode}
+            display="default"
+            onConfirm={onIssueChange}
+            onCancel={() => CancelPicker("issue")}
+            format="DD-MM-YYYY"
+          />
+          <DateTimePicker
+            isVisible={showComplete}
+            testID="dateTimePicker"
+            value={dateComplete}
+            mode={mode}
+            display="default"
+            onConfirm={onCompleteChange}
+            onCancel={() => CancelPicker("complete")}
+            format="DD-MM-YYYY"
+          />
+          <DateTimePicker
+            isVisible={showSnaggingIssue}
+            testID="dateTimePicker"
+            value={dateSnaggingIssue}
+            mode={mode}
+            display="default"
+            onConfirm={onSnaggingIssueChange}
+            onCancel={() => CancelPicker("dateSnaggingIssue")}
+            format="DD-MM-YYYY"
+          />
+          <DateTimePicker
+            isVisible={showSnaggingComplete}
+            testID="dateTimePicker"
+            value={dateSnaggingComplete}
+            mode={mode}
+            display="default"
+            onConfirm={onSnaggingCompleteChange}
+            onCancel={() => CancelPicker("dateSnaggingComplete")}
+            format="DD-MM-YYYY"
+          />
+          <ScrollView style={{ height: "100%" }}>
+            <View style={styles.formConatiner}>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={block}
+                  onChangeText={(e) => setBlock(e)}
+                  style={styles.inputField}
+                  placeholder={"Block"}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={plotNumber}
+                  onChangeText={(e) => setPlotNumber(e)}
+                  style={styles.inputField}
+                  placeholder={"Plot No"}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => showDatepicker("DateIssue")}
+                  style={styles.inputField}
+                >
+                  {new Date(dateIssue).toLocaleDateString()}
+                </Text>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => showDatepicker("CompleteDate")}
+                  style={styles.inputField}
+                >
+                  {new Date(dateComplete).toLocaleDateString()}
+                </Text>
+              </View>
+
+              <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>
+                  Snagging to be completed within 24 hours
+                </Text>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={wrrantySnagging}
+                  onChangeText={(e) => setWrrantySnagging(e)}
+                  style={styles.inputField}
+                  placeholder={"Pre- warranty snagging"}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={painterName}
+                  onChangeText={(e) => setPainterName(e)}
+                  style={styles.inputField}
+                  placeholder={"Painter’s name"}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={noOfPage}
+                  onChangeText={(e) => setNoOfPage(e)}
+                  style={styles.inputField}
+                  placeholder={"No of page"}
+                />
+              </View>
+              <View style={styles.tableViewContainer}>
+                <View style={styles.tableHeader}>
+                  <View style={styles.headerTitleView}>
+                    <Text style={styles.headerTitle}>Location</Text>
+                  </View>
+                  <View style={styles.headerTitleView}>
+                    <Text style={styles.headerTitle}>Snag Description</Text>
+                  </View>
+                </View>
+                <View style={{ flexDirection: "column" }}>
+                  {dynamicSnagInput.length > 0 &&
+                    dynamicSnagInput.map((el, index) => (
+                      <View style={styles.tableBody} key={index}>
+                        <View style={styles.inputBodyContainer}>
+                          <TextInput
+                            value={el.location}
+                            onChangeText={(txt) =>
+                              updateValue("location", index, txt)
+                            }
+                            style={styles.bodyTextInput}
+                            placeholder={"Location"}
+                          />
+                        </View>
+                        <View style={styles.inputBodyContainer}>
+                          <TextInput
+                            value={el.description}
+                            onChangeText={(txt) =>
+                              updateValue("description", index, txt)
+                            }
+                            style={styles.bodyTextInput}
+                            placeholder={"Description"}
+                          />
+                        </View>
+                      </View>
+                    ))}
+                </View>
+              </View>
+              <View
+                style={{
+                  width: "100%",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                }}
+              >
+                <TouchableOpacity
+                  style={styles.addBtn}
+                  onPress={() => {
+                    if (
+                      dynamicSnagInput.length > 0 &&
+                      !dynamicSnagInput[dynamicSnagInput.length - 1].location &&
+                      !dynamicSnagInput[dynamicSnagInput.length - 1].description
+                    ) {
+                      alert(
+                        "Please Enter All Value and then move to next Item Add !"
+                      );
+                    } else {
+                      addSnagRow();
+                    }
+                  }}
+                >
+                  <Image style={styles.plusBtn} source={plus} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => showDatepicker("SnaggingIssue")}
+                  style={styles.inputField}
+                >
+                  {new Date(dateSnaggingIssue).toLocaleDateString()}
+                </Text>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => showDatepicker("SnaggingCompleted")}
+                  style={styles.inputField}
+                >
+                  {new Date(dateSnaggingComplete).toLocaleDateString()}
+                </Text>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={totalHours}
+                  onChangeText={(e) => setTotalHours(e)}
+                  style={styles.inputField}
+                  placeholder={"Hours"}
+                />
+              </View>
+              <View style={styles.tableViewContainer}>
+                <View style={styles.tableHeader}>
+                  <View style={styles.headerTitleView}>
+                    <Text style={styles.headerTitle}>Location</Text>
+                  </View>
+                  <View style={styles.headerTitleView}>
+                    <Text style={styles.headerTitle}>Snag Description</Text>
+                  </View>
+                </View>
+                <View style={{ flexDirection: "column" }}>
+                  {dynamicSnagCompletedInput.length > 0 &&
+                    dynamicSnagCompletedInput.map((el, index) => (
+                      <View style={styles.tableBody} key={index}>
+                        <View style={styles.inputBodyContainer}>
+                          <TextInput
+                            value={el.location}
+                            onChangeText={(txt) =>
+                              updateCompletedValue("location", index, txt)
+                            }
+                            style={styles.bodyTextInput}
+                            placeholder={"Location"}
+                          />
+                        </View>
+                        <View style={styles.inputBodyContainer}>
+                          <TextInput
+                            value={el.description}
+                            onChangeText={(txt) =>
+                              updateCompletedValue("description", index, txt)
+                            }
+                            style={styles.bodyTextInput}
+                            placeholder={"Description"}
+                          />
+                        </View>
+                      </View>
+                    ))}
+                </View>
+                <View
+                  style={{
+                    width: "100%",
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => {
+                      if (
+                        dynamicSnagCompletedInput.length > 0 &&
+                        !dynamicSnagCompletedInput[
+                          dynamicSnagCompletedInput.length - 1
+                        ].location &&
+                        !dynamicSnagCompletedInput[
+                          dynamicSnagCompletedInput.length - 1
+                        ].description
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addSnagCompletedRow();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{ marginTop: 10 }}>
+                    <Text style={{marginBottom:10,fontFamily: "poppins-semiBold"}}>Project Images</Text>
+                    {projectImages!="" ? (
+                      <View style={{flexDirection:"row"}}>
+                        {/* <Text>Hello</Text> */}
+                        { projectImages.map((item, index)=>(
+                          <Image style={{width:50, height:50, marginRight:10}} source={{uri:item.uri}} key={index}/>
+                        ))}
+
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[styles.button, styles.buttonOpen,{width: "100%"}]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+              <View
+                style={{
+                  backgroundColor: "#000",
+                  width: "100%",
+                  height: ".5%",
+                  marginBottom: 20,
+                  marginTop: 20,
+                }}
+              ></View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => snaggingFormInsert()}
+                >
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 };
@@ -497,6 +597,22 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
+  button: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#1073AC",
+  },
+  buttonClose: {
+    backgroundColor: "#1073AC",
+  },
+  textStyle: {
+    color: "white",
+    textAlign: "center",
+    fontFamily: "poppins-semiBold",
+  },
   titleContainer: {
     height: "5%",
     width: "100%",
@@ -541,7 +657,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 30,
     borderWidth: 1,
-    marginBottom:10
+    marginBottom: 10,
   },
   headerTitleView: {
     width: "50%",
@@ -557,7 +673,7 @@ const styles = StyleSheet.create({
     width: "50%",
   },
   bodyTextInput: {
-    width:"90%",
+    width: "90%",
     borderBottomWidth: 1,
     borderBottomColor: "#96A8B2",
     padding: 5,
@@ -584,7 +700,7 @@ const styles = StyleSheet.create({
     borderColor: "#E2ECF2",
     padding: 5,
     borderRadius: 14,
-    marginRight:20,
+    marginRight: 20,
   },
   infoAbout: {
     width: "100%",

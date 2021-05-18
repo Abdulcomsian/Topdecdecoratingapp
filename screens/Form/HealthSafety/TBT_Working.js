@@ -61,7 +61,7 @@ const TBTWORKING = (props) => {
   });
   const tbtFormInsert = async () => {
     try{
-      if(data!=""){
+      if(data.contractor!="" && data.project!="" && data.supervisor!="" && data.date!=null && data.comments!="" && data.tbtSign!="" && data.jobSummary!=""){
         await props.creatTbtWorkingHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();

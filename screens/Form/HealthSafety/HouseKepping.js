@@ -7,6 +7,8 @@ import SignatureComponent from "../../../components/SignatureComponent";
 import { insertHouseKeepingForm } from "../../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import * as ImagePicker from "expo-image-picker";
+import { AssetsSelector } from "expo-images-picker";
 
 const HouseKepping = (props) => {
   const { navigation, token, isSuccessMsg, isSuccess } = props;
@@ -281,9 +283,85 @@ try{
     alert(err.message)
   }
   };
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (data) => {
+    setProjectImages(data);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      <DateTimePickerModal
+      {isShow ? 
+      (
+        <View style={{ flex: 1 }}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
+                </View>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
+            }}
+          />
+        </View>
+      ) : 
+      (
+        <View>
+          <DateTimePickerModal
         isVisible={show.isVisible}
         testID='dateTimePicker'
         value={dateCheck}
@@ -465,12 +543,46 @@ try{
                   Once completed, please file a copy in the Site Folder and send a copy to our Head Office.
                 </Text>
               </View>
+              <View style={{ marginTop: 10 }}>
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Project Images
+                    </Text>
+                    {projectImages != "" ? (
+                      <View style={{ flexDirection: "row" }}>
+                        {/* <Text>Hello</Text> */}
+                        {projectImages.map((item, index) => (
+                          <Image
+                            style={{ width: 50, height: 50, marginRight: 10 }}
+                            source={{ uri: item.uri }}
+                            key={index}
+                          />
+                        ))}
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          styles.buttonOpen,
+                          { width: "100%" },
+                        ]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
               <View
                 style={{
                   backgroundColor: "#000",
                   width: "100%",
                   height: 2,
                   marginBottom: 20,
+                  marginTop:20
                 }}></View>
               <View style={styles.btnContainer}>
                 <TouchableOpacity style={styles.commonBtn} onPress={() => houseKeppingForm()}>
@@ -480,6 +592,8 @@ try{
             </View>
           </ScrollView>
         </>
+      )}
+        </View>
       )}
     </View>
   );

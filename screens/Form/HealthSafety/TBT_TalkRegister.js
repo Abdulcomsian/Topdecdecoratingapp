@@ -97,7 +97,6 @@ const TBTREGISTER = (props) => {
   });
   const [isSign, setIsSign] = useState("");
   const [bscsSignature, setBscsSignature] = useState("");
-
   const [client, setClient] = useState("");
   const [projectName, setProjectName] = useState("");
   const [subject, setSubject] = useState("");
@@ -108,7 +107,7 @@ const TBTREGISTER = (props) => {
     try {
       console.log("Try Token :",token)
      
-      if(client!="" && projectName!=""  && subject!="" && outline!="" && registerDate!="" && startTime!="" && finishTime!="" && toolBoxArray!="" && supervisorName!=""  ){
+      if(client!="" && projectName!=""  && subject!="" && outline!="" && registerDate!="" && startTime!="" && finishTime!="" && toolBoxArray!="" && supervisorName!="" && bscsSignature!="" && isSign!=""){
         await props.creatTbtRegisterHandler(client,projectName,subject,outline,registerDate,startTime,finishTime,toolBoxArray,supervisorName,bscsSignature,isSign,jobID,tabId,token,props.route.params?.index)
         // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();

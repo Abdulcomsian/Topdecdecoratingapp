@@ -13,6 +13,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { connect } from "react-redux";
 import { insertOnSiteDecorationForm } from "../../../Redux/action/auth/authActionTypes";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import * as ImagePicker from "expo-image-picker";
+import { AssetsSelector } from "expo-images-picker";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -55,7 +57,7 @@ const OnSiteDecoration = (props) => {
   };
   const onSiteDecorationFormInsert = async () => {
     try {
-      if (contractorName != "" && projectName != "" && dynamicInput != "") {
+      if (contractorName != "" && projectName != "" && dynamicInput != "" && onSiteSignature!="") {
         await props.createOnSiteDecorationHandler(
           contractorName,
           projectName,
@@ -82,7 +84,7 @@ const OnSiteDecoration = (props) => {
     isSign: false,
     index: -1,
   });
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(new Date().toLocaleDateString());
   const [show, setShow] = useState({
     isVisible: false,
     index: -1,
@@ -99,9 +101,85 @@ const OnSiteDecoration = (props) => {
   const showDatepicker = (index = -1) => {
     setShow({ ...show, isVisible: true, index: index });
   };
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (data) => {
+    setProjectImages(data);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      <DateTimePickerModal
+      {isShow ? 
+      (
+        <View style={{ flex: 1 }}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
+                </View>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
+            }}
+          />
+        </View>
+      ) : 
+      (
+        <View style={{flex:1}}>
+          <DateTimePickerModal
         isVisible={show.isVisible}
         testID='dateTimePicker'
         value={date}
@@ -336,6 +414,39 @@ const OnSiteDecoration = (props) => {
                   </Text>
                 </View>
               </View>
+              <View style={{ marginTop: 10 }}>
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Project Images
+                    </Text>
+                    {projectImages != "" ? (
+                      <View style={{ flexDirection: "row" }}>
+                        {/* <Text>Hello</Text> */}
+                        {projectImages.map((item, index) => (
+                          <Image
+                            style={{ width: 50, height: 50, marginRight: 10 }}
+                            source={{ uri: item.uri }}
+                            key={index}
+                          />
+                        ))}
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          styles.buttonOpen,
+                          { width: "100%" },
+                        ]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
               <View
                 style={{
                   backgroundColor: "#000",
@@ -356,6 +467,8 @@ const OnSiteDecoration = (props) => {
             </View>
           </ScrollView>
         </>
+      )}
+        </View>
       )}
     </View>
   );

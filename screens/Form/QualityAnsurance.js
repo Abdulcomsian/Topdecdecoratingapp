@@ -13,6 +13,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { insertAnsuranceForm } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
 import SignatureComponent from "../../components/SignatureComponent";
+import * as ImagePicker from "expo-image-picker";
+import { AssetsSelector } from "expo-images-picker";
 
 var plus = require("../../assets/authScreen/plus.png");
 const QualityInssurance = (props) => {
@@ -231,38 +233,45 @@ const QualityInssurance = (props) => {
   const [activitySign, setActivitySign] = useState("");
 
   const qualityAnsuranceFormInsert = async () => {
-    try{
-    if (
-      projectName != "" &&
-      unitPlot != "" 
-    ) {
-      await props.createAnsuranceHandler(
-        projectName,
-        unitPlot,
-        issuranceArray,
-        activityArray,
-        mcSign,
-        mdSign,
-        smsSign,
-        bscsSign,
-        siteManagerSign,
-        activitySign,
-        jobID,
-        tabId,
-        token,
-        props.route.params?.index
-      );
-      alert("Quality Ansurance Insert SuccessFully !");
-      navigation.pop();
-    } else {
-      alert("Please Insert All Fields CareFully !");
-      return false;
+    try {
+      if (
+        projectName != "" &&
+        unitPlot != "" &&
+        mcSign != "" &&
+        activityArray != "" &&
+        mdSign != "" &&
+        issuranceArray != "" &&
+        smsSign != "" &&
+        bscsSign != "" &&
+        siteManagerSign != "" &&
+        activitySign != ""
+      ) {
+        await props.createAnsuranceHandler(
+          projectName,
+          unitPlot,
+          issuranceArray,
+          activityArray,
+          mcSign,
+          mdSign,
+          smsSign,
+          bscsSign,
+          siteManagerSign,
+          activitySign,
+          jobID,
+          tabId,
+          token,
+          props.route.params?.index
+        );
+        alert("Quality Ansurance Insert SuccessFully !");
+        navigation.pop();
+      } else {
+        alert("Please Insert All Fields CareFully !");
+        return false;
+      }
+    } catch (err) {
+      alert(err.message);
     }
-  } catch(err){
-    alert(err.message)
-  }
   };
-
 
   const [signature, setSignature] = useState({
     bool: false,
@@ -291,612 +300,764 @@ const QualityInssurance = (props) => {
       uri: "",
     },
   });
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (data) => {
+    setProjectImages(data);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      <DateTimePickerModal
-        isVisible={show.isVisible}
-        date={date ? date : new Date()}
-        mode={"date"}
-        is24Hour={true}
-        display="default"
-        onConfirm={(date) => onChange(date)}
-        onCancel={() => setShow({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
-      />
-      <DateTimePickerModal
-        isVisible={showActivity.isVisible}
-        date={date ? date : new Date()}
-        mode={"date"}
-        is24Hour={true}
-        display="default"
-        onConfirm={(date) => onActivityChange(date)}
-        onCancel={() => setShowActivity({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
-      />
-      {signature.bool ? (
-        <SignatureComponent
-          returnImage={(uri) => {
-            let data = signature.isUpperSign
-              ? [...issuranceArray]
-              : [...activityArray];
-             if (signature.mc.bool) {
-              setSignature({
-                ...signature,
-                mc: { ...signature.mc, bool: false, uri: uri },
-                bool: false,
-              });
-              setMcSign(uri);
-            } else if (signature.md.bool) {
-              setSignature({
-                ...signature,
-                md: { ...signature.md, bool: false, uri: uri },
-                bool: false,
-              });
-              setMdSign(uri);
-            } else if (signature.sms.bool) {
-              setSignature({
-                ...signature,
-                sms: { ...signature.sms, bool: false, uri: uri },
-                bool: false,
-              });
-              setSmsSign(uri);
-            } else if(signature.bscs.bool){
-              setSignature({
-                ...signature,
-                bscs: { ...signature.bscs, bool: false, uri: uri },
-                bool: false,
-              });
-              setBscsSign(uri);
-            } else if(signature.siteManagerSign.bool){
-              setSignature({
-                ...signature,
-                siteManagerSign: { ...signature.siteManagerSign, bool: false, uri: uri },
-                bool: false,
-              });
-              setSiteManagerSign(uri);
-            } else{
-              setSignature({
-                ...signature,
-                activitySign: { ...signature.activitySign, bool: false, uri: uri },
-                bool: false,
-              });
-              setActivitySign(uri);
-            }
-          }}
-        />
+      {isShow ? (
+        <View style={{ flex: 1 }}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
+                </View>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
+            }}
+          />
+        </View>
       ) : (
-        <>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>
-              Quality Assurance Inpection CheckList
-            </Text>
-          </View>
-          <ScrollView style={{width:"100%" }}>
-            <View style={styles.formConatiner}>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Project"}
-                  value={projectName}
-                  onChangeText={(e) => setProjectName(e)}
-                />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  value={unitPlot}
-                  onChangeText={(e) => setUnitPlot(e)}
-                  style={styles.inputField}
-                  placeholder={"Unit/Plot"}
-                />
-              </View>
-            </View>
-            <View style={styles.tableViewContainer}>
-              <View style={styles.tableHeader}>
-                <View style={styles.headerTitleView}>
-                  <Text style={styles.headerTitle}>Activity</Text>
-                </View>
-                <View style={styles.headerTitleView}>
-                  <Text style={styles.headerTitle}>Date Completed</Text>
-                </View>
-                <View style={styles.headerTitleView}>
-                  <Text style={styles.headerTitle}>Key Letter </Text>
-                </View>
-                <View style={styles.headerTitleView}>
-                  <Text style={styles.headerTitle}>Comments</Text>
-                </View>
-              </View>
-              <View style={{ width: "100%" }}>
-                {issuranceArray.length > 0 &&
-                  issuranceArray.map((item, index) => (
-                    <View
-                      style={{
-                        marginBottom: 20,
-                        paddingRight: 20,
-                        paddingLeft: 20,
-                      }}
-                    >
-                      <View style={styles.activityTitleView}>
-                        <Text
-                          style={{
-                            fontSize: 10,
-                            fontFamily: "poppins-semiBold",
-                          }}
-                        >
-                          {item.title}
-                        </Text>
-                        {item.secondTitle && (
-                          <Text
-                            style={{
-                              fontSize: 10,
-                              fontFamily: "poppins-semiBold",
-                            }}
-                          >
-                            {item.title}
-                          </Text>
-                        )}
-                      </View>
-                      <View style={styles.tableBody}>
-                        <View style={styles.inputBodyContainer}>
-                          <Text
-                            onPress={() => showDatepicker(index)}
-                            style={{
-                              width: "100%",
-
-                              paddingTop: 10,
-                              fontSize: 12,
-                              color: "#96A8B2",
-                              fontFamily: "poppins-regular",
-                            }}
-                          >
-                            {new Date(item.dateComplte).toLocaleDateString()}
-                          </Text>
-                        </View>
-                        <View style={styles.inputBodyContainer}>
-                          <TextInput
-                            style={styles.bodyTextInput}
-                            placeholder={"Key Letter"}
-                            onChangeText={(txt) =>
-                              updateValue("keyLetter", index, txt)
-                            }
-                            value={item.keyLetter}
-                          />
-                        </View>
-                        <View style={styles.inputBodyContainer}>
-                          <TextInput
-                            style={styles.bodyTextInput}
-                            placeholder={"Comments"}
-                            onChangeText={(txt) =>
-                              updateValue("comment", index, txt)
-                            }
-                            value={item.comment}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                  ))}
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TouchableOpacity
-                  onPress={() =>
-                    setSignature({
-                      bool: true,
-                      mc: { ...signature.mc, bool: false },
-                      md: { ...signature.md, bool: false },
-                      sms: { ...signature.sms, bool: false },
-                      bscs: { ...signature.bscs, bool: false },
-                      siteManagerSign: { ...signature.siteManagerSign, bool: true },
-                      activitySign: { ...signature.activitySign, bool: false },
-                    })
-                  }
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {signature.siteManagerSign.uri ? (
-                    <Image
-                      source={{ uri: signature.siteManagerSign.uri }}
-                      style={{
-                        marginBottom: 20,
-                        height: 100,
-                        width: 100,
-                        backgroundColor: "gray",
-                      }}
-                    />
-                  ) : (
-                    <Text
-                      style={{
-                        height: 52,
-                        width: "100%",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 15,
-                      }}
-                    >
-                      Site Manager to Sign
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View>
-                <Text style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}>
-                  Overall comments once all the above is completed:{" "}
+        <View>
+          <DateTimePickerModal
+            isVisible={show.isVisible}
+            date={date ? date : new Date()}
+            mode={"date"}
+            is24Hour={true}
+            display="default"
+            onConfirm={(date) => onChange(date)}
+            onCancel={() => setShow({ isVisible: false, index: -1 })}
+            cancelTextIOS="Cancel"
+            confirmTextIOS="Confirm"
+          />
+          <DateTimePickerModal
+            isVisible={showActivity.isVisible}
+            date={date ? date : new Date()}
+            mode={"date"}
+            is24Hour={true}
+            display="default"
+            onConfirm={(date) => onActivityChange(date)}
+            onCancel={() => setShowActivity({ isVisible: false, index: -1 })}
+            cancelTextIOS="Cancel"
+            confirmTextIOS="Confirm"
+          />
+          {signature.bool ? (
+            <SignatureComponent
+              returnImage={(uri) => {
+                let data = signature.isUpperSign
+                  ? [...issuranceArray]
+                  : [...activityArray];
+                if (signature.mc.bool) {
+                  setSignature({
+                    ...signature,
+                    mc: { ...signature.mc, bool: false, uri: uri },
+                    bool: false,
+                  });
+                  setMcSign(uri);
+                } else if (signature.md.bool) {
+                  setSignature({
+                    ...signature,
+                    md: { ...signature.md, bool: false, uri: uri },
+                    bool: false,
+                  });
+                  setMdSign(uri);
+                } else if (signature.sms.bool) {
+                  setSignature({
+                    ...signature,
+                    sms: { ...signature.sms, bool: false, uri: uri },
+                    bool: false,
+                  });
+                  setSmsSign(uri);
+                } else if (signature.bscs.bool) {
+                  setSignature({
+                    ...signature,
+                    bscs: { ...signature.bscs, bool: false, uri: uri },
+                    bool: false,
+                  });
+                  setBscsSign(uri);
+                } else if (signature.siteManagerSign.bool) {
+                  setSignature({
+                    ...signature,
+                    siteManagerSign: {
+                      ...signature.siteManagerSign,
+                      bool: false,
+                      uri: uri,
+                    },
+                    bool: false,
+                  });
+                  setSiteManagerSign(uri);
+                } else {
+                  setSignature({
+                    ...signature,
+                    activitySign: {
+                      ...signature.activitySign,
+                      bool: false,
+                      uri: uri,
+                    },
+                    bool: false,
+                  });
+                  setActivitySign(uri);
+                }
+              }}
+            />
+          ) : (
+            <>
+              <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>
+                  Quality Assurance Inpection CheckList
                 </Text>
               </View>
-              <View style={styles.tableHeader}>
-                <View style={styles.headerCompletionTitleView}>
-                  <Text style={styles.headerCompletionTitle}>KEY</Text>
-                </View>
-                <View style={styles.headerCompletionTitleView}>
-                  <Text style={styles.headerCompletionTitle}>
-                    Site Mannagers to sign after Completion
-                  </Text>
-                </View>
-              </View>
-              <View style={styles.keyActivityDiv}>
-                <View style={{ flexDirection: "row" }}>
-                  <View style={styles.keyDiv}>
-                    {keyArray.map((item, index) => (
-                      <View style={styles.keyTextView}>
-                        <Text
-                          style={{
-                            fontSize: 10,
-                            fontFamily: "poppins-semiBold",
-                          }}
-                        >
-                          {item.keys}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 10,
-                            fontFamily: "poppins-regular",
-                          }}
-                        >
-                          {item.keyDetails}
-                        </Text>
-                      </View>
-                    ))}
+              <ScrollView style={{ width: "100%",marginBottom:80 }}>
+                <View style={styles.formConatiner}>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Project"}
+                      value={projectName}
+                      onChangeText={(e) => setProjectName(e)}
+                    />
                   </View>
-                  <View style={styles.activityDiv}>
-                    <View style={styles.tableActivityHeader}>
-                      <View style={styles.headerActivityTitleView}>
-                        <Text style={styles.headerActivityTitle}>Activity</Text>
-                      </View>
-                      <View style={styles.headerActivityTitleView}>
-                        <Text style={styles.headerActivityTitle}>Date</Text>
-                      </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={unitPlot}
+                      onChangeText={(e) => setUnitPlot(e)}
+                      style={styles.inputField}
+                      placeholder={"Unit/Plot"}
+                    />
+                  </View>
+                </View>
+                <View style={styles.tableViewContainer}>
+                  <View style={styles.tableHeader}>
+                    <View style={styles.headerTitleView}>
+                      <Text style={styles.headerTitle}>Activity</Text>
                     </View>
-                    <View style={styles.tableActivityBody}>
-                      <View style={styles.activityListView}>
-                        {activityArray.length > 0 &&
-                          activityArray.map((item, index) => (
-                            <View
-                              style={{ flexDirection: "row", width: "100%" }}
-                              key={index}
+                    <View style={styles.headerTitleView}>
+                      <Text style={styles.headerTitle}>Date Completed</Text>
+                    </View>
+                    <View style={styles.headerTitleView}>
+                      <Text style={styles.headerTitle}>Key Letter </Text>
+                    </View>
+                    <View style={styles.headerTitleView}>
+                      <Text style={styles.headerTitle}>Comments</Text>
+                    </View>
+                  </View>
+                  <View style={{ width: "100%" }}>
+                    {issuranceArray.length > 0 &&
+                      issuranceArray.map((item, index) => (
+                        <View
+                          style={{
+                            marginBottom: 20,
+                            paddingRight: 20,
+                            paddingLeft: 20,
+                          }}
+                        >
+                          <View style={styles.activityTitleView}>
+                            <Text
+                              style={{
+                                fontSize: 10,
+                                fontFamily: "poppins-semiBold",
+                              }}
                             >
-                              <View
-                                style={[
-                                  styles.activityTitle,
-                                  { width: "33.3%" },
-                                ]}
+                              {item.title}
+                            </Text>
+                            {item.secondTitle && (
+                              <Text
+                                style={{
+                                  fontSize: 10,
+                                  fontFamily: "poppins-semiBold",
+                                }}
                               >
-                                <Text
-                                  style={{
-                                    fontSize: 8,
-                                    fontFamily: "poppins-semiBold",
-                                    paddingTop: 8,
-                                  }}
-                                >
-                                  {item.activity}
-                                </Text>
-                              </View>
+                                {item.title}
+                              </Text>
+                            )}
+                          </View>
+                          <View style={styles.tableBody}>
+                            <View style={styles.inputBodyContainer}>
+                              <Text
+                                onPress={() => showDatepicker(index)}
+                                style={{
+                                  width: "100%",
 
-                              <View style={{ width: "30.3%", marginRight: 5 }}>
-                                <Text
-                                  onPress={() => showActivityDatepicker(index)}
-                                  style={{
-                                    width: "100%",
-                                    paddingTop: 18,
-                                    fontSize: 8,
-                                    color: "#96A8B2",
-                                    fontFamily: "poppins-regular",
-                                    borderBottomWidth: 1,
-                                    borderBottomColor: "#96A8B2",
-                                    padding: 5,
-                                    color: "#96A8B2",
-                                  }}
-                                >
-                                  {new Date(item.date).toLocaleDateString()}
-                                </Text>
-                              </View>
-                             
+                                  paddingTop: 10,
+                                  fontSize: 12,
+                                  color: "#96A8B2",
+                                  fontFamily: "poppins-regular",
+                                }}
+                              >
+                                {new Date(
+                                  item.dateComplte
+                                ).toLocaleDateString()}
+                              </Text>
                             </View>
-                          ))}
+                            <View style={styles.inputBodyContainer}>
+                              <TextInput
+                                style={styles.bodyTextInput}
+                                placeholder={"Key Letter"}
+                                onChangeText={(txt) =>
+                                  updateValue("keyLetter", index, txt)
+                                }
+                                value={item.keyLetter}
+                              />
+                            </View>
+                            <View style={styles.inputBodyContainer}>
+                              <TextInput
+                                style={styles.bodyTextInput}
+                                placeholder={"Comments"}
+                                onChangeText={(txt) =>
+                                  updateValue("comment", index, txt)
+                                }
+                                value={item.comment}
+                              />
+                            </View>
+                          </View>
+                        </View>
+                      ))}
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setSignature({
+                          bool: true,
+                          mc: { ...signature.mc, bool: false },
+                          md: { ...signature.md, bool: false },
+                          sms: { ...signature.sms, bool: false },
+                          bscs: { ...signature.bscs, bool: false },
+                          siteManagerSign: {
+                            ...signature.siteManagerSign,
+                            bool: true,
+                          },
+                          activitySign: {
+                            ...signature.activitySign,
+                            bool: false,
+                          },
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {signature.siteManagerSign.uri ? (
+                        <Image
+                          source={{ uri: signature.siteManagerSign.uri }}
+                          style={{
+                            marginBottom: 20,
+                            height: 100,
+                            width: 100,
+                            backgroundColor: "gray",
+                          }}
+                        />
+                      ) : (
+                        <Text
+                          style={{
+                            height: 52,
+                            width: "100%",
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 15,
+                          }}
+                        >
+                          Site Manager to Sign
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View>
+                    <Text
+                      style={{ fontSize: 10, fontFamily: "poppins-semiBold" }}
+                    >
+                      Overall comments once all the above is completed:{" "}
+                    </Text>
+                  </View>
+                  <View style={styles.tableHeader}>
+                    <View style={styles.headerCompletionTitleView}>
+                      <Text style={styles.headerCompletionTitle}>KEY</Text>
+                    </View>
+                    <View style={styles.headerCompletionTitleView}>
+                      <Text style={styles.headerCompletionTitle}>
+                        Site Mannagers to sign after Completion
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.keyActivityDiv}>
+                    <View style={{ flexDirection: "row" }}>
+                      <View style={styles.keyDiv}>
+                        {keyArray.map((item, index) => (
+                          <View style={styles.keyTextView}>
+                            <Text
+                              style={{
+                                fontSize: 10,
+                                fontFamily: "poppins-semiBold",
+                              }}
+                            >
+                              {item.keys}
+                            </Text>
+                            <Text
+                              style={{
+                                fontSize: 10,
+                                fontFamily: "poppins-regular",
+                              }}
+                            >
+                              {item.keyDetails}
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                      <View style={styles.activityDiv}>
+                        <View style={styles.tableActivityHeader}>
+                          <View style={styles.headerActivityTitleView}>
+                            <Text style={styles.headerActivityTitle}>
+                              Activity
+                            </Text>
+                          </View>
+                          <View style={styles.headerActivityTitleView}>
+                            <Text style={styles.headerActivityTitle}>Date</Text>
+                          </View>
+                        </View>
+                        <View style={styles.tableActivityBody}>
+                          <View style={styles.activityListView}>
+                            {activityArray.length > 0 &&
+                              activityArray.map((item, index) => (
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    width: "100%",
+                                  }}
+                                  key={index}
+                                >
+                                  <View
+                                    style={[
+                                      styles.activityTitle,
+                                      { width: "50%" },
+                                    ]}
+                                  >
+                                    <Text
+                                      style={{
+                                        fontSize: 8,
+                                        fontFamily: "poppins-semiBold",
+                                        paddingTop: 8,
+                                      }}
+                                    >
+                                      {item.activity}
+                                    </Text>
+                                  </View>
+
+                                  <View
+                                    style={{ width: "50%", marginRight: 5 }}
+                                  >
+                                    <Text
+                                      onPress={() =>
+                                        showActivityDatepicker(index)
+                                      }
+                                      style={{
+                                        width: "100%",
+                                        paddingTop: 18,
+                                        fontSize: 12,
+                                        color: "#96A8B2",
+                                        fontFamily: "poppins-regular",
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: "#96A8B2",
+                                        padding: 5,
+                                        color: "#96A8B2",
+                                      }}
+                                    >
+                                      {new Date(item.date).toLocaleDateString()}
+                                    </Text>
+                                  </View>
+                                </View>
+                              ))}
+                          </View>
+                        </View>
                       </View>
                     </View>
                     <TouchableOpacity
-                                onPress={() =>
-                                  setSignature({
-                                    bool: true,
-                                    mc: { ...signature.mc, bool: false },
-                                    md: { ...signature.md, bool: false },
-                                    sms: { ...signature.sms, bool: false },
-                                    bscs: { ...signature.bscs, bool: false },
-                                    siteManagerSign: { ...signature.siteManagerSign, bool: false },
-                                    activitySign: { ...signature.activitySign, bool: true },
-                                  })
-                                }
-                                style={{
-                                  width: "30.3%",
-                                  justifyContent: "center",
-                                  alignItems: "flex-end",
-                                }}
-                              >
-                                {signature.activitySign.uri ?
-                                <Image
-                                  source={{ uri: signature.activitySign.uri }}
-                                  style={{
-                                    height: 20,
-                                    width: 20,
-                                    backgroundColor: "gray",
-                                  }}
-                                />
-                                :
-                                <Text
+                      onPress={() =>
+                        setSignature({
+                          bool: true,
+                          mc: { ...signature.mc, bool: false },
+                          md: { ...signature.md, bool: false },
+                          sms: { ...signature.sms, bool: false },
+                          bscs: { ...signature.bscs, bool: false },
+                          siteManagerSign: {
+                            ...signature.siteManagerSign,
+                            bool: false,
+                          },
+                          activitySign: {
+                            ...signature.activitySign,
+                            bool: true,
+                          },
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {signature.activitySign.uri ? (
+                        <Image
+                          source={{ uri: signature.activitySign.uri }}
+                          style={{
+                            height: 20,
+                            width: 20,
+                            backgroundColor: "gray",
+                          }}
+                        />
+                      ) : (
+                        <Text
                           style={{
                             width: "100%",
                             borderBottomWidth: 1,
                             borderBottomColor: "#96A8B2",
                             padding: 5,
-                            fontSize: 8,
+                            fontSize: 12,
                             color: "#96A8B2",
                             fontFamily: "poppins-regular",
                             paddingTop: 15,
                           }}
-                        >Sign</Text>
-}
-                              </TouchableOpacity>
+                        >
+                          Sign
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <Text
+                    style={{
+                      paddingTop: 20,
+                      paddingBottom: 20,
+                      color: "#96A8B2",
+                      fontSize: 12,
+                      fontFamily: "poppins-semiBold",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#96A8B2",
+                        fontSize: 12,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Quality Insurance
+                    </Text>{" "}
+                    is an audit process to verify that the quality of work
+                    performed is what was inspected and reported.
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontFamily: "poppins-semiBold",
+                      color: "#000",
+                    }}
+                  >
+                    Supervisor Sign
+                  </Text>
+                  <View style={styles.inputFieldContainer}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setSignature({
+                          bool: true,
+                          mc: { ...signature.mc, bool: true },
+                          md: { ...signature.md, bool: false },
+                          sms: { ...signature.sms, bool: false },
+                          bscs: { ...signature.bscs, bool: false },
+                          siteManagerSign: {
+                            ...signature.siteManagerSign,
+                            bool: false,
+                          },
+                          activitySign: {
+                            ...signature.activitySign,
+                            bool: false,
+                          },
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {signature.mc.uri ? (
+                        <Image
+                          source={{ uri: signature.mc.uri }}
+                          style={{
+                            marginBottom: 20,
+                            height: 100,
+                            width: 100,
+                            backgroundColor: "gray",
+                          }}
+                        />
+                      ) : (
+                        <Text
+                          style={{
+                            height: 52,
+                            width: "100%",
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 15,
+                          }}
+                        >
+                          Supervisor MC Signature
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setSignature({
+                          bool: true,
+                          mc: { ...signature.mc, bool: false },
+                          md: { ...signature.md, bool: true },
+                          sms: { ...signature.sms, bool: false },
+                          bscs: { ...signature.bscs, bool: false },
+                          siteManagerSign: {
+                            ...signature.siteManagerSign,
+                            bool: false,
+                          },
+                          activitySign: {
+                            ...signature.activitySign,
+                            bool: false,
+                          },
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {signature.md.uri ? (
+                        <Image
+                          source={{ uri: signature.md.uri }}
+                          style={{
+                            marginBottom: 20,
+                            height: 100,
+                            width: 100,
+                            backgroundColor: "gray",
+                          }}
+                        />
+                      ) : (
+                        <Text
+                          style={{
+                            height: 52,
+                            width: "100%",
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 15,
+                          }}
+                        >
+                          Supervisor MD Signature
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setSignature({
+                          bool: true,
+                          mc: { ...signature.mc, bool: false },
+                          md: { ...signature.md, bool: false },
+                          sms: { ...signature.sms, bool: true },
+                          bscs: { ...signature.bscs, bool: false },
+                          siteManagerSign: {
+                            ...signature.siteManagerSign,
+                            bool: false,
+                          },
+                          activitySign: {
+                            ...signature.activitySign,
+                            bool: false,
+                          },
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {signature.sms.uri ? (
+                        <Image
+                          source={{ uri: signature.sms.uri }}
+                          style={{
+                            marginBottom: 20,
+                            height: 100,
+                            width: 100,
+                            backgroundColor: "gray",
+                          }}
+                        />
+                      ) : (
+                        <Text
+                          style={{
+                            height: 52,
+                            width: "100%",
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 15,
+                          }}
+                        >
+                          Supervisor SMS Signature
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setSignature({
+                          bool: true,
+                          mc: { ...signature.mc, bool: false },
+                          md: { ...signature.md, bool: false },
+                          sms: { ...signature.sms, bool: false },
+                          bscs: { ...signature.bscs, bool: true },
+                          siteManagerSign: {
+                            ...signature.siteManagerSign,
+                            bool: false,
+                          },
+                          activitySign: {
+                            ...signature.activitySign,
+                            bool: false,
+                          },
+                        })
+                      }
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {signature.bscs.uri ? (
+                        <Image
+                          source={{ uri: signature.bscs.uri }}
+                          style={{
+                            marginBottom: 20,
+                            height: 100,
+                            width: 100,
+                            backgroundColor: "gray",
+                          }}
+                        />
+                      ) : (
+                        <Text
+                          style={{
+                            height: 52,
+                            width: "100%",
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 15,
+                          }}
+                        >
+                          Supervisor BSCS Signature
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{ marginTop: 10 }}>
+                    <Text style={{marginBottom:10,fontFamily: "poppins-semiBold"}}>Project Images</Text>
+                    {projectImages!="" ? (
+                      <View style={{flexDirection:"row"}}>
+                        {/* <Text>Hello</Text> */}
+                        { projectImages.map((item, index)=>(
+                          <Image style={{width:50, height:50, marginRight:10}} source={{uri:item.uri}} key={index}/>
+                        ))}
+
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[styles.button, styles.buttonOpen,{width: "100%"}]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#000",
+                      width: "100%",
+                      height: ".1%",
+                      marginTop: 10
+                    }}
+                  ></View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      style={styles.commonBtn}
+                      onPress={() => qualityAnsuranceFormInsert()}
+                    >
+                      <Text style={styles.commonText}>Save</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
-              </View>
-              <Text
-                style={{
-                  paddingTop: 20,
-                  paddingBottom: 20,
-                  color: "#96A8B2",
-                  fontSize: 12,
-                  fontFamily: "poppins-semiBold",
-                  textAlign: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    color: "#96A8B2",
-                    fontSize: 12,
-                    fontFamily: "poppins-semiBold",
-                  }}
-                >
-                  Quality Insurance
-                </Text>{" "}
-                is an audit process to verify that the quality of work performed
-                is what was inspected and reported.
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  fontFamily: "poppins-semiBold",
-                  color: "#000",
-                }}
-              >
-                Supervisor Sign
-              </Text>
-              <View style={styles.inputFieldContainer}>
-                <TouchableOpacity
-                  onPress={() =>
-                    setSignature({
-                      bool: true,
-                      mc: { ...signature.mc, bool: true },
-                      md: { ...signature.md, bool: false },
-                      sms: { ...signature.sms, bool: false },
-                      bscs: { ...signature.bscs, bool: false },
-                      siteManagerSign: { ...signature.siteManagerSign, bool: false },
-                      activitySign: { ...signature.activitySign, bool: false },
-                    })
-                  }
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {signature.mc.uri ? (
-                    <Image
-                      source={{ uri: signature.mc.uri }}
-                      style={{
-                        marginBottom: 20,
-                        height: 100,
-                        width: 100,
-                        backgroundColor: "gray",
-                      }}
-                    />
-                  ) : (
-                    <Text
-                      style={{
-                        height: 52,
-                        width: "100%",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 15,
-                      }}
-                    >
-                      Supervisor MC Signature
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TouchableOpacity
-                  onPress={() =>
-                    setSignature({
-                      bool: true,
-                      mc: { ...signature.mc, bool: false },
-                      md: { ...signature.md, bool: true },
-                      sms: { ...signature.sms, bool: false },
-                      bscs: { ...signature.bscs, bool: false },
-                      siteManagerSign: { ...signature.siteManagerSign, bool: false },
-                      activitySign: { ...signature.activitySign, bool: false },
-                    })
-                  }
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {signature.md.uri ? (
-                    <Image
-                      source={{ uri: signature.md.uri }}
-                      style={{
-                        marginBottom: 20,
-                        height: 100,
-                        width: 100,
-                        backgroundColor: "gray",
-                      }}
-                    />
-                  ) : (
-                    <Text
-                      style={{
-                        height: 52,
-                        width: "100%",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 15,
-                      }}
-                    >
-                      Supervisor MD Signature
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TouchableOpacity
-                  onPress={() =>
-                    setSignature({
-                      bool: true,
-                      mc: { ...signature.mc, bool: false },
-                      md: { ...signature.md, bool: false },
-                      sms: { ...signature.sms, bool: true },
-                      bscs: { ...signature.bscs, bool: false },
-                      siteManagerSign: { ...signature.siteManagerSign, bool: false },
-                      activitySign: { ...signature.activitySign, bool: false },
-                    })
-                  }
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {signature.sms.uri ? (
-                    <Image
-                      source={{ uri: signature.sms.uri }}
-                      style={{
-                        marginBottom: 20,
-                        height: 100,
-                        width: 100,
-                        backgroundColor: "gray",
-                      }}
-                    />
-                  ) : (
-                    <Text
-                      style={{
-                        height: 52,
-                        width: "100%",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 15,
-                      }}
-                    >
-                      Supervisor SMS Signature
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TouchableOpacity
-                  onPress={() =>
-                    setSignature({
-                      bool: true,
-                      mc: { ...signature.mc, bool: false },
-                      md: { ...signature.md, bool: false },
-                      sms: { ...signature.sms, bool: false },
-                      bscs: { ...signature.bscs, bool: true },
-                      siteManagerSign: { ...signature.siteManagerSign, bool: false },
-                      activitySign: { ...signature.activitySign, bool: false },
-                    })
-                  }
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {signature.bscs.uri ? (
-                    <Image
-                      source={{ uri: signature.bscs.uri }}
-                      style={{
-                        marginBottom: 20,
-                        height: 100,
-                        width: 100,
-                        backgroundColor: "gray",
-                      }}
-                    />
-                  ) : (
-                    <Text
-                      style={{
-                        height: 52,
-                        width: "100%",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 15,
-                      }}
-                    >
-                      Supervisor BSCS Signature
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  backgroundColor: "#000",
-                  width: "100%",
-                  height: 2,
-                }}
-              ></View>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity
-                  style={styles.commonBtn}
-                  onPress={() => qualityAnsuranceFormInsert()}
-                >
-                  <Text style={styles.commonText}>Save</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
-        </>
+              </ScrollView>
+            </>
+          )}
+        </View>
       )}
     </View>
   );
@@ -935,7 +1096,7 @@ const mapDispatchToProps = (dispatch) => ({
         smsSign,
         bscsSign,
         siteManagerSign,
-    activitySign,
+        activitySign,
         jobID,
         tabId,
         token,
@@ -948,6 +1109,22 @@ const styles = StyleSheet.create({
   mainContainer: {
     height: "100%",
     width: "100%",
+  },
+  button: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#1073AC",
+  },
+  buttonClose: {
+    backgroundColor: "#1073AC",
+  },
+  textStyle: {
+    color: "white",
+    textAlign: "center",
+    fontFamily: "poppins-semiBold",
   },
   titleContainer: {
     height: "5%",
@@ -1013,7 +1190,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerActivityTitleView: {
-    width: "33.3%",
+    width: "50%",
     justifyContent: "center",
     alignItems: "center",
   },

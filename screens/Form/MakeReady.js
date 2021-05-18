@@ -5,6 +5,8 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import { insertMakeReadyForm } from "../../Redux/action/auth/authActionTypes";
 import SignatureComponent from "../../components/SignatureComponent";
 import { connect } from "react-redux";
+import { AssetsSelector } from "expo-images-picker";
+import * as ImagePicker from "expo-image-picker";
 
 var plus = require("../../assets/authScreen/plus.png");
 const MakeReady = (props) => {
@@ -129,7 +131,14 @@ const MakeReady = (props) => {
       plotNumber &&
       reason != "" &&
       supervisorName != "" &&
-      agentName != ""
+      agentName != "" &&
+      supervisorSignature !="" &&
+      agentSignature !="" &&
+      dateWritten !="" &&
+      dateIssue !="" &&
+      dynamicInput!="" &&
+      dateComplete!="" &&
+      todayDate!=""
     ) {
       await props.createMakeReadyHandler(
         clientName,
@@ -176,9 +185,85 @@ const MakeReady = (props) => {
       setShowToday(false)
     }
   }
+
+
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (data) => {
+    setProjectImages(data);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :",projectImages)
   return (
     <View style={styles.mainContainer}>
-      <DateTimePicker
+      {isShow ?   
+        ( <View style={{flex:1}}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
+                </View>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
+            }}
+          />
+        </View>
+      ) : (
+      <View>
+<DateTimePicker
         isVisible={show}
         testID='dateTimePicker'
         value={dateWritten}
@@ -435,6 +520,25 @@ const MakeReady = (props) => {
                   {new Date(todayDate).toLocaleDateString()}
                 </Text>
               </View>
+              <View style={{ marginTop: 10 }}>
+                    <Text style={{marginBottom:10,fontFamily: "poppins-semiBold"}}>Project Images</Text>
+                    {projectImages!="" ? (
+                      <View style={{flexDirection:"row"}}>
+                        {/* <Text>Hello</Text> */}
+                        { projectImages.map((item, index)=>(
+                          <Image style={{width:50, height:50, marginRight:10}} source={{uri:item.uri}} key={index}/>
+                        ))}
+
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[styles.button, styles.buttonOpen,{width: "100%"}]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
               <View
                 style={{
                   backgroundColor: "#000",
@@ -451,6 +555,8 @@ const MakeReady = (props) => {
             </View>
           </ScrollView>
         </>
+      )}
+      </View>
       )}
     </View>
   );
@@ -517,6 +623,22 @@ const styles = StyleSheet.create({
   mainContainer: {
     height: "100%",
     width: "100%",
+  },
+  buttonOpen: {
+    backgroundColor: "#1073AC",
+  },
+  buttonClose: {
+    backgroundColor: "#1073AC",
+  },
+  textStyle: {
+    color: "white",
+    textAlign: "center",
+    fontFamily: "poppins-semiBold",
+  },
+  button: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
   },
   titleContainer: {
     height: "5%",

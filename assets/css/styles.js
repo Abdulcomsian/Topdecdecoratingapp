@@ -6,6 +6,22 @@ mainContainer:{
     width:'100%',
     paddingBottom:50
 },
+button: {
+    borderRadius: 5,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#1073AC",
+  },
+  buttonClose: {
+    backgroundColor: "#1073AC",
+  },
+  textStyle: {
+    color: "white",
+    textAlign: "center",
+    fontFamily: "poppins-semiBold",
+  },
 imageView:{
     height:"25%",
     width:"100%",

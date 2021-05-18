@@ -8,6 +8,8 @@ import SignatureComponent from "../../../components/SignatureComponent";
 import { connect } from "react-redux";
 import { insertTbtSlip } from "../../../Redux/action/auth/authActionTypes";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import * as ImagePicker from "expo-image-picker";
+import { AssetsSelector } from "expo-images-picker";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -61,11 +63,12 @@ const TBTSlip = (props) => {
     date: null,
     comments: "",
     tbtSign:"",
+    projectImages: [],
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
     try{
-      if(data!=""){
+      if(data.contractor!="" && data.project!="" && data.supervisor!="" && data.date!=null && data.comments!="" && data.tbtSign!="" && data.jobSummary!=""){
         await props.creatTbtSlipHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
         // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
@@ -78,9 +81,84 @@ const TBTSlip = (props) => {
       alert(err.message)
     }
   };
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (dataImage) => {
+    setData({ ...data, projectImages: dataImage });
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", data.projectImages);
   return (
     <View style={styles.mainContainer}>
-      {openSign.bool ? (
+       {isShow ? 
+       (
+        <View style={{ flex: 1 }}>
+        <AssetsSelector
+          options={{
+            assetsType: ["photo", "video"],
+            maxSelections: 3,
+            margin: 2,
+            portraitCols: 4,
+            landscapeCols: 5,
+            widgetWidth: 100,
+            widgetBgColor: "white",
+            videoIcon: {
+              iconName: "ios-videocam",
+              color: "tomato",
+              size: 20,
+            },
+            selectedIcon: {
+              iconName: "ios-checkmark-circle-outline",
+              color: "white",
+              bg: "#0eb14970",
+              size: 26,
+            },
+            spinnerColor: "black",
+            onError: () => {},
+            noAssets: () => (
+              <View>
+                <Text></Text>
+              </View>
+            ),
+            defaultTopNavigator: {
+              continueText: "Finish",
+              goBackText: "Back",
+              selectedText: "Selected",
+              midTextColor: "tomato",
+              buttonStyle: _buttonStyle,
+              buttonTextStyle: _textStyle,
+              backFunction: goBack,
+              doneFunction: (data) => onDone(data),
+            },
+          }}
+        />
+      </View>
+       ) : 
+       (
+         <View style={{flex:1}}>
+           {openSign.bool ? (
         <SignatureComponent
           returnImage={(uri) => {
             if(openSign?.index===2){
@@ -139,6 +217,7 @@ const TBTSlip = (props) => {
                     setData({ ...data, [key]: value });
                   }
                 }}
+                projectImage={()=>uploadPhotoImage()}
               />
           <Text style={{ fontFamily: "poppins-bold", fontSize: 12, textAlign: "center" }}>
             Once completed, please file a copy in the Site Folder and send a copy to our Head Office and give a copy to the site staff.
@@ -179,6 +258,8 @@ const TBTSlip = (props) => {
       </ScrollView>
       </>
       )}
+         </View>
+       )}
     </View>
   );
 };

@@ -497,33 +497,6 @@ export const insertHandOverForm = (
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      // jobSummary.map(obj => {
-      
-      //   Object.keys(obj).forEach(key => {
-      //     formData.append(`jobSummary[]`, JSON.stringify([{key:obj[key]}]));
-      //   });
-      // })
-     // formData.append("jobSummary[]",jobSummary[0])
-
-      // // const body = {
-      // //   contractor,
-      // //   project,
-      // //   block,
-      // //   reason,
-      // //   plotNumber,
-      // //   dateWritten,
-      // //   date_isue,
-      // //   supervisor,
-      // //   signature,
-      // //   todayDate,
-      // //   agentName,
-      // //   agentSignature,
-      // //   completed_date,
-      // //   task_id,
-      // //   tab_id,
-      // //   jobSummary,
-      // // };
-
       console.log("Hand Over Form Data :", formData)
       const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
         method: "POST",
@@ -537,19 +510,11 @@ export const insertHandOverForm = (
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
-        // dispatch({
-        //   type: Actions.UPDATE_PLOT_REPORT,
-        //   payload: index,
-        // });
         dispatch({
           type: Actions.CREATE_HAND_OVER_SHEET_SUCCESS,
           payload: response,
         });
       } else {
-        // dispatch({
-        //   type: Actions.CREATE_HAND_OVER_SHEET_FAIL,
-        //   payload: response,
-        // });
         throw new Error(response.message);
       }
     } catch (err) {
@@ -1231,27 +1196,6 @@ export const insertWorkSheet = (
         formData.append(`PRELIMINARIES[]`, JSON.stringify([item]));
       });
 
-
-      // const body = {
-      //   contractor,
-      //   title,
-      //   day_start,
-      //   week_ending,
-      //   indution,
-      //   plot,
-      //   description,
-      //   manager,
-      //   sign,
-      //   date,
-      //   position,
-      //   task_id,
-      //   tab_id,
-      //   LABOUR,
-      //   MATERIALS,
-      //   PLANTS,
-      //   PRELIMINARIES,
-      // };
-
       const request = await axios(base_url + "supervisor/insert/verification/accurate", {
         method: "POST",
         headers: {
@@ -1264,19 +1208,11 @@ export const insertWorkSheet = (
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
-        // dispatch({
-        //   type: Actions.UPDATE_PLOT_REPORT,
-        //   payload: index,
-        // });
         dispatch({
           type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_CREATE,
           payload: response,
         });
       } else {
-        // dispatch({
-        //   type: Actions.INSERT_ACCURATE_DAY_WOEK_SHEET_FAIL,
-        //   payload: response,
-        // });
         throw new Error(response.message);
       }
     } catch (err) {
@@ -1698,7 +1634,6 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
       formData.append("project",project)
       formData.append("operation",operation)
       formData.append("date",date)
-
       signature &&
       formData.append("signature", {
         // file: signature,
@@ -1706,8 +1641,6 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
         name: signature.split("/").pop(),
         type: 'image/jpeg', // it may be necessary in Android.
       });
-
-
       formData.append("date1",date1)
       formData.append("task_id",task_id)
       formData.append("tab_id",tab_id)
@@ -1715,20 +1648,6 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
       jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
-
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   operation,
-      //   date,
-      //   signature,
-      //   date1,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
-      console.log(formData)
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/cleanup", {
         method: "POST",
         headers: {
@@ -1746,10 +1665,6 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
           payload: response,
         });
       } else {
-        // dispatch({
-        //   type: Actions.INSERT_CLEAN_UP_FORM_FAIL,
-        //   payload: response,
-        // });
         throw new Error(response.message);
       }
     } catch (err) {
@@ -1869,20 +1784,6 @@ export const insertFridayPackForm = (contractor, project, supervisor, jobSummary
       jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
-      //formData.append("jobSummary",jobSummary)
-
-
-      // const body = {
-      //   contractor,
-      //   project,
-      //   week_ending,
-      //   supervisor,
-      //   furhter_comment,
-      //   date,
-      //   task_id,
-      //   tab_id,
-      //   jobSummary,
-      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/friday_pack", {
         method: "POST",
@@ -1901,10 +1802,6 @@ export const insertFridayPackForm = (contractor, project, supervisor, jobSummary
           payload: response,
         });
       } else {
-        // dispatch({
-        //   type: Actions.INSERT_ELECTRICAL_EQUIPMENT_FORM_FAIL,
-        //   payload: response,
-        // });
         throw new Error(response.message);
       }
     } catch (err) {
@@ -1948,10 +1845,6 @@ export const insertHarmFulForm = (contractor, project, date, jobSummary, task_id
           payload: response,
         });
       } else {
-        // dispatch({
-        //   type: Actions.INSERT_HARMFUL_SUBSTANCE_FORM_FAIL,
-        //   payload: response,
-        // });
         throw new Error(response.message);
       }
     } catch (err) {
@@ -3680,7 +3573,8 @@ export const updateWorkFlowTopTabs = ( plot_id, token ) => {
       //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
           dispatch({
             type: Actions.UPDATE_SNAG_WORKFLOW,
-            payload: _returnUpdatedArray(getState().summary.snagArray,null)
+            // payload: _returnUpdatedArray(getState().summary.snagArray,null)
+            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
           });
      //   }
        
@@ -3697,7 +3591,8 @@ export const updateWorkFlowTopTabs = ( plot_id, token ) => {
       //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
           dispatch({
             type: Actions.UPDATE_SNAG_WORKFLOW,
-            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
+            payload: _returnUpdatedArray(getState().summary.snagArray,null)
+            //payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
           });
       }
     } catch (err) {
@@ -3707,7 +3602,6 @@ export const updateWorkFlowTopTabs = ( plot_id, token ) => {
     }
   };
 };
-
 export const updateVerificationTopTabs = ( plot_id, token ) => {
   //return console.log({plot_id, tab_id, token })
   return async (dispatch, getState) => {
