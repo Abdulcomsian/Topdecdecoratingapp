@@ -100,11 +100,22 @@ const TBTRESPIRATORY = (props) => {
     comments: "",
     tbtsign: "",
     projectImages: [],
+    projectComment:"",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
     try {
-      if (data != "") {
+      if (
+        data.contractor != "" &&
+        data.project != "" &&
+        data.supervisor != "" &&
+        data.date != "" && 
+        data.comments != "" &&
+        data.tbtsign != "" &&
+        data.projectImages != "" &&
+        data.jobSummary != "" &&
+        data.projectComment !=""
+      ) {
         await props.creatTbtRespiratoryHandler(
           { ...data, task_id: jobID, tab_id: tabId },
           token,

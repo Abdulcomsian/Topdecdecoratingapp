@@ -51,6 +51,7 @@ const DecorationRecord = (props) => {
   const showSupervisorDatepicker = () => {
     setShowSupervisor(true);
   };
+  const [projectComment, setProjectComment] = useState("");
   const siteInstructionForm = async () => {
     try {
       if (
@@ -61,7 +62,9 @@ const DecorationRecord = (props) => {
         description != "" &&
         specialNotes != "" &&
         supervisorName != "" &&
-        dateSupervisor != ""
+        dateSupervisor != "" &&
+        projectImages != "" &&
+        projectComment != ""
       ) {
         await props.createSiteInstructionHandler(
           contractName,
@@ -72,6 +75,8 @@ const DecorationRecord = (props) => {
           specialNotes,
           supervisorName,
           dateSupervisor,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token
@@ -165,7 +170,7 @@ const DecorationRecord = (props) => {
           />
         </View>
       ) : (
-        <View>
+        <View style={{ flex: 1 }}>
           <DateTimePickerModal
             isVisible={show}
             testID="dateTimePicker"
@@ -419,6 +424,15 @@ const DecorationRecord = (props) => {
                 </TouchableOpacity>
               )}
             </View>
+            <View style={styles.inputFieldContainer}>
+              <TextInput
+                value={projectComment}
+                onChangeText={(e) => setProjectComment(e)}
+                style={styles.inputField}
+                multiline={true}
+                placeholder={"Project Images Comments"}
+              />
+            </View>
             <View
               style={{
                 backgroundColor: "#000",
@@ -457,6 +471,8 @@ const mapDispatchToProps = (dispatch) => ({
     specialNotes,
     supervisorName,
     dateSupervisor,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token
@@ -471,6 +487,8 @@ const mapDispatchToProps = (dispatch) => ({
         specialNotes,
         supervisorName,
         dateSupervisor,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token

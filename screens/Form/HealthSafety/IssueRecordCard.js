@@ -74,7 +74,7 @@ const IssueCard = (props) => {
   const showDatepicker = (index = -1) => {
     setShow({ ...show, isVisible: true, index: index });
   };
-
+  const [projectComment, setProjectComment] = useState("");
   const issueRecordForm = async () => {
     try {
       if (
@@ -82,7 +82,9 @@ const IssueCard = (props) => {
         projectName != "" &&
         nameOfOperative != "" &&
         dynamicInput != "" &&
-        recordSignature != ""
+        recordSignature != "" &&
+        projectImages != "" &&
+        projectComment != ""
       ) {
         await props.createIssueRecordCardHandler(
           contractorName,
@@ -90,6 +92,8 @@ const IssueCard = (props) => {
           nameOfOperative,
           dynamicInput,
           recordSignature,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -501,6 +505,15 @@ const IssueCard = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -540,6 +553,8 @@ const mapDispatchToProps = (dispatch) => ({
     nameOfOperative,
     dynamicInput,
     recordSignature,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -552,6 +567,8 @@ const mapDispatchToProps = (dispatch) => ({
         nameOfOperative,
         dynamicInput,
         recordSignature,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

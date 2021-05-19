@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, ScrollView, TouchableOpacity, CheckBox, Image } from "react-native";
+import {
+  View,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  CheckBox,
+  Image,
+} from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -15,9 +22,9 @@ const HouseKepping = (props) => {
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const { plot_Id } = props.route.params;
   const jobID = plot_Id;
-  console.log("Work Plot ID :",jobID)
+  console.log("Work Plot ID :", jobID);
   const tabId = props.route.params.tabName;
-  console.log("Work Tab ID :",tabId)
+  console.log("Work Tab ID :", tabId);
   const [getSign, setGetSign] = useState(false);
   const [checkListArray, setCheckListArray] = useState([
     {
@@ -39,8 +46,7 @@ const HouseKepping = (props) => {
       comment: "",
     },
     {
-      item:
-        "Are all protection, abrasives, masking tape and other sundries or general waste cleared away by the decorator and placed in the appropriate site bin. ",
+      item: "Are all protection, abrasives, masking tape and other sundries or general waste cleared away by the decorator and placed in the appropriate site bin. ",
       date: new Date().toLocaleDateString(),
       block: "",
       yes: false,
@@ -194,7 +200,9 @@ const HouseKepping = (props) => {
     },
   ]);
   const [dateCheck, setDateCheck] = useState(new Date().toLocaleDateString());
-  const [dateSupervisor, setDateSupervisor] = useState(new Date().toLocaleDateString());
+  const [dateSupervisor, setDateSupervisor] = useState(
+    new Date().toLocaleDateString()
+  );
   const [showSupervisor, setShowSupervisor] = useState(false);
   const [constructorName, setConstructorName] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -248,6 +256,7 @@ const HouseKepping = (props) => {
       setCheckListArray(copyArray);
     }
   };
+  const [projectComment, setProjectComment] = useState("");
   const houseKeppingForm = async () => {
     // console.log("Main Contractor  :", constructorName);
     // console.log("Project Name :", projectName);
@@ -258,30 +267,41 @@ const HouseKepping = (props) => {
     // //   console.log("Job ID :", jobID);
     // //   console.log("Tab Name :", tabId);
     // console.log("Token :", token);
-try{
-    if (constructorName != "" && projectName != "" && weekCommencing != "" && checkListArray != "" && supervisorSign != "" && dateSupervisor != "") {
-     await props.createHouseKeepingHandler(
-        constructorName,
-        projectName,
-        weekCommencing,
-        checkListArray,
-        supervisorSign,
-        dateSupervisor,
-        jobID,
-        tabId,
-        token,
-        props.route.params?.index
-      );
-      // props.updateHealthReport(props?.route?.params?.index);
-      alert("Hose Keeping Insert SuccessFully !")
-      props.navigation.pop();
-    } else {
-      alert("Please Insert All Fields CareFully !");
-      return false;
+    try {
+      if (
+        constructorName != "" &&
+        projectName != "" &&
+        weekCommencing != "" &&
+        checkListArray != "" &&
+        supervisorSign != "" &&
+        dateSupervisor != "" &&
+        projectImages != "" &&
+        projectComment != ""
+      ) {
+        await props.createHouseKeepingHandler(
+          constructorName,
+          projectName,
+          weekCommencing,
+          checkListArray,
+          supervisorSign,
+          dateSupervisor,
+          projectImages,
+          projectComment,
+          jobID,
+          tabId,
+          token,
+          props.route.params?.index
+        );
+        // props.updateHealthReport(props?.route?.params?.index);
+        alert("Hose Keeping Insert SuccessFully !");
+        props.navigation.pop();
+      } else {
+        alert("Please Insert All Fields CareFully !");
+        return false;
+      }
+    } catch (err) {
+      alert(err.message);
     }
-  } catch(err){
-    alert(err.message)
-  }
   };
   const [projectImages, setProjectImages] = useState([]);
   const [isShow, setIsShow] = useState(false);
@@ -315,8 +335,7 @@ try{
   console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      {isShow ? 
-      (
+      {isShow ? (
         <View style={{ flex: 1 }}>
           <AssetsSelector
             options={{
@@ -358,192 +377,239 @@ try{
             }}
           />
         </View>
-      ) : 
-      (
-        <View>
-          <DateTimePickerModal
-        isVisible={show.isVisible}
-        testID='dateTimePicker'
-        value={dateCheck}
-        mode={"date"}
-        display='default'
-        onConfirm={onChange}
-        onCancel={() => setShow({ isVisible: false, index: -1 })}
-        format='DD-MM-YYYY'
-      />
-      <DateTimePickerModal
-        isVisible={showSupervisor}
-        testID='dateTimePicker'
-        value={dateSupervisor}
-        mode={"date"}
-        display='default'
-        onConfirm={onChangeDateSupervisor}
-        onCancel={() => setShowSupervisor(false)}
-        format='DD-MM-YYYY'
-      />
-      {getSign ? (
-        <SignatureComponent
-          returnImage={(uri) => {
-            setSupervisorSign(uri);
-            setGetSign(false);
-          }}
-        />
       ) : (
-        <>
-          <View
-            style={{
-              paddingTop: 30,
-              justifyContent: "center",
-              alignItems: "center",
-            }}>
-            <Text style={styles.titleText}>House Keeping Checklist</Text>
-          </View>
-          <ScrollView>
-            <View style={styles.formCodnatiner}>
-              <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Main Contractor"} value={constructorName} onChangeText={(e) => setConstructorName(e)} />
+        <View style={{ flex: 1 }}>
+          <DateTimePickerModal
+            isVisible={show.isVisible}
+            testID="dateTimePicker"
+            value={dateCheck}
+            mode={"date"}
+            display="default"
+            onConfirm={onChange}
+            onCancel={() => setShow({ isVisible: false, index: -1 })}
+            format="DD-MM-YYYY"
+          />
+          <DateTimePickerModal
+            isVisible={showSupervisor}
+            testID="dateTimePicker"
+            value={dateSupervisor}
+            mode={"date"}
+            display="default"
+            onConfirm={onChangeDateSupervisor}
+            onCancel={() => setShowSupervisor(false)}
+            format="DD-MM-YYYY"
+          />
+          {getSign ? (
+            <SignatureComponent
+              returnImage={(uri) => {
+                setSupervisorSign(uri);
+                setGetSign(false);
+              }}
+            />
+          ) : (
+            <>
+              <View
+                style={{
+                  paddingTop: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.titleText}>House Keeping Checklist</Text>
               </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput value={projectName} onChangeText={(e) => setProjectName(e)} style={styles.inputField} placeholder={"Project"} />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput style={styles.inputField} placeholder={"Week Commencing"} value={weekCommencing} onChangeText={(e) => setWeekCommencing(e)} />
-              </View>
-              <View style={styles.tableCheckListViewContainer}>
-                <View style={styles.tableHeader}>
-                  <View style={styles.headerCheckListTitleView}>
-                    <Text style={styles.headerTitle}>ITEMS</Text>
+              <ScrollView>
+                <View style={styles.formCodnatiner}>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Main Contractor"}
+                      value={constructorName}
+                      onChangeText={(e) => setConstructorName(e)}
+                    />
                   </View>
-                  <View style={styles.headerCheckListTitleView}>
-                    <Text style={styles.headerTitle}>Block</Text>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectName}
+                      onChangeText={(e) => setProjectName(e)}
+                      style={styles.inputField}
+                      placeholder={"Project"}
+                    />
                   </View>
-                  <View style={styles.headerCheckListTitleView}>
-                    <Text style={styles.headerTitle}>Yes</Text>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Week Commencing"}
+                      value={weekCommencing}
+                      onChangeText={(e) => setWeekCommencing(e)}
+                    />
                   </View>
-                  <View style={styles.headerCheckListTitleView}>
-                    <Text style={styles.headerTitle}>No</Text>
-                  </View>
-                  <View style={styles.headerCheckListTitleView}>
-                    <Text style={styles.headerTitle}>N/a</Text>
-                  </View>
-                  <View style={styles.headerCheckListTitleView}>
-                    <Text style={styles.headerTitle}>Date/s of check</Text>
-                  </View>
-                  <View style={styles.headerCheckListTitleView}>
-                    <Text style={styles.headerTitle}>Comments</Text>
-                  </View>
-                </View>
-                <View>
-                  {checkListArray.map((item, index) => (
-                    <View key={index}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: "#000",
-                          fontFamily: "poppins-regular",
-                          padding: 5,
-                        }}>
-                        {item.item}
-                      </Text>
-                      <View style={styles.tableCheckListBody}>
-                        <View style={styles.inputHarmFullBodyContainer}>
-                          <TextInput
-                            style={styles.bodyTextInput}
-                            placeholder={"Block"}
-                            value={item.block}
-                            onChangeText={(txt) => updateSignValue("block", index, txt)}
-                          />
-                        </View>
-                        <View style={styles.inputHarmFullBodyContainer}>
-                          <CheckBox value={item.yes} onValueChange={() => checkedValue(index, "yes")} />
-                        </View>
-                        <View style={styles.inputHarmFullBodyContainer}>
-                          <CheckBox value={item.no} onValueChange={() => checkedValue(index, "no")} />
-                        </View>
-                        <View style={styles.inputHarmFullBodyContainer}>
-                          <CheckBox value={item.other} onValueChange={() => checkedValue(index, "other")} />
-                        </View>
-                        <View style={styles.inputHarmFullBodyContainer}>
+                  <View style={styles.tableCheckListViewContainer}>
+                    <View style={styles.tableHeader}>
+                      <View style={styles.headerCheckListTitleView}>
+                        <Text style={styles.headerTitle}>ITEMS</Text>
+                      </View>
+                      <View style={styles.headerCheckListTitleView}>
+                        <Text style={styles.headerTitle}>Block</Text>
+                      </View>
+                      <View style={styles.headerCheckListTitleView}>
+                        <Text style={styles.headerTitle}>Yes</Text>
+                      </View>
+                      <View style={styles.headerCheckListTitleView}>
+                        <Text style={styles.headerTitle}>No</Text>
+                      </View>
+                      <View style={styles.headerCheckListTitleView}>
+                        <Text style={styles.headerTitle}>N/a</Text>
+                      </View>
+                      <View style={styles.headerCheckListTitleView}>
+                        <Text style={styles.headerTitle}>Date/s of check</Text>
+                      </View>
+                      <View style={styles.headerCheckListTitleView}>
+                        <Text style={styles.headerTitle}>Comments</Text>
+                      </View>
+                    </View>
+                    <View>
+                      {checkListArray.map((item, index) => (
+                        <View key={index}>
                           <Text
-                            onPress={() => showCheckDatepicker(index)}
                             style={{
-                              height: 39,
-                              width: "95%",
-                              paddingTop: 13,
-                              fontSize: 8,
-                              color: "#96A8B2",
+                              fontSize: 12,
+                              color: "#000",
                               fontFamily: "poppins-regular",
+                              padding: 5,
+                            }}
+                          >
+                            {item.item}
+                          </Text>
+                          <View style={styles.tableCheckListBody}>
+                            <View style={styles.inputHarmFullBodyContainer}>
+                              <TextInput
+                                style={styles.bodyTextInput}
+                                placeholder={"Block"}
+                                value={item.block}
+                                onChangeText={(txt) =>
+                                  updateSignValue("block", index, txt)
+                                }
+                              />
+                            </View>
+                            <View style={styles.inputHarmFullBodyContainer}>
+                              <CheckBox
+                                value={item.yes}
+                                onValueChange={() => checkedValue(index, "yes")}
+                              />
+                            </View>
+                            <View style={styles.inputHarmFullBodyContainer}>
+                              <CheckBox
+                                value={item.no}
+                                onValueChange={() => checkedValue(index, "no")}
+                              />
+                            </View>
+                            <View style={styles.inputHarmFullBodyContainer}>
+                              <CheckBox
+                                value={item.other}
+                                onValueChange={() =>
+                                  checkedValue(index, "other")
+                                }
+                              />
+                            </View>
+                            <View style={styles.inputHarmFullBodyContainer}>
+                              <Text
+                                onPress={() => showCheckDatepicker(index)}
+                                style={{
+                                  height: 39,
+                                  width: "95%",
+                                  paddingTop: 13,
+                                  fontSize: 8,
+                                  color: "#96A8B2",
+                                  fontFamily: "poppins-regular",
+                                  borderBottomWidth: 1,
+                                  borderBottomColor: "#96A8B2",
+                                  padding: 5,
+                                  color: "#96A8B2",
+                                }}
+                              >
+                                {new Date(item.date).toLocaleDateString()}
+                              </Text>
+                            </View>
+                            <View style={styles.inputHarmFullBodyContainer}>
+                              <TextInput
+                                style={styles.bodyTextInput}
+                                placeholder={"Comments"}
+                                value={item.comment}
+                                onChangeText={(txt) =>
+                                  updateSignValue("comment", index, txt)
+                                }
+                              />
+                            </View>
+                          </View>
+                        </View>
+                      ))}
+                    </View>
+                    <View style={styles.inputFieldContainer}>
+                      <TouchableOpacity
+                        onPress={() => setGetSign(true)}
+                        style={styles.inputFieldContainer}
+                      >
+                        {supervisorSign ? (
+                          <Image
+                            style={{
+                              marginTop: 20,
+                              height: 100,
+                              width: 100,
+                              backgroundColor: "gray",
+                            }}
+                            source={{ uri: supervisorSign }}
+                          />
+                        ) : (
+                          <Text
+                            style={{
+                              height: 52,
+                              width: "100%",
                               borderBottomWidth: 1,
                               borderBottomColor: "#96A8B2",
                               padding: 5,
+                              fontSize: 12,
                               color: "#96A8B2",
-                            }}>
-                            {new Date(item.date).toLocaleDateString()}
+                              fontFamily: "poppins-regular",
+                              paddingTop: 15,
+                            }}
+                          >
+                            Signature
                           </Text>
-                        </View>
-                        <View style={styles.inputHarmFullBodyContainer}>
-                          <TextInput
-                            style={styles.bodyTextInput}
-                            placeholder={"Comments"}
-                            value={item.comment}
-                            onChangeText={(txt) => updateSignValue("comment", index, txt)}
-                          />
-                        </View>
-                      </View>
+                        )}
+                      </TouchableOpacity>
                     </View>
-                  ))}
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity onPress={() => setGetSign(true)} style={styles.inputFieldContainer}>
-                    {supervisorSign ? (
-                      <Image style={{ marginTop: 20, height: 100, width: 100, backgroundColor: "gray" }} source={{ uri: supervisorSign }} />
-                    ) : (
+                    <View style={styles.inputFieldContainer}>
                       <Text
+                        onPress={() => showSupervisorDatepicker()}
                         style={{
-                          height: 52,
-                          width: "100%",
-                          borderBottomWidth: 1,
-                          borderBottomColor: "#96A8B2",
-                          padding: 5,
+                          width: "90%",
+                          paddingTop: 17,
                           fontSize: 12,
                           color: "#96A8B2",
                           fontFamily: "poppins-regular",
-                          paddingTop: 15,
-                        }}>
-                        Signature
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          padding: 5,
+                          color: "#96A8B2",
+                        }}
+                      >
+                        {new Date(dateSupervisor).toLocaleDateString()}
                       </Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text
-                    onPress={() => showSupervisorDatepicker()}
-                    style={{
-                      width: "90%",
-                      paddingTop: 17,
-                      fontSize: 12,
-                      color: "#96A8B2",
-                      fontFamily: "poppins-regular",
-                      borderBottomWidth: 1,
-                      borderBottomColor: "#96A8B2",
-                      padding: 5,
-                      color: "#96A8B2",
-                    }}>
-                    {new Date(dateSupervisor).toLocaleDateString()}
-                  </Text>
-                </View>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontFamily: "poppins-bold",
-                    paddingTop: 10,
-                    paddingBottom: 20,
-                    textAlign: "center",
-                  }}>
-                  Once completed, please file a copy in the Site Folder and send a copy to our Head Office.
-                </Text>
-              </View>
-              <View style={{ marginTop: 10 }}>
+                    </View>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontFamily: "poppins-bold",
+                        paddingTop: 10,
+                        paddingBottom: 20,
+                        textAlign: "center",
+                      }}
+                    >
+                      Once completed, please file a copy in the Site Folder and
+                      send a copy to our Head Office.
+                    </Text>
+                  </View>
+                  <View style={{ marginTop: 10 }}>
                     <Text
                       style={{
                         marginBottom: 10,
@@ -576,23 +642,36 @@ try{
                       </TouchableOpacity>
                     )}
                   </View>
-              <View
-                style={{
-                  backgroundColor: "#000",
-                  width: "100%",
-                  height: 2,
-                  marginBottom: 20,
-                  marginTop:20
-                }}></View>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.commonBtn} onPress={() => houseKeppingForm()}>
-                  <Text style={styles.commonText}>Save</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
-        </>
-      )}
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#000",
+                      width: "100%",
+                      height: 2,
+                      marginBottom: 20,
+                      marginTop: 20,
+                    }}
+                  ></View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      style={styles.commonBtn}
+                      onPress={() => houseKeppingForm()}
+                    >
+                      <Text style={styles.commonText}>Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </>
+          )}
         </View>
       )}
     </View>
@@ -605,8 +684,36 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createHouseKeepingHandler: (constructorName, projectName, weekCommencing, checkListArray, supervisorSign, dateSupervisor, jobID, tabId, token, index) =>
-    dispatch(insertHouseKeepingForm(constructorName, projectName, weekCommencing, checkListArray, supervisorSign, dateSupervisor, jobID, tabId, token, index)),
+  createHouseKeepingHandler: (
+    constructorName,
+    projectName,
+    weekCommencing,
+    checkListArray,
+    supervisorSign,
+    dateSupervisor,
+    projectImages,
+    projectComment,
+    jobID,
+    tabId,
+    token,
+    index
+  ) =>
+    dispatch(
+      insertHouseKeepingForm(
+        constructorName,
+        projectName,
+        weekCommencing,
+        checkListArray,
+        supervisorSign,
+        dateSupervisor,
+        projectImages,
+        projectComment,
+        jobID,
+        tabId,
+        token,
+        index
+      )
+    ),
   // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HouseKepping);

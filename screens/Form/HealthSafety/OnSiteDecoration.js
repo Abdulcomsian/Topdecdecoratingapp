@@ -19,20 +19,14 @@ import { AssetsSelector } from "expo-images-picker";
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var plus = require("../../../assets/authScreen/plus.png");
 const OnSiteDecoration = (props) => {
-  const {
-    navigation,
-    token,
-    isOnSite,
-    isSuccessMsg,
-    isJobId,
-    isMethod,
-  } = props;
+  const { navigation, token, isOnSite, isSuccessMsg, isJobId, isMethod } =
+    props;
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const { plot_Id } = props.route.params;
   const jobID = plot_Id;
-  console.log("Work Plot ID :",jobID)
+  console.log("Work Plot ID :", jobID);
   const tabId = props.route.params.tabName;
-  console.log("Work Tab ID :",tabId)
+  console.log("Work Tab ID :", tabId);
   const [siteArray, setSiteArray] = useState([]);
   const [dynamicInput, setdynamicInput] = useState([]);
   const [contractorName, setContractorName] = useState("");
@@ -55,14 +49,24 @@ const OnSiteDecoration = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
+  const [projectComment, setProjectComment] = useState("");
   const onSiteDecorationFormInsert = async () => {
     try {
-      if (contractorName != "" && projectName != "" && dynamicInput != "" && onSiteSignature!="") {
+      if (
+        contractorName != "" &&
+        projectName != "" &&
+        dynamicInput != "" &&
+        onSiteSignature != "" &&
+        projectImages != "" &&
+        projectComment != ""
+      ) {
         await props.createOnSiteDecorationHandler(
           contractorName,
           projectName,
           dynamicInput,
           onSiteSignature,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -133,8 +137,7 @@ const OnSiteDecoration = (props) => {
   console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      {isShow ? 
-      (
+      {isShow ? (
         <View style={{ flex: 1 }}>
           <AssetsSelector
             options={{
@@ -176,141 +179,143 @@ const OnSiteDecoration = (props) => {
             }}
           />
         </View>
-      ) : 
-      (
-        <View style={{flex:1}}>
-          <DateTimePickerModal
-        isVisible={show.isVisible}
-        testID='dateTimePicker'
-        value={date}
-        mode={"date"}
-        display='default'
-        onConfirm={onChange}
-        onCancel={() => setShow({ isVisible: false, index: -1 })}
-        format='DD-MM-YYYY'
-      />
-      {getSign ? (
-        <SignatureComponent
-          returnImage={(uri) => {
-            setOnSiteSignature(uri);
-            setGetSign(false);
-          }}
-        />
       ) : (
-        <>
-          <View style={styles.imageView}>
-            <Image source={mainImage} style={styles.bannerImage} />
-          </View>
-          <View
-            style={{
-              paddingTop: 30,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "poppins-regular",
-                fontSize: 12,
-                textAlign: "center",
+        <View style={{ flex: 1 }}>
+          <DateTimePickerModal
+            isVisible={show.isVisible}
+            testID="dateTimePicker"
+            value={date}
+            mode={"date"}
+            display="default"
+            onConfirm={onChange}
+            onCancel={() => setShow({ isVisible: false, index: -1 })}
+            format="DD-MM-YYYY"
+          />
+          {getSign ? (
+            <SignatureComponent
+              returnImage={(uri) => {
+                setOnSiteSignature(uri);
+                setGetSign(false);
               }}
-            >
-              Names and CSCS card registration Nos. of painters to be used
-              during the project painting{" "}
-            </Text>
-          </View>
-          <ScrollView>
-            <View style={styles.formCodnatiner}>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Main Contractor"}
-                  value={contractorName}
-                  onChangeText={(e) => setContractorName(e)}
-                />
+            />
+          ) : (
+            <>
+              <View style={styles.imageView}>
+                <Image source={mainImage} style={styles.bannerImage} />
               </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Project"}
-                  value={projectName}
-                  onChangeText={(e) => setProjectName(e)}
-                />
-              </View>
-              <View style={styles.tableViewContainer}>
-                <View style={styles.tableHeader}>
-                  <View style={styles.headerLadderListTitleView}>
-                    <Text style={styles.headerTitle}>Name</Text>
-                  </View>
-                  <View style={styles.headerLadderListTitleView}>
-                    <Text style={styles.headerTitle}>CSCS Card no</Text>
-                  </View>
-                  <View style={styles.headerLadderListTitleView}>
-                    <Text style={styles.headerTitle}>
-                      CSCS card expiry date
-                    </Text>
-                  </View>
-                </View>
-                <View
+              <View
+                style={{
+                  paddingTop: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
                   style={{
-                    justifyContent: "flex-end",
-                    width: "100%",
-                    alignItems: "flex-end",
-                    marginBottom: 10,
+                    fontFamily: "poppins-regular",
+                    fontSize: 12,
+                    textAlign: "center",
                   }}
                 >
-                  <TouchableOpacity
-                    style={styles.addBtn}
-                    onPress={() => addSiteArray()}
-                  >
-                    <Image style={styles.plusBtn} source={plus} />
-                  </TouchableOpacity>
-                </View>
-                {dynamicInput.map((item, index) => (
-                  <View style={styles.tableBody} key={index}>
-                    <View style={styles.inputSiteBodyContainer}>
-                      <TextInput
-                        style={styles.bodyTextInput}
-                        placeholder={"Name"}
-                        value={item.name}
-                        onChangeText={(txt) => updateValue("name", index, txt)}
-                      />
-                    </View>
-                    <View style={styles.inputSiteBodyContainer}>
-                      <TextInput
-                        style={styles.bodyTextInput}
-                        placeholder={"CSCS Card no"}
-                        value={item.Card_no}
-                        onChangeText={(txt) =>
-                          updateValue("Card_no", index, txt)
-                        }
-                      />
-                    </View>
-                    <View style={styles.inputSiteBodyContainer}>
-                      <Text
-                        onPress={() => showDatepicker(index)}
-                        style={{
-                          width: "90%",
-                          height: 39,
-                          borderBottomWidth: 1,
-                          borderBottomColor: "#96A8B2",
-                          padding: 5,
-                          fontSize: 8,
-                          color: "#96A8B2",
-                          fontFamily: "poppins-regular",
-                          paddingTop: 12,
-                          marginRight: 5,
-                        }}
-                      >
-                        {new Date(item.date).toLocaleDateString()}
-                      </Text>
-                    </View>
-                   
+                  Names and CSCS card registration Nos. of painters to be used
+                  during the project painting{" "}
+                </Text>
+              </View>
+              <ScrollView>
+                <View style={styles.formCodnatiner}>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Main Contractor"}
+                      value={contractorName}
+                      onChangeText={(e) => setContractorName(e)}
+                    />
                   </View>
-                ))}
-                 <View style={[styles.inputSiteBodyContainer,{width:"100%"}]}>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Project"}
+                      value={projectName}
+                      onChangeText={(e) => setProjectName(e)}
+                    />
+                  </View>
+                  <View style={styles.tableViewContainer}>
+                    <View style={styles.tableHeader}>
+                      <View style={styles.headerLadderListTitleView}>
+                        <Text style={styles.headerTitle}>Name</Text>
+                      </View>
+                      <View style={styles.headerLadderListTitleView}>
+                        <Text style={styles.headerTitle}>CSCS Card no</Text>
+                      </View>
+                      <View style={styles.headerLadderListTitleView}>
+                        <Text style={styles.headerTitle}>
+                          CSCS card expiry date
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "flex-end",
+                        width: "100%",
+                        alignItems: "flex-end",
+                        marginBottom: 10,
+                      }}
+                    >
                       <TouchableOpacity
-                        onPress={() => setGetSign(true)} 
+                        style={styles.addBtn}
+                        onPress={() => addSiteArray()}
+                      >
+                        <Image style={styles.plusBtn} source={plus} />
+                      </TouchableOpacity>
+                    </View>
+                    {dynamicInput.map((item, index) => (
+                      <View style={styles.tableBody} key={index}>
+                        <View style={styles.inputSiteBodyContainer}>
+                          <TextInput
+                            style={styles.bodyTextInput}
+                            placeholder={"Name"}
+                            value={item.name}
+                            onChangeText={(txt) =>
+                              updateValue("name", index, txt)
+                            }
+                          />
+                        </View>
+                        <View style={styles.inputSiteBodyContainer}>
+                          <TextInput
+                            style={styles.bodyTextInput}
+                            placeholder={"CSCS Card no"}
+                            value={item.Card_no}
+                            onChangeText={(txt) =>
+                              updateValue("Card_no", index, txt)
+                            }
+                          />
+                        </View>
+                        <View style={styles.inputSiteBodyContainer}>
+                          <Text
+                            onPress={() => showDatepicker(index)}
+                            style={{
+                              width: "90%",
+                              height: 39,
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#96A8B2",
+                              padding: 5,
+                              fontSize: 8,
+                              color: "#96A8B2",
+                              fontFamily: "poppins-regular",
+                              paddingTop: 12,
+                              marginRight: 5,
+                            }}
+                          >
+                            {new Date(item.date).toLocaleDateString()}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+                    <View
+                      style={[styles.inputSiteBodyContainer, { width: "100%" }]}
+                    >
+                      <TouchableOpacity
+                        onPress={() => setGetSign(true)}
                         style={[
                           styles.inputHarmFullBodyContainer,
                           {
@@ -348,73 +353,108 @@ const OnSiteDecoration = (props) => {
                         )}
                       </TouchableOpacity>
                     </View>
-                <View style={styles.footerView}>
-                  <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    Address: 2,
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
-                    >
-                      {" "}
-                      Green Lane, Penge, London SE20 7JA
-                    </Text>
-                  </Text>
-                  <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    T:{" "}
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
-                    >
-                      {" "}
-                      0208 676 060
-                    </Text>
-                  </Text>
-                  <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    F:{" "}
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
-                    >
-                      {" "}
-                      0208 676 0671
-                    </Text>
-                  </Text>
-                  <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    M:{" "}
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
-                    >
-                      {" "}
-                      07737 632206
-                    </Text>
-                  </Text>
-                  <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    E:{" "}
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
-                    >
-                      {" "}
-                      info@topdecdecorating.com
-                    </Text>
-                  </Text>
-                  <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    W:{" "}
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
-                    >
-                      {" "}
-                      www.topdecdecorating.com
-                    </Text>
-                  </Text>
-                  <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                    VAT Registration Number:{" "}
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 10 }}
-                    >
-                      {" "}
-                      203 474 927
-                    </Text>
-                  </Text>
-                </View>
-              </View>
-              <View style={{ marginTop: 10 }}>
+                    <View style={styles.footerView}>
+                      <Text
+                        style={{ fontFamily: "poppins-bold", fontSize: 12 }}
+                      >
+                        Address: 2,
+                        <Text
+                          style={{
+                            fontFamily: "poppins-regular",
+                            fontSize: 10,
+                          }}
+                        >
+                          {" "}
+                          Green Lane, Penge, London SE20 7JA
+                        </Text>
+                      </Text>
+                      <Text
+                        style={{ fontFamily: "poppins-bold", fontSize: 12 }}
+                      >
+                        T:{" "}
+                        <Text
+                          style={{
+                            fontFamily: "poppins-regular",
+                            fontSize: 10,
+                          }}
+                        >
+                          {" "}
+                          0208 676 060
+                        </Text>
+                      </Text>
+                      <Text
+                        style={{ fontFamily: "poppins-bold", fontSize: 12 }}
+                      >
+                        F:{" "}
+                        <Text
+                          style={{
+                            fontFamily: "poppins-regular",
+                            fontSize: 10,
+                          }}
+                        >
+                          {" "}
+                          0208 676 0671
+                        </Text>
+                      </Text>
+                      <Text
+                        style={{ fontFamily: "poppins-bold", fontSize: 12 }}
+                      >
+                        M:{" "}
+                        <Text
+                          style={{
+                            fontFamily: "poppins-regular",
+                            fontSize: 10,
+                          }}
+                        >
+                          {" "}
+                          07737 632206
+                        </Text>
+                      </Text>
+                      <Text
+                        style={{ fontFamily: "poppins-bold", fontSize: 12 }}
+                      >
+                        E:{" "}
+                        <Text
+                          style={{
+                            fontFamily: "poppins-regular",
+                            fontSize: 10,
+                          }}
+                        >
+                          {" "}
+                          info@topdecdecorating.com
+                        </Text>
+                      </Text>
+                      <Text
+                        style={{ fontFamily: "poppins-bold", fontSize: 12 }}
+                      >
+                        W:{" "}
+                        <Text
+                          style={{
+                            fontFamily: "poppins-regular",
+                            fontSize: 10,
+                          }}
+                        >
+                          {" "}
+                          www.topdecdecorating.com
+                        </Text>
+                      </Text>
+                      <Text
+                        style={{ fontFamily: "poppins-bold", fontSize: 12 }}
+                      >
+                        VAT Registration Number:{" "}
+                        <Text
+                          style={{
+                            fontFamily: "poppins-regular",
+                            fontSize: 10,
+                          }}
+                        >
+                          {" "}
+                          203 474 927
+                        </Text>
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ marginTop: 10 }}>
                     <Text
                       style={{
                         marginBottom: 10,
@@ -447,27 +487,36 @@ const OnSiteDecoration = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
-              <View
-                style={{
-                  backgroundColor: "#000",
-                  width: "100%",
-                  height: 2,
-                  marginBottom: 20,
-                  marginTop: 20,
-                }}
-              ></View>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity
-                  style={styles.commonBtn}
-                  onPress={() => onSiteDecorationFormInsert()}
-                >
-                  <Text style={styles.commonText}>Save</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
-        </>
-      )}
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#000",
+                      width: "100%",
+                      height: 2,
+                      marginBottom: 20,
+                      marginTop: 20,
+                    }}
+                  ></View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      style={styles.commonBtn}
+                      onPress={() => onSiteDecorationFormInsert()}
+                    >
+                      <Text style={styles.commonText}>Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </>
+          )}
         </View>
       )}
     </View>
@@ -485,6 +534,8 @@ const mapDispatchToProps = (dispatch) => ({
     projectName,
     dynamicInput,
     onSiteSignature,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -496,12 +547,14 @@ const mapDispatchToProps = (dispatch) => ({
         projectName,
         dynamicInput,
         onSiteSignature,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,
         index
       )
     ),
-    // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(OnSiteDecoration);

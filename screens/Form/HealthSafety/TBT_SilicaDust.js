@@ -136,6 +136,7 @@ const TBTSLICIA = (props) => {
     comments: "",
     tbtSign: "",
     projectImages: [],
+    projectComment:"",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
@@ -147,7 +148,9 @@ const TBTSLICIA = (props) => {
         data.date != null &&
         data.comments != "" &&
         data.tbtSign != "" &&
-        data.jobSummary != ""
+        data.jobSummary != "" &&
+        data.projectImages !="" &&
+        data.projectComment !=""
       ) {
         await props.creatTbtSilicaDustHandler(
           { ...data, task_id: jobID, tab_id: tabId },

@@ -287,6 +287,7 @@ const AccidentReport = (props) => {
       setReOccurance({ ...reOccurance, yes: false, no: true });
     }
   };
+  const [projectComment, setProjectComment] = useState("");
   const incidentFormInsert = async () => {
     if (
       nameOfInjuredPerson != "" &&
@@ -316,7 +317,9 @@ const AccidentReport = (props) => {
       managmentArray !== "" &&
       managerName !== "" &&
       managerSignature !== "" &&
-      dateManager !== ""
+      dateManager !== "" &&
+      projectImages != "" &&
+      projectComment != ""
     ) {
       await props.createAccidentHandler(
         nameOfPerson,
@@ -349,6 +352,8 @@ const AccidentReport = (props) => {
         managerName,
         managerSignature,
         dateManager,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,
@@ -1173,6 +1178,15 @@ const AccidentReport = (props) => {
                             </TouchableOpacity>
                           )}
                         </View>
+                        <View style={styles.inputFieldContainer}>
+                          <TextInput
+                            value={projectComment}
+                            onChangeText={(e) => setProjectComment(e)}
+                            style={styles.inputField}
+                            multiline={true}
+                            placeholder={"Project Images Comments"}
+                          />
+                        </View>
                         <View
                           style={{
                             backgroundColor: "#000",
@@ -1240,6 +1254,8 @@ const mapDispatchToProps = (dispatch) => ({
     managerName,
     managerSignature,
     dateManager,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -1277,6 +1293,8 @@ const mapDispatchToProps = (dispatch) => ({
         managerName,
         managerSignature,
         dateManager,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

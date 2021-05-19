@@ -84,6 +84,7 @@ const TBTHOUSE = (props) => {
     comments: "",
     tbtSign: "",
     projectImages: [],
+    projectComment,
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
@@ -95,7 +96,9 @@ const TBTHOUSE = (props) => {
         data.date != "" &&
         data.comments != "" &&
         data.tbtSign != "" &&
-        data.jobSummary != ""
+        data.jobSummary != "" &&
+        data.projectImages !="" &&
+        data.projectComment !=""
       ) {
         await props.creatTbtHoseKeepingHandler(
           { ...data, task_id: jobID, tab_id: tabId },

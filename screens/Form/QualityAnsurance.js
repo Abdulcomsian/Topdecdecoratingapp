@@ -231,6 +231,7 @@ const QualityInssurance = (props) => {
   const [bscsSign, setBscsSign] = useState("");
   const [siteManagerSign, setSiteManagerSign] = useState("");
   const [activitySign, setActivitySign] = useState("");
+  const [projectComment, setProjectComment] = useState("");
 
   const qualityAnsuranceFormInsert = async () => {
     try {
@@ -244,7 +245,9 @@ const QualityInssurance = (props) => {
         smsSign != "" &&
         bscsSign != "" &&
         siteManagerSign != "" &&
-        activitySign != ""
+        activitySign != "" &&
+        projectImages!="" &&
+        projectComment !=""
       ) {
         await props.createAnsuranceHandler(
           projectName,
@@ -257,6 +260,8 @@ const QualityInssurance = (props) => {
           bscsSign,
           siteManagerSign,
           activitySign,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -375,7 +380,7 @@ const QualityInssurance = (props) => {
           />
         </View>
       ) : (
-        <View>
+        <View style={{flex:1}}>
           <DateTimePickerModal
             isVisible={show.isVisible}
             date={date ? date : new Date()}
@@ -1037,6 +1042,16 @@ const QualityInssurance = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -1080,6 +1095,8 @@ const mapDispatchToProps = (dispatch) => ({
     bscsSign,
     siteManagerSign,
     activitySign,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -1097,6 +1114,8 @@ const mapDispatchToProps = (dispatch) => ({
         bscsSign,
         siteManagerSign,
         activitySign,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

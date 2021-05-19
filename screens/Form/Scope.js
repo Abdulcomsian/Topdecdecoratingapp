@@ -68,6 +68,7 @@ const Scope = (props) => {
   const showDatepicker = () => {
     showMode("date");
   };
+  const [projectComment, setProjectComment] = useState("");
   const scopeFormInsert = async () => {
     try {
       if (
@@ -76,7 +77,9 @@ const Scope = (props) => {
         plotNumber != "" &&
         type != "" &&
         date != "" &&
-        signature != ""
+        signature != "" &&
+        projectImages != "" &&
+        projectComment !=""
       ) {
         await props.createScopeHandler(
           dynamicInput,
@@ -85,6 +88,8 @@ const Scope = (props) => {
           plotNumber,
           type,
           date,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -509,6 +514,16 @@ const Scope = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -549,6 +564,8 @@ const mapDispatchToProps = (dispatch) => ({
     plotNumber,
     type,
     date,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -562,6 +579,8 @@ const mapDispatchToProps = (dispatch) => ({
         plotNumber,
         type,
         date,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

@@ -50,14 +50,23 @@ const VerificationOfWork = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
+  const [projectComment, setProjectComment] = useState("");
   const verificationWorkFormInsert = async () => {
     try {
-      if (projectName != "" && idRef != "" && decoratorName != "") {
+      if (
+        projectName != "" &&
+        idRef != "" &&
+        decoratorName != "" &&
+        projectImages != "" &&
+        projectComment != ""
+      ) {
         await props.createVerificationWorkHandler(
           projectName,
           idRef,
           decoratorName,
           dynamicInput,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token
@@ -119,11 +128,7 @@ const VerificationOfWork = (props) => {
   };
   console.log("Project Iamges :", projectImages);
   return (
-    <View
-      style={[
-        styles.mainContainer
-      ]}
-    >
+    <View style={[styles.mainContainer]}>
       {isShow ? (
         <View style={{ flex: 1 }}>
           <AssetsSelector
@@ -167,7 +172,7 @@ const VerificationOfWork = (props) => {
           />
         </View>
       ) : (
-        <View style={{paddingLeft:20, paddingRight:20, paddingTop:50}}>
+        <View style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 50 }}>
           <DateTimePickerModal
             isVisible={show.isVisible}
             testID="dateTimePicker"
@@ -415,6 +420,15 @@ const VerificationOfWork = (props) => {
                   </TouchableOpacity>
                 )}
               </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={projectComment}
+                  onChangeText={(e) => setProjectComment(e)}
+                  style={styles.inputField}
+                  multiline={true}
+                  placeholder={"Project Images Comments"}
+                />
+              </View>
               <View
                 style={{
                   backgroundColor: "#000",
@@ -451,6 +465,8 @@ const mapDispatchToProps = (dispatch) => ({
     idRef,
     decoratorName,
     dynamicInput,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token
@@ -461,6 +477,8 @@ const mapDispatchToProps = (dispatch) => ({
         idRef,
         decoratorName,
         dynamicInput,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token

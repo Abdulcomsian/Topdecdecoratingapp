@@ -83,6 +83,7 @@ const MethodStatement = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
+  const [projectComment, setProjectComment] = useState("");
   const statementRegisterForm = async () => {
     try {
       if (
@@ -93,7 +94,9 @@ const MethodStatement = (props) => {
         dynamicInput != "" &&
         supervisorName !== "" &&
         supervisorSignature !== "" &&
-        isSign !== ""
+        isSign !== "" &&
+        projectImages != "" &&
+        projectComment != ""
       ) {
         await props.createMethodStateMentHandler(
           statementTitle,
@@ -104,6 +107,8 @@ const MethodStatement = (props) => {
           supervisorName,
           supervisorSignature,
           isSign,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -565,6 +570,15 @@ const MethodStatement = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -607,6 +621,8 @@ const mapDispatchToProps = (dispatch) => ({
     supervisorName,
     supervisorSignature,
     isSign,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -622,6 +638,8 @@ const mapDispatchToProps = (dispatch) => ({
         supervisorName,
         supervisorSignature,
         isSign,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

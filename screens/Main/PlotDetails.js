@@ -131,6 +131,7 @@ const PlotDetails = (props) => {
   }, [navigation]);
   // console.log("Send Data :", sendData);
  
+  console.log("Send Mail :",jobSummary)
   const sendEmail = () =>{
     try{
       if(jobSummary!==""){

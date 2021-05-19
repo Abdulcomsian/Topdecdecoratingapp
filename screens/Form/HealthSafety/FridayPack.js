@@ -154,6 +154,7 @@ const FridayPack = (props) => {
   const showDatepicker = () => {
     setShow(true);
   };
+  const [projectComment, setProjectComment] = useState("");
   const fridayPackFormInsert = async () => {
     console.log("Name Of Contractor :", contractorName);
     console.log("Project Name :", projectName);
@@ -170,7 +171,9 @@ const FridayPack = (props) => {
         documentRow != "" &&
         weekEnding != "" &&
         furtherComments !== "" &&
-        date !== ""
+        date !== "" &&
+        projectImages != "" &&
+        projectComment != ""
       ) {
         await props.createFridayPackHandler(
           contractorName,
@@ -180,6 +183,8 @@ const FridayPack = (props) => {
           weekEnding,
           date,
           furtherComments,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -271,7 +276,7 @@ const FridayPack = (props) => {
           />
         </View>
       ) : (
-        <View>
+        <View style={{ flex: 1 }}>
           <DateTimePickerModal
             isVisible={show}
             testID="dateTimePicker"
@@ -506,6 +511,15 @@ const FridayPack = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -547,6 +561,8 @@ const mapDispatchToProps = (dispatch) => ({
     weekEnding,
     date,
     furtherComments,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -561,6 +577,8 @@ const mapDispatchToProps = (dispatch) => ({
         weekEnding,
         date,
         furtherComments,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

@@ -349,6 +349,7 @@ const LadderCheckList = (props) => {
       setLadderArrayList(copyArray);
     }
   };
+  const [projectComment, setProjectComment] = useState("");
   const ladderCheckListForm = async () => {
     try {
       if (
@@ -358,7 +359,9 @@ const LadderCheckList = (props) => {
         dateTimeComplete != "" &&
         nextDateInspection != "" &&
         furtherComments != "" &&
-        ladderArrayList
+        ladderArrayList !="" &&
+        projectImages !="" &&
+        projectComment !=""
       ) {
         await props.createLadderCheckListHandler(
           contractorName,
@@ -368,6 +371,8 @@ const LadderCheckList = (props) => {
           nextDateInspection,
           furtherComments,
           ladderArrayList,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -744,6 +749,16 @@ const LadderCheckList = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -785,6 +800,8 @@ const mapDispatchToProps = (dispatch) => ({
     nextDateInspection,
     furtherComments,
     ladderArrayList,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -799,6 +816,8 @@ const mapDispatchToProps = (dispatch) => ({
         nextDateInspection,
         furtherComments,
         ladderArrayList,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

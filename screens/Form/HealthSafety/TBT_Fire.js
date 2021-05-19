@@ -24,9 +24,9 @@ const TBTFire = (props) => {
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const { plot_Id } = props.route.params;
   const jobID = plot_Id;
-  console.log("Work Plot ID :",jobID)
+  console.log("Work Plot ID :", jobID);
   const tabId = props.route.params.tabName;
-  console.log("Work Tab ID :",tabId)
+  console.log("Work Tab ID :", tabId);
   const [coshhArray, setCoshhArray] = useState([
     {
       mainTitle: "Fire Prevention",
@@ -130,23 +130,37 @@ const TBTFire = (props) => {
     supervisor: "",
     date: null,
     comments: "",
-    tbtSign:"",
+    tbtSign: "",
     projectImages: [],
+    projectComment: "",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
-    try{
-      if(data.contractor!="" && data.project!="" && data.supervisor!="" && data.date!=null && data.comments!="" && data.tbtSign!="" && data.jobSummary!=""){
-        await props.creatTbtFireHandler({...data,task_id:jobID,tab_id:tabId},token,props.route.params?.index)
+    try {
+      if (
+        data.contractor != "" &&
+        data.project != "" &&
+        data.supervisor != "" &&
+        data.date != null &&
+        data.comments != "" &&
+        data.tbtSign != "" &&
+        data.jobSummary != "" &&
+        data.projectImages !="" &&
+        data.projectComment !=""
+      ) {
+        await props.creatTbtFireHandler(
+          { ...data, task_id: jobID, tab_id: tabId },
+          token,
+          props.route.params?.index
+        );
         // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT FIRE Insert SuccessFully !");
-      } 
-      else{
+      } else {
         alert("Please Insert All Fields CareFully !");
       }
-    } catch(err){
-      alert(err.message)
+    } catch (err) {
+      alert(err.message);
     }
   };
   const [isShow, setIsShow] = useState(false);
@@ -180,8 +194,7 @@ const TBTFire = (props) => {
   console.log("Project Iamges :", data.projectImages);
   return (
     <View style={styles.mainContainer}>
-      {isShow ? 
-      (
+      {isShow ? (
         <View style={{ flex: 1 }}>
           <AssetsSelector
             options={{
@@ -223,169 +236,188 @@ const TBTFire = (props) => {
             }}
           />
         </View>
-      ) : 
-      (
-        <View style={{flex:1}}>
-          {openSign.bool ? (
-        <SignatureComponent
-          returnImage={(uri) => {
-            if(openSign?.index===2) {
-              setData({ ...data, tbtSign:uri});
-              setOpenSign({ bool: false, index: -1 });
-            } else {
-              let copydata = [...data.jobSummary];
-              copydata[openSign.index].sign = uri;
-              setData({ ...data, jobSummary: [...copydata] });
-              setOpenSign({ bool: false, index: -1 });
-            }
-          }}
-        />
       ) : (
-        <>
-          <View style={styles.imageView}>
-            <Image source={mainImage} style={styles.bannerImage} />
-          </View>
-          <View
-            style={{
-              paddingTop: 30,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text style={styles.titleText}>Toolbox Talk – Fire Safety</Text>
-          </View>
-          <ScrollView>
-            <View style={{ paddingLeft: 20, paddingRight: 20 }}>
-              <View style={{ marginTop: 20 }}>
-                {coshhArray.map((item, index) =>
-                  item.mainTitle ? (
-                    <View key={index}>
-                      <Text
-                        style={{ fontFamily: "poppins-bold", fontSize: 16 }}
-                      >
-                        {item.mainTitle}
-                      </Text>
-                      <Text
-                        style={{
-                          fontFamily: "poppins-regular",
-                          fontSize: 12,
-                          backgroundColor: item.bgcolor,
-                        }}
-                      >
-                        {item.title}
-                      </Text>
-                    </View>
-                  ) : (
-                    <View key={index}>
-                      <Text
-                        style={{
-                          fontFamily: "poppins-regular",
-                          fontSize: 12,
-                          backgroundColor: item.bgcolor,
-                        }}
-                      >
-                        {item.title}
-                      </Text>
-                    </View>
-                  )
-                )}
+        <View style={{ flex: 1 }}>
+          {openSign.bool ? (
+            <SignatureComponent
+              returnImage={(uri) => {
+                if (openSign?.index === 2) {
+                  setData({ ...data, tbtSign: uri });
+                  setOpenSign({ bool: false, index: -1 });
+                } else {
+                  let copydata = [...data.jobSummary];
+                  copydata[openSign.index].sign = uri;
+                  setData({ ...data, jobSummary: [...copydata] });
+                  setOpenSign({ bool: false, index: -1 });
+                }
+              }}
+            />
+          ) : (
+            <>
+              <View style={styles.imageView}>
+                <Image source={mainImage} style={styles.bannerImage} />
               </View>
-              <TBTForm
-                data={data}
-                getSignature={(index) =>
-                  setOpenSign({ ...openSign, bool: true, index })
-                }
-                setTBTGlobalSign={()=>{ setOpenSign({ ...openSign, bool: true, index:2 })}}
-                addAttendence={() =>
-                  setData({
-                    ...data,
-                    jobSummary: [...data.jobSummary, { print: "", sign: "" }],
-                  })
-                }
-                onChangeData={(key, value, index = -1) => {
-                  if (index >= 0) {
-                    let copyAttendance = [...data.jobSummary];
-                    copyAttendance[index].print = value;
-                    setData({ ...data, jobSummary: [...copyAttendance] });
-                  } else {
-                    setData({ ...data, [key]: value });
-                  }
-                }}
-                projectImage={()=>uploadPhotoImage()}
-              />
-              <Text
+              <View
                 style={{
-                  fontFamily: "poppins-bold",
-                  fontSize: 12,
-                  textAlign: "center",
+                  paddingTop: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                Once completed, please file a copy in the Site Folder and send a
-                copy to our Head Office and give a copy to the site staff.
-              </Text>
-              <View style={styles.footerView}>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  Address: 2,
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    Green Lane, Penge, London SE20 7JA
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  T:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    0208 676 060
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  F:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    0208 676 0671
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  M:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    07737 632206
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  E:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    info@topdecdecorating.com
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  W:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    www.topdecdecorating.com
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  VAT Registration Number:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    203 474 927
-                  </Text>
-                </Text>
+                <Text style={styles.titleText}>Toolbox Talk – Fire Safety</Text>
               </View>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity
-                  style={styles.commonBtn}
-                  onPress={() => tbtFormInsert()}
-                >
-                  <Text style={styles.commonText}>Save</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
-        </>
-      )}
+              <ScrollView>
+                <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+                  <View style={{ marginTop: 20 }}>
+                    {coshhArray.map((item, index) =>
+                      item.mainTitle ? (
+                        <View key={index}>
+                          <Text
+                            style={{ fontFamily: "poppins-bold", fontSize: 16 }}
+                          >
+                            {item.mainTitle}
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: "poppins-regular",
+                              fontSize: 12,
+                              backgroundColor: item.bgcolor,
+                            }}
+                          >
+                            {item.title}
+                          </Text>
+                        </View>
+                      ) : (
+                        <View key={index}>
+                          <Text
+                            style={{
+                              fontFamily: "poppins-regular",
+                              fontSize: 12,
+                              backgroundColor: item.bgcolor,
+                            }}
+                          >
+                            {item.title}
+                          </Text>
+                        </View>
+                      )
+                    )}
+                  </View>
+                  <TBTForm
+                    data={data}
+                    getSignature={(index) =>
+                      setOpenSign({ ...openSign, bool: true, index })
+                    }
+                    setTBTGlobalSign={() => {
+                      setOpenSign({ ...openSign, bool: true, index: 2 });
+                    }}
+                    addAttendence={() =>
+                      setData({
+                        ...data,
+                        jobSummary: [
+                          ...data.jobSummary,
+                          { print: "", sign: "" },
+                        ],
+                      })
+                    }
+                    onChangeData={(key, value, index = -1) => {
+                      if (index >= 0) {
+                        let copyAttendance = [...data.jobSummary];
+                        copyAttendance[index].print = value;
+                        setData({ ...data, jobSummary: [...copyAttendance] });
+                      } else {
+                        setData({ ...data, [key]: value });
+                      }
+                    }}
+                    projectImage={() => uploadPhotoImage()}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: "poppins-bold",
+                      fontSize: 12,
+                      textAlign: "center",
+                    }}
+                  >
+                    Once completed, please file a copy in the Site Folder and
+                    send a copy to our Head Office and give a copy to the site
+                    staff.
+                  </Text>
+                  <View style={styles.footerView}>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      Address: 2,
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        Green Lane, Penge, London SE20 7JA
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      T:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        0208 676 060
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      F:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        0208 676 0671
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      M:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        07737 632206
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      E:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        info@topdecdecorating.com
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      W:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        www.topdecdecorating.com
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      VAT Registration Number:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        203 474 927
+                      </Text>
+                    </Text>
+                  </View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      style={styles.commonBtn}
+                      onPress={() => tbtFormInsert()}
+                    >
+                      <Text style={styles.commonText}>Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </>
+          )}
         </View>
       )}
     </View>
@@ -398,18 +430,8 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  creatTbtFireHandler: (
-    data,
-    token,
-    index
-  ) =>
-    dispatch(
-      insertTbtFire(
-        data,
-        token,
-        index
-      )
-    ),
-    // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  creatTbtFireHandler: (data, token, index) =>
+    dispatch(insertTbtFire(data, token, index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TBTFire);

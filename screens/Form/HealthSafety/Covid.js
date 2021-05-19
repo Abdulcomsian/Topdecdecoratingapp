@@ -98,6 +98,7 @@ const Covid = (props) => {
     comments: "",
     tbtSign: "",
     projectImages: [],
+    projectComment: "",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
@@ -109,7 +110,9 @@ const Covid = (props) => {
         data.date != "" &&
         data.comments != "" &&
         data.tbtSign != "" &&
-        data.jobSummary != ""
+        data.jobSummary != "" &&
+        data.projectImages !="" &&
+        data.projectComment !=""
       ) {
         await props.creatTbtCovidHandler(
           { ...data, task_id: jobID, tab_id: tabId },

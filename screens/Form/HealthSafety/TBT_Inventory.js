@@ -14,6 +14,8 @@ import SignatureComponent from "../../../components/SignatureComponent";
 import { connect } from "react-redux";
 import { insertTbtInventory } from "../../../Redux/action/auth/authActionTypes";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
+import * as ImagePicker from "expo-image-picker";
+import { AssetsSelector } from "expo-images-picker";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 
@@ -22,9 +24,9 @@ const TBTINVENTORY = (props) => {
   // const jobID = Math.floor(Math.random() * 100) + 1;
   const { plot_Id } = props.route.params;
   const jobID = plot_Id;
-  console.log("Work Plot ID :",jobID)
+  console.log("Work Plot ID :", jobID);
   const tabId = props.route.params.tabName;
-  console.log("Work Tab ID :",tabId)
+  console.log("Work Tab ID :", tabId);
   const [getSign, setGetSign] = useState(false);
   const [inventoryArray, setInventoryArray] = useState([
     {
@@ -125,9 +127,7 @@ const TBTINVENTORY = (props) => {
     const currentDate = selectedDate;
     setShowDueDate({ ...showDueDate, isVisible: false, index: -1 });
     let copyArr = [...inventoryArray];
-    copyArr[
-      showDueDate.index
-    ].due_date = currentDate.toLocaleDateString();
+    copyArr[showDueDate.index].due_date = currentDate.toLocaleDateString();
     setInventoryArray(copyArr);
   };
   const onSupervisorDateChange = (selectedDate) => {
@@ -138,17 +138,35 @@ const TBTINVENTORY = (props) => {
   const showSupervisorDatepicker = () => {
     setSupervisorShow(true);
   };
-
+  const [projectComment, setProjectComment] = useState("");
   const tbtInventoryFormInsert = async () => {
-    
     try {
-     
-      if(mainContractor!="" && projectName!=""  && supervisorSignature!="" && dateSupervisor!="" && inventoryArray!="" ){
-        await props.creatTbtInventoryHandler(mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,props.route.params?.index)
+      if (
+        mainContractor != "" &&
+        projectName != "" &&
+        supervisorSignature != "" &&
+        dateSupervisor != "" &&
+        inventoryArray != "" &&
+        projectImages != "" &&
+        projectComment != ""
+      ) {
+        await props.creatTbtInventoryHandler(
+          mainContractor,
+          projectName,
+          supervisorSignature,
+          dateSupervisor,
+          inventoryArray,
+          projectImages,
+          projectComment,
+          jobID,
+          tabId,
+          token,
+          props.route.params?.index
+        );
         // props.updateHealthReport(props?.route?.params?.index);
         props.navigation.pop();
         alert("TBT INVENTORY Insert SuccessFully !");
-      }else{
+      } else {
         alert("Please Insert All Fields CareFully !");
       }
     } catch (err) {
@@ -160,364 +178,499 @@ const TBTINVENTORY = (props) => {
     preData[index][key] = value;
     setInventoryArray(preData);
   };
+  const [projectImages, setProjectImages] = useState([]);
+  const [isShow, setIsShow] = useState(false);
+
+  const onDone = (dataImage) => {
+    setProjectImages(dataImage);
+    setIsShow(false);
+  };
+
+  const goBack = () => {
+    setIsShow(false);
+  };
+  const uploadPhotoImage = async () => {
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+    setIsShow(true);
+  };
+  // console.log("Pick Project :",projectImages)
+  const _textStyle = {
+    color: "white",
+  };
+  const _buttonStyle = {
+    backgroundColor: "#1073AC",
+    borderRadius: 5,
+  };
+  console.log("Project Iamges :", projectImages);
   return (
     <View style={styles.mainContainer}>
-      <DateTimePickerModal
-        isVisible={show.isVisible}
-        date={date ? date : new Date()}
-        mode={"date"}
-        is24Hour={true}
-        display="default"
-        onConfirm={(date) => onChange(date)}
-        onCancel={() => setShow({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
-      />
-      <DateTimePickerModal
-        isVisible={showDueDate.isVisible}
-        date={date ? date : new Date()}
-        mode={"date"}
-        is24Hour={true}
-        display="default"
-        onConfirm={(date) => onInspectionDueDateChange(date)}
-        onCancel={() => setShowDueDate({ isVisible: false, index: -1 })}
-        cancelTextIOS="Cancel"
-        confirmTextIOS="Confirm"
-      />
-      <DateTimePickerModal
-        isVisible={showSupervisor}
-        testID="dateTimePicker"
-        value={dateSupervisor}
-        mode={"date"}
-        display="default"
-        onConfirm={onSupervisorDateChange}
-        onCancel={() => setSupervisorShow(false)}
-        format="DD-MM-YYYY"
-      />
-      {getSign ? (
-        <SignatureComponent
-          returnImage={(uri) => {
-            setSupervisorSignature(uri);
-            setGetSign(false);
-          }}
-        />
-      ) : (
-        <>
-          <View style={styles.imageView}>
-            <Image source={mainImage} style={styles.bannerImage} />
-          </View>
-          <View
-            style={{
-              paddingTop: 30,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text style={styles.titleText}>
-              Working at Height Equipment - Inventory Control
-            </Text>
-          </View>
-          <ScrollView>
-            <View style={{ paddingLeft: 20, paddingRight: 20 }}>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Main Contractor"}
-                  value={mainContractor}
-                  onChangeText={(e) => setMainContractor(e)}
-                />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Project"}
-                  value={projectName}
-                  onChangeText={(e) => setProjectName(e)}
-                />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TouchableOpacity
-                  onPress={() => setGetSign(true)}
-                  style={styles.inputFieldContainer}
-                >
-                  {supervisorSignature ? (
-                    <Image
-                      style={{
-                        marginTop: 20,
-                        height: 100,
-                        width: 100,
-                        backgroundColor: "gray",
-                      }}
-                      source={{ uri: supervisorSignature }}
-                    />
-                  ) : (
-                    <Text
-                      style={{
-                        height: 52,
-                        width: "100%",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 15,
-                      }}
-                    >
-                      Supervisor Print & Sign
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showSupervisorDatepicker()}
-                  style={[styles.inputField, { paddingTop: 15 }]}
-                >
-                  {new Date(dateSupervisor).toLocaleDateString()}
-                </Text>
-              </View>
-
-              <View style={styles.tableViewContainer}>
-                <View style={styles.tableHeader}>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>Equipments</Text>
-                  </View>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>Inspection Date</Text>
-                  </View>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>Tagged/ Labelled</Text>
-                  </View>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>Qty. in Stock</Text>
-                  </View>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>Location</Text>
-                  </View>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>Inspection due date</Text>
-                  </View>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>In good condition</Text>
-                  </View>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>
-                      Needs repair/replaced
-                    </Text>
-                  </View>
-                  <View style={styles.headerEquipmentTitleView}>
-                    <Text style={styles.headerTitle}>Comments</Text>
-                  </View>
+      {isShow ? (
+        <View style={{ flex: 1 }}>
+          <AssetsSelector
+            options={{
+              assetsType: ["photo", "video"],
+              maxSelections: 3,
+              margin: 2,
+              portraitCols: 4,
+              landscapeCols: 5,
+              widgetWidth: 100,
+              widgetBgColor: "white",
+              videoIcon: {
+                iconName: "ios-videocam",
+                color: "tomato",
+                size: 20,
+              },
+              selectedIcon: {
+                iconName: "ios-checkmark-circle-outline",
+                color: "white",
+                bg: "#0eb14970",
+                size: 26,
+              },
+              spinnerColor: "black",
+              onError: () => {},
+              noAssets: () => (
+                <View>
+                  <Text></Text>
                 </View>
-                {inventoryArray.map((item, index) => (
-                  <View key={index}>
-                    <Text
-                      style={{
-                        fontFamily: "poppins-bold",
-                        fontSize: 10,
-                        paddingTop: 20,
-                      }}
-                    >
-                      {item.title}
-                    </Text>
-                    <View style={styles.tableBody}>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <TextInput
-                          style={styles.bodyTextInput}
-                          placeholder={"Equ"}
-                          onChangeText={(txt) =>
-                            updateLabourValue("equipment", index, txt)
-                          }
-                          value={item.equipment}
-                        />
-                      </View>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <Text
-                          onPress={() => showDatepicker(index)}
-                          style={{
-                            height: 39,
-                            paddingTop: 16,
-                            fontSize: 8,
-                            color: "#96A8B2",
-                            fontFamily: "poppins-regular",
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#96A8B2",
-                            marginRight: 5,
-                            color: "#96A8B2",
-                          }}
-                        >
-                          {new Date(item.date_1).toLocaleDateString()}
-                        </Text>
-                      </View>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <TextInput
-                          style={styles.bodyTextInput}
-                          placeholder={"Tagged"}
-                          onChangeText={(txt) =>
-                            updateLabourValue("tagged", index, txt)
-                          }
-                          value={item.tagged}
-                        />
-                      </View>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <TextInput
-                          style={styles.bodyTextInput}
-                          placeholder={"Qty."}
-                          onChangeText={(txt) =>
-                            updateLabourValue("stock", index, txt)
-                          }
-                          value={item.stock}
-                        />
-                      </View>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <TextInput
-                          style={styles.bodyTextInput}
-                          placeholder={"Location"}
-                          onChangeText={(txt) =>
-                            updateLabourValue("location", index, txt)
-                          }
-                          value={item.location}
-                        />
-                      </View>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <Text
-                          onPress={() => showInspectionDueDatepicker(index)}
-                          style={{
-                            height: 39,
-                            paddingTop: 16,
-                            fontSize: 8,
-                            color: "#96A8B2",
-                            fontFamily: "poppins-regular",
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#96A8B2",
-                            marginRight: 5,
-                            color: "#96A8B2",
-                          }}
-                        >
-                          {new Date(
-                            item.due_date
-                          ).toLocaleDateString()}
-                        </Text>
-                      </View>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <TextInput
-                          style={styles.bodyTextInput}
-                          placeholder={"Condition"}
-                          onChangeText={(txt) =>
-                            updateLabourValue("condition", index, txt)
-                          }
-                          value={item.condition}
-                        />
-                      </View>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <TextInput
-                          style={styles.bodyTextInput}
-                          placeholder={"Replaced"}
-                          onChangeText={(txt) =>
-                            updateLabourValue("needs", index, txt)
-                          }
-                          value={item.needs}
-                        />
-                      </View>
-                      <View style={styles.inputInventoryBodyContainer}>
-                        <TextInput
-                          multiline={true}
-                          numberOfLines={4}
-                          style={styles.bodyTextInput}
-                          placeholder={"Comments"}
-                          onChangeText={(txt) =>
-                            updateLabourValue("comment", index, txt)
-                          }
-                          value={item.comment}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                ))}
-              </View>
-              <Text
-                style={{
-                  fontFamily: "poppins-bold",
-                  fontSize: 10,
-                  paddingTop: 20,
-                  textAlign: "center",
-                }}
-              >
-                Once completed, please file a copy in the Site Folder and send a
-                copy to our Office. Also, please give a copy to the Site Staff.
-              </Text>
-              <View style={styles.footerView}>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  Address: 2,
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    Green Lane, Penge, London SE20 7JA
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  T:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    0208 676 060
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  F:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    0208 676 0671
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  M:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    07737 632206
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  E:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    info@topdecdecorating.com
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  W:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    www.topdecdecorating.com
-                  </Text>
-                </Text>
-                <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
-                  VAT Registration Number:{" "}
-                  <Text style={{ fontFamily: "poppins-regular", fontSize: 10 }}>
-                    {" "}
-                    203 474 927
-                  </Text>
-                </Text>
+              ),
+              defaultTopNavigator: {
+                continueText: "Finish",
+                goBackText: "Back",
+                selectedText: "Selected",
+                midTextColor: "tomato",
+                buttonStyle: _buttonStyle,
+                buttonTextStyle: _textStyle,
+                backFunction: goBack,
+                doneFunction: (data) => onDone(data),
+              },
+            }}
+          />
+        </View>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <DateTimePickerModal
+            isVisible={show.isVisible}
+            date={date ? date : new Date()}
+            mode={"date"}
+            is24Hour={true}
+            display="default"
+            onConfirm={(date) => onChange(date)}
+            onCancel={() => setShow({ isVisible: false, index: -1 })}
+            cancelTextIOS="Cancel"
+            confirmTextIOS="Confirm"
+          />
+          <DateTimePickerModal
+            isVisible={showDueDate.isVisible}
+            date={date ? date : new Date()}
+            mode={"date"}
+            is24Hour={true}
+            display="default"
+            onConfirm={(date) => onInspectionDueDateChange(date)}
+            onCancel={() => setShowDueDate({ isVisible: false, index: -1 })}
+            cancelTextIOS="Cancel"
+            confirmTextIOS="Confirm"
+          />
+          <DateTimePickerModal
+            isVisible={showSupervisor}
+            testID="dateTimePicker"
+            value={dateSupervisor}
+            mode={"date"}
+            display="default"
+            onConfirm={onSupervisorDateChange}
+            onCancel={() => setSupervisorShow(false)}
+            format="DD-MM-YYYY"
+          />
+          {getSign ? (
+            <SignatureComponent
+              returnImage={(uri) => {
+                setSupervisorSignature(uri);
+                setGetSign(false);
+              }}
+            />
+          ) : (
+            <>
+              <View style={styles.imageView}>
+                <Image source={mainImage} style={styles.bannerImage} />
               </View>
               <View
                 style={{
-                  backgroundColor: "#000",
-                  width: "100%",
-                  height: 2,
-                  marginBottom: 20,
-                  marginTop: 20,
+                  paddingTop: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-              ></View>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity
-                  style={styles.commonBtn}
-                  onPress={() => tbtInventoryFormInsert()}
-                >
-                  <Text style={styles.commonText}>Save</Text>
-                </TouchableOpacity>
+              >
+                <Text style={styles.titleText}>
+                  Working at Height Equipment - Inventory Control
+                </Text>
               </View>
-            </View>
-          </ScrollView>
-        </>
+              <ScrollView>
+                <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Main Contractor"}
+                      value={mainContractor}
+                      onChangeText={(e) => setMainContractor(e)}
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      style={styles.inputField}
+                      placeholder={"Project"}
+                      value={projectName}
+                      onChangeText={(e) => setProjectName(e)}
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TouchableOpacity
+                      onPress={() => setGetSign(true)}
+                      style={styles.inputFieldContainer}
+                    >
+                      {supervisorSignature ? (
+                        <Image
+                          style={{
+                            marginTop: 20,
+                            height: 100,
+                            width: 100,
+                            backgroundColor: "gray",
+                          }}
+                          source={{ uri: supervisorSignature }}
+                        />
+                      ) : (
+                        <Text
+                          style={{
+                            height: 52,
+                            width: "100%",
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 15,
+                          }}
+                        >
+                          Supervisor Print & Sign
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text
+                      onPress={() => showSupervisorDatepicker()}
+                      style={[styles.inputField, { paddingTop: 15 }]}
+                    >
+                      {new Date(dateSupervisor).toLocaleDateString()}
+                    </Text>
+                  </View>
+
+                  <View style={styles.tableViewContainer}>
+                    <View style={styles.tableHeader}>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>Equipments</Text>
+                      </View>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>Inspection Date</Text>
+                      </View>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>Tagged/ Labelled</Text>
+                      </View>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>Qty. in Stock</Text>
+                      </View>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>Location</Text>
+                      </View>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>
+                          Inspection due date
+                        </Text>
+                      </View>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>
+                          In good condition
+                        </Text>
+                      </View>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>
+                          Needs repair/replaced
+                        </Text>
+                      </View>
+                      <View style={styles.headerEquipmentTitleView}>
+                        <Text style={styles.headerTitle}>Comments</Text>
+                      </View>
+                    </View>
+                    {inventoryArray.map((item, index) => (
+                      <View key={index}>
+                        <Text
+                          style={{
+                            fontFamily: "poppins-bold",
+                            fontSize: 10,
+                            paddingTop: 20,
+                          }}
+                        >
+                          {item.title}
+                        </Text>
+                        <View style={styles.tableBody}>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <TextInput
+                              style={styles.bodyTextInput}
+                              placeholder={"Equ"}
+                              onChangeText={(txt) =>
+                                updateLabourValue("equipment", index, txt)
+                              }
+                              value={item.equipment}
+                            />
+                          </View>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <Text
+                              onPress={() => showDatepicker(index)}
+                              style={{
+                                height: 39,
+                                paddingTop: 16,
+                                fontSize: 8,
+                                color: "#96A8B2",
+                                fontFamily: "poppins-regular",
+                                borderBottomWidth: 1,
+                                borderBottomColor: "#96A8B2",
+                                marginRight: 5,
+                                color: "#96A8B2",
+                              }}
+                            >
+                              {new Date(item.date_1).toLocaleDateString()}
+                            </Text>
+                          </View>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <TextInput
+                              style={styles.bodyTextInput}
+                              placeholder={"Tagged"}
+                              onChangeText={(txt) =>
+                                updateLabourValue("tagged", index, txt)
+                              }
+                              value={item.tagged}
+                            />
+                          </View>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <TextInput
+                              style={styles.bodyTextInput}
+                              placeholder={"Qty."}
+                              onChangeText={(txt) =>
+                                updateLabourValue("stock", index, txt)
+                              }
+                              value={item.stock}
+                            />
+                          </View>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <TextInput
+                              style={styles.bodyTextInput}
+                              placeholder={"Location"}
+                              onChangeText={(txt) =>
+                                updateLabourValue("location", index, txt)
+                              }
+                              value={item.location}
+                            />
+                          </View>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <Text
+                              onPress={() => showInspectionDueDatepicker(index)}
+                              style={{
+                                height: 39,
+                                paddingTop: 16,
+                                fontSize: 8,
+                                color: "#96A8B2",
+                                fontFamily: "poppins-regular",
+                                borderBottomWidth: 1,
+                                borderBottomColor: "#96A8B2",
+                                marginRight: 5,
+                                color: "#96A8B2",
+                              }}
+                            >
+                              {new Date(item.due_date).toLocaleDateString()}
+                            </Text>
+                          </View>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <TextInput
+                              style={styles.bodyTextInput}
+                              placeholder={"Condition"}
+                              onChangeText={(txt) =>
+                                updateLabourValue("condition", index, txt)
+                              }
+                              value={item.condition}
+                            />
+                          </View>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <TextInput
+                              style={styles.bodyTextInput}
+                              placeholder={"Replaced"}
+                              onChangeText={(txt) =>
+                                updateLabourValue("needs", index, txt)
+                              }
+                              value={item.needs}
+                            />
+                          </View>
+                          <View style={styles.inputInventoryBodyContainer}>
+                            <TextInput
+                              multiline={true}
+                              numberOfLines={4}
+                              style={styles.bodyTextInput}
+                              placeholder={"Comments"}
+                              onChangeText={(txt) =>
+                                updateLabourValue("comment", index, txt)
+                              }
+                              value={item.comment}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "poppins-bold",
+                      fontSize: 10,
+                      paddingTop: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    Once completed, please file a copy in the Site Folder and
+                    send a copy to our Office. Also, please give a copy to the
+                    Site Staff.
+                  </Text>
+                  <View style={styles.footerView}>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      Address: 2,
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        Green Lane, Penge, London SE20 7JA
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      T:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        0208 676 060
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      F:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        0208 676 0671
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      M:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        07737 632206
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      E:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        info@topdecdecorating.com
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      W:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        www.topdecdecorating.com
+                      </Text>
+                    </Text>
+                    <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
+                      VAT Registration Number:{" "}
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 10 }}
+                      >
+                        {" "}
+                        203 474 927
+                      </Text>
+                    </Text>
+                  </View>
+                  <View style={{ marginTop: 10 }}>
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Project Images
+                    </Text>
+                    {projectImages != "" ? (
+                      <View style={{ flexDirection: "row" }}>
+                        {/* <Text>Hello</Text> */}
+                        {projectImages.map((item, index) => (
+                          <Image
+                            style={{ width: 50, height: 50, marginRight: 10 }}
+                            source={{ uri: item.uri }}
+                            key={index}
+                          />
+                        ))}
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          styles.buttonOpen,
+                          { width: "100%" },
+                        ]}
+                        onPress={() => uploadPhotoImage()}
+                      >
+                        <Text style={styles.textStyle}>Add Images</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: "#000",
+                      width: "100%",
+                      height: 2,
+                      marginBottom: 20,
+                      marginTop: 20,
+                    }}
+                  ></View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      style={styles.commonBtn}
+                      onPress={() => tbtInventoryFormInsert()}
+                    >
+                      <Text style={styles.commonText}>Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </>
+          )}
+        </View>
       )}
     </View>
   );
@@ -529,8 +682,34 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  creatTbtInventoryHandler: (mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,index) =>
-    dispatch(insertTbtInventory(mainContractor,projectName,supervisorSignature,dateSupervisor,inventoryArray,jobID,tabId,token,index)),
+  creatTbtInventoryHandler: (
+    mainContractor,
+    projectName,
+    supervisorSignature,
+    dateSupervisor,
+    inventoryArray,
+    projectImages,
+    projectComment,
+    jobID,
+    tabId,
+    token,
+    index
+  ) =>
+    dispatch(
+      insertTbtInventory(
+        mainContractor,
+        projectName,
+        supervisorSignature,
+        dateSupervisor,
+        inventoryArray,
+        projectImages,
+        projectComment,
+        jobID,
+        tabId,
+        token,
+        index
+      )
+    ),
   // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TBTINVENTORY);

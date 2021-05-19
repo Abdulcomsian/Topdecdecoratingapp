@@ -272,6 +272,7 @@ const PuwerInspection = (props) => {
     preData[index][key] = value;
     setPuwerArrayList(preData);
   };
+  const [projectComment, setProjectComment] = useState("");
   const puwerInspectionFormInsert = async () => {
     try {
       if (
@@ -280,7 +281,9 @@ const PuwerInspection = (props) => {
         furtherComment != "" &&
         supervisorSign != "" &&
         dateSupervisor != "" &&
-        puwerArrayList != ""
+        puwerArrayList != "" &&
+        projectImages != "" &&
+        projectComment != ""
       ) {
         await props.createPuwerInspectionHandler(
           contractorName,
@@ -289,6 +292,8 @@ const PuwerInspection = (props) => {
           supervisorSign,
           dateSupervisor,
           puwerArrayList,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -890,6 +895,15 @@ const PuwerInspection = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -931,6 +945,8 @@ const mapDispatchToProps = (dispatch) => ({
     supervisorSign,
     dateSupervisor,
     puwerArrayList,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -944,6 +960,8 @@ const mapDispatchToProps = (dispatch) => ({
         supervisorSign,
         dateSupervisor,
         puwerArrayList,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

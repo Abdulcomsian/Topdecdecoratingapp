@@ -3,7 +3,7 @@ const INITIAL_STATE = {
   misCoat: [
     {
       tickSign: false,
-      text: "Hover Over Form",
+      text: "Hand Over Form",
       chekecd: false,
       url: "HandOverForm",
     },
@@ -36,7 +36,7 @@ const INITIAL_STATE = {
   decorationArray: [
     {
       tickSign: false,
-      text: "Hover Over Form",
+      text: "Hand Over Form",
       chekecd: false,
       url: "HandOverForm",
     },
@@ -69,7 +69,7 @@ const INITIAL_STATE = {
   snagArray: [
     {
       tickSign: false,
-      text: "Hover Over Form",
+      text: "Hand Over Form",
       chekecd: false,
       url: "HandOverForm",
     },

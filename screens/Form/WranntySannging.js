@@ -38,6 +38,7 @@ const WrantySannging = (props) => {
   const [painterName, setPainterName] = useState("");
   const [noOfPage, setNoOfPage] = useState("");
   const [totalHours, setTotalHours] = useState("");
+  const [projectComment, setProjectComment] = useState("");
 
   const [dataSnag, setDataSnag] = useState({
     location: "",
@@ -126,7 +127,9 @@ const WrantySannging = (props) => {
         wrrantySnagging != "" &&
         painterName != "" &&
         noOfPage != "" &&
-        totalHours
+        totalHours !="" &&
+        projectImages !="" &&
+        projectComment !=""
       ) {
         await props.createSnaggingHandler(
           block,
@@ -141,6 +144,8 @@ const WrantySannging = (props) => {
           dateSnaggingComplete,
           totalHours,
           dynamicSnagCompletedInput,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -243,7 +248,7 @@ const WrantySannging = (props) => {
           />
         </View>
       ) : (
-        <View>
+        <View style={{ flex: 1 }}>
           <DateTimePicker
             isVisible={showIssue}
             testID="dateTimePicker"
@@ -521,6 +526,16 @@ const WrantySannging = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                    </View>
+                  
               <View
                 style={{
                   backgroundColor: "#000",
@@ -565,6 +580,8 @@ const mapDispatchToProps = (dispatch) => ({
     dateSnaggingComplete,
     totalHours,
     dynamicSnagCompletedInput,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -584,6 +601,8 @@ const mapDispatchToProps = (dispatch) => ({
         dateSnaggingComplete,
         totalHours,
         dynamicSnagCompletedInput,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

@@ -39,6 +39,7 @@ const HandOverForm = (props) => {
   const [showComplete, setShowComplete] = useState(false);
   const [showToday, setShowToday] = useState(false);
   const [contructorName, setContructorName] = useState("");
+  const [projectComment, setProjectComment] = useState("");
   const [project, setProject] = useState("");
   const [block, setBlock] = useState("");
   const [reason, setReason] = useState("");
@@ -138,7 +139,9 @@ const HandOverForm = (props) => {
         dynamicInput &&
         agentName != "" &&
         supervisorSignature !== "" &&
-        agentSignature !== ""
+        agentSignature !== "" &&
+        projectImages != "" &&
+        projectComment !=""
       ) {
         await props.createHandOverHandler(
           contructorName,
@@ -155,6 +158,8 @@ const HandOverForm = (props) => {
           agentName,
           agentSignature,
           todayDate,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -199,7 +204,7 @@ const HandOverForm = (props) => {
     backgroundColor: "#1073AC",
     borderRadius: 5,
   };
-  console.log("Project Iamges :",projectImages)
+  // console.log("Project Iamges :",projectImages)
   return (
     <View style={styles.mainContainer}>
       {isShow ? (
@@ -245,7 +250,7 @@ const HandOverForm = (props) => {
           />
         </View>
       ) : (
-        <View>
+        <View style={{flex:1}}>
           <DateTimePicker
             isVisible={show}
             testID="dateTimePicker"
@@ -528,7 +533,7 @@ const HandOverForm = (props) => {
                         }
                       }}
                     >
-                      {/* <Image style={styles.plusBtn} source={plus} /> */}
+                      <Image style={styles.plusBtn} source={plus} />
                     </TouchableOpacity>
                   </View>
                   <Text
@@ -616,6 +621,15 @@ const HandOverForm = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -664,6 +678,8 @@ const mapDispatchToProps = (dispatch) => ({
     agentName,
     agentSignature,
     todayDate,
+    projectImages,
+    projectComment,
     tabId,
     jobID,
     token,
@@ -685,6 +701,8 @@ const mapDispatchToProps = (dispatch) => ({
         agentName,
         agentSignature,
         todayDate,
+        projectImages,
+        projectComment,
         tabId,
         jobID,
         token,

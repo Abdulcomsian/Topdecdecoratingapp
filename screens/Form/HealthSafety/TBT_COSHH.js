@@ -107,6 +107,7 @@ const TBTCOSHH = (props) => {
     comments: "",
     tbtSign: "",
     projectImages: [],
+    projectComment:"",
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
@@ -125,7 +126,8 @@ const TBTCOSHH = (props) => {
         data.date != null &&
         data.comments != "" &&
         data.tbtSign != "" &&
-        data.jobSummary != ""
+        data.jobSummary != "" &&
+        data.projectImages != ""
       ) {
         await props.creatTbtCoshHandler(
           { ...data, task_id: jobID, tab_id: tabId },
@@ -445,6 +447,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   creatTbtCoshHandler: (data, token, index) =>
     dispatch(insertTBTCOSH(data, token, index)),
-  updateHealthReport: (index) => dispatch(updateHealthReport(index)),
+  // updateHealthReport: (index) => dispatch(updateHealthReport(index)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(TBTCOSHH);

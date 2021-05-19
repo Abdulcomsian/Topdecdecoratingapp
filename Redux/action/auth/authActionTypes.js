@@ -434,6 +434,8 @@ export const insertHandOverForm = (
   agentName,
   agentSignature,
   todayDate,
+  projectImages,
+  projectComment,
   task_id,
   tab_id,
   token,
@@ -492,10 +494,20 @@ export const insertHandOverForm = (
       formData.append("completed_date",completed_date)
       formData.append("task_id",task_id)
       formData.append("tab_id",tab_id)
-
+      formData.append("projectComment",projectComment)
+      
       jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       console.log("Hand Over Form Data :", formData)
       const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
@@ -541,6 +553,8 @@ export const insertMakeReadyForm = (
   agentName,
   agentSignature,
   todayDate,
+  projectImages,
+  projectComment,
   task_id,
   tab_id,
   token,
@@ -611,6 +625,14 @@ export const insertMakeReadyForm = (
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
 
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+      formData.append("projectComment",projectComment)
       console.log(formData)
       // const body = {
       //   client,
@@ -681,6 +703,8 @@ export const insertSnaggingForm = (
   completed_by,
   hour,
   dynamicInputComplete,
+  projectImages,
+  projectComment,
   task_id,
   tab_id,
   token,
@@ -703,29 +727,59 @@ export const insertSnaggingForm = (
       // console.log("Job ID :", jobID);
       // console.log("Tab Name :", tabId);
       // console.log("Token :", token);
-      const body = {
-        block,
-        plot_number,
-        isue_date,
-        completion_date,
-        pre_w_snagging,
-        painter,
-        snagging_isue_by,
-        completed_by,
-        No_of_Pages,
-        hour,
-        task_id,
-        tab_id,
-        dynamicInput,
-        dynamicInputComplete,
-      };
+
+      const formData = new FormData();
+
+      formData.append("block",block)
+      formData.append("plot_number",plot_number)
+      formData.append("isue_date",isue_date)
+      formData.append("completion_date",completion_date)
+      formData.append("pre_w_snagging",pre_w_snagging)
+      formData.append("painter",painter)
+      formData.append("snagging_isue_by",snagging_isue_by)
+      formData.append("completed_by",completed_by)
+      formData.append("No_of_Pages",No_of_Pages)
+      formData.append("hour",hour)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      dynamicInput.forEach(item => {
+        formData.append(`dynamicInput[]`, JSON.stringify([item]));
+      });
+      formData.append("dynamicInputComplete",dynamicInputComplete)
+      formData.append("projectComment",projectComment)
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+      // const body = {
+      //   block,
+      //   plot_number,
+      //   isue_date,
+      //   completion_date,
+      //   pre_w_snagging,
+      //   painter,
+      //   snagging_isue_by,
+      //   completed_by,
+      //   No_of_Pages,
+      //   hour,
+      //   task_id,
+      //   tab_id,
+      //   dynamicInput,
+      //   dynamicInputComplete,
+      // };
 
       const request = await axios(base_url + "supervisor/make/workflow/insertWarenty", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       //console.log("Insert Response :", response);
@@ -751,7 +805,7 @@ export const insertSnaggingForm = (
     }
   };
 };
-export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, sitemanager_sign, activity_sign, task_id, tab_id, token, index) => {
+export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, sitemanager_sign, activity_sign,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       console.log("Project Name :", project);
@@ -818,7 +872,7 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
         name: activity_sign.split("/").pop(),
         type: 'image/jpeg', // it may be necessary in Android.
       });
-
+      formData.append("projectComment",projectComment)
       formData.append("task_id",task_id)
       formData.append("tab_id",tab_id)
 
@@ -832,6 +886,13 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
         formData.append(`dynamicInputcomplete[]`, JSON.stringify([item]));
       });
 
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
 
       // const body = {
@@ -900,6 +961,8 @@ export const insertRemedialForm = (
   managerName,
   managerSignature,
   dateManager,
+  projectImages,
+  projectComment,
   task_id,
   tab_id,
   token,
@@ -972,9 +1035,16 @@ export const insertRemedialForm = (
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
 
-
+      formData.append("projectComment",projectComment)
       formData.append("totalHours",totalHours)
-
+      
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       // const body = {
       //   contractor,
@@ -1031,7 +1101,7 @@ export const insertRemedialForm = (
     }
   };
 };
-export const insertScopeForm = (dynamicInput, painter, signature, plot_number, type, date, task_id, tab_id, token, index) => {
+export const insertScopeForm = (dynamicInput, painter, signature, plot_number, type, date,projectImages, projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic Input :", dynamicInput);
@@ -1066,7 +1136,14 @@ export const insertScopeForm = (dynamicInput, painter, signature, plot_number, t
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
 
-
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+      formData.append("projectComment",projectComment)
       // const body = {
       //   signature,
       //   date,
@@ -1127,6 +1204,7 @@ export const insertWorkSheet = (
   sign,
   position,
   date,
+  projectImages,
   task_id,
   tab_id,
   token,
@@ -1196,6 +1274,14 @@ export const insertWorkSheet = (
         formData.append(`PRELIMINARIES[]`, JSON.stringify([item]));
       });
 
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
       const request = await axios(base_url + "supervisor/insert/verification/accurate", {
         method: "POST",
         headers: {
@@ -1221,7 +1307,7 @@ export const insertWorkSheet = (
     }
   };
 };
-export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, tab_id, token) => {
+export const insertDecorationRecord = (jobSummary, jobSummarycomplete,projectImages,projectComment, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic First Input :", jobSummary);
@@ -1229,19 +1315,43 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
       // console.log("Job ID :", task_id);
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
-      const body = {
-        task_id,
-        tab_id,
-        jobSummary,
-        jobSummarycomplete,
-      };
+      // const body = {
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      //   jobSummarycomplete,
+      // };
+
+      const formData = new FormData();
+
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+      jobSummarycomplete.forEach(item => {
+        formData.append(`jobSummarycomplete[]`, JSON.stringify([item]));
+      });
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+      formData.append("projectComment",projectComment)
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/decoration", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       //console.log("Insert Response :", response);
@@ -1263,7 +1373,7 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete, task_id, 
     }
   };
 };
-export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, token) => {
+export const insertMiscoat = (contractor, project, jobSummary,projectImages,projectComment, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contructor :", contractor);
@@ -1272,20 +1382,42 @@ export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, 
       // console.log("Job ID :", task_id);
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
-      const body = {
-        contractor,
-        project,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+      // const body = {
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
+
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+      formData.append("projectComment",projectComment)
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Miscoat", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       //console.log("Insert Response :", response);
@@ -1307,7 +1439,7 @@ export const insertMiscoat = (contractor, project, jobSummary, task_id, tab_id, 
     }
   };
 };
-export const insertSiteInstruction = (contractor, instruction, raised_by, date, details, condition, supervisor, s_date, task_id, tab_id, token) => {
+export const insertSiteInstruction = (contractor, instruction, raised_by, date, details, condition, supervisor, s_date,projectImages, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1321,25 +1453,49 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
       // console.log("Job ID :", task_id);
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
-      const body = {
-        contractor,
-        instruction,
-        raised_by,
-        date,
-        details,
-        condition,
-        s_date,
-        task_id,
-        tab_id,
-        supervisor,
-      };
+
+
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("instruction",instruction)
+      formData.append("raised_by",raised_by)
+      formData.append("date",date)
+      formData.append("details",details)
+      formData.append("condition",condition)
+      formData.append("s_date",s_date)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+      formData.append("supervisor",supervisor)
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+      // const body = {
+      //   contractor,
+      //   instruction,
+      //   raised_by,
+      //   date,
+      //   details,
+      //   condition,
+      //   s_date,
+      //   task_id,
+      //   tab_id,
+      //   supervisor,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Instruction", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       //console.log("Insert Response :", response);
@@ -1361,32 +1517,56 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
     }
   };
 };
-export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES, task_id, tab_id, token) => {
+export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES,projectImages,projectComment, task_id, tab_id, token) => {
   return async (dispatch, getState) => {
     try {
-      console.log("Project Name :", project);
-      console.log("Id Ref :", id_ref);
-      console.log("Decorator Name :", decorator);
-      console.log("Dynamic :", PRELIMINARIES);
-      console.log("Job ID :", task_id);
-      console.log("Tab Name :", tab_id);
-      console.log("Token :", token);
+      // console.log("Project Name :", project);
+      // console.log("Id Ref :", id_ref);
+      // console.log("Decorator Name :", decorator);
+      // console.log("Dynamic :", PRELIMINARIES);
+      // console.log("Job ID :", task_id);
+      // console.log("Tab Name :", tab_id);
+      // console.log("Token :", token);
 
-      const body = {
-        project,
-        id_ref,
-        decorator,
-        task_id,
-        tab_id,
-        PRELIMINARIES,
-      };
+
+      const formData = new FormData();
+
+      formData.append("project",project)
+      formData.append("id_ref",id_ref)
+      formData.append("decorator",decorator)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+      
+      PRELIMINARIES.forEach(item => {
+        formData.append(`PRELIMINARIES[]`, JSON.stringify([item]));
+      });
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+      formData.append("projectComment",projectComment)
+      // const body = {
+      //   project,
+      //   id_ref,
+      //   decorator,
+      //   task_id,
+      //   tab_id,
+      //   PRELIMINARIES,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/verification/verrify_worksheet", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       console.log("Insert Response :", response);
@@ -1434,6 +1614,8 @@ export const insertAccidentForm = (
   Manager_Name,
   Manager_sign,
   Manager_date,
+  projectImages,
+  projectComment,
   task_id,
   tab_id,
   token,
@@ -1487,7 +1669,7 @@ export const insertAccidentForm = (
       // formData.append(`incidentArray`,JSON.stringify(incidentArray));
    
 
-
+      formData.append("projectComment",projectComment)
       formData.append("Name_of_Injured_Person",Name_of_Injured_Person)
       formData.append("Age",Age)
       formData.append("Sex",Sex)
@@ -1548,7 +1730,13 @@ export const insertAccidentForm = (
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
       
-    
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       console.log(formData)
 
@@ -1613,7 +1801,7 @@ export const insertAccidentForm = (
     }
   };
 };
-export const insertCleanUpForm = (contractor, project, operation, date, jobSummary, signature, date1, task_id, tab_id, token, index) => {
+export const insertCleanUpForm = (contractor, project, operation, date, jobSummary, signature, date1,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1648,6 +1836,19 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
       jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+      formData.append("projectComment",projectComment)
+
+
+
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/cleanup", {
         method: "POST",
         headers: {
@@ -1673,7 +1874,7 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
     }
   };
 };
-export const insertElectricalEquipemntForm = (contractor, project, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
+export const insertElectricalEquipemntForm = (contractor, project, supervisor, date, jobSummary,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -1706,6 +1907,17 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
       jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+
+      formData.append("projectComment",projectComment)
       // formData.append("jobSummary",jobSummary)
       
       // const body = {
@@ -1747,7 +1959,7 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
     }
   };
 };
-export const insertFridayPackForm = (contractor, project, supervisor, jobSummary, week_ending, date, furhter_comment, task_id, tab_id, token, index) => {
+export const insertFridayPackForm = (contractor, project, supervisor, jobSummary, week_ending, date, furhter_comment,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -1785,6 +1997,16 @@ export const insertFridayPackForm = (contractor, project, supervisor, jobSummary
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+      formData.append("projectComment",projectComment)
+
+
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/friday_pack", {
         method: "POST",
         headers: {
@@ -1810,7 +2032,7 @@ export const insertFridayPackForm = (contractor, project, supervisor, jobSummary
     }
   };
 };
-export const insertHarmFulForm = (contractor, project, date, jobSummary, task_id, tab_id, token, index) => {
+export const insertHarmFulForm = (contractor, project, date, jobSummary,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -1821,21 +2043,44 @@ export const insertHarmFulForm = (contractor, project, date, jobSummary, task_id
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        contractor,
-        project,
-        date,
-        tab_id,
-        task_id,
-        jobSummary,
-      };
+      const formData = new FormData();
+
+      formData.append("contractor",contractor)
+      formData.append("project",project)
+      formData.append("date",date)
+      formData.append("tab_id",tab_id)
+      formData.append("task_id",task_id)
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+      formData.append("projectComment",projectComment)
+      // const body = {
+      //   contractor,
+      //   project,
+      //   date,
+      //   tab_id,
+      //   task_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       //console.log("Insert Response :", response);
@@ -1863,6 +2108,7 @@ export const insertHealthSafetyForm = (
   Inspection_Date,
   inspectionSignature,
   Document,
+  projectImages,
   task_id,
   tab_id,
   token,
@@ -1917,7 +2163,13 @@ export const insertHealthSafetyForm = (
       });
  
       // formData.append(`Document`,JSON.stringify(Document));
-
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
       
       
       console.log(formData)
@@ -1965,7 +2217,7 @@ export const insertHealthSafetyForm = (
     }
   };
 };
-export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Supervisor, date, task_id, tab_id, token, index) => {
+export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Supervisor, date,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contractor  :", contractor);
@@ -1998,6 +2250,17 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
       jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+      formData.append("projectComment",projectComment)
       // formData.append("jobSummary",jobSummary)
 
       // const body = {
@@ -2040,7 +2303,7 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
     }
   };
 };
-export const insertLAdderCheckListForm = (contractor, project, supervisor, date, next_inspection, comment, jobSummary, task_id, tab_id, token, index) => {
+export const insertLAdderCheckListForm = (contractor, project, supervisor, date, next_inspection, comment, jobSummary,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contractor  :", contractor);
@@ -2078,7 +2341,15 @@ export const insertLAdderCheckListForm = (contractor, project, supervisor, date,
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
       // formData.append("jobSummary",jobSummary)
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
+      formData.append("projectComment",projectComment)
         console.log(formData)
       // const body = {
       //   contractor,
@@ -2120,7 +2391,7 @@ export const insertLAdderCheckListForm = (contractor, project, supervisor, date,
     }
   };
 };
-export const insertMethodStatementForm = (title, contractor, project, ref, jobSummary, supervisor, supervisor_sign,isSign, task_id, tab_id, token, index) => {
+export const insertMethodStatementForm = (title, contractor, project, ref, jobSummary, supervisor, supervisor_sign,isSign,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       //   console.log("Statement Title  :", title);
@@ -2168,6 +2439,16 @@ export const insertMethodStatementForm = (title, contractor, project, ref, jobSu
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+
+      formData.append("projectComment",projectComment)
       // const body = {
       //   title,
       //   contractor,
@@ -2206,7 +2487,7 @@ export const insertMethodStatementForm = (title, contractor, project, ref, jobSu
     }
   };
 };
-export const insertIssueRecordForm = (contractor, project, employees, jobSummary,recordSignature, task_id, tab_id, token, index) => {
+export const insertIssueRecordForm = (contractor, project, employees, jobSummary,recordSignature,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main contractor  :", contractor);
@@ -2241,6 +2522,15 @@ export const insertIssueRecordForm = (contractor, project, employees, jobSummary
       });
       
 
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+      formData.append("projectComment",projectComment)
       // const body = {
       //   contractor,
       //   employees,
@@ -2278,7 +2568,7 @@ export const insertIssueRecordForm = (contractor, project, employees, jobSummary
     }
   };
 };
-export const insertPuwerInspectionForm = (contractor, project, comments, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
+export const insertPuwerInspectionForm = (contractor, project, comments, supervisor, date, jobSummary, projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contractor  :", contractor);
@@ -2316,7 +2606,13 @@ export const insertPuwerInspectionForm = (contractor, project, comments, supervi
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
       // const body = {
       //   contractor,
       //   project,
@@ -2327,7 +2623,7 @@ export const insertPuwerInspectionForm = (contractor, project, comments, supervi
       //   tab_id,
       //   jobSummary,
       // };
-
+      formData.append("projectComment",projectComment)
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Puwer", {
         method: "POST",
         headers: {
@@ -2357,7 +2653,7 @@ export const insertPuwerInspectionForm = (contractor, project, comments, supervi
     }
   };
 };
-export const insertOnSiteDecorationForm = (contractor, project, jobSummary,onSiteSignature, task_id, tab_id, token, index) => {
+export const insertOnSiteDecorationForm = (contractor, project, jobSummary,onSiteSignature,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       //   console.log("Statement Title  :", title);
@@ -2391,8 +2687,15 @@ export const insertOnSiteDecorationForm = (contractor, project, jobSummary,onSit
       });
 
 
-      
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
+      formData.append("projectComment",projectComment)
       // const body = {
       //   contractor,
       //   project,
@@ -2444,6 +2747,8 @@ export const insertRecordOfProject = (
   contractor,
   project,
   jobSummary,
+  projectImages,
+  projectComment,
   task_id,
   tab_id,
   token,
@@ -2468,30 +2773,63 @@ export const insertRecordOfProject = (
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const body = {
-        surname,
-        firstname,
-        relation_to_kin,
-        mobile,
-        job,
-        address,
-        cscscard,
-        detail,
-        nexttokin,
-        kincontact,
-        contractor,
-        project,
-        task_id,
-        tab_id,
-        jobSummary,
-      };
+
+      const formData = new FormData()
+
+      formData.append("surname",surname)
+      formData.append("firstname",firstname)
+      formData.append("relation_to_kin",relation_to_kin)
+      formData.append("mobile",mobile)
+      formData.append("job",job)
+      formData.append("address",address)
+      formData.append("cscscard",cscscard)
+      formData.append("detail",detail)
+      formData.append("nexttokin",nexttokin)
+      formData.append("kincontact",kincontact)
+      formData.append("contractor",contractor)
+      formData.append("task_id",task_id)
+      formData.append("tab_id",tab_id)
+
+
+      jobSummary.forEach(item => {
+        formData.append(`jobSummary[]`, JSON.stringify([item]));
+      });
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+      formData.append("projectComment",projectComment)
+      // const body = {
+      //   surname,
+      //   firstname,
+      //   relation_to_kin,
+      //   mobile,
+      //   job,
+      //   address,
+      //   cscscard,
+      //   detail,
+      //   nexttokin,
+      //   kincontact,
+      //   contractor,
+      //   project,
+      //   task_id,
+      //   tab_id,
+      //   jobSummary,
+      // };
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/IntroTraining", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data, application/json",
+          "Cache-Control": "no-cache",
         },
-        data: body,
+        data: formData,
       });
       const response = request.data;
       // console.log("Insert Response :", response);
@@ -2524,6 +2862,8 @@ export const insertDailyBreifingForm = (
   Operative,
   Hazrd,
   saveStartSignature,
+  projectImages,
+  projectComment,
   task_id,
   tab_id,
   token,
@@ -2574,7 +2914,7 @@ export const insertDailyBreifingForm = (
       Hazrd.forEach(item => {
         formData.append(`Hazrd[]`, JSON.stringify([item]));
       });
-
+      formData.append("projectComment",projectComment)
 
       saveStartSignature &&
       formData.append("saveStartSignature", {
@@ -2583,6 +2923,14 @@ export const insertDailyBreifingForm = (
         name: Math.random(0, 1000).toString(),
         type: 'image/png', // it may be necessary in Android.
       });
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
       
       // formData.append("Contractor",Contractor)
       // formData.append("Contractor",Contractor)
@@ -2648,6 +2996,7 @@ export const insertTBTCOSH = (data, token, index) => {
       formData.append("comments",data.comments)
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
+      formData.append("projectComment",data.projectComment)
 
 
       data.tbtSign &&
@@ -2662,6 +3011,14 @@ export const insertTBTCOSH = (data, token, index) => {
       data.jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+      
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
 
 console.log("Form Data",formData)
@@ -2719,6 +3076,7 @@ export const insertTbtFire = (data, token, index) => {
       formData.append("comments",data.comments)
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
+      formData.append("projectComment",data.projectComment)
 
       data.tbtSign &&
       formData.append("tbtSign", {
@@ -2731,6 +3089,13 @@ export const insertTbtFire = (data, token, index) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       console.log("Form Data :",formData)
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/fire_safety", {
@@ -2785,7 +3150,7 @@ export const insertTbtSlip = (data, token, index) => {
       formData.append("comments",data.comments)
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
-
+      formData.append("projectComment",data.projectComment)
       data.tbtSign &&
       formData.append("tbtSign", {
         // file: signature,
@@ -2796,6 +3161,14 @@ export const insertTbtSlip = (data, token, index) => {
       data.jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/SlitTrip", {
         method: "POST",
@@ -2859,6 +3232,16 @@ export const insertTbtCovid = (data, token, index) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
+
+      formData.append("projectComment",data.projectComment)
+
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/covid", {
         method: "POST",
@@ -2913,7 +3296,7 @@ export const insertTbtHouseKeepingForm = (data, token, index) => {
       formData.append("comments",data.comments)
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
-
+      formData.append("projectComment",data.projectComment)
       data.tbtSign &&
       formData.append("tbtSign", {
         // file: signature,
@@ -2924,6 +3307,14 @@ export const insertTbtHouseKeepingForm = (data, token, index) => {
       data.jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepingTB", {
@@ -2979,7 +3370,7 @@ export const insertTbtMobileForm = (data, token, index) => {
       formData.append("comments",data.comments)
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
-
+      formData.append("projectComment",data.projectComment)
       data.tbtSign &&
       formData.append("tbtSign", {
         // file: signature,
@@ -2991,7 +3382,13 @@ export const insertTbtMobileForm = (data, token, index) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/MobileEvelated", {
@@ -3045,7 +3442,7 @@ export const insertTbtRespiratory = (data, token, index) => {
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
 
-
+      formData.append("projectComment",data.projectComment)
       data.tbtSign &&
       formData.append("tbtSign", {
         // file: signature,
@@ -3058,6 +3455,14 @@ export const insertTbtRespiratory = (data, token, index) => {
       data.jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DustMask", {
@@ -3110,6 +3515,7 @@ export const insertTbtSilicaDust = (data, token, index) => {
       formData.append("comments",data.comments)
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
+      formData.append("projectComment",data.projectComment)
 
 
       data.tbtSign &&
@@ -3125,7 +3531,13 @@ export const insertTbtSilicaDust = (data, token, index) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/SilicaDust", {
         method: "POST",
@@ -3189,7 +3601,7 @@ export const insertTbtDrugs = (data, token, index) => {
       formData.append("comments",data.comments)
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
-
+      formData.append("projectComment",data.projectComment)
 
       data.tbtSign &&
       formData.append("tbtSign", {
@@ -3204,6 +3616,13 @@ export const insertTbtDrugs = (data, token, index) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DrugAndAlcohol", {
         method: "POST",
@@ -3245,7 +3664,7 @@ export const insertTbtVolience = (data, token, index) => {
 
       formData.append("date",data.date)
       formData.append("supervisor",data.supervisor)
-
+      formData.append("projectComment",data.projectComment)
       data.signature &&
       formData.append("signature", {
         // file: signature,
@@ -3271,6 +3690,14 @@ export const insertTbtVolience = (data, token, index) => {
       data.jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/VoilenceAndAggression", {
         method: "POST",
@@ -3325,6 +3752,7 @@ export const insertTbtWorking = (data, token, index) => {
       formData.append("comments",data.comments)
       formData.append("task_id",data.task_id)
       formData.append("tab_id",data.tab_id)
+      formData.append("projectComment",data.projectComment)
 
       data.tbtSign &&
       formData.append("tbtSign", {
@@ -3338,6 +3766,14 @@ export const insertTbtWorking = (data, token, index) => {
       data.jobSummary.forEach(item => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
+
+      data.projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
 
       const request = await axios(base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeight", {
         method: "POST",
@@ -3368,7 +3804,7 @@ export const insertTbtWorking = (data, token, index) => {
     }
   };
 };
-export const insertTbtRegister = (client, project, subject, outline, date, start, finish, jobSummary, supervisor, signature,tbtSign, task_id, tab_id, token, index) => {
+export const insertTbtRegister = (client, project, subject, outline, date, start, finish, jobSummary, supervisor, signature,tbtSign, projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Client :", client);
@@ -3396,7 +3832,7 @@ export const insertTbtRegister = (client, project, subject, outline, date, start
       formData.append("start",start)
       formData.append("finish",finish)
       formData.append("supervisor",supervisor)
-
+      formData.append("projectComment",projectComment)
       signature &&
       formData.append("signature", {
         // file: signature,
@@ -3422,6 +3858,14 @@ export const insertTbtRegister = (client, project, subject, outline, date, start
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
+
+      projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
       // const body = {
       //   client,
       //   project,
@@ -3466,7 +3910,7 @@ export const insertTbtRegister = (client, project, subject, outline, date, start
     }
   };
 };
-export const insertTbtInventory = (contractor, project, supervisor, date, jobSummary, task_id, tab_id, token, index) => {
+export const insertTbtInventory = (contractor, project, supervisor, date, jobSummary,projectImages,projectComment, task_id, tab_id, token, index) => {
   return async (dispatch, getState) => {
     try {
       console.log("Main contractor :", contractor);
@@ -3484,7 +3928,7 @@ export const insertTbtInventory = (contractor, project, supervisor, date, jobSum
       formData.append("contractor",contractor)
       formData.append("project",project)
       formData.append("date",date)
-
+      formData.append("projectComment",projectComment)
 
       supervisor &&
       formData.append("supervisor", {
@@ -3501,6 +3945,14 @@ export const insertTbtInventory = (contractor, project, supervisor, date, jobSum
       formData.append("task_id",task_id)
       formData.append("tab_id",tab_id)
 
+
+     projectImages.forEach(element =>{
+        formData.append("projectImages[]", {
+          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: 'image/png', // it may be necessary in Android.
+        });
+      })
       // const body = {
       //   contractor,
       //   project,

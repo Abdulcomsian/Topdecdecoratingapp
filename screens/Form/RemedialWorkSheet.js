@@ -116,6 +116,7 @@ const RemedialWork = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
+  const [projectComment, setProjectComment] = useState("");
   const remedialFormInsert = async () => {
     try {
       if (
@@ -133,7 +134,9 @@ const RemedialWork = (props) => {
         supervisorName != "" &&
         managerName != "" &&
         managerSignature != "" &&
-        supervisorSignature != ""
+        supervisorSignature != "" &&
+        projectImages != "" &&
+        projectComment !=""
       ) {
         await props.createRemedialHandler(
           contructorName,
@@ -155,6 +158,8 @@ const RemedialWork = (props) => {
           managerName,
           managerSignature,
           dateManager,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -254,7 +259,7 @@ const RemedialWork = (props) => {
           />
         </View>
       ) : (
-        <View>
+        <View style={{ flex: 1 }}>
           <DateTimePicker
             isVisible={showIssue}
             testID="dateTimePicker"
@@ -657,6 +662,16 @@ const RemedialWork = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -710,6 +725,8 @@ const mapDispatchToProps = (dispatch) => ({
     managerName,
     managerSignature,
     dateManager,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -736,6 +753,8 @@ const mapDispatchToProps = (dispatch) => ({
         managerName,
         managerSignature,
         dateManager,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

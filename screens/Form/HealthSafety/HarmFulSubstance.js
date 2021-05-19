@@ -52,19 +52,24 @@ const HarmFulSubstance = (props) => {
   const showDatepicker = () => {
     setShow(true);
   };
+  const [projectComment, setProjectComment] = useState("");
   const harmFulSubstanceFormInsert = async () => {
     try {
       if (
         contractorName != "" &&
         projectName != "" &&
         date != "" &&
-        dynamicInput != ""
+        dynamicInput != "" &&
+        projectImages !="" &&
+        projectComment !=""
       ) {
         await props.createHarmFullHandler(
           contractorName,
           projectName,
           date,
           dynamicInput,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -162,7 +167,7 @@ const HarmFulSubstance = (props) => {
           />
         </View>
       ) : (
-        <View>
+        <View style={{flex:1}}>
           <DateTimePickerModal
             isVisible={show}
             testID="dateTimePicker"
@@ -377,6 +382,16 @@ const HarmFulSubstance = (props) => {
                   </TouchableOpacity>
                 )}
               </View>
+              <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+
+                  </View>
               <View
                 style={{
                   backgroundColor: "#000",
@@ -413,6 +428,8 @@ const mapDispatchToProps = (dispatch) => ({
     projectName,
     date,
     dynamicInput,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -424,6 +441,8 @@ const mapDispatchToProps = (dispatch) => ({
         projectName,
         date,
         dynamicInput,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

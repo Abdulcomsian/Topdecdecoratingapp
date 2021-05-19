@@ -87,7 +87,7 @@ const RecordOfProject = (props) => {
   const [kinContactDetail, setKinContactDetail] = useState("");
   const [mainContractor, setMainContractor] = useState("");
   const [projectName, setProjectName] = useState("");
-
+  const [projectComment, setProjectComment] = useState("");
   const recordProjectFormInsert = async () => {
     try {
       if (
@@ -103,7 +103,9 @@ const RecordOfProject = (props) => {
         kinContactDetail != "" &&
         mainContractor != "" &&
         projectName != "" &&
-        recordArray != ""
+        recordArray != "" &&
+        projectImages != "" &&
+        projectComment != ""
       ) {
         await props.createRecordOfProjectHandler(
           surName,
@@ -119,6 +121,8 @@ const RecordOfProject = (props) => {
           mainContractor,
           projectName,
           recordArray,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -210,7 +214,7 @@ const RecordOfProject = (props) => {
           />
         </View>
       ) : (
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <View
             style={{
               paddingTop: 30,
@@ -467,6 +471,15 @@ const RecordOfProject = (props) => {
                   </TouchableOpacity>
                 )}
               </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  value={projectComment}
+                  onChangeText={(e) => setProjectComment(e)}
+                  style={styles.inputField}
+                  multiline={true}
+                  placeholder={"Project Images Comments"}
+                />
+              </View>
               <View
                 style={{
                   backgroundColor: "#000",
@@ -512,6 +525,8 @@ const mapDispatchToProps = (dispatch) => ({
     mainContractor,
     projectName,
     recordArray,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -532,6 +547,8 @@ const mapDispatchToProps = (dispatch) => ({
         mainContractor,
         projectName,
         recordArray,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

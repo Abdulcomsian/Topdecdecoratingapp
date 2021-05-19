@@ -134,7 +134,7 @@ const ElectricalEquipment = (props) => {
     setdynamicInput(copyArr);
   };
   const [getSign, setGetSign] = useState(false);
-
+  const [projectComment, setProjectComment] = useState("");
   const electricalEquipmentFormInsert = async () => {
     try {
       if (
@@ -142,7 +142,9 @@ const ElectricalEquipment = (props) => {
         projectName != "" &&
         supervisorSignature != "" &&
         date != "" &&
-        dynamicInput != ""
+        dynamicInput != "" &&
+        projectImages != "" &&
+        projectComment != ""
       ) {
         await props.createElectricalEquipmentHandler(
           contractorName,
@@ -150,6 +152,8 @@ const ElectricalEquipment = (props) => {
           supervisorSignature,
           date,
           dynamicInput,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -241,7 +245,7 @@ const ElectricalEquipment = (props) => {
           />
         </View>
       ) : (
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <DateTimePicker
             isVisible={showDate}
             testID="dateTimePicker"
@@ -738,6 +742,15 @@ const ElectricalEquipment = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -777,6 +790,8 @@ const mapDispatchToProps = (dispatch) => ({
     supervisorSignature,
     date,
     dynamicInput,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -789,6 +804,8 @@ const mapDispatchToProps = (dispatch) => ({
         supervisorSignature,
         date,
         dynamicInput,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

@@ -33,6 +33,7 @@ const TBTForm = (props) => {
     comments,
     jobSummary,
     signature,
+    projectComment,
   } = data;
   const [openData, setOpenDate] = React.useState({ bool: false, index: -1 });
 
@@ -415,6 +416,16 @@ const TBTForm = (props) => {
           </TouchableOpacity>
         )}
       </View>
+      <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => onChangeData("projectComment",e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+
+                  </View>
     </>
   );
 };

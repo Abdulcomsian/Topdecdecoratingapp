@@ -126,7 +126,7 @@ const AccurateDayWork = (props) => {
   const showDatepicker = () => {
     setShow(true);
   };
-
+  const [projectComment, setProjectComment] = useState("");
   const workSheetInsert = async () => {
     try {
       if (
@@ -141,7 +141,9 @@ const AccurateDayWork = (props) => {
         position != "" &&
         date &&
         jobID != "" &&
-        tabId != ""
+        tabId != "" &&
+        projectImages !="" &&
+        projectComment !=""
       ) {
         await props.createWorkSheetHandler(
           mainContructor,
@@ -159,6 +161,8 @@ const AccurateDayWork = (props) => {
           managerSignature,
           position,
           date,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -982,6 +986,16 @@ const AccurateDayWork = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -1031,6 +1045,8 @@ const mapDispatchToProps = (dispatch) => ({
     managerSignature,
     position,
     date,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -1053,6 +1069,8 @@ const mapDispatchToProps = (dispatch) => ({
         managerSignature,
         position,
         date,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

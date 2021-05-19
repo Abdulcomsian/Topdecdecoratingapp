@@ -84,6 +84,7 @@ const CleanUp = (props) => {
     setShowSupervisor(false);
     setDateSupervisor(new Date(currentDate).toLocaleDateString());
   };
+  const [projectComment, setProjectComment] = useState("");
   const cleanUpFormInsert = async () => {
     // console.log("Name Of Contractor :", contractorName);
     // console.log("Project Name :", projectName);
@@ -100,7 +101,9 @@ const CleanUp = (props) => {
         date != "" &&
         dynamicInput != "" &&
         supervisorSignature !== "" &&
-        dateSupervisor !== ""
+        dateSupervisor !== "" &&
+        projectImages != "" &&
+        projectComment != ""
       ) {
         await props.createCleanUpHandler(
           contractorName,
@@ -110,6 +113,8 @@ const CleanUp = (props) => {
           dynamicInput,
           supervisorSignature,
           dateSupervisor,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token,
@@ -227,7 +232,7 @@ const CleanUp = (props) => {
           />
         </View>
       ) : (
-        <View>
+        <View style={{flex:1}}>
           <DateTimePicker
             isVisible={showDate}
             testID="dateTimePicker"
@@ -540,6 +545,15 @@ const CleanUp = (props) => {
                       </TouchableOpacity>
                     )}
                   </View>
+                  <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+                  </View>
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -581,6 +595,8 @@ const mapDispatchToProps = (dispatch) => ({
     dynamicInput,
     supervisorSignature,
     dateSupervisor,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token,
@@ -595,6 +611,8 @@ const mapDispatchToProps = (dispatch) => ({
         dynamicInput,
         supervisorSignature,
         dateSupervisor,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token,

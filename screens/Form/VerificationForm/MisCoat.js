@@ -48,14 +48,17 @@ const MistCoat = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
+  const [projectComment, setProjectComment] = useState("");
   const mistCoatFormInsert = async () => {
     try {
-      if (dynamicInput != "" && mainContructor != "" && projectName != "") {
+      if (dynamicInput != "" && mainContructor != "" && projectName != "" && projectImages!="" && projectComment !="") {
         console.log(dynamicInput);
         await props.createMisCoatHandler(
           mainContructor,
           projectName,
           dynamicInput,
+          projectImages,
+          projectComment,
           jobID,
           tabId,
           token
@@ -180,7 +183,7 @@ const MistCoat = (props) => {
             />
           </View>
         ) : (
-          <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+          <View style={{ paddingLeft: 20, paddingRight: 20, flex:1 }}>
             <DateTimePickerModal
               isVisible={show.isVisible}
               date={date ? date : new Date()}
@@ -427,6 +430,16 @@ const MistCoat = (props) => {
                         </TouchableOpacity>
                       )}
                     </View>
+                    <View style={styles.inputFieldContainer}>
+                    <TextInput
+                      value={projectComment}
+                      onChangeText={(e) => setProjectComment(e)}
+                      style={styles.inputField}
+                      multiline={true}
+                      placeholder={"Project Images Comments"}
+                    />
+
+                  </View>
                     <View
                       style={{
                         backgroundColor: "#000",
@@ -465,6 +478,8 @@ const mapDispatchToProps = (dispatch) => ({
     mainContructor,
     projectName,
     dynamicInput,
+    projectImages,
+    projectComment,
     jobID,
     tabId,
     token
@@ -474,6 +489,8 @@ const mapDispatchToProps = (dispatch) => ({
         mainContructor,
         projectName,
         dynamicInput,
+        projectImages,
+        projectComment,
         jobID,
         tabId,
         token
