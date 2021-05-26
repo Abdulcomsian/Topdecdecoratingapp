@@ -51,21 +51,27 @@ const MistCoat = (props) => {
   const [projectComment, setProjectComment] = useState("");
   const mistCoatFormInsert = async () => {
     try {
-      if (dynamicInput != "" && mainContructor != "" && projectName != "" && projectImages!="" && projectComment !="") {
+      if (
+        dynamicInput != "" &&
+        mainContructor != "" &&
+        projectName != "" &&
+        projectImagesComment != "" &&
+        commentImages != ""
+      ) {
         console.log(dynamicInput);
         await props.createMisCoatHandler(
           mainContructor,
           projectName,
           dynamicInput,
-          projectImages,
-          projectComment,
+          projectImagesComment,
+          commentImages,
           jobID,
           tabId,
           token
         );
         //props.updateVerificationReport(props?.route?.params?.index);
         alert("MisCoat Insert SuccessFully !");
-        props.navigation.pop();
+        // props.navigation.pop();
       } else {
         alert("Please Insert All Fields CareFully !");
         return false;
@@ -92,6 +98,9 @@ const MistCoat = (props) => {
     copyArr[show.index].start = currentDate.toLocaleDateString();
     setdynamicInput(copyArr);
   };
+  const [signature, setSignature] = useState({
+    index: -1,
+  });
 
   const onCompleteChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -111,14 +120,17 @@ const MistCoat = (props) => {
   const [isShow, setIsShow] = useState(false);
 
   const onDone = (data) => {
-    setProjectImages(data);
+    let copydata = [...projectImagesComment];
+    copydata[signature.index].image = data[0].uri;
+    setProjectImagesComment([...copydata]);
+    setSignature({ ...signature, index: -1 });
     setIsShow(false);
   };
 
   const goBack = () => {
     setIsShow(false);
   };
-  const uploadPhotoImage = async () => {
+  const uploadPhotoImage = async (index) => {
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -126,6 +138,7 @@ const MistCoat = (props) => {
       alert("Permission to access camera roll is required!");
       return;
     }
+    setSignature({ ...signature, index: index });
     setIsShow(true);
   };
   // console.log("Pick Project :",projectImages)
@@ -136,7 +149,24 @@ const MistCoat = (props) => {
     backgroundColor: "#1073AC",
     borderRadius: 5,
   };
-  console.log("Project Iamges :", projectImages);
+  const [projectImagesComment, setProjectImagesComment] = useState([]);
+  const [commentImages, setCommentImages] = useState([]);
+  const addImagesCommentRow = () => {
+    setProjectImagesComment((oldArray) => [
+      ...oldArray,
+      { image: "", comment: "" },
+    ]);
+  };
+  const updateProjectCommentValue = (key, index, value) => {
+    let preData = [...projectImagesComment];
+    preData[index][key] = value;
+    setProjectImagesComment([...preData]);
+
+    let commentData = preData.map((item, index) => {
+      return { comment: item.comment };
+    });
+    setCommentImages(commentData);
+  };
   return (
     <ScrollView style={{ height: "100%" }}>
       <View style={styles.mainContainer}>
@@ -145,7 +175,7 @@ const MistCoat = (props) => {
             <AssetsSelector
               options={{
                 assetsType: ["photo", "video"],
-                maxSelections: 3,
+                maxSelections: 1,
                 margin: 2,
                 portraitCols: 4,
                 landscapeCols: 5,
@@ -183,7 +213,7 @@ const MistCoat = (props) => {
             />
           </View>
         ) : (
-          <View style={{ paddingLeft: 20, paddingRight: 20, flex:1 }}>
+          <View style={{ paddingLeft: 20, paddingRight: 20, flex: 1 }}>
             <DateTimePickerModal
               isVisible={show.isVisible}
               date={date ? date : new Date()}
@@ -406,40 +436,113 @@ const MistCoat = (props) => {
                       >
                         Project Images
                       </Text>
-                      {projectImages != "" ? (
-                        <View style={{ flexDirection: "row" }}>
-                          {/* <Text>Hello</Text> */}
-                          {projectImages.map((item, index) => (
-                            <Image
-                              style={{ width: 50, height: 50, marginRight: 10 }}
-                              source={{ uri: item.uri }}
-                              key={index}
-                            />
-                          ))}
+                      <View
+                        style={[
+                          styles.tableViewContainer,
+                          { paddingLeft: 0, paddingRight: 0 },
+                        ]}
+                      >
+                        <View style={styles.tableHeader}>
+                          <View style={{ width: "50%" }}>
+                            <Text style={styles.headerTitle}>Image</Text>
+                          </View>
+                          <View style={{ width: "50%" }}>
+                            <Text style={styles.headerTitle}>Comment</Text>
+                          </View>
                         </View>
-                      ) : (
+                      </View>
+                      <View
+                        style={{
+                          width: "100%",
+                          justifyContent: "flex-end",
+                          alignItems: "flex-end",
+                          marginRight: 50,
+                          marginTop: 20,
+                        }}
+                      >
                         <TouchableOpacity
-                          style={[
-                            styles.button,
-                            styles.buttonOpen,
-                            { width: "100%" },
-                          ]}
-                          onPress={() => uploadPhotoImage()}
+                          style={[styles.addBtn]}
+                          onPress={() => {
+                            if (
+                              projectImagesComment.length > 0 &&
+                              !projectImagesComment[
+                                projectImagesComment.length - 1
+                              ].image &&
+                              !projectImagesComment[
+                                projectImagesComment.length - 1
+                              ].comment
+                            ) {
+                              alert(
+                                "Please Enter All Value and then move to next Item Add !"
+                              );
+                            } else {
+                              addImagesCommentRow();
+                            }
+                          }}
                         >
-                          <Text style={styles.textStyle}>Add Images</Text>
+                          <Image style={styles.plusBtn} source={plus} />
                         </TouchableOpacity>
-                      )}
-                    </View>
-                    <View style={styles.inputFieldContainer}>
-                    <TextInput
-                      value={projectComment}
-                      onChangeText={(e) => setProjectComment(e)}
-                      style={styles.inputField}
-                      multiline={true}
-                      placeholder={"Project Images Comments"}
-                    />
+                      </View>
+                      <View style={{ flexDirection: "column" }}>
+                        {projectImagesComment.length > 0 &&
+                          projectImagesComment.map((el, index) => (
+                            <View
+                              style={[styles.tableBody, { marginBottom: 20 }]}
+                              key={index}
+                            >
+                              {el.image != "" ? (
+                                <View
+                                  style={{
+                                    width: "50%",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Image
+                                    style={{
+                                      width: 50,
+                                      height: 50,
+                                      marginRight: 10,
+                                    }}
+                                    source={{ uri: el.image }}
+                                    key={index}
+                                  />
+                                </View>
+                              ) : (
+                                <View style={{ width: "50%" }}>
+                                  <TouchableOpacity
+                                    style={[
+                                      styles.button,
+                                      styles.buttonOpen,
+                                      { width: "90%" },
+                                    ]}
+                                    onPress={() => uploadPhotoImage(index)}
+                                  >
+                                    <Text style={styles.textStyle}>
+                                      Add Image
+                                    </Text>
+                                  </TouchableOpacity>
+                                </View>
+                              )}
 
-                  </View>
+                              <View style={{ width: "50%" }}>
+                                <TextInput
+                                  value={el.comment}
+                                  onChangeText={(txt) =>
+                                    updateProjectCommentValue(
+                                      "comment",
+                                      index,
+                                      txt
+                                    )
+                                  }
+                                  style={styles.bodyTextInput}
+                                  placeholder={"Comment"}
+                                />
+                              </View>
+                            </View>
+                          ))}
+                      </View>
+                    </View>
                     <View
                       style={{
                         backgroundColor: "#000",
@@ -478,8 +581,8 @@ const mapDispatchToProps = (dispatch) => ({
     mainContructor,
     projectName,
     dynamicInput,
-    projectImages,
-    projectComment,
+    projectImagesComment,
+    commentImages,
     jobID,
     tabId,
     token
@@ -489,8 +592,8 @@ const mapDispatchToProps = (dispatch) => ({
         mainContructor,
         projectName,
         dynamicInput,
-        projectImages,
-        projectComment,
+        projectImagesComment,
+        commentImages,
         jobID,
         tabId,
         token
@@ -519,6 +622,7 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontFamily: "poppins-semiBold",
+    fontSize: 10,
   },
   titleContainer: {
     height: "5%",

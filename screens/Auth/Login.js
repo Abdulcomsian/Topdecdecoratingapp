@@ -7,7 +7,7 @@ import { useDispatch, useSelector, connect } from "react-redux";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { StackActions } from "@react-navigation/native";
 
-var logo = require("../../assets/authScreen/logo.png");
+var logo = require("../../assets/authScreen/logo.jpeg");
 var user = require("../../assets/authScreen/icon.png");
 var lock = require("../../assets/authScreen/lock.png");
 
@@ -168,6 +168,9 @@ const styles = StyleSheet.create({
   },
   logoImage: {
     justifyContent: "center",
+    width:450,
+    height:150,
+    resizeMode:"center"
   },
   formConatiner: {
     width: "100%",

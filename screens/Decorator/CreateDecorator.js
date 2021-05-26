@@ -28,7 +28,7 @@ const CreateDecorataor = (props) => {
           setEmail(email);
           console.log("Email is Correct");
           if (regPass.test(password) === false) {
-            alert("Password is Not Correct");
+            alert("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
             setPassword(password);
             return false;
           } else {
@@ -46,15 +46,13 @@ const CreateDecorataor = (props) => {
             } else{
               alert("Please CareFully Enter Details !")
             }
-
-            return true;
           }
         }
       } else {
         alert("Please Insert All Fields CareFully !");
       }
     } catch (err) {
-      alert(err.message);
+      alert(err.message)
     }
   };
   const uploadPhotoImage = async (type) => {

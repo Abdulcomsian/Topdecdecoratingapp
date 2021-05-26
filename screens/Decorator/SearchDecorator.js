@@ -13,7 +13,12 @@ const SearchDecorator = (props) =>{
     const searchDecorator = () =>{
         console.log("Search Decorator Id :",decoratorID)
         console.log("Token :",token)
-        props.searchDecoratorHandler(decoratorID,token)
+        if(decoratorID!=""){
+            navigation.navigate('DecoratorDetails',{id:decoratorID,token:token,roleID:role})
+        }
+        else{
+            alert("Please Enter Decorator Id !")
+        }
     }
     return(
         
@@ -37,12 +42,12 @@ const SearchDecorator = (props) =>{
                 </View>
             </View>
             <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorDetails',{id:decoratorID,token:token,roleID:role})}>
-                        <Text style={styles.commonText}>Search</Text>
-                    </TouchableOpacity>
-                    {/* <TouchableOpacity style={styles.commonBtn} onPress={() => searchDecorator()}>
+                    {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorDetails',{id:decoratorID,token:token,roleID:role})}>
                         <Text style={styles.commonText}>Search</Text>
                     </TouchableOpacity> */}
+                    <TouchableOpacity style={styles.commonBtn} onPress={() => searchDecorator()}>
+                        <Text style={styles.commonText}>Search</Text>
+                    </TouchableOpacity>
                 </View>
         </View>
     )

@@ -4,7 +4,7 @@ import {Text} from 'native-base';
 import { connect } from 'react-redux'
 import { resetLoginFlag } from '../Redux/action/auth/authActionTypes';
 
-var logo=require('../assets/authScreen/logo.png');
+var logo=require('../assets/authScreen/logo.jpeg');
 const SplashScreen = ( props ) =>{
     const {navigation}=props;
     // useEffect(() => {
@@ -62,7 +62,10 @@ const styles = StyleSheet.create({
         textAlign:'center',
     },
     logoImage:{
-        justifyContent:'center'
+        justifyContent:'center',
+        width:450,
+        height:150,
+        resizeMode:"center"
     },
     mainBannerText:{
         fontSize:25,

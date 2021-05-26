@@ -11,6 +11,11 @@ button: {
     padding: 10,
     elevation: 2,
   },
+  bannerImage:{
+      resizeMode:"center",
+      width:450,
+      height:150
+  },
   buttonOpen: {
     backgroundColor: "#1073AC",
   },
@@ -21,6 +26,7 @@ button: {
     color: "white",
     textAlign: "center",
     fontFamily: "poppins-semiBold",
+    fontSize:10
   },
 imageView:{
     height:"25%",

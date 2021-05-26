@@ -231,6 +231,7 @@ const QualityInssurance = (props) => {
   const [bscsSign, setBscsSign] = useState("");
   const [siteManagerSign, setSiteManagerSign] = useState("");
   const [activitySign, setActivitySign] = useState("");
+  const [overallComment, setOverAllComments] = useState("");
   const [projectComment, setProjectComment] = useState("");
 
   const qualityAnsuranceFormInsert = async () => {
@@ -246,8 +247,9 @@ const QualityInssurance = (props) => {
         bscsSign != "" &&
         siteManagerSign != "" &&
         activitySign != "" &&
-        projectImages!="" &&
-        projectComment !=""
+        projectImagesComment != "" &&
+        commentImages != "" &&
+        overallComment !=""
       ) {
         await props.createAnsuranceHandler(
           projectName,
@@ -260,8 +262,9 @@ const QualityInssurance = (props) => {
           bscsSign,
           siteManagerSign,
           activitySign,
-          projectImages,
-          projectComment,
+          projectImagesComment,
+          commentImages,
+          overallComment,
           jobID,
           tabId,
           token,
@@ -304,19 +307,23 @@ const QualityInssurance = (props) => {
       bool: false,
       uri: "",
     },
+    index: -1,
   });
   const [projectImages, setProjectImages] = useState([]);
   const [isShow, setIsShow] = useState(false);
 
   const onDone = (data) => {
-    setProjectImages(data);
+    let copydata = [...projectImagesComment];
+    copydata[signature.index].image = data[0].uri;
+    setProjectImagesComment([...copydata]);
+    setSignature({ ...signature, index: -1 });
     setIsShow(false);
   };
 
   const goBack = () => {
     setIsShow(false);
   };
-  const uploadPhotoImage = async () => {
+  const uploadPhotoImage = async (index) => {
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -324,6 +331,7 @@ const QualityInssurance = (props) => {
       alert("Permission to access camera roll is required!");
       return;
     }
+    setSignature({ ...signature, index: index });
     setIsShow(true);
   };
   // console.log("Pick Project :",projectImages)
@@ -334,7 +342,24 @@ const QualityInssurance = (props) => {
     backgroundColor: "#1073AC",
     borderRadius: 5,
   };
-  console.log("Project Iamges :", projectImages);
+  const [projectImagesComment, setProjectImagesComment] = useState([]);
+  const [commentImages, setCommentImages] = useState([]);
+  const addImagesCommentRow = () => {
+    setProjectImagesComment((oldArray) => [
+      ...oldArray,
+      { image: "", comment: "" },
+    ]);
+  };
+  const updateProjectCommentValue = (key, index, value) => {
+    let preData = [...projectImagesComment];
+    preData[index][key] = value;
+    setProjectImagesComment([...preData]);
+
+    let commentData = preData.map((item, index) => {
+      return { comment: item.comment };
+    });
+    setCommentImages(commentData);
+  };
   return (
     <View style={styles.mainContainer}>
       {isShow ? (
@@ -342,7 +367,7 @@ const QualityInssurance = (props) => {
           <AssetsSelector
             options={{
               assetsType: ["photo", "video"],
-              maxSelections: 3,
+              maxSelections: 1,
               margin: 2,
               portraitCols: 4,
               landscapeCols: 5,
@@ -380,7 +405,7 @@ const QualityInssurance = (props) => {
           />
         </View>
       ) : (
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <DateTimePickerModal
             isVisible={show.isVisible}
             date={date ? date : new Date()}
@@ -469,7 +494,7 @@ const QualityInssurance = (props) => {
                   Quality Assurance Inpection CheckList
                 </Text>
               </View>
-              <ScrollView style={{ width: "100%",marginBottom:80 }}>
+              <ScrollView style={{ flex: 1 }}>
                 <View style={styles.formConatiner}>
                   <View style={styles.inputFieldContainer}>
                     <TextInput
@@ -633,6 +658,14 @@ const QualityInssurance = (props) => {
                     >
                       Overall comments once all the above is completed:{" "}
                     </Text>
+                  </View>
+                  <View style={[styles.inputBodyContainer,{width:"100%"}]}>
+                    <TextInput
+                      style={[styles.bodyTextInput,{width:"100%"}]}
+                      placeholder={"Overall Comments"}
+                        value={overallComment}
+                        onChangeText={(e) => setOverAllComments(e)}
+                    />
                   </View>
                   <View style={styles.tableHeader}>
                     <View style={styles.headerCompletionTitleView}>
@@ -1024,40 +1057,131 @@ const QualityInssurance = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={{ marginTop: 10 }}>
-                    <Text style={{marginBottom:10,fontFamily: "poppins-semiBold"}}>Project Images</Text>
-                    {projectImages!="" ? (
-                      <View style={{flexDirection:"row"}}>
-                        {/* <Text>Hello</Text> */}
-                        { projectImages.map((item, index)=>(
-                          <Image style={{width:50, height:50, marginRight:10}} source={{uri:item.uri}} key={index}/>
-                        ))}
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Project Images
+                    </Text>
 
+                    <View
+                      style={[
+                        styles.tableViewContainer,
+                        { paddingLeft: 0, paddingRight: 0 },
+                      ]}
+                    >
+                      <View style={styles.tableHeader}>
+                        <View style={{ width: "50%" }}>
+                          <Text style={styles.headerTitle}>Image</Text>
+                        </View>
+                        <View style={{ width: "50%" }}>
+                          <Text style={styles.headerTitle}>Comment</Text>
+                        </View>
                       </View>
-                    ) : (
+                    </View>
+                    <View
+                      style={{
+                        width: "100%",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-end",
+                        marginRight: 50,
+                        marginTop: 20,
+                      }}
+                    >
                       <TouchableOpacity
-                        style={[styles.button, styles.buttonOpen,{width: "100%"}]}
-                        onPress={() => uploadPhotoImage()}
+                        style={[styles.addBtn]}
+                        onPress={() => {
+                          if (
+                            projectImagesComment.length > 0 &&
+                            !projectImagesComment[
+                              projectImagesComment.length - 1
+                            ].image &&
+                            !projectImagesComment[
+                              projectImagesComment.length - 1
+                            ].comment
+                          ) {
+                            alert(
+                              "Please Enter All Value and then move to next Item Add !"
+                            );
+                          } else {
+                            addImagesCommentRow();
+                          }
+                        }}
                       >
-                        <Text style={styles.textStyle}>Add Images</Text>
+                        <Image style={styles.plusBtn} source={plus} />
                       </TouchableOpacity>
-                    )}
-                  </View>
-                  <View style={styles.inputFieldContainer}>
-                    <TextInput
-                      value={projectComment}
-                      onChangeText={(e) => setProjectComment(e)}
-                      style={styles.inputField}
-                      multiline={true}
-                      placeholder={"Project Images Comments"}
-                    />
+                    </View>
+                    <View style={{ flexDirection: "column" }}>
+                      {projectImagesComment.length > 0 &&
+                        projectImagesComment.map((el, index) => (
+                          <View
+                            style={[
+                              styles.tableBody,
+                              { marginBottom: 20, marginLeft: 0 },
+                            ]}
+                            key={index}
+                          >
+                            {el.image != "" ? (
+                              <View
+                                style={{
+                                  width: "50%",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Image
+                                  style={{
+                                    width: 50,
+                                    height: 50,
+                                    marginRight: 10,
+                                  }}
+                                  source={{ uri: el.image }}
+                                  key={index}
+                                />
+                              </View>
+                            ) : (
+                              <View style={{ width: "50%" }}>
+                                <TouchableOpacity
+                                  style={[
+                                    styles.button,
+                                    styles.buttonOpen,
+                                    { width: "90%" },
+                                  ]}
+                                  onPress={() => uploadPhotoImage(index)}
+                                >
+                                  <Text style={styles.textStyle}>
+                                    Add Image
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                            )}
 
+                            <View style={{ width: "50%" }}>
+                              <TextInput
+                                value={el.comment}
+                                onChangeText={(txt) =>
+                                  updateProjectCommentValue(
+                                    "comment",
+                                    index,
+                                    txt
+                                  )
+                                }
+                                style={styles.bodyTextInput}
+                                placeholder={"Comment"}
+                              />
+                            </View>
+                          </View>
+                        ))}
+                    </View>
                   </View>
                   <View
                     style={{
                       backgroundColor: "#000",
                       width: "100%",
                       height: ".1%",
-                      marginTop: 10
+                      marginTop: 10,
                     }}
                   ></View>
                   <View style={styles.btnContainer}>
@@ -1095,8 +1219,9 @@ const mapDispatchToProps = (dispatch) => ({
     bscsSign,
     siteManagerSign,
     activitySign,
-    projectImages,
-    projectComment,
+    projectImagesComment,
+    commentImages,
+    overallComment,
     jobID,
     tabId,
     token,
@@ -1114,8 +1239,9 @@ const mapDispatchToProps = (dispatch) => ({
         bscsSign,
         siteManagerSign,
         activitySign,
-        projectImages,
-        projectComment,
+        projectImagesComment,
+        commentImages,
+        overallComment,
         jobID,
         tabId,
         token,
@@ -1144,6 +1270,7 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontFamily: "poppins-semiBold",
+    fontSize: 10,
   },
   titleContainer: {
     height: "5%",
@@ -1161,10 +1288,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   formConatiner: {
-    height: "5%",
     paddingRight: 20,
     paddingLeft: 20,
-    marginTop: 30,
   },
   inputFieldContainer: {
     width: "100%",
@@ -1190,7 +1315,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 30,
     borderWidth: 1,
-    height: "2%",
+    height: 30,
     marginBottom: 10,
   },
   tableActivityHeader: {
@@ -1267,7 +1392,6 @@ const styles = StyleSheet.create({
   tableViewContainer: {
     paddingLeft: 20,
     paddingRight: 20,
-    height: "80%",
     width: "100%",
   },
   keyActivityDiv: {
@@ -1300,8 +1424,7 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     width: "100%",
-    height: "15%",
-    marginBottom: 80,
+    marginBottom: 20,
     marginTop: 20,
   },
   commonBtn: {

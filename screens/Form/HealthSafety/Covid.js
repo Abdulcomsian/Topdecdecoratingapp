@@ -17,7 +17,7 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
 
-var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
+var mainImage = require("../../../assets/authScreen/logo.jpeg");
 var plus = require("../../../assets/authScreen/plus.png");
 const Covid = (props) => {
   const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
@@ -97,9 +97,13 @@ const Covid = (props) => {
     date: null,
     comments: "",
     tbtSign: "",
-    projectImages: [],
+    projectImagesComment: [],
     projectComment: "",
+    commentImages: [],
     jobSummary: [],
+  });
+  const [signature, setSignature] = useState({
+    index: -1,
   });
   const tbtFormInsert = async () => {
     try {
@@ -132,14 +136,21 @@ const Covid = (props) => {
   const [isShow, setIsShow] = useState(false);
 
   const onDone = (dataImage) => {
-    setData({ ...data, projectImages: dataImage });
+    let copydata = [...data.projectImagesComment];
+    copydata[signature.index].image = dataImage[0].uri;
+    console.log(copydata)
+    setData({
+      ...data,
+      projectImagesComment: [...copydata],
+    });
+    setSignature({ ...signature, index: -1 });
     setIsShow(false);
   };
 
   const goBack = () => {
     setIsShow(false);
   };
-  const uploadPhotoImage = async () => {
+  const uploadPhotoImage = async (index) => {
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -147,6 +158,7 @@ const Covid = (props) => {
       alert("Permission to access camera roll is required!");
       return;
     }
+    setSignature({ ...signature, index: index });
     setIsShow(true);
   };
   // console.log("Pick Project :",projectImages)
@@ -165,7 +177,7 @@ const Covid = (props) => {
           <AssetsSelector
             options={{
               assetsType: ["photo", "video"],
-              maxSelections: 3,
+              maxSelections: 1,
               margin: 2,
               portraitCols: 4,
               landscapeCols: 5,
@@ -315,6 +327,34 @@ const Covid = (props) => {
                         ],
                       })
                     }
+                    addImagesCommentRow={() =>
+                      setData({
+                        ...data,
+                        projectImagesComment: [
+                          ...data.projectImagesComment,
+                          { image: "", comment: "" },
+                        ],
+                      })
+                    }
+                    onCommentChange={(key, value, index = -1) => {
+                      if (index >= 0) {
+                        let preData = [...data.projectImagesComment];
+                        preData[index][key] = value;
+                        setData({
+                          ...data,
+                          projectImagesComment: [...preData],
+                        });
+                        let commentData = preData.map((item, index) => {
+                          return { comment: item.comment };
+                        });
+                        setData({
+                          ...data,
+                          commentImages: [...commentData],
+                        });
+                      } else {
+                        setData({ ...data, [key]: value });
+                      }
+                    }}
                     onChangeData={(key, value, index = -1) => {
                       if (index >= 0) {
                         let copyAttendance = [...data.jobSummary];
@@ -324,7 +364,7 @@ const Covid = (props) => {
                         setData({ ...data, [key]: value });
                       }
                     }}
-                    projectImage={() => uploadPhotoImage()}
+                    projectImageUpload={(index) => uploadPhotoImage(index)}
                   />
                   <Text
                     style={{

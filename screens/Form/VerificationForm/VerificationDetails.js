@@ -59,9 +59,7 @@ const VerificationDetails = (props) => {
   };
 
   const [miscotArray, setMiscotArray] = useState(verificationMiscoatInfo);
-  const [decorationArray, setDecorationArray] = useState(
-    verificationDecorationInfo
-  );
+  const [decorationArray, setDecorationArray] = useState(verificationDecorationInfo);
   const [snagArray, setSnagArray] = useState(verificationSngInfo);
 
   const checkedForm = (index, type) => {
@@ -153,6 +151,25 @@ const VerificationDetails = (props) => {
           }
           else{
             alert("Email Send SuccessFully !")
+
+            const updateArray=[...miscotArray];
+            miscotArray.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setMiscotArray(updateArray)
+
+            const updateDecorationArray=[...decorationArray];
+            decorationArray.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setDecorationArray(updateDecorationArray)
+            
+            const updateSnagArray=[...snagArray];
+            snagArray.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setSnagArray(updateSnagArray)
+            setJobSummary([])
           }
         })();
       }

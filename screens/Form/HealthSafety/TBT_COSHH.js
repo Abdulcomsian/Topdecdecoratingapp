@@ -17,8 +17,7 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
 
-
-var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
+var mainImage = require("../../../assets/authScreen/logo.jpeg");
 var plus = require("../../../assets/authScreen/plus.png");
 const TBTCOSHH = (props) => {
   const { navigation, token, isOnSite, isSuccessMsg, isJobId } = props;
@@ -106,8 +105,9 @@ const TBTCOSHH = (props) => {
     date: null,
     comments: "",
     tbtSign: "",
-    projectImages: [],
-    projectComment:"",
+    projectImagesComment: [],
+    projectComment: "",
+    commentImages: [],
     jobSummary: [],
   });
   const tbtFormInsert = async () => {
@@ -144,17 +144,29 @@ const TBTCOSHH = (props) => {
       alert(err.message);
     }
   };
+  const [signature, setSignature] = useState({
+    index: -1,
+  });
   const [isShow, setIsShow] = useState(false);
 
-  const onDone = (dataImage) => {
-    setData({ ...data, projectImages: dataImage });
+  const onDone = (dataIamge) => {
+    // console.log(data)
+    let copydata = [...data.projectImagesComment];
+    copydata[signature.index].image = dataIamge[0].uri;
+    console.log(copydata)
+    setData({
+      ...data,
+      projectImagesComment: [...copydata],
+    });
+    setSignature({ ...signature, index: -1 });
     setIsShow(false);
   };
 
   const goBack = () => {
     setIsShow(false);
   };
-  const uploadPhotoImage = async () => {
+  const uploadPhotoImage = async (index) => {
+    console.log("here", index);
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -162,6 +174,7 @@ const TBTCOSHH = (props) => {
       alert("Permission to access camera roll is required!");
       return;
     }
+    setSignature({ ...signature, index: index });
     setIsShow(true);
   };
   // console.log("Pick Project :",projectImages)
@@ -172,7 +185,6 @@ const TBTCOSHH = (props) => {
     backgroundColor: "#1073AC",
     borderRadius: 5,
   };
-  console.log("Project Iamges :", data.projectImages);
   return (
     <View style={styles.mainContainer}>
       {isShow ? (
@@ -180,7 +192,7 @@ const TBTCOSHH = (props) => {
           <AssetsSelector
             options={{
               assetsType: ["photo", "video"],
-              maxSelections: 3,
+              maxSelections: 1,
               margin: 2,
               portraitCols: 4,
               landscapeCols: 5,
@@ -325,6 +337,34 @@ const TBTCOSHH = (props) => {
                         ],
                       })
                     }
+                    addImagesCommentRow={() =>
+                      setData({
+                        ...data,
+                        projectImagesComment: [
+                          ...data.projectImagesComment,
+                          { image: "", comment: "" },
+                        ],
+                      })
+                    }
+                    onCommentChange={(key, value, index = -1) => {
+                      if (index >= 0) {
+                        let preData = [...data.projectImagesComment];
+                        preData[index][key] = value;
+                        setData({
+                          ...data,
+                          projectImagesComment: [...preData],
+                        });
+                        let commentData = preData.map((item, index) => {
+                          return { comment: item.comment };
+                        });
+                        setData({
+                          ...data,
+                          commentImages: [...commentData],
+                        });
+                      } else {
+                        setData({ ...data, [key]: value });
+                      }
+                    }}
                     onChangeData={(key, value, index = -1) => {
                       if (index >= 0) {
                         let copyAttendance = [...data.jobSummary];
@@ -334,7 +374,7 @@ const TBTCOSHH = (props) => {
                         setData({ ...data, [key]: value });
                       }
                     }}
-                    projectImage={()=>uploadPhotoImage()}
+                    projectImageUpload={(index) => uploadPhotoImage(index)}
                   />
                   <Text
                     style={{

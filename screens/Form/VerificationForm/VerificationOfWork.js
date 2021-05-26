@@ -57,16 +57,16 @@ const VerificationOfWork = (props) => {
         projectName != "" &&
         idRef != "" &&
         decoratorName != "" &&
-        projectImages != "" &&
-        projectComment != ""
+        projectImagesComment != "" &&
+        commentImages != ""
       ) {
         await props.createVerificationWorkHandler(
           projectName,
           idRef,
           decoratorName,
           dynamicInput,
-          projectImages,
-          projectComment,
+          projectImagesComment,
+          commentImages,
           jobID,
           tabId,
           token
@@ -86,6 +86,9 @@ const VerificationOfWork = (props) => {
     isVisible: false,
     index: -1,
   });
+  const [signature, setSignature] = useState({
+    index: -1,
+  });
   const [date, setDate] = useState(new Date(1598051730000));
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -101,14 +104,17 @@ const VerificationOfWork = (props) => {
   const [isShow, setIsShow] = useState(false);
 
   const onDone = (data) => {
-    setProjectImages(data);
+    let copydata = [...projectImagesComment];
+    copydata[signature.index].image = data[0].uri;
+    setProjectImagesComment([...copydata]);
+    setSignature({ ...signature, index: -1 });
     setIsShow(false);
   };
 
   const goBack = () => {
     setIsShow(false);
   };
-  const uploadPhotoImage = async () => {
+  const uploadPhotoImage = async (index) => {
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -116,6 +122,7 @@ const VerificationOfWork = (props) => {
       alert("Permission to access camera roll is required!");
       return;
     }
+    setSignature({ ...signature, index: index });
     setIsShow(true);
   };
   // console.log("Pick Project :",projectImages)
@@ -126,7 +133,24 @@ const VerificationOfWork = (props) => {
     backgroundColor: "#1073AC",
     borderRadius: 5,
   };
-  console.log("Project Iamges :", projectImages);
+  const [projectImagesComment, setProjectImagesComment] = useState([]);
+  const [commentImages, setCommentImages] = useState([]);
+  const addImagesCommentRow = () => {
+    setProjectImagesComment((oldArray) => [
+      ...oldArray,
+      { image: "", comment: "" },
+    ]);
+  };
+  const updateProjectCommentValue = (key, index, value) => {
+    let preData = [...projectImagesComment];
+    preData[index][key] = value;
+    setProjectImagesComment([...preData]);
+
+    let commentData = preData.map((item, index) => {
+      return { comment: item.comment };
+    });
+    setCommentImages(commentData);
+  };
   return (
     <View style={[styles.mainContainer]}>
       {isShow ? (
@@ -134,7 +158,7 @@ const VerificationOfWork = (props) => {
           <AssetsSelector
             options={{
               assetsType: ["photo", "video"],
-              maxSelections: 3,
+              maxSelections: 1,
               margin: 2,
               portraitCols: 4,
               landscapeCols: 5,
@@ -172,7 +196,9 @@ const VerificationOfWork = (props) => {
           />
         </View>
       ) : (
-        <View style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 50 }}>
+        <View
+          style={{ paddingLeft: 20, paddingRight: 20, paddingTop: 50, flex: 1 }}
+        >
           <DateTimePickerModal
             isVisible={show.isVisible}
             testID="dateTimePicker"
@@ -396,38 +422,104 @@ const VerificationOfWork = (props) => {
                 >
                   Project Images
                 </Text>
-                {projectImages != "" ? (
-                  <View style={{ flexDirection: "row" }}>
-                    {/* <Text>Hello</Text> */}
-                    {projectImages.map((item, index) => (
-                      <Image
-                        style={{ width: 50, height: 50, marginRight: 10 }}
-                        source={{ uri: item.uri }}
-                        key={index}
-                      />
-                    ))}
+                <View
+                  style={[
+                    styles.tableViewContainer,
+                    { paddingLeft: 0, paddingRight: 0 },
+                  ]}
+                >
+                  <View style={styles.tableHeader}>
+                    <View style={{ width: "50%" }}>
+                      <Text style={styles.headerTitle}>Image</Text>
+                    </View>
+                    <View style={{ width: "50%" }}>
+                      <Text style={styles.headerTitle}>Comment</Text>
+                    </View>
                   </View>
-                ) : (
+                </View>
+                <View
+                  style={{
+                    width: "100%",
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                    marginRight: 50,
+                    marginTop: 20,
+                  }}
+                >
                   <TouchableOpacity
-                    style={[
-                      styles.button,
-                      styles.buttonOpen,
-                      { width: "100%" },
-                    ]}
-                    onPress={() => uploadPhotoImage()}
+                    style={[styles.addBtn]}
+                    onPress={() => {
+                      if (
+                        projectImagesComment.length > 0 &&
+                        !projectImagesComment[projectImagesComment.length - 1]
+                          .image &&
+                        !projectImagesComment[projectImagesComment.length - 1]
+                          .comment
+                      ) {
+                        alert(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addImagesCommentRow();
+                      }
+                    }}
                   >
-                    <Text style={styles.textStyle}>Add Images</Text>
+                    <Image style={styles.plusBtn} source={plus} />
                   </TouchableOpacity>
-                )}
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput
-                  value={projectComment}
-                  onChangeText={(e) => setProjectComment(e)}
-                  style={styles.inputField}
-                  multiline={true}
-                  placeholder={"Project Images Comments"}
-                />
+                </View>
+                <View style={{ flexDirection: "column" }}>
+                  {projectImagesComment.length > 0 &&
+                    projectImagesComment.map((el, index) => (
+                      <View
+                        style={[styles.tableBody, { marginBottom: 20 }]}
+                        key={index}
+                      >
+                        {el.image != "" ? (
+                          <View
+                            style={{
+                              width: "50%",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Image
+                              style={{
+                                width: 50,
+                                height: 50,
+                                marginRight: 10,
+                              }}
+                              source={{ uri: el.image }}
+                              key={index}
+                            />
+                          </View>
+                        ) : (
+                          <View style={{ width: "50%" }}>
+                            <TouchableOpacity
+                              style={[
+                                styles.button,
+                                styles.buttonOpen,
+                                { width: "90%" },
+                              ]}
+                              onPress={() => uploadPhotoImage(index)}
+                            >
+                              <Text style={styles.textStyle}>Add Image</Text>
+                            </TouchableOpacity>
+                          </View>
+                        )}
+
+                        <View style={{ width: "50%" }}>
+                          <TextInput
+                            value={el.comment}
+                            onChangeText={(txt) =>
+                              updateProjectCommentValue("comment", index, txt)
+                            }
+                            style={styles.bodyTextInput}
+                            placeholder={"Comment"}
+                          />
+                        </View>
+                      </View>
+                    ))}
+                </View>
               </View>
               <View
                 style={{
@@ -465,8 +557,8 @@ const mapDispatchToProps = (dispatch) => ({
     idRef,
     decoratorName,
     dynamicInput,
-    projectImages,
-    projectComment,
+    projectImagesComment,
+    commentImages,
     jobID,
     tabId,
     token
@@ -477,8 +569,8 @@ const mapDispatchToProps = (dispatch) => ({
         idRef,
         decoratorName,
         dynamicInput,
-        projectImages,
-        projectComment,
+        projectImagesComment,
+        commentImages,
         jobID,
         tabId,
         token

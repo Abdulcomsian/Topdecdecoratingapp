@@ -27,7 +27,7 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Remedial Wrok Sheet",
+      text: "Remedial Work Sheet",
       chekecd: false,
       url: "RemedialWork",
     },

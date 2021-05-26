@@ -11,10 +11,7 @@ var plus = require("../../assets/authScreen/plus.png");
 const NewJob = (props) => {
   const { navigation, isJobId, isJob, isJobMsg } = props;
   const [token, setToken] = useState(props.token);
-  const [data, setData] = useState({
-    qty: "",
-    description: "",
-  });
+  const [data, setData] = useState([]);
   const [constructorName, setConstructorName] = useState("");
   const [projectName, setProjectName] = useState("");
   const [weekProject, setWeekProject] = useState("");
@@ -46,6 +43,7 @@ const NewJob = (props) => {
       } else {
         alert("Please Enter All Missing Fields CareFully !");
       }
+     
     } catch (err) {
       alert(err.message);
     }
@@ -162,10 +160,10 @@ const NewJob = (props) => {
                 }}
                 selectedValue={selectedValue}
                 onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
-                <Picker.Item style={{ fontFamily: "poppins-regular" }} label='Select Supervisor ID' value='Select Supervisor ID' />
+                <Picker.Item style={{ fontFamily: "poppins-regular" }} label='Select Supervisor Name' value='Select Supervisor Name' />
                 {supervisorData &&
                   supervisorData.map((item) => (
-                    <Picker.Item style={{ fontFamily: "poppins-regular" }} label={item.id.toString()} value={item?.id.toString()} />
+                    <Picker.Item style={{ fontFamily: "poppins-regular" }} label={item.name.toString()} value={item?.id.toString()} />
                   ))}
               </Picker>
             </View>
@@ -186,6 +184,23 @@ const NewJob = (props) => {
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>Job Summary</Text>
             </View>
+            <View style={{width:"100%",justifyContent:"flex-end", alignItems:"flex-end"}}>
+                <TouchableOpacity style={styles.addBtn} onPress={() => {
+                        if (
+                          dynamicInput.length > 0 &&
+                          !dynamicInput[dynamicInput.length - 1].qty &&
+                          !dynamicInput[dynamicInput.length - 1].description
+                        ) {
+                          alert(
+                            "Please Enter All Value and then move to next Item Add !"
+                          );
+                        } else {
+                          addInput();
+                        }
+                      }}>
+                  <Image style={styles.plusBtn} source={plus} />
+                </TouchableOpacity>
+              </View>
             {dynamicInput.length > 0 && (
               <View style={[styles.dynamicInput, { flexDirection: "column" }]}>
                 {dynamicInput.map((el, index) => (
@@ -206,29 +221,7 @@ const NewJob = (props) => {
                 ))}
               </View>
             )}
-            <View style={styles.dynamicInput}>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  onChangeText={(txt) => setData({ ...data, qty: txt.replace(/[^0-9]/g, "") })}
-                  style={styles.quantityInput}
-                  placeholder={"Quantity"}
-                  value={data.qty}
-                />
-                <TextInput
-                  onChangeText={(txt) => setData({ ...data, description: txt })}
-                  style={styles.descriptionInput}
-                  placeholder={"Description"}
-                  value={data.description}
-                />
-              </View>
-
-              <View style={styles.addBtn}>
-                <TouchableOpacity onPress={() => addInput()}>
-                  <Image style={styles.plusBtn} source={plus} />
-                </TouchableOpacity>
-              </View>
-            </View>
-
+            
             <View style={styles.btnContainer}>
               {/* <TouchableOpacity
                 style={styles.commonBtn}
@@ -315,10 +308,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
-    width: "80%",
+    width: "100%",
   },
   quantityInput: {
-    width: "30%",
+    width: "50%",
     height: 52,
     borderBottomWidth: 1,
     borderBottomColor: "#96A8B2",
@@ -337,24 +330,21 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-regular",
   },
   addBtn: {
-    width: "20%",
-    justifyContent: "center",
-    alignItems: "center",
+    width: "15%",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
     position: "relative",
+    backgroundColor: "#F6F9FB",
+    borderWidth: 1,
+    borderColor: "#E2ECF2",
+    padding: 15,
+    borderRadius: 14,
   },
   dynamicInput: {
     width: "100%",
     flexDirection: "row",
     marginTop: 30,
     position: "relative",
-  },
-  addBtn: {
-    justifyContent: "center",
-    backgroundColor: "#F6F9FB",
-    borderWidth: 1,
-    borderColor: "#E2ECF2",
-    padding: 15,
-    borderRadius: 14,
   },
   plusBtn: {
     width: 18,

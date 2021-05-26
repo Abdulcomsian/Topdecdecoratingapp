@@ -47,13 +47,14 @@ const SearchJob = (props) => {
         //props.searchJobHandler(refID,date,token)
         setDate(new Date());
       }
-    } else {
-      if (changeDate) {
+    } else if(changeDate){
         console.log("Just Date");
         setBasedText("Just Date");
         props.navigation.navigate("AllJobs", { selectedDate: date, refernceNum: refID, basedText: basedText, token: token });
         // props.searchJobHandler(refID,date,token)
-      }
+    }
+    else{
+      alert("Please Enter Refernce ID Or Date Select !")
     }
   };
 

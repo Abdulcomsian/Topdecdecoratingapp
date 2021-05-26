@@ -157,6 +157,24 @@ const HealthSafetyDetails = (props) => {
           }
           else{
             alert("Email Send SuccessFully !")
+            const updateArray=[...miscotArray];
+            miscotArray.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setMiscotArray(updateArray)
+
+            const updateDecorationArray=[...decoration];
+            decoration.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setDecoration(updateDecorationArray)
+            
+            const updateSnagArray=[...snag];
+            snag.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setSnag(updateSnagArray)
+            setJobSummary([])
           }
         })();
       }

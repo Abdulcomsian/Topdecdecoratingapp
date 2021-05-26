@@ -746,7 +746,7 @@ function getHeaderTitle(route) {
                     backgroundColor: '#1073AC',
                     },  
                     headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
-                    headerTitle:"Wrannty Sannging"
+                    headerTitle:"Pre Warranty Snagging"
                     };
         case 'QualityInssurance':
             return { headerShown: true,

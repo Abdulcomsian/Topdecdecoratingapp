@@ -30,7 +30,7 @@ const PlotDetails = (props) => {
   } = props;
   const { plot_id, plotName } = props.route.params;
 
-  //console.log("Plot ID :",plot_id)
+  // console.log("Plot ID :",misCoat)
   const [tab, setTab] = useState({
     miscoat: true,
     decoration: false,
@@ -40,6 +40,9 @@ const PlotDetails = (props) => {
   const _ref = useRef(null);
   const [activeTab, setActiveTab] = useState("Miscoat");
   const [jobSummary, setJobSummary] = useState([]);
+  const [miscotArray, setMiscotArray] = useState(misCoat);
+  const [decoration, setDecoration] = useState(decorationArray);
+  const [snag, setSnag] = useState(snagArray);
   const selectTabManually = (tabName) => {
     if (tabName === "Miscoat") {
       _ref.current.setPage(0);
@@ -54,15 +57,19 @@ const PlotDetails = (props) => {
       setActiveTab("Sang");
     }
   };
+ 
+  let newArray;
   //updating the top tab states
   const swicthTabChecked = async (key1, key2, key3, value1, value2, value3) => {
     setTab({ ...tab, [key1]: value1, [key2]: value2, [key3]: value3 });
+    const updateArray=[...miscotArray];
+      miscotArray.map((item,index)=>{
+      updateArray[index].chekecd=false;
+      })
+    setMiscotArray(updateArray)
   };
 
-  const [miscotArray, setMiscotArray] = useState(misCoat);
-  const [decoration, setDecoration] = useState(decorationArray);
-  const [snag, setSnag] = useState(snagArray);
-
+ 
   const checkedForm = (index, type) => {
     if (type == "Miscoat") {
       const preData = [...miscotArray];
@@ -117,6 +124,7 @@ const PlotDetails = (props) => {
       }
     }
   };
+  console.log("Before Array :",miscotArray)
   React.useEffect(() => {
     setMiscotArray(misCoat);
     setDecoration(decorationArray);
@@ -129,7 +137,7 @@ const PlotDetails = (props) => {
     });
     return unsubscribe;
   }, [navigation]);
-  // console.log("Send Data :", sendData);
+  console.log("Send Data :", token);
  
   console.log("Send Mail :",jobSummary)
   const sendEmail = () =>{
@@ -155,6 +163,24 @@ const PlotDetails = (props) => {
           }
           else{
             alert("Email Send SuccessFully !")
+            const updateArray=[...miscotArray];
+            miscotArray.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setMiscotArray(updateArray)
+
+            const updateDecorationArray=[...decorationArray];
+            decorationArray.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setDecoration(updateDecorationArray)
+            
+            const updateSnagArray=[...snagArray];
+            snagArray.map((item,index)=>{
+                updateArray[index].chekecd=false;
+            })
+            setSnag(updateSnagArray)
+            setJobSummary([])
           }
         })();
       }

@@ -78,8 +78,8 @@ const Scope = (props) => {
         type != "" &&
         date != "" &&
         signature != "" &&
-        projectImages != "" &&
-        projectComment !=""
+        projectImagesComment != "" &&
+        commentImages != ""
       ) {
         await props.createScopeHandler(
           dynamicInput,
@@ -88,8 +88,8 @@ const Scope = (props) => {
           plotNumber,
           type,
           date,
-          projectImages,
-          projectComment,
+          projectImagesComment,
+          commentImages,
           jobID,
           tabId,
           token,
@@ -105,6 +105,9 @@ const Scope = (props) => {
       alert(err.message);
     }
   };
+  const [commentImageIndex, setCommentImageIndex] = useState({
+    index: -1,
+  });
   const CancelPicker = (type) => {
     setShow(false);
   };
@@ -112,14 +115,17 @@ const Scope = (props) => {
   const [isShow, setIsShow] = useState(false);
 
   const onDone = (data) => {
-    setProjectImages(data);
+    let copydata = [...projectImagesComment];
+    copydata[commentImageIndex.index].image = data[0].uri;
+    setProjectImagesComment([...copydata]);
+    setCommentImageIndex({ ...commentImageIndex, index: -1 });
     setIsShow(false);
   };
 
   const goBack = () => {
     setIsShow(false);
   };
-  const uploadPhotoImage = async () => {
+  const uploadPhotoImage = async (index) => {
     let permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -127,6 +133,7 @@ const Scope = (props) => {
       alert("Permission to access camera roll is required!");
       return;
     }
+    setCommentImageIndex({ ...commentImageIndex, index: index });
     setIsShow(true);
   };
   // console.log("Pick Project :",projectImages)
@@ -137,7 +144,24 @@ const Scope = (props) => {
     backgroundColor: "#1073AC",
     borderRadius: 5,
   };
-  console.log("Project Iamges :", projectImages);
+  const [projectImagesComment, setProjectImagesComment] = useState([]);
+  const [commentImages, setCommentImages] = useState([]);
+  const addImagesCommentRow = () => {
+    setProjectImagesComment((oldArray) => [
+      ...oldArray,
+      { image: "", comment: "" },
+    ]);
+  };
+  const updateProjectCommentValue = (key, index, value) => {
+    let preData = [...projectImagesComment];
+    preData[index][key] = value;
+    setProjectImagesComment([...preData]);
+
+    let commentData = preData.map((item, index) => {
+      return { comment: item.comment };
+    });
+    setCommentImages(commentData);
+  };
   return (
     <View style={styles.mainContainer}>
       {isShow ? (
@@ -145,7 +169,7 @@ const Scope = (props) => {
           <AssetsSelector
             options={{
               assetsType: ["photo", "video"],
-              maxSelections: 3,
+              maxSelections: 1,
               margin: 2,
               portraitCols: 4,
               landscapeCols: 5,
@@ -183,7 +207,7 @@ const Scope = (props) => {
           />
         </View>
       ) : (
-        <View style={{flex:1,  width: "100%" }}>
+        <View style={{ flex: 1, width: "100%" }}>
           <DateTimePicker
             isVisible={show}
             testID="dateTimePicker"
@@ -294,8 +318,8 @@ const Scope = (props) => {
                   </Text>
                 </View>
               </View>
-              <ScrollView style={{width: "100%" }}>
-                <View style={{paddingRight: 20,paddingLeft: 20,}}>
+              <ScrollView style={{ width: "100%" }}>
+                <View style={{ paddingRight: 20, paddingLeft: 20 }}>
                   <View style={styles.tableViewContainer}>
                     <View style={styles.tableHeader}>
                       <View style={styles.headerTitleView}>
@@ -490,39 +514,112 @@ const Scope = (props) => {
                     >
                       Project Images
                     </Text>
-                    {projectImages != "" ? (
-                      <View style={{ flexDirection: "row" }}>
-                        {/* <Text>Hello</Text> */}
-                        {projectImages.map((item, index) => (
-                          <Image
-                            style={{ width: 50, height: 50, marginRight: 10 }}
-                            source={{ uri: item.uri }}
-                            key={index}
-                          />
-                        ))}
+                    <View
+                      style={[
+                        styles.tableViewContainer,
+                        { paddingLeft: 0, paddingRight: 0 },
+                      ]}
+                    >
+                      <View style={styles.tableHeader}>
+                        <View style={{ width: "50%" }}>
+                          <Text style={styles.headerTitle}>Image</Text>
+                        </View>
+                        <View style={{ width: "50%" }}>
+                          <Text style={styles.headerTitle}>Comment</Text>
+                        </View>
                       </View>
-                    ) : (
+                    </View>
+                    <View
+                      style={{
+                        width: "100%",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-end",
+                        marginRight: 50,
+                        marginTop: 20,
+                      }}
+                    >
                       <TouchableOpacity
-                        style={[
-                          styles.button,
-                          styles.buttonOpen,
-                          { width: "100%" },
-                        ]}
-                        onPress={() => uploadPhotoImage()}
+                        style={[styles.addBtn]}
+                        onPress={() => {
+                          if (
+                            projectImagesComment.length > 0 &&
+                            !projectImagesComment[
+                              projectImagesComment.length - 1
+                            ].image &&
+                            !projectImagesComment[
+                              projectImagesComment.length - 1
+                            ].comment
+                          ) {
+                            alert(
+                              "Please Enter All Value and then move to next Item Add !"
+                            );
+                          } else {
+                            addImagesCommentRow();
+                          }
+                        }}
                       >
-                        <Text style={styles.textStyle}>Add Images</Text>
+                        <Image style={styles.plusBtn} source={plus} />
                       </TouchableOpacity>
-                    )}
-                  </View>
-                  <View style={styles.inputFieldContainer}>
-                    <TextInput
-                      value={projectComment}
-                      onChangeText={(e) => setProjectComment(e)}
-                      style={styles.inputField}
-                      multiline={true}
-                      placeholder={"Project Images Comments"}
-                    />
+                    </View>
+                    <View style={{ flexDirection: "column" }}>
+                      {projectImagesComment.length > 0 &&
+                        projectImagesComment.map((el, index) => (
+                          <View
+                            style={[styles.tableBody, { marginBottom: 20 }]}
+                            key={index}
+                          >
+                            {el.image != "" ? (
+                              <View
+                                style={{
+                                  width: "50%",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Image
+                                  style={{
+                                    width: 50,
+                                    height: 50,
+                                    marginRight: 10,
+                                  }}
+                                  source={{ uri: el.image }}
+                                  key={index}
+                                />
+                              </View>
+                            ) : (
+                              <View style={{ width: "50%" }}>
+                                <TouchableOpacity
+                                  style={[
+                                    styles.button,
+                                    styles.buttonOpen,
+                                    { width: "90%" },
+                                  ]}
+                                  onPress={() => uploadPhotoImage(index)}
+                                >
+                                  <Text style={styles.textStyle}>
+                                    Add Image
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                            )}
 
+                            <View style={{ width: "50%" }}>
+                              <TextInput
+                                value={el.comment}
+                                onChangeText={(txt) =>
+                                  updateProjectCommentValue(
+                                    "comment",
+                                    index,
+                                    txt
+                                  )
+                                }
+                                style={styles.bodyTextInput}
+                                placeholder={"Comment"}
+                              />
+                            </View>
+                          </View>
+                        ))}
+                    </View>
                   </View>
                   <View
                     style={{
@@ -564,8 +661,8 @@ const mapDispatchToProps = (dispatch) => ({
     plotNumber,
     type,
     date,
-    projectImages,
-    projectComment,
+    projectImagesComment,
+    commentImages,
     jobID,
     tabId,
     token,
@@ -579,8 +676,8 @@ const mapDispatchToProps = (dispatch) => ({
         plotNumber,
         type,
         date,
-        projectImages,
-        projectComment,
+        projectImagesComment,
+        commentImages,
         jobID,
         tabId,
         token,
@@ -592,7 +689,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Scope);
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex:1,
+    flex: 1,
     width: "100%",
   },
   button: {
@@ -610,6 +707,7 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontFamily: "poppins-semiBold",
+    fontSize: 10,
   },
   titleContainer: {
     height: "5%",

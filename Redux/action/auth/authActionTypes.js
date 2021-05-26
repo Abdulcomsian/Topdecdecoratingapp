@@ -25,9 +25,11 @@ export const adminLogin = (email, password) => {
           payload: response,
         });
       } else {
+        console.log(response?.response?.request);
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -49,9 +51,11 @@ export const emailLink = (email) => {
           payload: response,
         });
       } else {
+        console.log(response?.response?.request);
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -103,7 +107,15 @@ export const resetPassword = (id, password) => {
     }
   };
 };
-export const createNewJobCreation = (contractor, project, weeks, supervisor_id, start_date, jobSummary, token) => {
+export const createNewJobCreation = (
+  contractor,
+  project,
+  weeks,
+  supervisor_id,
+  start_date,
+  jobSummary,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log(contractor)
@@ -157,51 +169,72 @@ export const searchJob = (reference_number, date, token) => {
     }
   };
 };
-export const createDecorator = (firstname, lastname, email, phone, password, token, photoID, cscsback, cscsfront) => {
+export const createDecorator = (
+  firstname,
+  lastname,
+  email,
+  phone,
+  password,
+  token,
+  photoID,
+  cscsback,
+  cscsfront
+) => {
   return async (dispatch, getState) => {
     try {
       const formData = new FormData();
       //console.log({ firstname, lastname, email, phone, password, token, photoID, cscsback, cscsfront });
       formData.append("email", email);
-      formData.append("password", password); 
+      formData.append("password", password);
       formData.append("firstname", firstname);
       formData.append("phone", phone);
       formData.append("lastname", lastname);
 
-      
       photoID &&
         formData.append("idcard", {
           // file: photoID,
-          uri: Platform.OS === "android" ? photoID: photoID.replace("file://", ""),
+          uri:
+            Platform.OS === "android"
+              ? photoID
+              : photoID.replace("file://", ""),
           name: photoID.split("/").pop(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
       cscsfront &&
         formData.append("cscsfront", {
           // uri: cscsfront,
-          uri: Platform.OS === "android" ? cscsfront : cscsfront.replace("file://", ""),
+          uri:
+            Platform.OS === "android"
+              ? cscsfront
+              : cscsfront.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
           type: "image/png", // it may be necessary in Android.
         });
       cscsback &&
         formData.append("cscsback", {
-          uri: Platform.OS === "android" ? cscsback : cscsback.replace("file://", ""),
+          uri:
+            Platform.OS === "android"
+              ? cscsback
+              : cscsback.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
           type: "image/png", // it may be necessary in Android.
         });
 
       console.log(formData);
       // const body = { email, password, firstname, phone, lastname };
-      const request = await axios('https://topdecdecoratingapp.com/api/admin/create/decorator', {
-        method: "POST",
-        data: formData,
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-          // Accept: 'application/json',
-        },
-      });
+      const request = await axios(
+        "https://topdecdecoratingapp.com/api/admin/create/decorator",
+        {
+          method: "POST",
+          data: formData,
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+            // Accept: 'application/json',
+          },
+        }
+      );
       const response = request.data;
       console.log("API Response CREATE DECORATOR :", response);
       if (response.success == true) {
@@ -213,8 +246,6 @@ export const createDecorator = (firstname, lastname, email, phone, password, tok
         throw new Error(response.message);
       }
     } catch (err) {
-      console.log("API Error :", err.message);
-      console.log(err.message);
       throw new Error(err.message);
     }
   };
@@ -340,7 +371,18 @@ export const updateSupervisor = (id, email, name, number, status, token) => {
     }
   };
 };
-export const updateDecorator = (id, email, firstname, lastname, phone,photoID, cscsFront, cscsBack, status, token) => {
+export const updateDecorator = (
+  id,
+  email,
+  firstname,
+  lastname,
+  phone,
+  photoID,
+  cscsFront,
+  cscsBack,
+  status,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Decorator Id :",id)
@@ -350,44 +392,49 @@ export const updateDecorator = (id, email, firstname, lastname, phone,photoID, c
       // console.log("Decorator Status :",status)
       // console.log("Token :",token)
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("id",id)
-      formData.append("firstname",firstname)
-      formData.append("email",email)
-      formData.append("phone",phone)
-      formData.append("lastname",lastname)
-      formData.append("status",status)
-
+      formData.append("id", id);
+      formData.append("firstname", firstname);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("lastname", lastname);
+      formData.append("status", status);
 
       photoID.localUri &&
-      formData.append("photoID", {
-        // file: photoID,
-        uri: Platform.OS === "android" ? photoID.localUri: photoID.localUri.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-
+        formData.append("photoID", {
+          // file: photoID,
+          uri:
+            Platform.OS === "android"
+              ? photoID.localUri
+              : photoID.localUri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
       cscsFront.localUri &&
-      formData.append("cscsFront", {
-        // file: cscsFront,
-        uri: Platform.OS === "android" ? cscsFront.localUri: cscsFront.localUri.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-
+        formData.append("cscsFront", {
+          // file: cscsFront,
+          uri:
+            Platform.OS === "android"
+              ? cscsFront.localUri
+              : cscsFront.localUri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
       cscsBack.localUri &&
-      formData.append("cscsBack", {
-        // file: cscsBack,
-        uri: Platform.OS === "android" ? cscsBack.localUri: cscsBack.localUri.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("cscsBack", {
+          // file: cscsBack,
+          uri:
+            Platform.OS === "android"
+              ? cscsBack.localUri
+              : cscsBack.localUri.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      console.log(formData)
+      console.log(formData);
       //const body = { id, firstname, email, phone, lastname, status };
       const request = await axios(base_url + "admin/edit/editDecorator", {
         method: "POST",
@@ -434,8 +481,8 @@ export const insertHandOverForm = (
   agentName,
   agentSignature,
   todayDate,
-  projectImages,
-  projectComment,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -460,65 +507,79 @@ export const insertHandOverForm = (
       // console.log("Job ID :",task_id)
       // console.log("Tab Name :",tab_id)
       // console.log("Token :",token)
-      
+
       const formData = new FormData();
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("block",block)
-      formData.append("reason",reason)
-      formData.append("plotNumber",plotNumber)
-      formData.append("dateWritten",dateWritten)
-      formData.append("date_isue",date_isue)
-      formData.append("supervisor",supervisor)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("block", block);
+      formData.append("reason", reason);
+      formData.append("plotNumber", plotNumber);
+      formData.append("dateWritten", dateWritten);
+      formData.append("date_isue", date_isue);
+      formData.append("supervisor", supervisor);
 
       signature &&
-      formData.append("signature", {
-        // file: signature,
-        uri: Platform.OS === "android" ? signature: signature.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("signature", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? signature
+              : signature.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      formData.append("todayDate",todayDate)
-      formData.append("agentName",agentName)
+      formData.append("todayDate", todayDate);
+      formData.append("agentName", agentName);
 
       agentSignature &&
-      formData.append("agentSignature", {
-        // file: agentSignature,
-        uri: Platform.OS === "android" ? agentSignature: agentSignature.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-      
-      formData.append("completed_date",completed_date)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-      formData.append("projectComment",projectComment)
-      
-      jobSummary.forEach(item => {
+        formData.append("agentSignature", {
+          // file: agentSignature,
+          uri:
+            Platform.OS === "android"
+              ? agentSignature
+              : agentSignature.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+
+      formData.append("completed_date", completed_date);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
+      // formData.append("projectComment",projectComment)
+
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
-
-      console.log("Hand Over Form Data :", formData)
-      const request = await axios(base_url + "supervisor/make/workflow/insert_handover", {
-        method: "POST",
-        data: formData,
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
       });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+
+      console.log("Hand Over Form Data :", formData);
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insert_handover",
+        {
+          method: "POST",
+          data: formData,
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -553,8 +614,8 @@ export const insertMakeReadyForm = (
   agentName,
   agentSignature,
   todayDate,
-  projectImages,
-  projectComment,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -584,56 +645,65 @@ export const insertMakeReadyForm = (
       // console.log("Token :", token);
 
       const formData = new FormData();
-      
-      formData.append("client",client)
-      formData.append("project",project)
-      formData.append("block",block)
-      formData.append("sheetNumber",sheetNumber)
-      formData.append("page",page)
-      formData.append("page2",page2)
-      formData.append("reason",reason)
-      formData.append("dateWritten",dateWritten)
-      formData.append("date_isue",date_isue)
-      formData.append("plotNumber",plotNumber)
-      formData.append("supervisorName",supervisorName)
+
+      formData.append("client", client);
+      formData.append("project", project);
+      formData.append("block", block);
+      formData.append("sheetNumber", sheetNumber);
+      formData.append("page", page);
+      formData.append("page2", page2);
+      formData.append("reason", reason);
+      formData.append("dateWritten", dateWritten);
+      formData.append("date_isue", date_isue);
+      formData.append("plotNumber", plotNumber);
+      formData.append("supervisorName", supervisorName);
 
       signature &&
-      formData.append("signature", {
-        uri: Platform.OS === "android" ? signature : signature.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: "image/png", // it may be necessary in Android.
-      });
+        formData.append("signature", {
+          uri:
+            Platform.OS === "android"
+              ? signature
+              : signature.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      formData.append("dateComplete",dateComplete)
-      formData.append("agentName",agentName)
+      formData.append("dateComplete", dateComplete);
+      formData.append("agentName", agentName);
 
       agentSignature &&
-      formData.append("agentSignature", {
-        uri: Platform.OS === "android" ? agentSignature : agentSignature.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: "image/png", // it may be necessary in Android.
-      });
+        formData.append("agentSignature", {
+          uri:
+            Platform.OS === "android"
+              ? agentSignature
+              : agentSignature.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
+      formData.append("todayDate", todayDate);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      formData.append("todayDate",todayDate)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-
-
-      dynamicInput.forEach(item => {
+      dynamicInput.forEach((item) => {
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-      formData.append("projectComment",projectComment)
-      console.log(formData)
+      });
+      console.log(formData);
       // const body = {
       //   client,
       //   project,
@@ -656,15 +726,18 @@ export const insertMakeReadyForm = (
       //   dynamicInput,
       // };
 
-      const request = await axios(base_url + "supervisor/make/workflow/makeReadySheet", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/make/workflow/makeReadySheet",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -703,8 +776,8 @@ export const insertSnaggingForm = (
   completed_by,
   hour,
   dynamicInputComplete,
-  projectImages,
-  projectComment,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -730,31 +803,40 @@ export const insertSnaggingForm = (
 
       const formData = new FormData();
 
-      formData.append("block",block)
-      formData.append("plot_number",plot_number)
-      formData.append("isue_date",isue_date)
-      formData.append("completion_date",completion_date)
-      formData.append("pre_w_snagging",pre_w_snagging)
-      formData.append("painter",painter)
-      formData.append("snagging_isue_by",snagging_isue_by)
-      formData.append("completed_by",completed_by)
-      formData.append("No_of_Pages",No_of_Pages)
-      formData.append("hour",hour)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("block", block);
+      formData.append("plot_number", plot_number);
+      formData.append("isue_date", isue_date);
+      formData.append("completion_date", completion_date);
+      formData.append("pre_w_snagging", pre_w_snagging);
+      formData.append("painter", painter);
+      formData.append("snagging_isue_by", snagging_isue_by);
+      formData.append("completed_by", completed_by);
+      formData.append("No_of_Pages", No_of_Pages);
+      formData.append("hour", hour);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      dynamicInput.forEach(item => {
+      dynamicInput.forEach((item) => {
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
-      formData.append("dynamicInputComplete",dynamicInputComplete)
-      formData.append("projectComment",projectComment)
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      dynamicInputComplete.forEach((item) => {
+        formData.append(`dynamicInputComplete[]`, JSON.stringify([item]));
+      });
+
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
+      });
       // const body = {
       //   block,
       //   plot_number,
@@ -771,16 +853,19 @@ export const insertSnaggingForm = (
       //   dynamicInput,
       //   dynamicInputComplete,
       // };
-
-      const request = await axios(base_url + "supervisor/make/workflow/insertWarenty", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      console.log("Wrannty Sannging :", formData);
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insertWarenty",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -800,12 +885,30 @@ export const insertSnaggingForm = (
         throw new Error(response.message);
       }
     } catch (err) {
-      console.log("Insert Error Response :", err.message);
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcomplete, mc, md, sms, bscs, sitemanager_sign, activity_sign,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertAnsuranceForm = (
+  project,
+  unit,
+  dynamicInput,
+  dynamicInputcomplete,
+  mc,
+  md,
+  sms,
+  bscs,
+  sitemanager_sign,
+  activity_sign,
+  projectImagesComment,
+  commentImages,
+  overallComment,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       console.log("Project Name :", project);
@@ -822,78 +925,89 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
 
       const formData = new FormData();
 
-      formData.append("project",project)
-      formData.append("unit",unit)
+      formData.append("project", project);
+      formData.append("unit", unit);
+      formData.append("overallComment", overallComment);
 
       mc &&
-      formData.append("mc", {
-        // file: mc,
-        uri: Platform.OS === "android" ? mc: mc.replace("file://", ""),
-        name: mc.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("mc", {
+          // file: mc,
+          uri: Platform.OS === "android" ? mc : mc.replace("file://", ""),
+          name: mc.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
       md &&
-      formData.append("md", {
-        // file: md,
-        uri: Platform.OS === "android" ? md: md.replace("file://", ""),
-        name: md.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("md", {
+          // file: md,
+          uri: Platform.OS === "android" ? md : md.replace("file://", ""),
+          name: md.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
       sms &&
-      formData.append("sms", {
-        // file: sms,
-        uri: Platform.OS === "android" ? sms: sms.replace("file://", ""),
-        name: sms.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("sms", {
+          // file: sms,
+          uri: Platform.OS === "android" ? sms : sms.replace("file://", ""),
+          name: sms.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
       bscs &&
-      formData.append("bscs", {
-        // file: bscs,
-        uri: Platform.OS === "android" ? bscs: bscs.replace("file://", ""),
-        name: bscs.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("bscs", {
+          // file: bscs,
+          uri: Platform.OS === "android" ? bscs : bscs.replace("file://", ""),
+          name: bscs.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
       sitemanager_sign &&
-      formData.append("sitemanager_sign", {
-        // file: sitemanager_sign,
-        uri: Platform.OS === "android" ? sitemanager_sign: sitemanager_sign.replace("file://", ""),
-        name: sitemanager_sign.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("sitemanager_sign", {
+          // file: sitemanager_sign,
+          uri:
+            Platform.OS === "android"
+              ? sitemanager_sign
+              : sitemanager_sign.replace("file://", ""),
+          name: sitemanager_sign.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
       activity_sign &&
-      formData.append("activity_sign", {
-        // file: activity_sign,
-        uri: Platform.OS === "android" ? activity_sign: activity_sign.replace("file://", ""),
-        name: activity_sign.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
-      formData.append("projectComment",projectComment)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+        formData.append("activity_sign", {
+          // file: activity_sign,
+          uri:
+            Platform.OS === "android"
+              ? activity_sign
+              : activity_sign.replace("file://", ""),
+          name: activity_sign.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      dynamicInput.forEach(item => {
+      dynamicInput.forEach((item) => {
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
 
-
-      dynamicInputcomplete.forEach(item => {
+      dynamicInputcomplete.forEach((item) => {
         formData.append(`dynamicInputcomplete[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
 
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
 
       // const body = {
       //   project,
@@ -908,15 +1022,20 @@ export const insertAnsuranceForm = (project, unit, dynamicInput, dynamicInputcom
       //   dynamicInputcomplete,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/quaity", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      console.log("Quality Ansurance :", formData);
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/quaity",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -961,8 +1080,8 @@ export const insertRemedialForm = (
   managerName,
   managerSignature,
   dateManager,
-  projectImages,
-  projectComment,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -995,56 +1114,67 @@ export const insertRemedialForm = (
 
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("sheet_number",sheet_number)
-      formData.append("page1",page1)
-      formData.append("page2",page2)
-      formData.append("block",block)
-      formData.append("plot_area_number",plot_area_number)
-      formData.append("operative",operative)
-      formData.append("data_issue",data_issue)
-      formData.append("site_instruction_number",site_instruction_number)
-      formData.append("work_reason",work_reason)
-      formData.append("supervisorName",supervisorName)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("sheet_number", sheet_number);
+      formData.append("page1", page1);
+      formData.append("page2", page2);
+      formData.append("block", block);
+      formData.append("plot_area_number", plot_area_number);
+      formData.append("operative", operative);
+      formData.append("data_issue", data_issue);
+      formData.append("site_instruction_number", site_instruction_number);
+      formData.append("work_reason", work_reason);
+      formData.append("supervisorName", supervisorName);
 
       supervisorSignature &&
-      formData.append("supervisorSignature", {
-        // file: supervisorSignature,
-        uri: Platform.OS === "android" ? supervisorSignature: supervisorSignature.replace("file://", ""),
-        name: supervisorSignature.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("supervisorSignature", {
+          // file: supervisorSignature,
+          uri:
+            Platform.OS === "android"
+              ? supervisorSignature
+              : supervisorSignature.replace("file://", ""),
+          name: supervisorSignature.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      formData.append("dateSupervisor",dateSupervisor)
-      formData.append("managerName",managerName)
+      formData.append("dateSupervisor", dateSupervisor);
+      formData.append("managerName", managerName);
 
       managerSignature &&
-      formData.append("managerSignature", {
-        // file: managerSignature,
-        uri: Platform.OS === "android" ? managerSignature: managerSignature.replace("file://", ""),
-        name: managerSignature.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
-      formData.append("dateManager",dateManager)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+        formData.append("managerSignature", {
+          // file: managerSignature,
+          uri:
+            Platform.OS === "android"
+              ? managerSignature
+              : managerSignature.replace("file://", ""),
+          name: managerSignature.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
+      formData.append("dateManager", dateManager);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-
-      dynamicInput.forEach(item => {
+      dynamicInput.forEach((item) => {
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
 
-      formData.append("projectComment",projectComment)
-      formData.append("totalHours",totalHours)
-      
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      formData.append("totalHours", totalHours);
+
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
+      });
 
       // const body = {
       //   contractor,
@@ -1070,13 +1200,16 @@ export const insertRemedialForm = (
       //   totalHours,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/workflow/RemendialSheet", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/workflow/RemendialSheet",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1101,7 +1234,20 @@ export const insertRemedialForm = (
     }
   };
 };
-export const insertScopeForm = (dynamicInput, painter, signature, plot_number, type, date,projectImages, projectComment, task_id, tab_id, token, index) => {
+export const insertScopeForm = (
+  dynamicInput,
+  painter,
+  signature,
+  plot_number,
+  type,
+  date,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic Input :", dynamicInput);
@@ -1114,36 +1260,44 @@ export const insertScopeForm = (dynamicInput, painter, signature, plot_number, t
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const formData = new FormData()
+      const formData = new FormData();
 
       signature &&
-      formData.append("signature", {
-        // file: signature,
-        uri: Platform.OS === "android" ? signature: signature.replace("file://", ""),
-        name: signature.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("signature", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? signature
+              : signature.replace("file://", ""),
+          name: signature.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      formData.append("date",date)
-      formData.append("type",type)
-      formData.append("painter",painter)
-      formData.append("plot_number",plot_number)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("date", date);
+      formData.append("type", type);
+      formData.append("painter", painter);
+      formData.append("plot_number", plot_number);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-
-      dynamicInput.forEach(item => {
+      dynamicInput.forEach((item) => {
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-      formData.append("projectComment",projectComment)
+      });
       // const body = {
       //   signature,
       //   date,
@@ -1155,15 +1309,18 @@ export const insertScopeForm = (dynamicInput, painter, signature, plot_number, t
       //   dynamicInput,
       // };
 
-      const request = await axios(base_url + "supervisor/make/workflow/insertScope", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/make/workflow/insertScope",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1204,7 +1361,8 @@ export const insertWorkSheet = (
   sign,
   position,
   date,
-  projectImages,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -1233,64 +1391,72 @@ export const insertWorkSheet = (
 
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("title",title)
-      formData.append("day_start",day_start)
-      formData.append("week_ending",week_ending)
-      formData.append("indution",indution)
-      formData.append("plot",plot)
-      formData.append("description",description)
-      formData.append("manager",manager)
+      formData.append("contractor", contractor);
+      formData.append("title", title);
+      formData.append("day_start", day_start);
+      formData.append("week_ending", week_ending);
+      formData.append("indution", indution);
+      formData.append("plot", plot);
+      formData.append("description", description);
+      formData.append("manager", manager);
 
       sign &&
-      formData.append("sign", {
-        // file: sign,
-        uri: Platform.OS === "android" ? sign: sign.replace("file://", ""),
-        name: sign.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("sign", {
+          // file: sign,
+          uri: Platform.OS === "android" ? sign : sign.replace("file://", ""),
+          name: sign.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      formData.append("date",date)
-      formData.append("position",position)    
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("date", date);
+      formData.append("position", position);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      LABOUR.forEach(item => {
+      LABOUR.forEach((item) => {
         formData.append(`LABOUR[]`, JSON.stringify([item]));
       });
 
-
-      MATERIALS.forEach(item => {
+      MATERIALS.forEach((item) => {
         formData.append(`MATERIALS[]`, JSON.stringify([item]));
       });
 
-
-      PLANTS.forEach(item => {
+      PLANTS.forEach((item) => {
         formData.append(`PLANTS[]`, JSON.stringify([item]));
       });
 
-
-      PRELIMINARIES.forEach(item => {
+      PRELIMINARIES.forEach((item) => {
         formData.append(`PRELIMINARIES[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
-
-      const request = await axios(base_url + "supervisor/insert/verification/accurate", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
       });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+
+      console.log("Token :", token);
+      const request = await axios(
+        base_url + "supervisor/insert/verification/accurate",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1302,12 +1468,20 @@ export const insertWorkSheet = (
         throw new Error(response.message);
       }
     } catch (err) {
-      console.log("Erroe :", err.message);
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-export const insertDecorationRecord = (jobSummary, jobSummarycomplete,projectImages,projectComment, task_id, tab_id, token) => {
+export const insertDecorationRecord = (
+  jobSummary,
+  jobSummarycomplete,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Dynamic First Input :", jobSummary);
@@ -1324,35 +1498,47 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete,projectIma
 
       const formData = new FormData();
 
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      jobSummarycomplete.forEach(item => {
+      jobSummarycomplete.forEach((item) => {
         formData.append(`jobSummarycomplete[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
-      formData.append("projectComment",projectComment)
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/decoration", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
       });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+
+      console.log("Token :", token);
+      console.log("Decoration Of Record :", formData);
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/decoration",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1368,12 +1554,21 @@ export const insertDecorationRecord = (jobSummary, jobSummarycomplete,projectIma
         throw new Error(response.message);
       }
     } catch (err) {
-      console.log("error:", err.message);
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-export const insertMiscoat = (contractor, project, jobSummary,projectImages,projectComment, task_id, tab_id, token) => {
+export const insertMiscoat = (
+  contractor,
+  project,
+  jobSummary,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contructor :", contractor);
@@ -1392,33 +1587,44 @@ export const insertMiscoat = (contractor, project, jobSummary,projectImages,proj
 
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
-      formData.append("projectComment",projectComment)
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Miscoat", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
       });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+
+      console.log("MisCoat :", formData);
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Miscoat",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1434,12 +1640,26 @@ export const insertMiscoat = (contractor, project, jobSummary,projectImages,proj
         throw new Error(response.message);
       }
     } catch (err) {
-      console.log("error:", err.message);
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-export const insertSiteInstruction = (contractor, instruction, raised_by, date, details, condition, supervisor, s_date,projectImages, task_id, tab_id, token) => {
+export const insertSiteInstruction = (
+  contractor,
+  instruction,
+  raised_by,
+  date,
+  details,
+  condition,
+  supervisor,
+  s_date,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1454,27 +1674,33 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("instruction",instruction)
-      formData.append("raised_by",raised_by)
-      formData.append("date",date)
-      formData.append("details",details)
-      formData.append("condition",condition)
-      formData.append("s_date",s_date)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-      formData.append("supervisor",supervisor)
+      formData.append("contractor", contractor);
+      formData.append("instruction", instruction);
+      formData.append("raised_by", raised_by);
+      formData.append("date", date);
+      formData.append("details", details);
+      formData.append("condition", condition);
+      formData.append("s_date", s_date);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
+      formData.append("supervisor", supervisor);
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
+      });
       // const body = {
       //   contractor,
       //   instruction,
@@ -1487,16 +1713,21 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
       //   tab_id,
       //   supervisor,
       // };
+      // console.log("Token :",token)
+      //       console.log("Site Instruction :",formData)
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Instruction", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Instruction",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1512,12 +1743,22 @@ export const insertSiteInstruction = (contractor, instruction, raised_by, date, 
         throw new Error(response.message);
       }
     } catch (err) {
-      // console.log("error:", err.message);
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES,projectImages,projectComment, task_id, tab_id, token) => {
+export const insertVerificationForm = (
+  project,
+  id_ref,
+  decorator,
+  PRELIMINARIES,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Project Name :", project);
@@ -1528,28 +1769,32 @@ export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const formData = new FormData();
 
-      formData.append("project",project)
-      formData.append("id_ref",id_ref)
-      formData.append("decorator",decorator)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-      
-      PRELIMINARIES.forEach(item => {
+      formData.append("project", project);
+      formData.append("id_ref", id_ref);
+      formData.append("decorator", decorator);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
+
+      PRELIMINARIES.forEach((item) => {
         formData.append(`PRELIMINARIES[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
 
-      formData.append("projectComment",projectComment)
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
       // const body = {
       //   project,
       //   id_ref,
@@ -1559,15 +1804,18 @@ export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES
       //   PRELIMINARIES,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/verification/verrify_worksheet", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/verification/verrify_worksheet",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1579,6 +1827,7 @@ export const insertVerificationForm = (project, id_ref, decorator, PRELIMINARIES
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -1614,8 +1863,8 @@ export const insertAccidentForm = (
   Manager_Name,
   Manager_sign,
   Manager_date,
-  projectImages,
-  projectComment,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -1654,93 +1903,98 @@ export const insertAccidentForm = (
       // console.log("Manager Signature :", Manager_sign);
       // console.log("Manager Date :", Manager_date);
 
-
       const formData = new FormData();
 
-      formData.append("Name_Of_Person",Name_Of_Person)
-      formData.append("Incident_Date",Incident_Date)
-      formData.append("Location_of_Incident",Location_of_Incident)
-      formData.append("Investigation_Date",Investigation_Date)
+      formData.append("Name_Of_Person", Name_Of_Person);
+      formData.append("Incident_Date", Incident_Date);
+      formData.append("Location_of_Incident", Location_of_Incident);
+      formData.append("Investigation_Date", Investigation_Date);
 
-      
-      incidentArray.forEach(item => {
+      incidentArray.forEach((item) => {
         formData.append(`incidentArray[]`, JSON.stringify([item]));
       });
       // formData.append(`incidentArray`,JSON.stringify(incidentArray));
-   
 
-      formData.append("projectComment",projectComment)
-      formData.append("Name_of_Injured_Person",Name_of_Injured_Person)
-      formData.append("Age",Age)
-      formData.append("Sex",Sex)
+      formData.append("Name_of_Injured_Person", Name_of_Injured_Person);
+      formData.append("Age", Age);
+      formData.append("Sex", Sex);
 
       // formData.append(`Employee`,JSON.stringify(Employee));
-      Employee.forEach(item => {
+      Employee.forEach((item) => {
         formData.append(`Employee[]`, JSON.stringify([item]));
       });
-      
-      
-      formData.append("Address",Address)
-      formData.append("Phone",Phone)
-      formData.append("Occupation",Occupation)
 
-    
+      formData.append("Address", Address);
+      formData.append("Phone", Phone);
+      formData.append("Occupation", Occupation);
 
-      
-      formData.append("Nature_of_Injury",Nature_of_Injury)
-      formData.append("Witness_Statement",Witness_Statement)
-      formData.append("Whom_Accident_Reported",Whom_Accident_Reported)
-      formData.append("When_Accident_Reported",When_Accident_Reported)
-      formData.append("Supervisor_Name",Supervisor_Name)
-      
+      formData.append("Nature_of_Injury", Nature_of_Injury);
+      formData.append("Witness_Statement", Witness_Statement);
+      formData.append("Whom_Accident_Reported", Whom_Accident_Reported);
+      formData.append("When_Accident_Reported", When_Accident_Reported);
+      formData.append("Supervisor_Name", Supervisor_Name);
+
       Supervisor_Signature &&
-      formData.append("Supervisor_Signature", {
-        // file: Supervisor_Signature,
-        uri: Platform.OS === "android" ? Supervisor_Signature: Supervisor_Signature.replace("file://", ""),
-        name: Supervisor_Signature.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("Supervisor_Signature", {
+          // file: Supervisor_Signature,
+          uri:
+            Platform.OS === "android"
+              ? Supervisor_Signature
+              : Supervisor_Signature.replace("file://", ""),
+          name: Supervisor_Signature.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      formData.append("Supervisor_Date",Supervisor_Date)
-      formData.append("Whom_Management_Reported",Whom_Management_Reported)
-      formData.append("Manager_Date_Report",Manager_Date_Report)
-      formData.append("Comment_Initial_Investigation",Comment_Initial_Investigation)
-      formData.append("Action_Requried",Action_Requried)
-      formData.append("Action_Performed",Action_Performed)
-      formData.append("Manager_Name",Manager_Name)
+      formData.append("Supervisor_Date", Supervisor_Date);
+      formData.append("Whom_Management_Reported", Whom_Management_Reported);
+      formData.append("Manager_Date_Report", Manager_Date_Report);
+      formData.append(
+        "Comment_Initial_Investigation",
+        Comment_Initial_Investigation
+      );
+      formData.append("Action_Requried", Action_Requried);
+      formData.append("Action_Performed", Action_Performed);
+      formData.append("Manager_Name", Manager_Name);
 
       Manager_sign &&
-      formData.append("Manager_sign", {
-        // file: Manager_sign,
-        uri: Platform.OS === "android" ? Manager_sign: Manager_sign.replace("file://", ""),
-        name: Manager_sign.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("Manager_sign", {
+          // file: Manager_sign,
+          uri:
+            Platform.OS === "android"
+              ? Manager_sign
+              : Manager_sign.replace("file://", ""),
+          name: Manager_sign.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      formData.append("Manager_date",Manager_date)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("Manager_date", Manager_date);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      callingDetails.forEach(item => {
+      callingDetails.forEach((item) => {
         formData.append(`callingDetails[]`, JSON.stringify([item]));
       });
 
-
-      dynamicInput.forEach(item => {
+      dynamicInput.forEach((item) => {
         formData.append(`dynamicInput[]`, JSON.stringify([item]));
       });
-      
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
+      });
 
-      console.log(formData)
-
-
+      console.log(formData);
 
       // const body = {
       //   Name_Of_Person,
@@ -1776,15 +2030,18 @@ export const insertAccidentForm = (
       //   Dynamic_Input,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/accident", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/accident",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1801,7 +2058,21 @@ export const insertAccidentForm = (
     }
   };
 };
-export const insertCleanUpForm = (contractor, project, operation, date, jobSummary, signature, date1,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertCleanUpForm = (
+  contractor,
+  project,
+  operation,
+  date,
+  jobSummary,
+  signature,
+  date1,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Contractor Name :", contractor);
@@ -1815,49 +2086,57 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const formData = new FormData();
-      
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("operation",operation)
-      formData.append("date",date)
-      signature &&
-      formData.append("signature", {
-        // file: signature,
-        uri: Platform.OS === "android" ? signature: signature.replace("file://", ""),
-        name: signature.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
-      formData.append("date1",date1)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
 
-      jobSummary.forEach(item => {
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("operation", operation);
+      formData.append("date", date);
+      signature &&
+        formData.append("signature", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? signature
+              : signature.replace("file://", ""),
+          name: signature.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
+      formData.append("date1", date1);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
+
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
-
-      formData.append("projectComment",projectComment)
-
-
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/cleanup", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
       });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/cleanup",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1874,7 +2153,19 @@ export const insertCleanUpForm = (contractor, project, operation, date, jobSumma
     }
   };
 };
-export const insertElectricalEquipemntForm = (contractor, project, supervisor, date, jobSummary,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertElectricalEquipemntForm = (
+  contractor,
+  project,
+  supervisor,
+  date,
+  jobSummary,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -1886,40 +2177,46 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
 
       supervisor &&
-      formData.append("supervisor", {
-        // file: supervisor,
-        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
-        name: supervisor.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("supervisor", {
+          // file: supervisor,
+          uri:
+            Platform.OS === "android"
+              ? supervisor
+              : supervisor.replace("file://", ""),
+          name: supervisor.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      formData.append("date",date)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("date", date);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-
-      formData.append("projectComment",projectComment)
+      });
       // formData.append("jobSummary",jobSummary)
-      
+
       // const body = {
       //   contractor,
       //   project,
@@ -1929,16 +2226,19 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
       //   tab_id,
       //   jobSummary,
       // };
-      
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/electric_equipment", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/electric_equipment",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -1959,7 +2259,21 @@ export const insertElectricalEquipemntForm = (contractor, project, supervisor, d
     }
   };
 };
-export const insertFridayPackForm = (contractor, project, supervisor, jobSummary, week_ending, date, furhter_comment,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertFridayPackForm = (
+  contractor,
+  project,
+  supervisor,
+  jobSummary,
+  week_ending,
+  date,
+  furhter_comment,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -1973,49 +2287,59 @@ export const insertFridayPackForm = (contractor, project, supervisor, jobSummary
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("week_ending",week_ending)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("week_ending", week_ending);
 
       supervisor &&
-      formData.append("supervisor", {
-        // file: supervisor,
-        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
-        name: supervisor.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("supervisor", {
+          // file: supervisor,
+          uri:
+            Platform.OS === "android"
+              ? supervisor
+              : supervisor.replace("file://", ""),
+          name: supervisor.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      formData.append("furhter_comment",furhter_comment)
-      formData.append("date",date)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("furhter_comment", furhter_comment);
+      formData.append("date", date);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
-      formData.append("projectComment",projectComment)
-
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/friday_pack", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
       });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/friday_pack",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2032,7 +2356,18 @@ export const insertFridayPackForm = (contractor, project, supervisor, jobSummary
     }
   };
 };
-export const insertHarmFulForm = (contractor, project, date, jobSummary,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertHarmFulForm = (
+  contractor,
+  project,
+  date,
+  jobSummary,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Name Of Contractor :", contractor);
@@ -2045,25 +2380,31 @@ export const insertHarmFulForm = (contractor, project, date, jobSummary,projectI
 
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("date",date)
-      formData.append("tab_id",tab_id)
-      formData.append("task_id",task_id)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("date", date);
+      formData.append("tab_id", tab_id);
+      formData.append("task_id", task_id);
 
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
 
-      formData.append("projectComment",projectComment)
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+
       // const body = {
       //   contractor,
       //   project,
@@ -2073,15 +2414,19 @@ export const insertHarmFulForm = (contractor, project, date, jobSummary,projectI
       //   jobSummary,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      console.log(formData);
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/harmfulSubstance",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       //console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2090,9 +2435,11 @@ export const insertHarmFulForm = (contractor, project, date, jobSummary,projectI
           payload: response,
         });
       } else {
+        console.log(response?.response?.request);
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -2108,7 +2455,8 @@ export const insertHealthSafetyForm = (
   Inspection_Date,
   inspectionSignature,
   Document,
-  projectImages,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -2130,49 +2478,54 @@ export const insertHealthSafetyForm = (
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const formData = new FormData();
-      
-      formData.append("Contractor",Contractor)
-      formData.append("Supervisor",Supervisor)
-      formData.append("Date",Date)
-      formData.append("Address",Address)
-      formData.append("Inspection_Name",Inspection_Name)
-      formData.append("Inspection_For",Inspection_For)
-      formData.append("Inspection_Date",Inspection_Date)
+
+      formData.append("Contractor", Contractor);
+      formData.append("Supervisor", Supervisor);
+      formData.append("Date", Date);
+      formData.append("Address", Address);
+      formData.append("Inspection_Name", Inspection_Name);
+      formData.append("Inspection_For", Inspection_For);
+      formData.append("Inspection_Date", Inspection_Date);
 
       inspectionSignature &&
-      formData.append("inspectionSignature", {
-        // file: inspectionSignature,
-        uri: Platform.OS === "android" ? inspectionSignature: inspectionSignature.replace("file://", ""),
-        name: inspectionSignature.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("inspectionSignature", {
+          // file: inspectionSignature,
+          uri:
+            Platform.OS === "android"
+              ? inspectionSignature
+              : inspectionSignature.replace("file://", ""),
+          name: inspectionSignature.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-
-      Action.forEach(item => {
+      Action.forEach((item) => {
         formData.append(`Action[]`, JSON.stringify([item]));
       });
 
-
-      Document.forEach(item => {
+      Document.forEach((item) => {
         formData.append(`Document[]`, JSON.stringify([item]));
       });
- 
+
       // formData.append(`Document`,JSON.stringify(Document));
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-      
-      
-      console.log(formData)
+      });
+      console.log(formData);
       // const body = {
       //   Contractor,
       //   Supervisor,
@@ -2188,15 +2541,19 @@ export const insertHealthSafetyForm = (
       //   Document,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/HealthAndSAfetyInspection", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url +
+          "supervisor/insert/healthAndSecurity/HealthAndSAfetyInspection",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2217,7 +2574,20 @@ export const insertHealthSafetyForm = (
     }
   };
 };
-export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Supervisor, date,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertHouseKeepingForm = (
+  contractor,
+  project,
+  week,
+  jobSummary,
+  Supervisor,
+  date,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contractor  :", contractor);
@@ -2229,38 +2599,43 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
 
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("week",week)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("week", week);
 
       Supervisor &&
-      formData.append("Supervisor", {
-        // file: Supervisor,
-        uri: Platform.OS === "android" ? Supervisor: Supervisor.replace("file://", ""),
-        name: Supervisor.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("Supervisor", {
+          // file: Supervisor,
+          uri:
+            Platform.OS === "android"
+              ? Supervisor
+              : Supervisor.replace("file://", ""),
+          name: Supervisor.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
+      formData.append("date", date);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      formData.append("date",date)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-
-      
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      formData.append("projectComment",projectComment)
+      });
       // formData.append("jobSummary",jobSummary)
 
       // const body = {
@@ -2274,15 +2649,18 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
       //   jobSummary,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepings", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/housekeepings",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2303,7 +2681,21 @@ export const insertHouseKeepingForm = (contractor, project, week, jobSummary, Su
     }
   };
 };
-export const insertLAdderCheckListForm = (contractor, project, supervisor, date, next_inspection, comment, jobSummary,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertLAdderCheckListForm = (
+  contractor,
+  project,
+  supervisor,
+  date,
+  next_inspection,
+  comment,
+  jobSummary,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contractor  :", contractor);
@@ -2319,38 +2711,45 @@ export const insertLAdderCheckListForm = (contractor, project, supervisor, date,
 
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("date",date)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("date", date);
 
       supervisor &&
-      formData.append("supervisor", {
-        // file: supervisor,
-        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
-        name: supervisor.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("supervisor", {
+          // file: supervisor,
+          uri:
+            Platform.OS === "android"
+              ? supervisor
+              : supervisor.replace("file://", ""),
+          name: supervisor.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
+      formData.append("next_inspection", next_inspection);
+      formData.append("comment", comment);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      formData.append("next_inspection",next_inspection)
-      formData.append("comment",comment)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
       // formData.append("jobSummary",jobSummary)
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
 
-      formData.append("projectComment",projectComment)
-        console.log(formData)
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+      console.log(formData);
       // const body = {
       //   contractor,
       //   project,
@@ -2363,15 +2762,18 @@ export const insertLAdderCheckListForm = (contractor, project, supervisor, date,
       //   jobSummary,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Ladders", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Ladders",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2391,7 +2793,22 @@ export const insertLAdderCheckListForm = (contractor, project, supervisor, date,
     }
   };
 };
-export const insertMethodStatementForm = (title, contractor, project, ref, jobSummary, supervisor, supervisor_sign,isSign,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertMethodStatementForm = (
+  title,
+  contractor,
+  project,
+  ref,
+  jobSummary,
+  supervisor,
+  supervisor_sign,
+  isSign,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       //   console.log("Statement Title  :", title);
@@ -2405,50 +2822,55 @@ export const insertMethodStatementForm = (title, contractor, project, ref, jobSu
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const formData = new FormData();
-      
-      formData.append("title",title)
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("ref",ref)
-      formData.append("supervisor",supervisor)
+
+      formData.append("title", title);
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("ref", ref);
+      formData.append("supervisor", supervisor);
 
       supervisor_sign &&
-      formData.append("supervisor_sign", {
-        // file: supervisor_sign,
-        uri: Platform.OS === "android" ? supervisor_sign: supervisor_sign.replace("file://", ""),
-        name: supervisor_sign.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
-
+        formData.append("supervisor_sign", {
+          // file: supervisor_sign,
+          uri:
+            Platform.OS === "android"
+              ? supervisor_sign
+              : supervisor_sign.replace("file://", ""),
+          name: supervisor_sign.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
       isSign &&
-      formData.append("isSign", {
-        // file: isSign,
-        uri: Platform.OS === "android" ? isSign: isSign.replace("file://", ""),
-        name: isSign.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("isSign", {
+          // file: isSign,
+          uri:
+            Platform.OS === "android" ? isSign : isSign.replace("file://", ""),
+          name: isSign.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-
-      formData.append("projectComment",projectComment)
+      });
       // const body = {
       //   title,
       //   contractor,
@@ -2461,13 +2883,16 @@ export const insertMethodStatementForm = (title, contractor, project, ref, jobSu
       //   jobSummary,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/methodStatement", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/methodStatement",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2487,7 +2912,19 @@ export const insertMethodStatementForm = (title, contractor, project, ref, jobSu
     }
   };
 };
-export const insertIssueRecordForm = (contractor, project, employees, jobSummary,recordSignature,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertIssueRecordForm = (
+  contractor,
+  project,
+  employees,
+  jobSummary,
+  recordSignature,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main contractor  :", contractor);
@@ -2498,39 +2935,43 @@ export const insertIssueRecordForm = (contractor, project, employees, jobSummary
       // console.log("Tab Name :", tabId);
       // console.log("Token :", token);
 
-
       const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("employees",employees)
-      formData.append("project",project)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-
+      formData.append("contractor", contractor);
+      formData.append("employees", employees);
+      formData.append("project", project);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
       recordSignature &&
-      formData.append("recordSignature", {
-        // file: recordSignature,
-        uri: Platform.OS === "android" ? recordSignature: recordSignature.replace("file://", ""),
-        name: recordSignature.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("recordSignature", {
+          // file: recordSignature,
+          uri:
+            Platform.OS === "android"
+              ? recordSignature
+              : recordSignature.replace("file://", ""),
+          name: recordSignature.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
-      
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      formData.append("projectComment",projectComment)
+      });
       // const body = {
       //   contractor,
       //   employees,
@@ -2540,15 +2981,18 @@ export const insertIssueRecordForm = (contractor, project, employees, jobSummary
       //   jobSummary,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/personal_protective", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/personal_protective",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2568,7 +3012,20 @@ export const insertIssueRecordForm = (contractor, project, employees, jobSummary
     }
   };
 };
-export const insertPuwerInspectionForm = (contractor, project, comments, supervisor, date, jobSummary, projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertPuwerInspectionForm = (
+  contractor,
+  project,
+  comments,
+  supervisor,
+  date,
+  jobSummary,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Main Contractor  :", contractor);
@@ -2581,38 +3038,41 @@ export const insertPuwerInspectionForm = (contractor, project, comments, supervi
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("comments",comments)
-
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("comments", comments);
 
       supervisor &&
-      formData.append("supervisor", {
-        // file: supervisor,
-        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
-        name: supervisor.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("supervisor", {
+          // file: supervisor,
+          uri:
+            Platform.OS === "android"
+              ? supervisor
+              : supervisor.replace("file://", ""),
+          name: supervisor.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
+      formData.append("date", date);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      formData.append("date",date)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-
-
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
+      });
       // const body = {
       //   contractor,
       //   project,
@@ -2623,16 +3083,21 @@ export const insertPuwerInspectionForm = (contractor, project, comments, supervi
       //   tab_id,
       //   jobSummary,
       // };
-      formData.append("projectComment",projectComment)
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/Puwer", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
       });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/Puwer",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       // if (response.success == true) {
@@ -2653,7 +3118,18 @@ export const insertPuwerInspectionForm = (contractor, project, comments, supervi
     }
   };
 };
-export const insertOnSiteDecorationForm = (contractor, project, jobSummary,onSiteSignature,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertOnSiteDecorationForm = (
+  contractor,
+  project,
+  jobSummary,
+  onSiteSignature,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       //   console.log("Statement Title  :", title);
@@ -2667,35 +3143,41 @@ export const insertOnSiteDecorationForm = (contractor, project, jobSummary,onSit
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
       onSiteSignature &&
-      formData.append("onSiteSignature", {
-        // file: onSiteSignature,
-        uri: Platform.OS === "android" ? onSiteSignature: onSiteSignature.replace("file://", ""),
-        name: onSiteSignature.split("/").pop(),
-        type: 'image/jpeg', // it may be necessary in Android.
-      });
+        formData.append("onSiteSignature", {
+          // file: onSiteSignature,
+          uri:
+            Platform.OS === "android"
+              ? onSiteSignature
+              : onSiteSignature.replace("file://", ""),
+          name: onSiteSignature.split("/").pop(),
+          type: "image/jpeg", // it may be necessary in Android.
+        });
 
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      formData.append("projectComment",projectComment)
+      });
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
       // const body = {
       //   contractor,
       //   project,
@@ -2704,15 +3186,18 @@ export const insertOnSiteDecorationForm = (contractor, project, jobSummary,onSit
       //   jobSummary,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/top_decorting", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/top_decorting",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2747,8 +3232,8 @@ export const insertRecordOfProject = (
   contractor,
   project,
   jobSummary,
-  projectImages,
-  projectComment,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -2771,39 +3256,43 @@ export const insertRecordOfProject = (
       // console.log("Job Summary thi :", jobSummary);
       // console.log("Job ID :", task_id);
       // console.log("Tab Name :", tab_id);
-      // console.log("Token :", token);
+      console.log("Token :", token);
 
+      const formData = new FormData();
 
-      const formData = new FormData()
+      formData.append("surname", surname);
+      formData.append("firstname", firstname);
+      formData.append("relation_to_kin", relation_to_kin);
+      formData.append("mobile", mobile);
+      formData.append("job", job);
+      formData.append("address", address);
+      formData.append("cscscard", cscscard);
+      formData.append("project", project);
+      formData.append("detail", detail);
+      formData.append("nexttokin", nexttokin);
+      formData.append("kincontact", kincontact);
+      formData.append("contractor", contractor);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      formData.append("surname",surname)
-      formData.append("firstname",firstname)
-      formData.append("relation_to_kin",relation_to_kin)
-      formData.append("mobile",mobile)
-      formData.append("job",job)
-      formData.append("address",address)
-      formData.append("cscscard",cscscard)
-      formData.append("detail",detail)
-      formData.append("nexttokin",nexttokin)
-      formData.append("kincontact",kincontact)
-      formData.append("contractor",contractor)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-
-
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      formData.append("projectComment",projectComment)
+      });
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+      console.log(formData);
       // const body = {
       //   surname,
       //   firstname,
@@ -2822,15 +3311,18 @@ export const insertRecordOfProject = (
       //   jobSummary,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/IntroTraining", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/IntroTraining",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       // console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2843,9 +3335,11 @@ export const insertRecordOfProject = (
         //   type: Actions.INSERT_RECORD_OF_PROJECT_FORM_FAIL,
         //   payload: response,
         // });
+        console.log(response?.response?.request);
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -2862,8 +3356,8 @@ export const insertDailyBreifingForm = (
   Operative,
   Hazrd,
   saveStartSignature,
-  projectImages,
-  projectComment,
+  projectImagesComment,
+  commentImages,
   task_id,
   tab_id,
   token,
@@ -2885,56 +3379,64 @@ export const insertDailyBreifingForm = (
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("Contractor",Contractor)
-      formData.append("Project",Project)
-      formData.append("Supervisor",Supervisor)
-      formData.append("Statment",Statment)
-      formData.append("Date",Date)
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("Contractor", Contractor);
+      formData.append("Project", Project);
+      formData.append("Supervisor", Supervisor);
+      formData.append("Statment", Statment);
+      formData.append("Date", Date);
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-      Daily.forEach(item => {
+      Daily.forEach((item) => {
         formData.append(`Daily[]`, JSON.stringify([item]));
       });
 
-      Job_Safe.forEach(item => {
+      Job_Safe.forEach((item) => {
         formData.append(`Job_Safe[]`, JSON.stringify([item]));
       });
 
-      Brefily.forEach(item => {
+      Brefily.forEach((item) => {
         formData.append(`Brefily[]`, JSON.stringify([item]));
       });
 
-      Operative.forEach(item => {
+      Operative.forEach((item) => {
         formData.append(`Operative[]`, JSON.stringify([item]));
       });
 
-      Hazrd.forEach(item => {
+      Hazrd.forEach((item) => {
         formData.append(`Hazrd[]`, JSON.stringify([item]));
       });
-      formData.append("projectComment",projectComment)
 
       saveStartSignature &&
-      formData.append("saveStartSignature", {
-        // file: saveStartSignature,
-        uri: Platform.OS === "android" ? saveStartSignature: saveStartSignature.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
+        formData.append("saveStartSignature", {
+          // file: saveStartSignature,
+          uri:
+            Platform.OS === "android"
+              ? saveStartSignature
+              : saveStartSignature.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      });
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
       });
 
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
-        });
-      })
-      
       // formData.append("Contractor",Contractor)
       // formData.append("Contractor",Contractor)
-      
+
       // const body = {
       //   Contractor,
       //   Project,
@@ -2949,16 +3451,19 @@ export const insertDailyBreifingForm = (
       //   Operative,
       //   Hazrd,
       // };
-      console.log(formData)
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DailyBreifing", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      console.log(formData);
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/DailyBreifing",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -2987,52 +3492,58 @@ export const insertTBTCOSH = (data, token, index) => {
       // console.log("Tab Name :", tabId);
       //console.log("Token :", token);
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-      formData.append("projectComment",data.projectComment)
-
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
 
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      data.jobSummary.forEach(item => {
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
-      
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-
-console.log("Form Data",formData)
-
-
-const request = await axios(base_url + "supervisor/insert/healthAndSecurity/COSHH", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+      console.log("Form Data", formData);
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/COSHH",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3067,46 +3578,57 @@ export const insertTbtFire = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-      formData.append("projectComment",data.projectComment)
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
 
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-      data.jobSummary.forEach(item => {
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      console.log("Form Data :",formData)
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/fire_safety", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      console.log("Form Data :", formData);
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/fire_safety",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3141,44 +3663,55 @@ export const insertTbtSlip = (data, token, index) => {
       //   jobSummary,
       // };
 
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-      formData.append("projectComment",data.projectComment)
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-      data.jobSummary.forEach(item => {
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/SlitTrip", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/SlitTrip",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3211,47 +3744,56 @@ export const insertTbtCovid = (data, token, index) => {
       //   tab_id,
       //   jobSummary,
       // };
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
 
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-      data.jobSummary.forEach(item => {
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      formData.append("projectComment",data.projectComment)
-
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/covid", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/covid",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3286,46 +3828,55 @@ export const insertTbtHouseKeepingForm = (data, token, index) => {
       //   jobSummary,
       // };
 
+      const formData = new FormData();
 
-      const formData = new FormData()
-
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-      formData.append("projectComment",data.projectComment)
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-      data.jobSummary.forEach(item => {
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/housekeepingTB", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/housekeepingTB",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3360,46 +3911,55 @@ export const insertTbtMobileForm = (data, token, index) => {
       //   jobSummary,
       // };
 
+      const formData = new FormData();
 
-      const formData = new FormData()
-
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-      formData.append("projectComment",data.projectComment)
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
-      data.jobSummary.forEach(item => {
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/MobileEvelated", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/MobileEvelated",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3432,48 +3992,57 @@ export const insertTbtRespiratory = (data, token, index) => {
       //   tab_id,
       //   jobSummary,
       // };
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
 
-      formData.append("projectComment",data.projectComment)
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      data.jobSummary.forEach(item => {
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DustMask", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/DustMask",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3506,48 +4075,57 @@ export const insertTbtSilicaDust = (data, token, index) => {
       //   tab_id,
       //   jobSummary,
       // };
-      const formData = new FormData()
+      const formData = new FormData();
 
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-      formData.append("projectComment",data.projectComment)
-
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
 
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      data.jobSummary.forEach(item => {
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/SilicaDust", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/SilicaDust",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3583,56 +4161,67 @@ export const insertTbtDrugs = (data, token, index) => {
 
       const formData = new FormData();
 
-
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
 
       data.signature &&
-      formData.append("signature", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.signature:  data.signature.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("signature", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.signature
+              : data.signature.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      formData.append("supervisor",data.supervisor)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-      formData.append("projectComment",data.projectComment)
+      formData.append("supervisor", data.supervisor);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
 
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      data.jobSummary.forEach(item => {
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/DrugAndAlcohol", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/DrugAndAlcohol",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
 
       const response = request.data;
       console.log("Insert Response :", response);
@@ -3661,53 +4250,63 @@ export const insertTbtVolience = (data, token, index) => {
 
       const formData = new FormData();
 
-
-      formData.append("date",data.date)
-      formData.append("supervisor",data.supervisor)
-      formData.append("projectComment",data.projectComment)
+      formData.append("date", data.date);
+      formData.append("supervisor", data.supervisor);
       data.signature &&
-      formData.append("signature", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.signature:  data.signature.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("signature", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.signature
+              : data.signature.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
 
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: signature,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("tbtSign", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      data.jobSummary.forEach(item => {
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/VoilenceAndAggression", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/VoilenceAndAggression",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3744,46 +4343,55 @@ export const insertTbtWorking = (data, token, index) => {
 
       const formData = new FormData();
 
-
-      formData.append("contractor",data.contractor)
-      formData.append("project",data.project)
-      formData.append("meeting",data.meeting)
-      formData.append("date",data.date)
-      formData.append("comments",data.comments)
-      formData.append("task_id",data.task_id)
-      formData.append("tab_id",data.tab_id)
-      formData.append("projectComment",data.projectComment)
+      formData.append("contractor", data.contractor);
+      formData.append("project", data.project);
+      formData.append("meeting", data.meeting);
+      formData.append("date", data.date);
+      formData.append("comments", data.comments);
+      formData.append("task_id", data.task_id);
+      formData.append("tab_id", data.tab_id);
 
       data.tbtSign &&
-      formData.append("tbtSign", {
-        // file: tbtSign,
-        uri: Platform.OS === "android" ?  data.tbtSign:  data.tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      })
+        formData.append("tbtSign", {
+          // file: tbtSign,
+          uri:
+            Platform.OS === "android"
+              ? data.tbtSign
+              : data.tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      data.jobSummary.forEach(item => {
+      data.jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-      data.projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      data.projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
-
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeight", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
       });
+      data.commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
+
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeight",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3804,7 +4412,25 @@ export const insertTbtWorking = (data, token, index) => {
     }
   };
 };
-export const insertTbtRegister = (client, project, subject, outline, date, start, finish, jobSummary, supervisor, signature,tbtSign, projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertTbtRegister = (
+  client,
+  project,
+  subject,
+  outline,
+  date,
+  start,
+  finish,
+  jobSummary,
+  supervisor,
+  signature,
+  tbtSign,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       // console.log("Client :", client);
@@ -3821,51 +4447,58 @@ export const insertTbtRegister = (client, project, subject, outline, date, start
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
 
-
       const formData = new FormData();
 
-      formData.append("client",client)
-      formData.append("project",project)
-      formData.append("subject",subject)
-      formData.append("date",date)
-      formData.append("outline",outline)
-      formData.append("start",start)
-      formData.append("finish",finish)
-      formData.append("supervisor",supervisor)
-      formData.append("projectComment",projectComment)
+      formData.append("client", client);
+      formData.append("project", project);
+      formData.append("subject", subject);
+      formData.append("date", date);
+      formData.append("outline", outline);
+      formData.append("start", start);
+      formData.append("finish", finish);
+      formData.append("supervisor", supervisor);
       signature &&
-      formData.append("signature", {
-        // file: signature,
-        uri: Platform.OS === "android" ? signature:  signature.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      })
+        formData.append("signature", {
+          // file: signature,
+          uri:
+            Platform.OS === "android"
+              ? signature
+              : signature.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
-
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
       tbtSign &&
-      formData.append("tbtSign", {
-        // file: tbtSign,
-        uri: Platform.OS === "android" ? tbtSign:  tbtSign.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      })
+        formData.append("tbtSign", {
+          // file: tbtSign,
+          uri:
+            Platform.OS === "android"
+              ? tbtSign
+              : tbtSign.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
 
-
-      projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
+      });
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
       // const body = {
       //   client,
       //   project,
@@ -3880,16 +4513,19 @@ export const insertTbtRegister = (client, project, subject, outline, date, start
       //   tab_id,
       //   jobSummary,
       // };
-      console.log(formData)
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/ToolBoxRegister", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      console.log(formData);
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/ToolBoxRegister",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3910,7 +4546,19 @@ export const insertTbtRegister = (client, project, subject, outline, date, start
     }
   };
 };
-export const insertTbtInventory = (contractor, project, supervisor, date, jobSummary,projectImages,projectComment, task_id, tab_id, token, index) => {
+export const insertTbtInventory = (
+  contractor,
+  project,
+  supervisor,
+  date,
+  jobSummary,
+  projectImagesComment,
+  commentImages,
+  task_id,
+  tab_id,
+  token,
+  index
+) => {
   return async (dispatch, getState) => {
     try {
       console.log("Main contractor :", contractor);
@@ -3922,37 +4570,42 @@ export const insertTbtInventory = (contractor, project, supervisor, date, jobSum
       console.log("Tab Name :", tab_id);
       console.log("Token :", token);
 
+      const formData = new FormData();
 
-      const formData = new FormData()
-
-      formData.append("contractor",contractor)
-      formData.append("project",project)
-      formData.append("date",date)
-      formData.append("projectComment",projectComment)
+      formData.append("contractor", contractor);
+      formData.append("project", project);
+      formData.append("date", date);
 
       supervisor &&
-      formData.append("supervisor", {
-        // file: supervisor,
-        uri: Platform.OS === "android" ? supervisor: supervisor.replace("file://", ""),
-        name: Math.random(0, 1000).toString(),
-        type: 'image/png', // it may be necessary in Android.
-      });
+        formData.append("supervisor", {
+          // file: supervisor,
+          uri:
+            Platform.OS === "android"
+              ? supervisor
+              : supervisor.replace("file://", ""),
+          name: Math.random(0, 1000).toString(),
+          type: "image/png", // it may be necessary in Android.
+        });
 
-
-      jobSummary.forEach(item => {
+      jobSummary.forEach((item) => {
         formData.append(`jobSummary[]`, JSON.stringify([item]));
       });
-      formData.append("task_id",task_id)
-      formData.append("tab_id",tab_id)
+      formData.append("task_id", task_id);
+      formData.append("tab_id", tab_id);
 
-
-     projectImages.forEach(element =>{
-        formData.append("projectImages[]", {
-          uri: Platform.OS === "android" ? element.uri: element.uri.replace("file://", ""),
+      projectImagesComment.forEach((element) => {
+        formData.append("projectImagesComment[]", {
+          uri:
+            Platform.OS === "android"
+              ? element.image
+              : element.image.replace("file://", ""),
           name: Math.random(0, 1000).toString(),
-          type: 'image/png', // it may be necessary in Android.
+          type: "image/png", // it may be necessary in Android.
         });
-      })
+      });
+      commentImages.forEach((item) => {
+        formData.append(`commentImages[]`, JSON.stringify([item]));
+      });
       // const body = {
       //   contractor,
       //   project,
@@ -3964,15 +4617,18 @@ export const insertTbtInventory = (contractor, project, supervisor, date, jobSum
       //   jobSummary,
       // };
 
-      const request = await axios(base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeightEquip", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data, application/json",
-          "Cache-Control": "no-cache",
-        },
-        data: formData,
-      });
+      const request = await axios(
+        base_url + "supervisor/insert/healthAndSecurity/WorkingAtHeightEquip",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data, application/json",
+            "Cache-Control": "no-cache",
+          },
+          data: formData,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
@@ -3985,125 +4641,172 @@ export const insertTbtInventory = (contractor, project, supervisor, date, jobSum
         //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
         //   payload: response,
         // });
+        console.log(response?.response?.request);
         throw new Error(response.message);
       }
     } catch (err) {
-      throw new Error(err.message);
-    }
-  };
-};
-
-export const updateWorkFlowTopTabs = ( plot_id, token ) => {
-  //return console.log({plot_id, tab_id, token })
-  return async (dispatch, getState) => {
-    try {
-      const body = {
-        plot_id
-      };
-
-      const request = await axios(base_url + "supervisor/search/job/taskDatails", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
-      const response = request.data;
-      console.log("Insert Response :", response);
-      if (response.success == true) {
-       // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
-          // _returnUpdatedArray(getState.summary.misCoat)
-          dispatch({
-            type: Actions.UPDATE_MISCOT_WORKFLOW,
-            payload: response?.data?.user.find(el=>el.tab_id==='Miscoat')?_returnUpdatedArray(getState().summary.misCoat,response?.data?.user.find(el=>el.tab_id==='Miscoat')):getState().summary.misCoat,
-          });
-      //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
-          dispatch({
-            type: Actions.UPDATE_DECORATION_WORKFLOW,
-            payload: response?.data?.user.find(el=>el.tab_id==='Decoration')?_returnUpdatedArray(getState().summary.decorationArray,response?.data?.user.find(el=>el.tab_id==='Decoration')):getState().summary.decorationArray,
-          });
-      //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
-          dispatch({
-            type: Actions.UPDATE_SNAG_WORKFLOW,
-            // payload: _returnUpdatedArray(getState().summary.snagArray,null)
-            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
-          });
-     //   }
-       
-      } else {
-        dispatch({
-            type: Actions.UPDATE_MISCOT_WORKFLOW,
-            payload: _returnUpdatedArray(getState().summary.misCoat,null)
-          });
-      //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
-          dispatch({
-            type: Actions.UPDATE_DECORATION_WORKFLOW,
-            payload: _returnUpdatedArray(getState().summary.decorationArray,null)
-          });
-      //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
-          dispatch({
-            type: Actions.UPDATE_SNAG_WORKFLOW,
-            payload: _returnUpdatedArray(getState().summary.snagArray,null)
-            //payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
-          });
-      }
-    } catch (err) {
-
       console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
 };
-export const updateVerificationTopTabs = ( plot_id, token ) => {
+
+export const updateWorkFlowTopTabs = (plot_id, token) => {
   //return console.log({plot_id, tab_id, token })
   return async (dispatch, getState) => {
     try {
       const body = {
-        plot_id
+        plot_id,
       };
 
-      const request = await axios(base_url + "supervisor/search/job/taskDatails/verificationOfWork", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      const request = await axios(
+        base_url + "supervisor/search/job/taskDatails",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
-       // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
-          // _returnUpdatedArray(getState.summary.misCoat)
-          dispatch({
-            type: Actions.UPDATE_MISCOT_VERIFICATION,
-            payload: response?.data?.user.find(el=>el.tab_id==='Miscoat')?_returnUpdatedArray(getState().summary.verificationMiscoatInfo,response?.data?.user.find(el=>el.tab_id==='Miscoat')):getState().summary.verificationMiscoatInfo,
-          });
-      //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
-          dispatch({
-            type: Actions.UPDATE_DECORATION_VERIFICATION,
-            payload: response?.data?.user.find(el=>el.tab_id==='Decoration')?_returnUpdatedArray(getState().summary.verificationDecorationInfo,response?.data?.user.find(el=>el.tab_id==='Decoration')):getState().summary.verificationDecorationInfo,
-          });
-      //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
-          dispatch({
-            type: Actions.UPDATE_SNAG_VERIFICATION,
-            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.verificationSngInfo,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.verificationSngInfo,
-          });
-     //   }
-       
+        // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
+        // _returnUpdatedArray(getState.summary.misCoat)
+        dispatch({
+          type: Actions.UPDATE_MISCOT_WORKFLOW,
+          payload: response?.data?.user.find((el) => el.tab_id === "Miscoat")
+            ? _returnUpdatedArray(
+                getState().summary.misCoat,
+                response?.data?.user.find((el) => el.tab_id === "Miscoat")
+              )
+            : getState().summary.misCoat,
+        });
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+        dispatch({
+          type: Actions.UPDATE_DECORATION_WORKFLOW,
+          payload: response?.data?.user.find((el) => el.tab_id === "Decoration")
+            ? _returnUpdatedArray(
+                getState().summary.decorationArray,
+                response?.data?.user.find((el) => el.tab_id === "Decoration")
+              )
+            : getState().summary.decorationArray,
+        });
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+        dispatch({
+          type: Actions.UPDATE_SNAG_WORKFLOW,
+          // payload: _returnUpdatedArray(getState().summary.snagArray,null)
+          payload: response?.data?.user.find((el) => el.tab_id === "Sang")
+            ? _returnUpdatedArray(
+                getState().summary.snagArray,
+                response?.data?.user.find((el) => el.tab_id === "Sang")
+              )
+            : getState().summary.snagArray,
+        });
+        //   }
+      } else {
+        dispatch({
+          type: Actions.UPDATE_MISCOT_WORKFLOW,
+          payload: _returnUpdatedArray(getState().summary.misCoat, null),
+        });
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+        dispatch({
+          type: Actions.UPDATE_DECORATION_WORKFLOW,
+          payload: _returnUpdatedArray(
+            getState().summary.decorationArray,
+            null
+          ),
+        });
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+        dispatch({
+          type: Actions.UPDATE_SNAG_WORKFLOW,
+          payload: _returnUpdatedArray(getState().summary.snagArray, null),
+          //payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.snagArray,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.snagArray,
+        });
+      }
+    } catch (err) {
+      console.log(err?.response?.request);
+      throw new Error(err.message);
+    }
+  };
+};
+export const updateVerificationTopTabs = (plot_id, token) => {
+  //return console.log({plot_id, tab_id, token })
+  return async (dispatch, getState) => {
+    try {
+      const body = {
+        plot_id,
+      };
+
+      const request = await axios(
+        base_url + "supervisor/search/job/taskDatails/verificationOfWork",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
+      const response = request.data;
+      console.log("Insert Response :", response);
+      if (response.success == true) {
+        // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
+        // _returnUpdatedArray(getState.summary.misCoat)
+        dispatch({
+          type: Actions.UPDATE_MISCOT_VERIFICATION,
+          payload: response?.data?.user.find((el) => el.tab_id === "Miscoat")
+            ? _returnUpdatedArray(
+                getState().summary.verificationMiscoatInfo,
+                response?.data?.user.find((el) => el.tab_id === "Miscoat")
+              )
+            : getState().summary.verificationMiscoatInfo,
+        });
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+        dispatch({
+          type: Actions.UPDATE_DECORATION_VERIFICATION,
+          payload: response?.data?.user.find((el) => el.tab_id === "Decoration")
+            ? _returnUpdatedArray(
+                getState().summary.verificationDecorationInfo,
+                response?.data?.user.find((el) => el.tab_id === "Decoration")
+              )
+            : getState().summary.verificationDecorationInfo,
+        });
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+        dispatch({
+          type: Actions.UPDATE_SNAG_VERIFICATION,
+          payload: response?.data?.user.find((el) => el.tab_id === "Sang")
+            ? _returnUpdatedArray(
+                getState().summary.verificationSngInfo,
+                response?.data?.user.find((el) => el.tab_id === "Sang")
+              )
+            : getState().summary.verificationSngInfo,
+        });
+        //   }
       } else {
         dispatch({
           type: Actions.UPDATE_MISCOT_VERIFICATION,
-          payload: _returnUpdatedArray(getState().summary.verificationMiscoatInfo,null),
+          payload: _returnUpdatedArray(
+            getState().summary.verificationMiscoatInfo,
+            null
+          ),
         });
-    //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
         dispatch({
           type: Actions.UPDATE_DECORATION_VERIFICATION,
-          payload: _returnUpdatedArray(getState().summary.verificationDecorationInfo,null),
+          payload: _returnUpdatedArray(
+            getState().summary.verificationDecorationInfo,
+            null
+          ),
         });
-    //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
         dispatch({
           type: Actions.UPDATE_SNAG_VERIFICATION,
-          payload: _returnUpdatedArray(getState().summary.verificationSngInfo,null)
+          payload: _returnUpdatedArray(
+            getState().summary.verificationSngInfo,
+            null
+          ),
         });
       }
     } catch (err) {
@@ -4112,56 +4815,82 @@ export const updateVerificationTopTabs = ( plot_id, token ) => {
     }
   };
 };
-export const updateHealthTopTabs = ( plot_id, token ) => {
+export const updateHealthTopTabs = (plot_id, token) => {
   //return console.log({plot_id, tab_id, token })
   return async (dispatch, getState) => {
     try {
       const body = {
-        plot_id
+        plot_id,
       };
-      console.log("HEalth & Safety :",token)
-      const request = await axios(base_url + "supervisor/search/job/taskDatails/healthAndSafety", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + token,
-        },
-        data: body,
-      });
+      console.log("HEalth & Safety :", token);
+      const request = await axios(
+        base_url + "supervisor/search/job/taskDatails/healthAndSafety",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + token,
+          },
+          data: body,
+        }
+      );
       const response = request.data;
       console.log("Insert Response :", response);
       if (response.success == true) {
-       // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
-          // _returnUpdatedArray(getState.summary.misCoat)
-          dispatch({
-            type: Actions.UPDATE_MISCOT_HEALTH,
-            payload: response?.data?.user.find(el=>el.tab_id==='Miscoat')?_returnUpdatedArray(getState().summary.healthAndSafetyMisCoat,response?.data?.user.find(el=>el.tab_id==='Miscoat')):getState().summary.healthAndSafetyMisCoat,
-          });
-      //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
-          dispatch({
-            type: Actions.UPDATE_DECORATION_HEALTH,
-            payload: response?.data?.user.find(el=>el.tab_id==='Decoration')?_returnUpdatedArray(getState().summary.healthAndSafetyDecoration,response?.data?.user.find(el=>el.tab_id==='Decoration')):getState().summary.healthAndSafetyDecoration,
-          });
-      //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
-          dispatch({
-            type: Actions.UPDATE_SNAG_HEALTH,
-            payload: response?.data?.user.find(el=>el.tab_id==='Sang')?_returnUpdatedArray(getState().summary.healthAndSafetySnag,response?.data?.user.find(el=>el.tab_id==='Sang')):getState().summary.healthAndSafetySnag,
-          });
-     //   }
-       
+        // if(response?.data?.user.find(el=>el.tab_id==='Miscoat')){
+        // _returnUpdatedArray(getState.summary.misCoat)
+        dispatch({
+          type: Actions.UPDATE_MISCOT_HEALTH,
+          payload: response?.data?.user.find((el) => el.tab_id === "Miscoat")
+            ? _returnUpdatedArray(
+                getState().summary.healthAndSafetyMisCoat,
+                response?.data?.user.find((el) => el.tab_id === "Miscoat")
+              )
+            : getState().summary.healthAndSafetyMisCoat,
+        });
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+        dispatch({
+          type: Actions.UPDATE_DECORATION_HEALTH,
+          payload: response?.data?.user.find((el) => el.tab_id === "Decoration")
+            ? _returnUpdatedArray(
+                getState().summary.healthAndSafetyDecoration,
+                response?.data?.user.find((el) => el.tab_id === "Decoration")
+              )
+            : getState().summary.healthAndSafetyDecoration,
+        });
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+        dispatch({
+          type: Actions.UPDATE_SNAG_HEALTH,
+          payload: response?.data?.user.find((el) => el.tab_id === "Sang")
+            ? _returnUpdatedArray(
+                getState().summary.healthAndSafetySnag,
+                response?.data?.user.find((el) => el.tab_id === "Sang")
+              )
+            : getState().summary.healthAndSafetySnag,
+        });
+        //   }
       } else {
         dispatch({
           type: Actions.UPDATE_MISCOT_HEALTH,
-          payload: _returnUpdatedArray(getState().summary.healthAndSafetyMisCoat,null),
+          payload: _returnUpdatedArray(
+            getState().summary.healthAndSafetyMisCoat,
+            null
+          ),
         });
-    //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Decoration')){
         dispatch({
           type: Actions.UPDATE_DECORATION_HEALTH,
-          payload: _returnUpdatedArray(getState().summary.healthAndSafetyDecoration,null),
+          payload: _returnUpdatedArray(
+            getState().summary.healthAndSafetyDecoration,
+            null
+          ),
         });
-    //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
+        //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
         dispatch({
           type: Actions.UPDATE_SNAG_HEALTH,
-          payload: _returnUpdatedArray(getState().summary.healthAndSafetySnag,null),
+          payload: _returnUpdatedArray(
+            getState().summary.healthAndSafetySnag,
+            null
+          ),
         });
       }
     } catch (err) {
@@ -4171,16 +4900,15 @@ export const updateHealthTopTabs = ( plot_id, token ) => {
   };
 };
 
+const _returnUpdatedArray = (oldArr, updated) => {
+  let copyData = [...oldArr];
 
-const _returnUpdatedArray=(oldArr,updated)=>{
-  let copyData=[...oldArr];
-  
-  oldArr.forEach((el,index)=>{
-    if(updated?.hasOwnProperty(el?.url)){
-      copyData[index].tickSign=updated[el.url]==="1"?true:false
-    }else{
-      copyData[index].tickSign=false
+  oldArr.forEach((el, index) => {
+    if (updated?.hasOwnProperty(el?.url)) {
+      copyData[index].tickSign = updated[el.url] === "1" ? true : false;
+    } else {
+      copyData[index].tickSign = false;
     }
-  })
-  return copyData
-}
+  });
+  return copyData;
+};
