@@ -117,8 +117,7 @@ const TBTRESPIRATORY = (props) => {
         data.comments != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" &&
-        data.projectComment !=""
+        data.projectImages !=""
 
       ) {
         await props.creatTbtRespiratoryHandler(

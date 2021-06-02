@@ -23,10 +23,10 @@ const SearchDecorator = (props) =>{
     return(
         
         <View style={styles.mainContainer}>
-            <View style={styles.dateTimeContainer}>
+            {/* <View style={styles.dateTimeContainer}>
                 <Text style={styles.refText}>Date: 12-2-2021</Text>
                 <Text style={styles.refText}>Ref  id: 10099499</Text>
-            </View>
+            </View> */}
             
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Search Decorator</Text>
@@ -37,7 +37,7 @@ const SearchDecorator = (props) =>{
                         style={styles.inputField}
                         placeholder={"Enter your Decorator ID"}
                         value={decoratorID}
-                        onChangeText={(e)=>setDecoratorID(e)}
+                        onChangeText={(e)=>setDecoratorID(e.replace(/[^0-9]/g, ""))}
                     />
                 </View>
             </View>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
         width:'100%',
         height:"25%",
         paddingLeft:20,
-        paddingRight:20
-
+        paddingRight:20,
+        justifyContent:"center",
     },
 });

@@ -23,11 +23,9 @@ const DecorationRecord = (props) => {
   const jobID = plot_id;
   console.log("Site Plot ID :", jobID);
   const tabId = props.route.params.tabName;
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
   const [show, setShow] = useState(false);
-  const [dateSupervisor, setDateSupervisor] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateSupervisor, setDateSupervisor] = useState("");
   const [showSupervisor, setShowSupervisor] = useState(false);
   const [contractName, setContractName] = useState("");
   const [instructionNo, setInstructionNo] = useState("");
@@ -200,7 +198,7 @@ const DecorationRecord = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => setShow(false)}
             onConfirm={onChange}
@@ -210,7 +208,7 @@ const DecorationRecord = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => setShowSupervisor(false)}
             onConfirm={onDateSupervisorChange}
@@ -235,7 +233,7 @@ const DecorationRecord = (props) => {
                   style={styles.inputField}
                   placeholder={"Instruction No"}
                   value={instructionNo}
-                  onChangeText={(e) => setInstructionNo(e)}
+                  onChangeText={(e) => setInstructionNo(e.replace(/[^0-9]/g, ""))}
                 />
               </View>
               <View style={styles.inputFieldContainer}>
@@ -247,21 +245,14 @@ const DecorationRecord = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showDatepicker()}
-                  style={{
-                    width: "100%",
-                    height: 52,
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#96A8B2",
-                    paddingTop: 15,
-                    fontSize: 12,
-                    color: "#96A8B2",
-                    fontFamily: "poppins-regular",
-                  }}
-                >
-                  {new Date(date).toLocaleDateString()}
-                </Text>
+              <TouchableOpacity onPress={() => showDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput
@@ -378,21 +369,14 @@ const DecorationRecord = (props) => {
                   </View>
                   <View style={{ width: "50%", marginRight: 5 }}>
                     <View style={styles.inputFieldContainer}>
-                      <Text
-                        onPress={() => showSupervisorDatepicker()}
-                        style={{
-                          width: "100%",
-                          height: 52,
-                          borderBottomWidth: 1,
-                          borderBottomColor: "#96A8B2",
-                          paddingTop: 15,
-                          fontSize: 12,
-                          color: "#96A8B2",
-                          fontFamily: "poppins-regular",
-                        }}
-                      >
-                        {new Date(dateSupervisor).toLocaleDateString()}
-                      </Text>
+                    <TouchableOpacity  onPress={() => showSupervisorDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={dateSupervisor ? new Date(dateSupervisor).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                     </View>
                   </View>
                 </View>

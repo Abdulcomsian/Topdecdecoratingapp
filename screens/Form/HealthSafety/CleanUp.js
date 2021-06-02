@@ -26,10 +26,8 @@ const CleanUp = (props) => {
   console.log("Work Plot ID :", jobID);
   const tabId = props.route.params.tabName;
   console.log("Work Tab ID :", tabId);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
-  const [dateSupervisor, setDateSupervisor] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [date, setDate] = useState("");
+  const [dateSupervisor, setDateSupervisor] = useState("");
   const [mode, setMode] = useState("date");
   const [showDate, setShowDate] = useState(false);
   const [showSupervisor, setShowSupervisor] = useState(false);
@@ -261,7 +259,7 @@ const CleanUp = (props) => {
             isVisible={showDate}
             testID="dateTimePicker"
             value={date}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => CancelPicker("date")}
             onConfirm={onDateChange}
@@ -271,7 +269,7 @@ const CleanUp = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => CancelPicker("dateSupervisor")}
             onConfirm={onSupervisorChange}
@@ -281,7 +279,7 @@ const CleanUp = (props) => {
             isVisible={showCompleteDate.isVisible}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() =>
               setShowCompleteDate({ isVisible: false, index: -1 })
@@ -328,12 +326,14 @@ const CleanUp = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker("Date")}
-                      style={[styles.inputField, { paddingTop: 15 }]}
-                    >
-                      {new Date(date).toLocaleDateString()}
-                    </Text>
+                    <TouchableOpacity onPress={() => showDatepicker("Date")}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date & Time of issue"}
+                      />
+                    </TouchableOpacity>
                   </View>
 
                   <View style={styles.tableViewContainer}>
@@ -510,12 +510,20 @@ const CleanUp = (props) => {
                       </TouchableOpacity>
                     </View>
                     <View style={styles.inputFieldContainer}>
-                      <Text
+                      <TouchableOpacity
                         onPress={() => showDatepicker("DateSupervisor")}
-                        style={[styles.inputField, { paddingTop: 15 }]}
                       >
-                        {new Date(dateSupervisor).toLocaleDateString()}
-                      </Text>
+                        <TextInput
+                          editable={false}
+                          value={
+                            dateSupervisor
+                              ? new Date(dateSupervisor).toLocaleDateString()
+                              : ""
+                          }
+                          style={styles.inputField}
+                          placeholder={"Date"}
+                        />
+                      </TouchableOpacity>
                     </View>
                     <View
                       style={{

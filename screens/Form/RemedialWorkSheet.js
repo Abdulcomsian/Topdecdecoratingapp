@@ -28,13 +28,9 @@ const RemedialWork = (props) => {
     photo: "",
   });
   const [dynamicInput, setdynamicInput] = useState([]);
-  const [dateIssue, setIssueDate] = useState(new Date().toLocaleDateString());
-  const [dateSupervisor, setSupervisorDate] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [dateManager, setManagerDate] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateIssue, setIssueDate] = useState("");
+  const [dateSupervisor, setSupervisorDate] = useState("");
+  const [dateManager, setManagerDate] = useState("");
   const [showIssue, setIssueShow] = useState(false);
   const [showSupervisor, setSupervisorShow] = useState(false);
   const [showManager, setManagerShow] = useState(false);
@@ -286,7 +282,7 @@ const RemedialWork = (props) => {
             isVisible={showIssue}
             testID="dateTimePicker"
             value={dateIssue}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onIssueChange}
             onCancel={() => CancelPicker("issue")}
@@ -297,7 +293,7 @@ const RemedialWork = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onSupervisorDateChange}
             onCancel={() => CancelPicker("supervisorDate")}
@@ -308,7 +304,7 @@ const RemedialWork = (props) => {
             isVisible={showManager}
             testID="dateTimePicker"
             value={dateManager}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onManagerDateChange}
             onCancel={() => CancelPicker("managerDate")}
@@ -368,7 +364,9 @@ const RemedialWork = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={sheetNumber}
-                      onChangeText={(e) => setSheetNumber(e)}
+                      onChangeText={(e) =>
+                        setSheetNumber(e.replace(/[^0-9]/g, ""))
+                      }
                       style={styles.inputField}
                       placeholder={"Sheet Number"}
                     />
@@ -384,7 +382,9 @@ const RemedialWork = (props) => {
                     <View style={{ width: "40%" }}>
                       <TextInput
                         value={pageOff}
-                        onChangeText={(e) => setPageOff(e)}
+                        onChangeText={(e) =>
+                          setPageOff(e.replace(/[^0-9]/g, ""))
+                        }
                         style={styles.inputField}
                         placeholder={"Page"}
                       />
@@ -401,7 +401,9 @@ const RemedialWork = (props) => {
                     <View style={{ width: "40%" }}>
                       <TextInput
                         value={pageSecond}
-                        onChangeText={(e) => setPageSecond(e)}
+                        onChangeText={(e) =>
+                          setPageSecond(e.replace(/[^0-9]/g, ""))
+                        }
                         style={styles.inputField}
                         placeholder={"Page"}
                       />
@@ -418,23 +420,35 @@ const RemedialWork = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={plotNumber}
-                      onChangeText={(e) => setPlotNumber(e)}
+                      onChangeText={(e) =>
+                        setPlotNumber(e.replace(/[^0-9]/g, ""))
+                      }
                       style={styles.inputField}
                       placeholder={"Plot/Area Number"}
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
+                    <TouchableOpacity
                       onPress={() => showDatepicker("DateIssue")}
-                      style={[styles.inputField, { paddingTop: 15 }]}
                     >
-                      {new Date(dateIssue).toLocaleDateString()}
-                    </Text>
+                      <TextInput
+                        editable={false}
+                        value={
+                          dateIssue
+                            ? new Date(dateIssue).toLocaleDateString()
+                            : ""
+                        }
+                        style={styles.inputField}
+                        placeholder={"Date Issue to Site team"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={instructionNumber}
-                      onChangeText={(e) => setInstructionNumber(e)}
+                      onChangeText={(e) =>
+                        setInstructionNumber(e.replace(/[^0-9]/g, ""))
+                      }
                       style={styles.inputField}
                       placeholder={"Site Instruction Number"}
                     />
@@ -467,7 +481,11 @@ const RemedialWork = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateValue("area", index, txt)
+                                updateValue(
+                                  "area",
+                                  index,
+                                  txt.replace(/[^0-9]/g, "")
+                                )
                               }
                               value={el.area}
                               style={styles.bodyTextInput}
@@ -487,7 +505,11 @@ const RemedialWork = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateValue("photo", index, txt)
+                                updateValue(
+                                  "photo",
+                                  index,
+                                  txt.replace(/[^0-9]/g, "")
+                                )
                               }
                               value={el.photo}
                               style={styles.bodyTextInput}
@@ -528,7 +550,9 @@ const RemedialWork = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={totalHours}
-                      onChangeText={(e) => setTotalHours(e)}
+                      onChangeText={(e) =>
+                        setTotalHours(e.replace(/[^0-9]/g, ""))
+                      }
                       style={styles.inputField}
                       placeholder={"Hours"}
                     />
@@ -592,12 +616,20 @@ const RemedialWork = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                    <Text
+                    <TouchableOpacity
                       onPress={() => showDatepicker("SupervisorDate")}
-                      style={[styles.inputField, { paddingTop: 15 }]}
                     >
-                      {new Date(dateSupervisor).toLocaleDateString()}
-                    </Text>
+                      <TextInput
+                        editable={false}
+                        value={
+                          dateSupervisor
+                            ? new Date(dateSupervisor).toLocaleDateString()
+                            : ""
+                        }
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <Text
                     style={{
@@ -658,12 +690,20 @@ const RemedialWork = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                    <Text
+                    <TouchableOpacity
                       onPress={() => showDatepicker("ManagerDate")}
-                      style={[styles.inputField, { paddingTop: 15 }]}
                     >
-                      {new Date(dateManager).toLocaleDateString()}
-                    </Text>
+                      <TextInput
+                        editable={false}
+                        value={
+                          dateManager
+                            ? new Date(dateManager).toLocaleDateString()
+                            : ""
+                        }
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={{ marginTop: 10 }}>
                     <Text

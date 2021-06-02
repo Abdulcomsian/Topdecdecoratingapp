@@ -45,7 +45,7 @@ const TBTForm = (props) => {
         isVisible={openData.bool}
         testID="dateTimePicker"
         value={date ? date : new Date()}
-        mode={"date"}
+        mode={Platform.OS === 'ios' ? "datetime" : "date"}
         display="default"
         onConfirm={(txt) => {
           setOpenDate({ ...openData, bool: false, index: -1 });

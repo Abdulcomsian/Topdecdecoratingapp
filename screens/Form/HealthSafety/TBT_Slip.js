@@ -117,8 +117,7 @@ const TBTSlip = (props) => {
         data.comments != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" &&
-        data.projectComment !=""
+        data.projectImages !="" 
       ) {
         await props.creatTbtSlipHandler(
           { ...data, task_id: jobID, tab_id: tabId },

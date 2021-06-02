@@ -279,7 +279,7 @@ const DecorationRecord = (props) => {
             <DateTimePickerModal
               isVisible={show.isVisible}
               date={date ? date : new Date()}
-              mode={"date"}
+              mode={Platform.OS === 'ios' ? "datetime" : "date"}
               is24Hour={true}
               display="default"
               onConfirm={(date) => onChange(date)}
@@ -290,7 +290,7 @@ const DecorationRecord = (props) => {
             <DateTimePickerModal
               isVisible={showComplete.isVisible}
               date={dateComplete ? dateComplete : new Date()}
-              mode={"date"}
+              mode={Platform.OS === 'ios' ? "datetime" : "date"}
               is24Hour={true}
               display="default"
               onConfirm={(date) => onCompleteChange(date)}
@@ -301,7 +301,7 @@ const DecorationRecord = (props) => {
             <DateTimePickerModal
               isVisible={showDateSecond.isVisible}
               date={dateSecond ? dateSecond : new Date()}
-              mode={"date"}
+              mode={Platform.OS === 'ios' ? "datetime" : "date"}
               is24Hour={true}
               display="default"
               onConfirm={(date) => onDateSecondChange(date)}
@@ -314,7 +314,7 @@ const DecorationRecord = (props) => {
             <DateTimePickerModal
               isVisible={showCompleteDateSecond.isVisible}
               date={dateSecondComplete ? dateSecondComplete : new Date()}
-              mode={"date"}
+              mode={Platform.OS === 'ios' ? "datetime" : "date"}
               is24Hour={true}
               display="default"
               onConfirm={(date) => onDateCompleteSecondChange(date)}
@@ -409,7 +409,7 @@ const DecorationRecord = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateFirstValue("price", index, txt)
+                                updateFirstValue("price", index, txt.replace(/[^0-9]/g, ""))
                               }
                               value={el.price}
                               style={styles.bodyTextInput}
@@ -429,7 +429,7 @@ const DecorationRecord = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateFirstValue("days", index, txt)
+                                updateFirstValue("days", index, txt.replace(/[^0-9]/g, ""))
                               }
                               value={el.days}
                               style={styles.bodyTextInput}
@@ -584,7 +584,7 @@ const DecorationRecord = (props) => {
                           <View style={styles.inputSecondBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateSecondValue("price", index, txt)
+                                updateSecondValue("price", index, txt.replace(/[^0-9]/g, ""))
                               }
                               value={el.price}
                               style={styles.bodyTextInput}

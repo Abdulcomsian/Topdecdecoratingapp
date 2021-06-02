@@ -25,7 +25,7 @@ const HarmFulSubstance = (props) => {
   const tabId = props.route.params.tabName;
   console.log("Work Tab ID :", tabId);
   const [harmFulRow, setHarmFullRow] = useState([]);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
   const [show, setShow] = useState(false);
   const [dynamicInput, setdynamicInput] = useState([]);
   const [contractorName, setContractorName] = useState("");
@@ -196,7 +196,7 @@ const HarmFulSubstance = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow(false)}
@@ -230,22 +230,14 @@ const HarmFulSubstance = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showDatepicker()}
-                  style={{
-                    width: "100%",
-                    height: 52,
-                    paddingTop: 20,
-                    fontSize: 12,
-                    color: "#96A8B2",
-                    fontFamily: "poppins-regular",
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#96A8B2",
-                    padding: 5,
-                  }}
-                >
-                  {new Date(date).toLocaleDateString()}
-                </Text>
+              <TouchableOpacity onPress={() => showDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
               </View>
               <View style={[styles.tableViewContainer, { marginTop: 30 }]}>
                 <View style={styles.tableHeader}>

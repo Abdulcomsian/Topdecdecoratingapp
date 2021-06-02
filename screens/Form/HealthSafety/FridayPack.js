@@ -113,7 +113,7 @@ const FridayPack = (props) => {
       commet: "",
     },
   ]);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
   const [show, setShow] = useState(false);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -306,7 +306,7 @@ const FridayPack = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow(false)}
@@ -475,22 +475,14 @@ const FridayPack = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker()}
-                      style={{
-                        width: "100%",
-                        height: 52,
-                        paddingTop: 20,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                      }}
-                    >
-                      {new Date(date).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity  onPress={() => showDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <Text
                     style={{

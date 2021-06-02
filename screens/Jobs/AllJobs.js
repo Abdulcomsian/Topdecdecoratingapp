@@ -67,13 +67,14 @@ const AllJobs = (props) =>{
       else{
     return(
         <View style={styles.mainContainer}>
-            <View style={styles.dateTimeContainer}>
+            {/* <View style={styles.dateTimeContainer}>
                 <Text style={styles.refText}>Date: 12-2-2021</Text>
                 <Text style={styles.refText}>Ref  id: 10099499</Text>
-            </View>
+            </View> */}
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>ALL Jobs</Text>
             </View>
+            
             {showView ? 
                 <ListView data={jobData} {...props}/>
                 :

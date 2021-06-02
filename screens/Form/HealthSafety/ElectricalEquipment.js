@@ -26,7 +26,7 @@ const ElectricalEquipment = (props) => {
   const tabId = props.route.params.tabName;
   console.log("Work Tab ID :", tabId);
   const [equipmentRow, setEquipmentRow] = useState([]);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
   const [mode, setMode] = useState("date");
   const [showDate, setShowDate] = useState(false);
   const [contractorName, setContractorName] = useState("");
@@ -273,7 +273,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showDate}
             testID="dateTimePicker"
             value={date}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => setShowDate(false)}
             onConfirm={onDateChange}
@@ -283,7 +283,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showDateOnSite.isVisible}
             testID="dateTimePicker"
             value={dateOnsite}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onDateOnSiteChange}
             onCancel={() => setShowDateOnSite({ isVisible: false, index: -1 })}
@@ -293,7 +293,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showLastTestDate.isVisible}
             testID="dateTimePicker"
             value={lastTestDate}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onLastTestDateChange}
             onCancel={() =>
@@ -305,7 +305,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showTestDueDate.isVisible}
             testID="dateTimePicker"
             value={testDueDate}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onNextTestDateChange}
             onCancel={() => setShowTestDueDate({ isVisible: false, index: -1 })}
@@ -315,7 +315,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showDateOfSite.isVisible}
             testID="dateTimePicker"
             value={dateOffSite}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onDateOfSiteChange}
             onCancel={() => setShowDateOfSite({ isVisible: false, index: -1 })}
@@ -397,12 +397,14 @@ const ElectricalEquipment = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker("Date")}
-                      style={[styles.inputField, { paddingTop: 15 }]}
-                    >
-                      {new Date(date).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity onPress={() => showDatepicker("Date")}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <Text
                     style={{
@@ -489,7 +491,7 @@ const ElectricalEquipment = (props) => {
                               <TextInput
                                 value={el.serial}
                                 onChangeText={(txt) =>
-                                  updateValue("serial", index, txt)
+                                  updateValue("serial", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 style={styles.bodyTextInput}
                                 placeholder={"Serial No"}
@@ -499,7 +501,7 @@ const ElectricalEquipment = (props) => {
                               <TextInput
                                 value={el.local}
                                 onChangeText={(txt) =>
-                                  updateValue("local", index, txt)
+                                  updateValue("local", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 style={styles.bodyTextInput}
                                 placeholder={"Local No"}
@@ -612,6 +614,122 @@ const ElectricalEquipment = (props) => {
                         <Image style={styles.plusBtn} source={plus} />
                       </TouchableOpacity>
                     </View>
+                    <View style={{ marginTop: 10 }}>
+                    <Text
+                      style={{
+                        marginBottom: 10,
+                        fontFamily: "poppins-semiBold",
+                      }}
+                    >
+                      Project Images
+                    </Text>
+                    <View
+                      style={[
+                        styles.tableViewContainer,
+                        { paddingLeft: 0, paddingRight: 0 },
+                      ]}
+                    >
+                      <View style={styles.tableHeader}>
+                        <View style={{ width: "50%" }}>
+                          <Text style={styles.headerTitle}>Image</Text>
+                        </View>
+                        <View style={{ width: "50%" }}>
+                          <Text style={styles.headerTitle}>Comment</Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        width: "100%",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-end",
+                        marginRight: 50,
+                        marginTop: 20,
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={[styles.addBtn]}
+                        onPress={() => {
+                          if (
+                            projectImagesComment.length > 0 &&
+                            !projectImagesComment[
+                              projectImagesComment.length - 1
+                            ].image &&
+                            !projectImagesComment[
+                              projectImagesComment.length - 1
+                            ].comment
+                          ) {
+                            alert(
+                              "Please Enter All Value and then move to next Item Add !"
+                            );
+                          } else {
+                            addImagesCommentRow();
+                          }
+                        }}
+                      >
+                        <Image style={styles.plusBtn} source={plus} />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: "column" }}>
+                      {projectImagesComment.length > 0 &&
+                        projectImagesComment.map((el, index) => (
+                          <View
+                            style={[styles.tableBody, { marginBottom: 20 }]}
+                            key={index}
+                          >
+                            {el.image != "" ? (
+                              <View
+                                style={{
+                                  width: "50%",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Image
+                                  style={{
+                                    width: 50,
+                                    height: 50,
+                                    marginRight: 10,
+                                  }}
+                                  source={{ uri: el.image }}
+                                  key={index}
+                                />
+                              </View>
+                            ) : (
+                              <View style={{ width: "50%" }}>
+                                <TouchableOpacity
+                                  style={[
+                                    styles.button,
+                                    styles.buttonOpen,
+                                    { width: "90%" },
+                                  ]}
+                                  onPress={() => uploadPhotoImage(index)}
+                                >
+                                  <Text style={styles.textStyle}>
+                                    Add Image
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                            )}
+
+                            <View style={{ width: "50%" }}>
+                              <TextInput
+                                value={el.comment}
+                                onChangeText={(txt) =>
+                                  updateProjectCommentValue(
+                                    "comment",
+                                    index,
+                                    txt
+                                  )
+                                }
+                                style={styles.bodyTextInput}
+                                placeholder={"Comment"}
+                              />
+                            </View>
+                          </View>
+                        ))}
+                    </View>
+                  </View>
                     <View
                       style={{
                         width: "100%",
@@ -730,122 +848,6 @@ const ElectricalEquipment = (props) => {
                           203 474 927
                         </Text>
                       </Text>
-                    </View>
-                  </View>
-                  <View style={{ marginTop: 10 }}>
-                    <Text
-                      style={{
-                        marginBottom: 10,
-                        fontFamily: "poppins-semiBold",
-                      }}
-                    >
-                      Project Images
-                    </Text>
-                    <View
-                      style={[
-                        styles.tableViewContainer,
-                        { paddingLeft: 0, paddingRight: 0 },
-                      ]}
-                    >
-                      <View style={styles.tableHeader}>
-                        <View style={{ width: "50%" }}>
-                          <Text style={styles.headerTitle}>Image</Text>
-                        </View>
-                        <View style={{ width: "50%" }}>
-                          <Text style={styles.headerTitle}>Comment</Text>
-                        </View>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        width: "100%",
-                        justifyContent: "flex-end",
-                        alignItems: "flex-end",
-                        marginRight: 50,
-                        marginTop: 20,
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={[styles.addBtn]}
-                        onPress={() => {
-                          if (
-                            projectImagesComment.length > 0 &&
-                            !projectImagesComment[
-                              projectImagesComment.length - 1
-                            ].image &&
-                            !projectImagesComment[
-                              projectImagesComment.length - 1
-                            ].comment
-                          ) {
-                            alert(
-                              "Please Enter All Value and then move to next Item Add !"
-                            );
-                          } else {
-                            addImagesCommentRow();
-                          }
-                        }}
-                      >
-                        <Image style={styles.plusBtn} source={plus} />
-                      </TouchableOpacity>
-                    </View>
-                    <View style={{ flexDirection: "column" }}>
-                      {projectImagesComment.length > 0 &&
-                        projectImagesComment.map((el, index) => (
-                          <View
-                            style={[styles.tableBody, { marginBottom: 20 }]}
-                            key={index}
-                          >
-                            {el.image != "" ? (
-                              <View
-                                style={{
-                                  width: "50%",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Image
-                                  style={{
-                                    width: 50,
-                                    height: 50,
-                                    marginRight: 10,
-                                  }}
-                                  source={{ uri: el.image }}
-                                  key={index}
-                                />
-                              </View>
-                            ) : (
-                              <View style={{ width: "50%" }}>
-                                <TouchableOpacity
-                                  style={[
-                                    styles.button,
-                                    styles.buttonOpen,
-                                    { width: "90%" },
-                                  ]}
-                                  onPress={() => uploadPhotoImage(index)}
-                                >
-                                  <Text style={styles.textStyle}>
-                                    Add Image
-                                  </Text>
-                                </TouchableOpacity>
-                              </View>
-                            )}
-
-                            <View style={{ width: "50%" }}>
-                              <TextInput
-                                value={el.comment}
-                                onChangeText={(txt) =>
-                                  updateProjectCommentValue(
-                                    "comment",
-                                    index,
-                                    txt
-                                  )
-                                }
-                                style={styles.bodyTextInput}
-                                placeholder={"Comment"}
-                              />
-                            </View>
-                          </View>
-                        ))}
                     </View>
                   </View>
                   <View

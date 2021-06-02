@@ -227,7 +227,7 @@ const MethodStatement = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
@@ -300,7 +300,7 @@ const MethodStatement = (props) => {
                       style={styles.inputField}
                       placeholder={"Ref No"}
                       value={refNo}
-                      onChangeText={(e) => setRefNo(e)}
+                      onChangeText={(e) => setRefNo(e.replace(/[^0-9]/g, ""))}
                     />
                   </View>
                   <Text

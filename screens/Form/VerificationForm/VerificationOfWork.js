@@ -203,7 +203,7 @@ const VerificationOfWork = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => setShow({ isVisible: false, index: -1 })}
             onConfirm={onChange}
@@ -221,7 +221,7 @@ const VerificationOfWork = (props) => {
             <View style={styles.inputFieldContainer}>
               <TextInput
                 value={idRef}
-                onChangeText={(e) => setIdRef(e)}
+                onChangeText={(e) => setIdRef(e.replace(/[^0-9]/g, ""))}
                 style={styles.inputField}
                 placeholder={"Id Ref"}
               />
@@ -343,7 +343,7 @@ const VerificationOfWork = (props) => {
                     </View>
                     <View style={styles.inputBodyContainer}>
                       <TextInput
-                        onChangeText={(txt) => updateValue("price", index, txt)}
+                        onChangeText={(txt) => updateValue("price", index, txt.replace(/[^0-9]/g, ""))}
                         value={el.price}
                         style={styles.bodyTextInput}
                         placeholder={"Price"}
@@ -361,10 +361,10 @@ const VerificationOfWork = (props) => {
                     </View>
                     <View style={styles.inputBodyContainer}>
                       <TextInput
-                        onChangeText={(txt) => updateValue("si", index, txt)}
+                        onChangeText={(txt) => updateValue("si", index, txt.replace(/[^0-9]/g, ""))}
                         value={el.si}
                         style={styles.bodyTextInput}
-                        placeholder={"No."}
+                        placeholder={"No"}
                       />
                     </View>
                     <View style={styles.inputBodyContainer}>

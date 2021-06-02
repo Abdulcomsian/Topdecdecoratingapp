@@ -18,7 +18,7 @@ import { TabRouter } from "react-navigation";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
 
-var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
+var mainImage = require("../../../assets/authScreen/logo.jpeg");
 var plus = require("../../../assets/authScreen/plus.png");
 const AccidentReport = (props) => {
   const { navigation, token, isSuccess, isSuccessMsg, isJobId } = props;
@@ -88,19 +88,14 @@ const AccidentReport = (props) => {
       incidentNo: "",
     },
   ]);
-  const [dateIncident, setDateIncident] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [dateInvestigation, setDateInvestigation] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [dateSupervisor, setDateSupervisor] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [dateReport, setDateReport] = useState(new Date().toLocaleDateString());
-  const [dateManager, setDateManager] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateIncident, setDateIncident] = useState("");
+  const [timeIncident, setTimeIncident] = useState("");
+  const [dateInvestigation, setDateInvestigation] = useState("");
+  const [timeInvestigation, setTimeInvestigation] = useState("");
+  const [dateSupervisor, setDateSupervisor] = useState("");
+  const [dateReport, setDateReport] = useState("");
+  const [timeReport, setTimeReport] = useState("");
+  const [dateManager, setDateManager] = useState("");
   const [mode, setMode] = useState("date");
   const [showIncident, setShowIncident] = useState(false);
   const [showInvestigation, setShowInvestigation] = useState(false);
@@ -209,11 +204,13 @@ const AccidentReport = (props) => {
     const currentDate = selectedDate;
     setShowIncident(false);
     setDateIncident(new Date(currentDate).toLocaleDateString());
+    setTimeIncident(new Date(currentDate).toLocaleTimeString())
   };
   const onInvestigationChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShowInvestigation(false);
     setDateInvestigation(new Date(currentDate).toLocaleDateString());
+    setTimeInvestigation(new Date(currentDate).toLocaleTimeString())
   };
   const onSupervisorDateChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -224,6 +221,7 @@ const AccidentReport = (props) => {
     const currentDate = selectedDate;
     setShowReport(false);
     setDateReport(new Date(currentDate).toLocaleDateString());
+    setTimeReport(new Date(currentDate).toLocaleTimeString());
   };
   const onManagerDateChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -485,7 +483,7 @@ const AccidentReport = (props) => {
             isVisible={showIncident}
             testID="dateTimePicker"
             value={dateIncident}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "datetime"}
             display="default"
             onConfirm={onIncidentChange}
             onCancel={() => CancelPicker("showIncident")}
@@ -495,7 +493,7 @@ const AccidentReport = (props) => {
             isVisible={showInvestigation}
             testID="dateTimePicker"
             value={dateInvestigation}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "datetime"}
             display="default"
             onConfirm={onInvestigationChange}
             onCancel={() => CancelPicker("showInvestigation")}
@@ -505,7 +503,7 @@ const AccidentReport = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onSupervisorDateChange}
             onCancel={() => CancelPicker("showSupervisor")}
@@ -515,7 +513,7 @@ const AccidentReport = (props) => {
             isVisible={showReport}
             testID="dateTimePicker"
             value={dateReport}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "datetime"}
             display="default"
             onConfirm={onReportDateChange}
             onCancel={() => CancelPicker("showReport")}
@@ -525,7 +523,7 @@ const AccidentReport = (props) => {
             isVisible={showManager}
             testID="dateTimePicker"
             value={dateManager}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onManagerDateChange}
             onCancel={() => CancelPicker("showManager")}
@@ -582,12 +580,18 @@ const AccidentReport = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker("Date")}
-                      style={[styles.inputField, { paddingTop: 15 }]}
-                    >
-                      {new Date(dateIncident).toLocaleDateString()}
-                    </Text>
+                    <TouchableOpacity onPress={() => showDatepicker("Date")}>
+                      <TextInput
+                        editable={false}
+                        value={
+                          dateIncident
+                            ? dateIncident  + " " + timeIncident
+                            : ""
+                        }
+                        style={styles.inputField}
+                        placeholder={"Date and Time of Incident"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
                     <TextInput
@@ -598,12 +602,20 @@ const AccidentReport = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
+                    <TouchableOpacity
                       onPress={() => showDatepicker("DateInvestigation")}
-                      style={[styles.inputField, { paddingTop: 15 }]}
                     >
-                      {new Date(dateInvestigation).toLocaleDateString()}
-                    </Text>
+                      <TextInput
+                        editable={false}
+                        value={
+                          dateInvestigation
+                            ? dateInvestigation + " " + timeInvestigation
+                            : ""
+                        }
+                        style={styles.inputField}
+                        placeholder={"Date and Time Investigation commenced"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={{ paddingTop: 20, paddingBottom: 20 }}>
                     <Text style={{ fontFamily: "poppins-bold", fontSize: 12 }}>
@@ -656,7 +668,9 @@ const AccidentReport = (props) => {
                   </View>
                   <View style={styles.inputFieldContainer}>
                     <TextInput
-                      onChangeText={(e) => setAgeOfInjuredPerson(e)}
+                      onChangeText={(e) =>
+                        setAgeOfInjuredPerson(e.replace(/[^0-9]/g, ""))
+                      }
                       value={ageOfInjuredPerson}
                       style={styles.inputField}
                       placeholder={"Age"}
@@ -708,7 +722,9 @@ const AccidentReport = (props) => {
                     <TextInput
                       style={styles.inputField}
                       placeholder={"Telephone Number"}
-                      onChangeText={(e) => setTelephoneNumber(e)}
+                      onChangeText={(e) =>
+                        setTelephoneNumber(e.replace(/[^0-9]/g, ""))
+                      }
                       value={telephonNumber}
                     />
                   </View>
@@ -784,7 +800,11 @@ const AccidentReport = (props) => {
                                 style={styles.inputField}
                                 placeholder={"Incident No"}
                                 onChangeText={(txt) =>
-                                  checkIncidentNo("incidentNo", index, txt)
+                                  checkIncidentNo(
+                                    "incidentNo",
+                                    index,
+                                    txt.replace(/[^0-9]/g, "")
+                                  )
                                 }
                               />
                             </View>
@@ -850,7 +870,11 @@ const AccidentReport = (props) => {
                                   <TextInput
                                     value={el.number}
                                     onChangeText={(txt) =>
-                                      updateValue("number", index, txt)
+                                      updateValue(
+                                        "number",
+                                        index,
+                                        txt.replace(/[^0-9]/g, "")
+                                      )
                                     }
                                     style={styles.bodyTextInput}
                                     placeholder={"Number"}
@@ -972,12 +996,22 @@ const AccidentReport = (props) => {
                           </TouchableOpacity>
                         </View>
                         <View style={styles.inputFieldContainer}>
-                          <Text
+                          <TouchableOpacity
                             onPress={() => showDatepicker("DateSupervisor")}
-                            style={[styles.inputField, { paddingTop: 15 }]}
                           >
-                            {new Date(dateSupervisor).toLocaleDateString()}
-                          </Text>
+                            <TextInput
+                              editable={false}
+                              value={
+                                dateSupervisor
+                                  ? new Date(
+                                      dateSupervisor
+                                    ).toLocaleDateString()
+                                  : ""
+                              }
+                              style={styles.inputField}
+                              placeholder={"Date"}
+                            />
+                          </TouchableOpacity>
                         </View>
                         <View
                           style={{
@@ -1007,12 +1041,20 @@ const AccidentReport = (props) => {
                           />
                         </View>
                         <View style={styles.inputFieldContainer}>
-                          <Text
+                          <TouchableOpacity
                             onPress={() => showDatepicker("DateReport")}
-                            style={[styles.inputField, { paddingTop: 15 }]}
                           >
-                            {new Date(dateReport).toLocaleDateString()}
-                          </Text>
+                            <TextInput
+                              editable={false}
+                              value={
+                                dateReport
+                                  ? dateReport + " " + timeReport
+                                  : ""
+                              }
+                              style={styles.inputField}
+                              placeholder={"Date and Time accident reported"}
+                            />
+                          </TouchableOpacity>
                         </View>
                         <View style={styles.inputFieldContainer}>
                           <TextInput
@@ -1156,12 +1198,20 @@ const AccidentReport = (props) => {
                           </TouchableOpacity>
                         </View>
                         <View style={styles.inputFieldContainer}>
-                          <Text
+                          <TouchableOpacity
                             onPress={() => showDatepicker("DateManager")}
-                            style={[styles.inputField, { paddingTop: 15 }]}
                           >
-                            {new Date(dateManager).toLocaleDateString()}
-                          </Text>
+                            <TextInput
+                              editable={false}
+                              value={
+                                dateManager
+                                  ? new Date(dateManager).toLocaleDateString()
+                                  : ""
+                              }
+                              style={styles.inputField}
+                              placeholder={"Date"}
+                            />
+                          </TouchableOpacity>
                         </View>
                         <View style={{ marginTop: 10 }}>
                           <Text

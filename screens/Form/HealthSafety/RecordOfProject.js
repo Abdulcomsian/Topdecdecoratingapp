@@ -274,7 +274,7 @@ const RecordOfProject = (props) => {
                 <TextInput
                   style={styles.inputField}
                   placeholder={"MOBILE NO"}
-                  onChangeText={(e) => setMobileNo(e)}
+                  onChangeText={(e) => setMobileNo(e.replace(/[^0-9]/g, ""))}
                   value={mobileNo}
                 />
               </View>

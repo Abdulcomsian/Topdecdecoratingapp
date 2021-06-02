@@ -27,12 +27,10 @@ const HandOverForm = (props) => {
   const jobID = plot_Id;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
-  const [dateIssue, setDateIssue] = useState(new Date().toLocaleDateString());
-  const [dateComplete, setDateComplete] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [todayDate, setTodayDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
+  const [dateIssue, setDateIssue] = useState("");
+  const [dateComplete, setDateComplete] = useState("");
+  const [todayDate, setTodayDate] = useState("");
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [showIssue, setShowIssue] = useState(false);
@@ -281,7 +279,7 @@ const HandOverForm = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => {}}
             onConfirm={onChange}
@@ -291,7 +289,7 @@ const HandOverForm = (props) => {
             isVisible={showIssue}
             testID="dateTimePicker"
             value={dateIssue}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => {}}
             onConfirm={onIssueChange}
@@ -302,7 +300,7 @@ const HandOverForm = (props) => {
             isVisible={showComplete}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => {}}
             onConfirm={onCompleteChange}
@@ -312,7 +310,7 @@ const HandOverForm = (props) => {
             isVisible={showToday}
             testID="dateTimePicker"
             value={todayDate}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => {}}
             onConfirm={onTodayDate}
@@ -380,26 +378,36 @@ const HandOverForm = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={plotNumber}
-                      onChangeText={(e) => setPlotNumber(e)}
+                      onChangeText={(e) => setPlotNumber(e.replace(/[^0-9]/g, ""))}
                       style={styles.inputField}
                       placeholder={"Plot/Area Number"}
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker("Date")}
-                      style={styles.inputField}
-                    >
-                      {new Date(date).toLocaleDateString()}
-                    </Text>
+                    <TouchableOpacity onPress={() => showDatepicker("Date")}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date Written"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
+                    <TouchableOpacity
                       onPress={() => showDatepicker("DateIssue")}
-                      style={styles.inputField}
                     >
-                      {new Date(dateIssue).toLocaleDateString()}
-                    </Text>
+                      <TextInput
+                        editable={false}
+                        value={
+                          dateIssue
+                            ? new Date(dateIssue).toLocaleDateString()
+                            : ""
+                        }
+                        style={styles.inputField}
+                        placeholder={"Date Issue to Site Agent"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <Text
                     style={{
@@ -461,12 +469,20 @@ const HandOverForm = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                    <Text
+                  <TouchableOpacity
                       onPress={() => showDatepicker("CompleteDate")}
-                      style={styles.inputField}
                     >
-                      {new Date(dateComplete).toLocaleDateString()}
-                    </Text>
+                      <TextInput
+                        editable={false}
+                        value={
+                          dateComplete
+                            ? new Date(dateComplete).toLocaleDateString()
+                            : ""
+                        }
+                        style={styles.inputField}
+                        placeholder={"Date Work Completed"}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.tableViewContainer}>
@@ -621,12 +637,20 @@ const HandOverForm = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                    <Text
+                  <TouchableOpacity
                       onPress={() => showDatepicker("TodayDate")}
-                      style={styles.inputField}
                     >
-                      {new Date(todayDate).toLocaleDateString()}
-                    </Text>
+                      <TextInput
+                        editable={false}
+                        value={
+                          todayDate
+                            ? new Date(todayDate).toLocaleDateString()
+                            : ""
+                        }
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={{ marginTop: 10 }}>
                     <Text

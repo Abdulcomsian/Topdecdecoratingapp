@@ -71,7 +71,7 @@ const MistCoat = (props) => {
         );
         //props.updateVerificationReport(props?.route?.params?.index);
         alert("MisCoat Insert SuccessFully !");
-        // props.navigation.pop();
+        props.navigation.pop();
       } else {
         alert("Please Insert All Fields CareFully !");
         return false;
@@ -217,7 +217,7 @@ const MistCoat = (props) => {
             <DateTimePickerModal
               isVisible={show.isVisible}
               date={date ? date : new Date()}
-              mode={"date"}
+              mode={Platform.OS === 'ios' ? "datetime" : "date"}
               is24Hour={true}
               display="default"
               onConfirm={(date) => onChange(date)}
@@ -228,7 +228,7 @@ const MistCoat = (props) => {
             <DateTimePickerModal
               isVisible={showComplete.isVisible}
               date={dateComplete ? dateComplete : new Date()}
-              mode={"date"}
+              mode={Platform.OS === 'ios' ? "datetime" : "date"}
               is24Hour={true}
               display="default"
               onConfirm={(date) => onCompleteChange(date)}
@@ -335,7 +335,7 @@ const MistCoat = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateValue("price", index, txt)
+                                updateValue("price", index, txt.replace(/[^0-9]/g, ""))
                               }
                               value={el.price}
                               style={styles.bodyTextInput}
@@ -355,7 +355,7 @@ const MistCoat = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateValue("days", index, txt)
+                                updateValue("days", index, txt.replace(/[^0-9]/g, ""))
                               }
                               value={el.days}
                               style={styles.bodyTextInput}

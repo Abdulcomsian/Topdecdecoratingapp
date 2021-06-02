@@ -137,7 +137,7 @@ const DailyBreifingForm = (props) => {
     }
     setJobSafetyArray(preData);
   };
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
   const [show, setShow] = useState(false);
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -307,7 +307,7 @@ const DailyBreifingForm = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow(false)}
@@ -364,27 +364,19 @@ const DailyBreifingForm = (props) => {
                       style={styles.inputField}
                       placeholder={"Method statement No"}
                       value={statementNumber}
-                      onChangeText={(e) => setStatementNumber(e)}
+                      onChangeText={(e) => setStatementNumber(e.replace(/[^0-9]/g, ""))}
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker()}
-                      style={{
-                        width: "100%",
-                        width: "100%",
-                        height: 52,
-                        paddingTop: 20,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                      }}
-                    >
-                      {new Date(date).toLocaleDateString()}
-                    </Text>
+
+                  <TouchableOpacity onPress={() => showDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
 
                   <View style={{ marginTop: 20 }}>

@@ -46,11 +46,9 @@ const TBTREGISTER = (props) => {
     index: -1,
   });
   const [date, setDate] = useState(new Date().toLocaleDateString());
-  const [registerDate, setRegisterDate] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [startTime, setStartTime] = useState(new Date().toLocaleTimeString());
-  const [finishTime, setFinishTime] = useState(new Date().toLocaleTimeString());
+  const [registerDate, setRegisterDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [finishTime, setFinishTime] = useState("");
 
   const [startTimeShow, setStartTimeShow] = useState("");
   const [finalTimeShow, setFinalTimeShow] = useState("");
@@ -264,7 +262,7 @@ const TBTREGISTER = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
@@ -274,7 +272,7 @@ const TBTREGISTER = (props) => {
             isVisible={registerDateShow}
             testID="dateTimePicker"
             value={registerDate}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onRegisterDateChange}
             onCancel={() => setRegisterDateShow(false)}
@@ -284,7 +282,7 @@ const TBTREGISTER = (props) => {
             isVisible={startTimeShow}
             testID="dateTimePicker"
             value={startTime}
-            mode={"time"}
+            mode={Platform.OS === 'ios' ? "datetime" : "time"}
             locale="en_GB"
             display="default"
             onConfirm={onStartTimeChange}
@@ -295,7 +293,7 @@ const TBTREGISTER = (props) => {
             isVisible={finalTimeShow}
             testID="dateTimePicker"
             value={finishTime}
-            mode={"time"}
+            mode={Platform.OS === 'ios' ? "datetime" : "time"}
             locale="en_GB"
             display="default"
             onConfirm={onFinishTimeChange}
@@ -376,52 +374,34 @@ const TBTREGISTER = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => setRegisterDateShow(true)}
-                      style={{
-                        height: 40,
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 13,
-                      }}
-                    >
-                      {new Date(registerDate).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity onPress={() => setRegisterDateShow(true)}>
+                      <TextInput
+                        editable={false}
+                        value={registerDate ? new Date(registerDate).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => setStartTimeShow(true)}
-                      style={{
-                        height: 40,
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 13,
-                      }}
-                    >
-                      {startTime}
-                    </Text>
+                  <TouchableOpacity  onPress={() => setStartTimeShow(true)}>
+                      <TextInput
+                        editable={false}
+                        value={startTime ? startTime : ""}
+                        style={styles.inputField}
+                        placeholder={"Start time"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => setFinalTimeShow(true)}
-                      style={{
-                        height: 40,
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        paddingTop: 13,
-                      }}
-                    >
-                      {finishTime}
-                    </Text>
+                  <TouchableOpacity  onPress={() => setFinalTimeShow(true)}>
+                      <TextInput
+                        editable={false}
+                        value={finishTime ? finishTime : ""}
+                        style={styles.inputField}
+                        placeholder={"Start time"}
+                      />
+                    </TouchableOpacity>
                   </View>
 
                   <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>

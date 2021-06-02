@@ -28,19 +28,13 @@ const HealthSafetyInspection = (props) => {
   console.log("Work Plot ID :", jobID);
   const tabId = props.route.params.tabName;
   console.log("Work Tab ID :", tabId);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
   const [show, setShow] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
-  const [dateInspection, setDateInspection] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateInspection, setDateInspection] = useState("");
   const [showInspection, setShowInspection] = useState(false);
-  const [dateComplete, setDateComplete] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [dateUpdateComplete, setDateUpdateComplete] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateComplete, setDateComplete] = useState("");
+  const [dateUpdateComplete, setDateUpdateComplete] = useState("");
   const [inspectionRow, setInspectionRow] = useState([]);
   const [dynamicInput, setdynamicInput] = useState([]);
   const [getSign, setGetSign] = useState(false);
@@ -325,7 +319,13 @@ const HealthSafetyInspection = (props) => {
   const [projectComment, setProjectComment] = useState("");
   const healthSafetyFormInsert = async () => {
     try {
-      console.log("Try Token", token);
+      console.log("Try Token", contractorName);
+      console.log("Try Token", siteSupervisor);
+      console.log("Try Token", dateInspection);
+      console.log("Try Token", projectAddress);
+      console.log("Try Token", inspectionName);
+      console.log("Try Token", inspectionFor);
+
       if (
         contractorName != "" &&
         siteSupervisor != "" &&
@@ -334,9 +334,8 @@ const HealthSafetyInspection = (props) => {
         dynamicInput != "" &&
         inspectionName != "" &&
         inspectionFor != "" &&
-        dateUpdateComplete != "" &&
-        signature != "" &&
-        arrayDocument != "" &&
+        signature != ""  &&
+        arrayDocument != ""  &&
         projectImagesComment != "" &&
         commentImages != ""
       ) {
@@ -348,7 +347,7 @@ const HealthSafetyInspection = (props) => {
           dynamicInput,
           inspectionName,
           inspectionFor,
-          dateUpdateComplete,
+          dateInspection,
           signature,
           arrayDocument,
           projectImagesComment,
@@ -385,7 +384,7 @@ const HealthSafetyInspection = (props) => {
     let copydata = [...projectImagesComment];
     copydata[commentImage.index].image = data[0].uri;
     setProjectImagesComment([...copydata]);
-    setCommentImage({ ...signature, index: -1 });
+    setCommentImage({ ...commentImage, index: -1 });
     setIsShow(false);
   };
 
@@ -400,7 +399,7 @@ const HealthSafetyInspection = (props) => {
       alert("Permission to access camera roll is required!");
       return;
     }
-    setSignature({ ...signature, index: index });
+    setCommentImage({ ...commentImage, index: index });
     setIsShow(true);
   };
   // console.log("Pick Project :",projectImages)
@@ -479,7 +478,7 @@ const HealthSafetyInspection = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => setShow(false)}
             onConfirm={onChange}
@@ -489,7 +488,7 @@ const HealthSafetyInspection = (props) => {
             isVisible={showInspection}
             testID="dateTimePicker"
             value={dateInspection}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => setShowInspection(false)}
             onConfirm={onInspectionChange}
@@ -499,7 +498,7 @@ const HealthSafetyInspection = (props) => {
             isVisible={showComplete.isVisible}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => setShowComplete({ isVisible: false, index: -1 })}
             onConfirm={onDateCompleteChange}
@@ -544,22 +543,14 @@ const HealthSafetyInspection = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker()}
-                      style={{
-                        width: "100%",
-                        height: 52,
-                        paddingTop: 20,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                      }}
-                    >
-                      {new Date(date).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity  onPress={() => showDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
                     <TextInput
@@ -653,6 +644,7 @@ const HealthSafetyInspection = (props) => {
                               />
                             </View>
                             <View style={styles.inputHarmFullBodyContainer}>
+                              
                               <Text
                                 onPress={() => showDateCompletepicker(index)}
                                 style={{
@@ -734,22 +726,14 @@ const HealthSafetyInspection = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showInspectionDatepicker()}
-                      style={{
-                        width: "100%",
-                        height: 52,
-                        paddingTop: 20,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                      }}
-                    >
-                      {new Date(dateInspection).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity  onPress={() => showInspectionDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={dateInspection ? new Date(dateInspection).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
                     <TouchableOpacity
@@ -1121,12 +1105,12 @@ const mapDispatchToProps = (dispatch) => ({
   createHealthSafetyInspectionHandler: (
     contractorName,
     siteSupervisor,
-    dateInspection,
+    date,
     projectAddress,
     dynamicInput,
     inspectionName,
     inspectionFor,
-    dateUpdateComplete,
+    dateInspection,
     signature,
     arrayDocument,
     projectImagesComment,
@@ -1140,12 +1124,12 @@ const mapDispatchToProps = (dispatch) => ({
       insertHealthSafetyForm(
         contractorName,
         siteSupervisor,
-        dateInspection,
+        date,
         projectAddress,
         dynamicInput,
         inspectionName,
         inspectionFor,
-        dateUpdateComplete,
+        dateInspection,
         signature,
         arrayDocument,
         projectImagesComment,

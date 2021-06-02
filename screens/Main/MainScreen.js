@@ -1,7 +1,8 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { View,StyleSheet,Image,TextInput,TouchableOpacity} from 'react-native';
 import {Text} from 'native-base';
 import { connect } from "react-redux";
+
 
 const MainScreen = ( props ) =>{
     const {navigation, isLogin, isLoginMsg, role, isUserID}=props;

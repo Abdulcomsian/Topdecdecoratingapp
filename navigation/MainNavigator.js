@@ -22,6 +22,7 @@ import SearchDecorator from '../screens/Decorator/SearchDecorator'
 import DecoratorDetails from '../screens/Decorator/DecoratorDetail'
 import ProfileDecorator from '../screens/Decorator/ProfileView'
 import ViewNotes from '../screens/Decorator/ViewNotesLog'
+import NotesDetail from '../screens/Decorator/DetailNotes'
 import DecoratorProfile from '../screens/Decorator/DecoratorProfile'
 import CreateSupervisor from '../screens/Supervisor/CreateSupervisor'
 import AssignedJobsList from '../screens/Supervisor/AssignedJobsList'
@@ -52,7 +53,7 @@ import HouseKepping from '../screens/Form/HealthSafety/HouseKepping'
 import LadderCheckList from '../screens/Form/HealthSafety/LadderCheckList'
 import MethodStatement from '../screens/Form/HealthSafety/MethodStatementRegister'
 import IssueCard from '../screens/Form/HealthSafety/IssueRecordCard'
-import PuwerInspection from '../screens/Form/HealthSafety/PuwerInspection'
+import PowerInspection from '../screens/Form/HealthSafety/PuwerInspection'
 import SiteDecoration from '../screens/Form/HealthSafety/OnSiteDecoration'
 import RecordofProject from '../screens/Form/HealthSafety/RecordOfProject'
 import DailyBreifing from '../screens/Form/HealthSafety/DailyBreifingForm'
@@ -72,7 +73,7 @@ import Tbtvolience from '../screens/Form/HealthSafety/TBT_Volience'
 import Tbtworking from '../screens/Form/HealthSafety/TBT_Working'
 import TbtRegister from '../screens/Form/HealthSafety/TBT_TalkRegister'
 import TbtInventory from '../screens/Form/HealthSafety/TBT_Inventory'
-import {Text, TouchableOpacity, Image} from "react-native"
+import {Text, TouchableOpacity, Image, Button} from "react-native"
 
 
 const Stack = createStackNavigator();
@@ -105,7 +106,7 @@ export default function MainNavigator({ navigation, route }) {
             <Stack.Screen
                 name="NewJob"
                 component={NewJob}
-                options={{ headerShown: true }}
+                options={{ headerShown: true, }}
             />
             <Stack.Screen
                 name="PlotDetails"
@@ -181,6 +182,13 @@ export default function MainNavigator({ navigation, route }) {
             <Stack.Screen
                 name="ViewNotes"
                 component={ViewNotes}
+                options={{
+                    headerShown: true,
+                  }}
+            />
+              <Stack.Screen
+                name="NotesDetail"
+                component={NotesDetail}
                 options={{
                     headerShown: true,
                   }}
@@ -417,8 +425,8 @@ export default function MainNavigator({ navigation, route }) {
                 }}
             />
             <Stack.Screen
-                name="PuwerInspection"
-                component={PuwerInspection}
+                name="PowerInspection"
+                component={PowerInspection}
                 options={{
                     headerShown: false,
                 }}
@@ -442,6 +450,7 @@ export default function MainNavigator({ navigation, route }) {
                 component={DailyBreifing}
                 options={{
                     headerShown: false,
+
                 }}
             />
             <Stack.Screen
@@ -609,13 +618,14 @@ function getHeaderTitle(route) {
                     headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular',  } 
                 };
         case 'NewJob':
-            return { headerShown: true,
+            return { 
+                    headerShown: true,
                     headerTintColor: '#fff',
                     headerStyle: {
                     backgroundColor: '#1073AC',
                     },  
                     headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', },
-                    headerTitle:"Create New Job"
+                    headerTitle:"Create New Job",
                     };
         case 'PlotDetails':
             return { headerShown: true,
@@ -693,6 +703,15 @@ function getHeaderTitle(route) {
                     },  
                     headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular',  } ,
                     headerTitle:"View Notes Logs"
+                    };
+        case 'NotesDetail':
+            return { headerShown: true,
+                    headerTintColor: '#fff',
+                    headerStyle: {
+                    backgroundColor: '#1073AC',
+                    },  
+                    headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular',  } ,
+                    headerTitle:"Detail Notes Logs"
                     };
         case 'CreateSupervisor':
             return { headerShown: true,
@@ -928,14 +947,14 @@ function getHeaderTitle(route) {
                         headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
                             headerTitle:"Issue Record Card"
                         };
-        case 'PuwerInspection':
+        case 'PowerInspection':
             return { headerShown: true,
                         headerTintColor: '#fff',
                         headerStyle: {
                         backgroundColor: '#1073AC',
                         },  
                         headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular', } ,
-                            headerTitle:"Puwer Inspection CheckList"
+                            headerTitle:"Power Inspection CheckList"
                         };
         case 'SiteDecoration':
             return { headerShown: true,

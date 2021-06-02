@@ -64,7 +64,7 @@ const SearchJob = (props) => {
         isVisible={show}
         testID='dateTimePicker'
         value={date}
-        mode={mode}
+        mode={Platform.OS === 'ios' ? "datetime" : "date"}
         display='default'
         onConfirm={onChange}
         onCancel={() => {}}
@@ -77,7 +77,7 @@ const SearchJob = (props) => {
       </View>
       <View style={styles.searchByView}>
         <View style={styles.inputFieldContainer}>
-          <TextInput style={styles.inputField} placeholder={"Enter Ref ID"} value={refID} onChangeText={(e) => setRefID(e)} />
+          <TextInput style={styles.inputField} placeholder={"Enter Ref ID"} value={refID} onChangeText={(e) => setRefID(e.replace(/[^0-9]/g, ""))} />
         </View>
         <Text style={{ justifyContent: "center", textAlign: "center", fontFamily: "poppins-medium", marginTop: 20 }}>OR</Text>
         <View style={styles.inputFieldContainer}>

@@ -150,8 +150,7 @@ const TBTSLICIA = (props) => {
         data.comments != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" &&
-        data.projectComment !=""
+        data.projectImages !="" 
       ) {
         await props.creatTbtSilicaDustHandler(
           { ...data, task_id: jobID, tab_id: tabId },

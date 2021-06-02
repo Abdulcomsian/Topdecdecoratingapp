@@ -115,8 +115,7 @@ const Covid = (props) => {
         data.comments != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" &&
-        data.projectComment !=""
+        data.projectImages !=""
       ) {
         await props.creatTbtCovidHandler(
           { ...data, task_id: jobID, tab_id: tabId },

@@ -295,12 +295,8 @@ const LadderCheckList = (props) => {
       other: false,
     },
   ]);
-  const [dateTimeComplete, setDateTimeComplete] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [nextDateInspection, setNextDateInspection] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateTimeComplete, setDateTimeComplete] = useState("");
+  const [nextDateInspection, setNextDateInspection] = useState("");
   const [showDateTimeComplete, setShowDateTimeComplete] = useState(false);
   const [showNextDateInspection, setShowNextDateInspection] = useState(false);
   const [furtherComments, setFurtherComments] = useState("");
@@ -493,7 +489,7 @@ const LadderCheckList = (props) => {
             isVisible={showDateTimeComplete}
             testID="dateTimePicker"
             value={dateTimeComplete}
-            mode={"datetime"}
+            mode={Platform.OS === 'ios' ? "datetime" : "datetime"}
             display="default"
             onConfirm={onDateCompleteChange}
             onCancel={() => setShowDateTimeComplete(false)}
@@ -503,7 +499,7 @@ const LadderCheckList = (props) => {
             isVisible={showNextDateInspection}
             testID="dateTimePicker"
             value={nextDateInspection}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onNextDateInspectionChange}
             onCancel={() => setShowNextDateInspection(false)}
@@ -585,38 +581,25 @@ const LadderCheckList = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDateCompletePicker()}
-                      style={{
-                        width: "100%",
-                        height: 60,
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        paddingTop: 20,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                      }}
-                    >
-                      {new Date(dateTimeComplete).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity  onPress={() => showDateCompletePicker()}>
+                      <TextInput
+                        editable={false}
+                        value={dateTimeComplete ? new Date(dateTimeComplete).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date and Time completed"}
+                      />
+                    </TouchableOpacity>
+                    
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showNextDateInspectionPicker()}
-                      style={{
-                        width: "100%",
-                        height: 60,
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        paddingTop: 20,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                      }}
-                    >
-                      {new Date(nextDateInspection).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity  onPress={() => showNextDateInspectionPicker()}>
+                      <TextInput
+                        editable={false}
+                        value={nextDateInspection ? new Date(nextDateInspection).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Next Inspection date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.tableCheckListViewContainer}>
                     <View style={styles.tableHeader}>

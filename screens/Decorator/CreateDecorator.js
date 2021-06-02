@@ -173,7 +173,7 @@ const CreateDecorataor = (props) => {
             <TextInput style={styles.inputField} placeholder={"Password"} value={password} onChangeText={(e) => setPassword(e)} secureTextEntry={true} />
           </View>
           <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Contact Number"} value={number} onChangeText={(e) => setNumber(e)} />
+            <TextInput style={styles.inputField} placeholder={"Contact Number"} value={number} onChangeText={(e) => setNumber(e.replace(/[^0-9]/g, ""))} />
           </View>
           <View style={styles.btnContainer}>
             {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorProfile')}>

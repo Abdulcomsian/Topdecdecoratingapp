@@ -39,19 +39,15 @@ const MakeReady = (props) => {
   const [pageSecond, setPageSecond] = useState("");
   const [plotNumber, setPlotNumber] = useState("");
   const [reason, setReason] = useState("");
-  const [dateWritten, setDateWritten] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [dateIssue, setDateIssue] = useState(new Date().toLocaleDateString());
+  const [dateWritten, setDateWritten] = useState("");
+  const [dateIssue, setDateIssue] = useState("");
   const [supervisorName, setSupervisorName] = useState("");
   const [projectComment, setProjectComment] = useState("");
   const [supervisorSignature, setSupervisorSignature] = useState("");
-  const [dateComplete, setDateComplete] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateComplete, setDateComplete] = useState("");
   const [agentName, setAgentName] = useState("");
   const [agentSignature, setAgentSignature] = useState("");
-  const [todayDate, setTodayDate] = useState(new Date().toLocaleDateString());
+  const [todayDate, setTodayDate] = useState("");
   const [mode, setMode] = useState("date");
   const [showIssue, setShowIssue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
@@ -306,7 +302,7 @@ const MakeReady = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={dateWritten}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => CancelPicker("show")}
             onConfirm={onChange}
@@ -317,7 +313,7 @@ const MakeReady = (props) => {
             isVisible={showIssue}
             testID="dateTimePicker"
             value={dateIssue}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => CancelPicker("issue")}
             onConfirm={onIssueChange}
@@ -328,7 +324,7 @@ const MakeReady = (props) => {
             isVisible={showComplete}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onCompleteChange}
             onCancel={() => CancelPicker("complete")}
@@ -339,7 +335,7 @@ const MakeReady = (props) => {
             isVisible={showToday}
             testID="dateTimePicker"
             value={todayDate}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onTodayDate}
             onCancel={() => CancelPicker("today")}
@@ -391,7 +387,7 @@ const MakeReady = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={block}
-                      onChangeText={(e) => setBlock(e)}
+                      onChangeText={(e) => setBlock(e.replace(/[^0-9]/g, ""))}
                       style={styles.inputField}
                       placeholder={"Block"}
                     />
@@ -399,7 +395,7 @@ const MakeReady = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={sheetNo}
-                      onChangeText={(e) => setSheetNo(e)}
+                      onChangeText={(e) => setSheetNo(e.replace(/[^0-9]/g, ""))}
                       style={styles.inputField}
                       placeholder={"Sheet Number"}
                     />
@@ -415,7 +411,7 @@ const MakeReady = (props) => {
                     <View style={{ width: "40%" }}>
                       <TextInput
                         value={pageOff}
-                        onChangeText={(e) => setPageOff(e)}
+                        onChangeText={(e) => setPageOff(e.replace(/[^0-9]/g, ""))}
                         style={styles.inputField}
                         placeholder={"Page"}
                       />
@@ -432,7 +428,7 @@ const MakeReady = (props) => {
                     <View style={{ width: "40%" }}>
                       <TextInput
                         value={pageSecond}
-                        onChangeText={(e) => setPageSecond(e)}
+                        onChangeText={(e) => setPageSecond(e.replace(/[^0-9]/g, ""))}
                         style={styles.inputField}
                         placeholder={"Page"}
                       />
@@ -441,7 +437,7 @@ const MakeReady = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={plotNumber}
-                      onChangeText={(e) => setPlotNumber(e)}
+                      onChangeText={(e) => setPlotNumber(e.replace(/[^0-9]/g, ""))}
                       style={styles.inputField}
                       placeholder={"Plot/Area Number"}
                     />
@@ -455,20 +451,24 @@ const MakeReady = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker("Date")}
-                      style={styles.inputField}
-                    >
-                      {new Date(dateWritten).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity onPress={() => showDatepicker("Date")}>
+                      <TextInput
+                        editable={false}
+                        value={dateWritten ? new Date(dateWritten).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date Written"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker("DateIssue")}
-                      style={styles.inputField}
-                    >
-                      {new Date(dateIssue).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity onPress={() => showDatepicker("DateIssue")}>
+                      <TextInput
+                        editable={false}
+                        value={dateIssue ? new Date(dateIssue).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date Issue to Site Agent"}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
                 <View style={styles.tableViewContainer}>
@@ -520,7 +520,7 @@ const MakeReady = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateValue("photos", index, txt)
+                                updateValue("photos", index, txt.replace(/[^0-9]/g, ""))
                               }
                               value={el.photos}
                               style={styles.bodyTextInput}
@@ -640,12 +640,14 @@ const MakeReady = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker("CompleteDate")}
-                      style={styles.inputField}
-                    >
-                      {new Date(dateComplete).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity  onPress={() => showDatepicker("CompleteDate")}>
+                      <TextInput
+                        editable={false}
+                        value={dateComplete ? new Date(dateComplete).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Completed Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <Text
                     style={{
@@ -706,12 +708,14 @@ const MakeReady = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showDatepicker("TodayDate")}
-                      style={styles.inputField}
-                    >
-                      {new Date(todayDate).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity  onPress={() => showDatepicker("TodayDate")}>
+                      <TextInput
+                        editable={false}
+                        value={todayDate ? new Date(todayDate).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={{ marginTop: 10 }}>
                     <Text

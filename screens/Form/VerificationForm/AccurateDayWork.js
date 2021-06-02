@@ -16,7 +16,7 @@ import { updateVerificationReport } from "../../../Redux/action/summary/Summary"
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
 
-var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
+var mainImage = require("../../../assets/authScreen/logo.jpeg");
 var plus = require("../../../assets/authScreen/plus.png");
 const AccurateDayWork = (props) => {
   const { navigation, token, isDayWork, isSuccessMsg, isJobId } = props;
@@ -31,7 +31,7 @@ const AccurateDayWork = (props) => {
   const [dynamicMaterialInput, setdynamicMaterialInput] = useState([]);
   const [dynamicPlantInput, setdynamicPlantInput] = useState([]);
   const [dynamicManagmentInput, setdynamicManagmentInput] = useState([]);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
   const [show, setShow] = useState(false);
   const [mainContructor, setMainContructor] = useState("");
   const [contructorTitle, setContructorTitle] = useState("");
@@ -283,7 +283,7 @@ const AccurateDayWork = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onCancel={() => setShow(false)}
             onConfirm={onChange}
@@ -326,7 +326,7 @@ const AccurateDayWork = (props) => {
                     <View style={styles.inputFieldContainer}>
                       <TextInput
                         value={sheetNo}
-                        onChangeText={(e) => setSheetNo(e)}
+                        onChangeText={(e) => setSheetNo(e.replace(/[^0-9]/g, ""))}
                         style={styles.inputField}
                         placeholder={"Daywork sheet No"}
                       />
@@ -342,14 +342,14 @@ const AccurateDayWork = (props) => {
                     <View style={styles.inputFieldContainer}>
                       <TextInput
                         value={siteInstructionNo}
-                        onChangeText={(e) => setSiteInstructionNo(e)}
+                        onChangeText={(e) => setSiteInstructionNo(e.replace(/[^0-9]/g, ""))}
                         style={styles.inputField}
                         placeholder={"Site Instruction No"}
                       />
                     </View>
                     <View style={styles.inputFieldContainer}>
                       <TextInput
-                        onChangeText={(e) => setPlotNumber(e)}
+                        onChangeText={(e) => setPlotNumber(e.replace(/[^0-9]/g, ""))}
                         value={plotNumber}
                         style={styles.inputField}
                         placeholder={"Plot No"}
@@ -516,7 +516,7 @@ const AccurateDayWork = (props) => {
                             <View style={styles.inputWeekBodyContainer}>
                               <TextInput
                                 onChangeText={(txt) =>
-                                  updateLabourValue("total", index, txt)
+                                  updateLabourValue("total", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 value={el.total}
                                 style={styles.bodyTextInput}
@@ -619,7 +619,7 @@ const AccurateDayWork = (props) => {
                             <View style={styles.inputMaterialBodyContainer}>
                               <TextInput
                                 onChangeText={(txt) =>
-                                  updateMaterialValue("quantity", index, txt)
+                                  updateMaterialValue("quantity", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 value={el.quantity}
                                 style={styles.bodyTextInput}
@@ -629,7 +629,7 @@ const AccurateDayWork = (props) => {
                             <View style={styles.inputMaterialBodyContainer}>
                               <TextInput
                                 onChangeText={(txt) =>
-                                  updateMaterialValue("unit", index, txt)
+                                  updateMaterialValue("unit", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 value={el.unit}
                                 style={styles.bodyTextInput}
@@ -718,7 +718,7 @@ const AccurateDayWork = (props) => {
                             <View style={styles.inputMaterialBodyContainer}>
                               <TextInput
                                 onChangeText={(txt) =>
-                                  updatePlantValue("quantity", index, txt)
+                                  updatePlantValue("quantity", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 value={el.quantity}
                                 style={styles.bodyTextInput}
@@ -728,7 +728,7 @@ const AccurateDayWork = (props) => {
                             <View style={styles.inputMaterialBodyContainer}>
                               <TextInput
                                 onChangeText={(txt) =>
-                                  updatePlantValue("unit", index, txt)
+                                  updatePlantValue("unit", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 value={el.unit}
                                 style={styles.bodyTextInput}
@@ -816,7 +816,7 @@ const AccurateDayWork = (props) => {
                             <View style={styles.inputMaterialBodyContainer}>
                               <TextInput
                                 onChangeText={(txt) =>
-                                  updateManagmentValue("quantity", index, txt)
+                                  updateManagmentValue("quantity", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 value={el.quantity}
                                 style={styles.bodyTextInput}
@@ -826,7 +826,7 @@ const AccurateDayWork = (props) => {
                             <View style={styles.inputMaterialBodyContainer}>
                               <TextInput
                                 onChangeText={(txt) =>
-                                  updateManagmentValue("unit", index, txt)
+                                  updateManagmentValue("unit", index, txt.replace(/[^0-9]/g, ""))
                                 }
                                 value={el.unit}
                                 style={styles.bodyTextInput}
@@ -939,24 +939,14 @@ const AccurateDayWork = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputBodyContainer}>
-                    <Text
-                      onPress={() => showDatepicker()}
-                      style={{
-                        width: "100%",
-                        height: 60,
-                        width: "90%",
-                        paddingTop: 17,
-                        fontSize: 12,
-                        color: "#96A8B2",
-                        fontFamily: "poppins-regular",
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#96A8B2",
-                        padding: 5,
-                        color: "#96A8B2",
-                      }}
-                    >
-                      {new Date(date).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity onPress={() => showDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View
                     style={{

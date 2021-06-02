@@ -15,13 +15,13 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Pre Wrannty Sannging",
+      text: "Pre Warranty Snagging",
       chekecd: false,
       url: "WranntySannging",
     },
     {
       tickSign: false,
-      text: "Quality Inssurance",
+      text: "Quality Assurance",
       chekecd: false,
       url: "QualityInssurance",
     },
@@ -48,13 +48,13 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Pre Wrannty Sannging",
+      text: "Pre Warranty Snagging",
       chekecd: false,
       url: "WranntySannging",
     },
     {
       tickSign: false,
-      text: "Quality Inssurance",
+      text: "Quality Assurance",
       chekecd: false,
       url: "QualityInssurance",
     },
@@ -81,13 +81,13 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Pre Wrannty Sannging",
+      text: "Pre Warranty Snagging",
       chekecd: false,
       url: "WranntySannging",
     },
     {
       tickSign: false,
-      text: "Quality Inssurance",
+      text: "Quality Assurance",
       chekecd: false,
       url: "QualityInssurance",
     },
@@ -194,7 +194,7 @@ const INITIAL_STATE = {
     { tickSign: false, text: "Friday Pack", chekecd: false, url: "FridayPack" },
     {
       tickSign: false,
-      text: "Harm Ful Substance",
+      text: "Harmful Substance",
       chekecd: false,
       url: "HarmFulSubstance",
     },
@@ -206,13 +206,13 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "House Keeping Checklist",
+      text: "Housekeping Checklist",
       chekecd: false,
       url: "HouseKepping",
     },
     {
       tickSign: false,
-      text: "Ladder Check List",
+      text: "Ladder Checklist",
       chekecd: false,
       url: "LadderCheckList",
     },
@@ -230,9 +230,9 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Puwer Inspection Checklist",
+      text: "Power Inspection Checklist",
       chekecd: false,
-      url: "PuwerInspection",
+      url: "PowerInspection",
     },
     {
       tickSign: false,
@@ -248,7 +248,7 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Daily Breifing Form",
+      text: "Daily Briefing Form",
       chekecd: false,
       url: "DailyBreifing",
     },
@@ -264,13 +264,13 @@ const INITIAL_STATE = {
     { tickSign: false, text: "TBT_COVID", chekecd: false, url: "Covid" },
     {
       tickSign: false,
-      text: "TBT_HOSEKEEPING",
+      text: "TBT_HOUSEKEEPING",
       chekecd: false,
       url: "Tbthouse",
     },
     {
       tickSign: false,
-      text: "TBT_MOBILEEVELATED",
+      text: "TBT_MOBILEELEVATED",
       chekecd: false,
       url: "Tbtmobile",
     },
@@ -284,7 +284,7 @@ const INITIAL_STATE = {
     { tickSign: false, text: "TBT_DRUGS", chekecd: false, url: "Tbtdrugs" },
     {
       tickSign: false,
-      text: "TBT_VOLIENCE",
+      text: "TBT_VIOLENCE",
       chekecd: false,
       url: "Tbtvolience",
     },
@@ -324,7 +324,7 @@ const INITIAL_STATE = {
     { tickSign: false, text: "Friday Pack", chekecd: false, url: "FridayPack" },
     {
       tickSign: false,
-      text: "Harm Ful Substance",
+      text: "Harmful Substance",
       chekecd: false,
       url: "HarmFulSubstance",
     },
@@ -336,13 +336,13 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "House Keeping Checklist",
+      text: "Housekeping Checklist",
       chekecd: false,
       url: "HouseKepping",
     },
     {
       tickSign: false,
-      text: "Ladder Check List",
+      text: "Ladder Checklist",
       chekecd: false,
       url: "LadderCheckList",
     },
@@ -360,9 +360,9 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Puwer Inspection Checklist",
+      text: "Power Inspection Checklist",
       chekecd: false,
-      url: "PuwerInspection",
+      url: "PowerInspection",
     },
     {
       tickSign: false,
@@ -378,7 +378,7 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Daily Breifing Form",
+      text: "Daily Briefing Form",
       chekecd: false,
       url: "DailyBreifing",
     },
@@ -454,7 +454,7 @@ const INITIAL_STATE = {
     { tickSign: false, text: "Friday Pack", chekecd: false, url: "FridayPack" },
     {
       tickSign: false,
-      text: "Harm Ful Substance",
+      text: "Harmful Substance",
       chekecd: false,
       url: "HarmFulSubstance",
     },
@@ -466,13 +466,13 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "House Keeping Checklist",
+      text: "Housekeping Checklist",
       chekecd: false,
       url: "HouseKepping",
     },
     {
       tickSign: false,
-      text: "Ladder Check List",
+      text: "Ladder Checklist",
       chekecd: false,
       url: "LadderCheckList",
     },
@@ -490,9 +490,9 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Puwer Inspection Checklist",
+      text: "Power Inspection Checklist",
       chekecd: false,
-      url: "PuwerInspection",
+      url: "PowerInspection",
     },
     {
       tickSign: false,
@@ -508,7 +508,7 @@ const INITIAL_STATE = {
     },
     {
       tickSign: false,
-      text: "Daily Breifing Form",
+      text: "Daily Briefing Form",
       chekecd: false,
       url: "DailyBreifing",
     },

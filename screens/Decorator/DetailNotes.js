@@ -4,20 +4,21 @@ import { Text } from "native-base";
 import axios from "axios";
 
 var rightArrow = require("../../assets/authScreen/right.png");
-const ViewNotes = (props) => {
+const DetailNotes = (props) => {
   const { navigation, token, isMakeReady, isSuccessMsg, isJobId } = props;
-  console.log(props.route.params.id);
+  console.log(props)
   const decorator_id = props.route.params.id;
-  const [plotArray, setPlotArray] = useState([]);
+  const date = props.route.params.date;
+  const [noteArray, setNoteArray] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showView, setShowView] = useState(false);
   useEffect(() => {
     try {
-      const body = { decorator_id };
+      const body = { date, decorator_id };
       (async () => {
         setLoading(true);
         const request = await axios(
-          "http://topdecdecoratingapp.com/api/admin/fetch_dates",
+          "http://topdecdecoratingapp.com/api/admin/Fetch_notes_details",
           {
             method: "POST",
             headers: {
@@ -27,9 +28,10 @@ const ViewNotes = (props) => {
           }
         );
         const response = await request.data;
+        console.log(response.data.user);
         if (response.success == true) {
           console.log("here");
-          setPlotArray(response.data.user);
+          setNoteArray(response.data.user);
           setLoading(false);
           setShowView(true);
         } else {
@@ -52,14 +54,13 @@ const ViewNotes = (props) => {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>View Notes</Text>
+          <Text style={styles.titleText}>List of Notes</Text>
         </View>
         {showView ? (
           <View style={{ padding: 30 }}>
-            {plotArray.map((item,index)=>(
-                <TouchableOpacity style={styles.commonBtn} onPress={()=>navigation.navigate("NotesDetail",{date:item.date,id:decorator_id})}>
-                    <Text style={styles.commonText}>{item.date}</Text>
-                    <Image  source={rightArrow}/>
+            {noteArray.map((item,index)=>(
+                <TouchableOpacity style={styles.commonBtn}>
+                    <Text style={styles.commonText}>{item.notes}</Text>
                 </TouchableOpacity>
             ))}
           </View>
@@ -79,7 +80,7 @@ const ViewNotes = (props) => {
     );
   }
 };
-export default ViewNotes;
+export default DetailNotes;
 const styles = StyleSheet.create({
   mainContainer: {
     height: "100%",

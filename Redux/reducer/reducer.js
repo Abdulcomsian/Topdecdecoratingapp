@@ -1,5 +1,5 @@
 import * as Actions from "../actionTypes";
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
     // token: localStorage.getItem("token"),
@@ -58,7 +58,6 @@ export default (state = initialState, action)=> {
                     role: action.payload.user.role,
                     token: action.payload.data.split("|")[1],
                     isUserID: action.payload.user.id
-                    
                 }
                 case Actions.RESET_LOGIN_FLAG:
                     return{

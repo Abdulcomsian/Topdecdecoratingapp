@@ -23,7 +23,7 @@ const Scope = (props) => {
   const jobID = plot_Id;
   const tabId = props.route.params.tabName;
   const [dynamicInput, setdynamicInput] = useState([]);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [date, setDate] = useState("");
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [painterName, setPainterName] = useState("");
@@ -212,7 +212,7 @@ const Scope = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => CancelPicker()}
@@ -445,7 +445,7 @@ const Scope = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={plotNumber}
-                      onChangeText={(e) => setPlotNumber(e)}
+                      onChangeText={(e) => setPlotNumber(e.replace(/[^0-9]/g, ""))}
                       style={styles.inputField}
                       placeholder={"Plot No"}
                     />
@@ -491,7 +491,15 @@ const Scope = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                    <Text
+                  <TouchableOpacity onPress={() => showDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={date ? new Date(date).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
+                    {/* <Text
                       onPress={() => showDatepicker()}
                       style={{
                         width: "100%",
@@ -503,7 +511,7 @@ const Scope = (props) => {
                       }}
                     >
                       {new Date(date).toLocaleDateString()}
-                    </Text>
+                    </Text> */}
                   </View>
                   <View style={{ marginTop: 10 }}>
                     <Text

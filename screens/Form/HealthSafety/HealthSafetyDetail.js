@@ -93,11 +93,11 @@ const HealthSafetyDetails = (props) => {
       const flag = preData[index].chekecd;
       if (flag) {
         preData[index].chekecd = false;
-        setDecorationArray(preData);
+        setDecoration(preData);
         setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
       } else {
         preData[index].chekecd = true;
-        setDecorationArray(preData);
+        setDecoration(preData);
         setJobSummary((oldArray) => [
           ...oldArray,
           { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
@@ -108,11 +108,11 @@ const HealthSafetyDetails = (props) => {
       const flag = preData[index].chekecd;
       if (flag) {
         preData[index].chekecd = false;
-        setSnagArray(preData);
+        setSnag(preData);
         setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
       } else {
         preData[index].chekecd = true;
-        setSnagArray(preData);
+        setSnag(preData);
         setJobSummary((oldArray) => [
           ...oldArray,
           { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
@@ -122,9 +122,21 @@ const HealthSafetyDetails = (props) => {
   };
 
   React.useEffect(() => {
-    setMiscotArray(healthAndSafetyMisCoat);
-    setDecoration(healthAndSafetyDecoration);
-    setSnag(healthAndSafetySnag);
+    const updateMiscoatArray=[...healthAndSafetyMisCoat];
+    healthAndSafetyMisCoat.map((item,index)=>{
+      updateMiscoatArray[index].chekecd=false;
+    })
+  setMiscotArray(updateMiscoatArray)
+  const updateDecorationArray=[...healthAndSafetyDecoration];
+    healthAndSafetyDecoration.map((item,index)=>{
+      updateDecorationArray[index].chekecd=false;
+    })
+    setDecoration(updateDecorationArray);
+  const updateSnagArray=[...healthAndSafetySnag];
+    healthAndSafetySnag.map((item,index)=>{
+      updateSnagArray[index].chekecd=false;
+    })
+    setSnag(updateSnagArray);
   }, [healthAndSafetyMisCoat, healthAndSafetyDecoration, healthAndSafetySnag]);
 
   React.useEffect(() => {
@@ -184,7 +196,7 @@ const HealthSafetyDetails = (props) => {
     }
   }
 
-
+  console.log("Send Mail :",jobSummary)
   return (
     <View style={styles.mainContainer}>
        <View style={styles.dateTimeContainer}>

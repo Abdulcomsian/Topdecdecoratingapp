@@ -6,13 +6,14 @@ import { adminLogin } from "../../Redux/action/auth/authActionTypes";
 import { useDispatch, useSelector, connect } from "react-redux";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { StackActions } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var logo = require("../../assets/authScreen/logo.jpeg");
 var user = require("../../assets/authScreen/icon.png");
 var lock = require("../../assets/authScreen/lock.png");
 
 const LoginScreen = (props) => {
-  const { navigation, isLogin, isLoginMsg, role, isUserID } = props;
+  const { navigation, isLogin, isLoginMsg, role, isUserID, token } = props;
   // const dispatch = useDispatch()
   // const [email, setEmail] = useState("Waqas@gmail.com");
   // const [password, setPassword] = useState("Waqas@123");
@@ -70,23 +71,26 @@ const LoginScreen = (props) => {
   };
   console.log("Login Role :", role);
   useEffect(() => {
-    if (isLogin) {
-      if (isLoginMsg) {
-        //alert(isLoginMsg)
-        if (role == "ADMIN") {
-          props.navigation.dispatch(StackActions.replace("MainScreen"));
-        } else if (role == "DECORATOR") {
-          props.navigation.dispatch(StackActions.replace("DecoratorDetails", { roleID: "decorator", id: isUserID }));
-        } else {
-          // props.navigation.dispatch(StackActions.replace('DetailSupervisor',{role:"supervisor",id: isUserID}))
-          props.navigation.dispatch(StackActions.replace("ViewJob", { role: "supervisor", id: isUserID }));
+    (async()=>{
+      if (isLogin) {
+        if (isLoginMsg) {
+          //alert(isLoginMsg)
+          if (role == "ADMIN") {
+            await AsyncStorage.setItem('token', JSON.stringify({token:token}))
+            props.navigation.dispatch(StackActions.replace("MainScreen"));
+          } else if (role == "DECORATOR") {
+            props.navigation.dispatch(StackActions.replace("DecoratorDetails", { roleID: "decorator", id: isUserID }));
+          } else {
+            // props.navigation.dispatch(StackActions.replace('DetailSupervisor',{role:"supervisor",id: isUserID}))
+            props.navigation.dispatch(StackActions.replace("ViewJob", { role: "supervisor", id: isUserID }));
+          }
+        }
+      } else {
+        if (isLoginMsg) {
+          //alert(isLoginMsg)
         }
       }
-    } else {
-      if (isLoginMsg) {
-        //alert(isLoginMsg)
-      }
-    }
+    })()
   }, [isLogin, isLoginMsg]);
 
   return (

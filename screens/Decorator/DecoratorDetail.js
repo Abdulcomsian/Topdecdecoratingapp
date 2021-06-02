@@ -32,13 +32,15 @@ const DecoratorDetails = (props) => {
   const [photoID, setPhotoID] = useState("");
   const [cscsFront, setCscsFront] = useState("");
   const [cscsBack, setCscsBack] = useState("");
+  const [notes, setNotes] = useState("");
   const [decoratorData, setDecoratorDate] = useState([]);
   const [showView, setShowView] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   const uploadPhotoImage = async (type) => {
     if (type == "photoID") {
-      let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      let permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (permissionResult.granted === false) {
         alert("Permission to access camera roll is required!");
@@ -51,7 +53,8 @@ const DecoratorDetails = (props) => {
       console.log("Piceker Result :", pickerResult);
       setPhotoID({ localUri: pickerResult.uri });
     } else if (type == "cscsFront") {
-      let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      let permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (permissionResult.granted === false) {
         alert("Permission to access camera roll is required!");
@@ -64,7 +67,8 @@ const DecoratorDetails = (props) => {
 
       setCscsFront({ localUri: pickerResult.uri });
     } else if (type == "cscsBack") {
-      let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      let permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (permissionResult.granted === false) {
         alert("Permission to access camera roll is required!");
@@ -78,8 +82,10 @@ const DecoratorDetails = (props) => {
       setCscsBack({ localUri: pickerResult.uri });
     }
   };
-  console.log("Role Name :",roleID)
+  console.log("Role Name :", roleID);
+  console.log("Token :", token);
   const id = props.route.params.id;
+  console.log("Decorator ID :", id);
   useEffect(() => {
     try {
       const body = { id };
@@ -96,7 +102,7 @@ const DecoratorDetails = (props) => {
           }
         );
         const response = await request.data;
-        console.log(response.data.user);
+        console.log("Response :", response.user);
         if (response.success == true) {
           console.log("here");
           setDecoratorDate(response.data.user);
@@ -105,7 +111,7 @@ const DecoratorDetails = (props) => {
         } else {
           setLoading(false);
           setShowView(false);
-          setErrorMsg(request.data.message);
+          setErrorMsg(response.message);
         }
       })();
     } catch (err) {
@@ -127,7 +133,7 @@ const DecoratorDetails = (props) => {
     }
   };
   const updateDecorator = async () => {
-    console.log("Decorator Array :",decoratorData)
+    console.log("Decorator Array :", decoratorData);
     try {
       await props.updateDecoratorHandler(
         decoratorData[0].id,
@@ -138,20 +144,70 @@ const DecoratorDetails = (props) => {
         photoID,
         cscsFront,
         cscsBack,
-        status,
+        decoratorData[0].status,
         token
-        
       );
       // props.navigation.pop();
-      alert("Profile Updated SuccessFully !")
+      alert("Profile Updated SuccessFully !");
     } catch (err) {
       alert(err.message);
     }
-};
+  };
+  const updateAdminDecorator = async () => {
+    console.log("Decorator Array :", decoratorData);
+    try {
+      await props.updateDecoratorHandler(
+        decoratorData[0].id,
+        decoratorData[0].email,
+        decoratorData[0].name,
+        decoratorData[0].lastname,
+        decoratorData[0].number,
+        decoratorData[0].photoId,
+        decoratorData[0].front,
+        decoratorData[0].back,
+        status,
+        token
+      );
+      // props.navigation.pop();
+      alert("Profile Updated SuccessFully !");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
   const updateValue = (key, index, value) => {
     let preData = [...decoratorData];
     preData[index][key] = value;
     setDecoratorDate(preData);
+  };
+  const submitNotes = () => {
+    console.log("Decorator Id :", props.route.params.id);
+    console.log("Notes :", notes);
+    try {
+      if (props.route.params.id != "" && notes != "") {
+        const decorator_id = props.route.params.id;
+        const body = { notes, decorator_id };
+
+        (async () => {
+          const request = await axios(
+            "http://topdecdecoratingapp.com/api/admin/add_notes",
+            {
+              method: "POST",
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+              data: body,
+            }
+          );
+          const response = await request.data;
+          if (response.success == true) {
+            navigation.goBack();
+            alert("Your Notes Add SucessFully !");
+          }
+        })();
+      }
+    } catch (err) {
+      alert(err.message);
+    }
   };
   if (loading) {
     return (
@@ -163,370 +219,521 @@ const DecoratorDetails = (props) => {
     console.log("decorator Array :", decoratorData);
     return (
       <View style={styles.mainContainer}>
-        <View style={styles.dateTimeContainer}>
+        {/* <View style={styles.dateTimeContainer}>
           <Text style={styles.refText}>Date: 12-2-2021</Text>
           <Text style={styles.refText}>Ref id: 10099499</Text>
-        </View>
+        </View> */}
 
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Decorator Details</Text>
         </View>
-        {roleID == "decorator" ? (
-          <ScrollView style={{ width: "100%" }}>
-            {decoratorData.map((item, index) => (
-              <View style={styles.formConatiner}>
-                <View style={styles.inputFieldContainer} key={index}>
-                  <Text style={styles.decoratorTitle}>Name:</Text>
-                  <TextInput
-                    value={item.name}
-                    style={[styles.detailItemInput, { width: "50%" }]}
-                    onChangeText={(txt) => updateValue("name", index, txt)}
-                  />
+        {showView ? (
+          roleID == "decorator" ? (
+            <ScrollView style={{ width: "100%" }}>
+              {decoratorData.map((item, index) => (
+                <View style={styles.formConatiner}>
+                  <View style={styles.inputFieldContainer} key={index}>
+                    <Text style={styles.decoratorTitle}>Name:</Text>
+                    <TextInput
+                      value={item.name}
+                      style={[styles.detailItemInput, { width: "50%" }]}
+                      onChangeText={(txt) => updateValue("name", index, txt)}
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer} key={index}>
+                    <Text style={styles.decoratorTitle}>Last Name:</Text>
+                    <TextInput
+                      value={item.lastname}
+                      style={[styles.detailItemInput, { width: "50%" }]}
+                      onChangeText={(txt) =>
+                        updateValue("lastname", index, txt)
+                      }
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>Email:</Text>
+                    <Text
+                      style={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        fontSize: 16,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        width: "50%",
+                      }}
+                    >
+                      {item.email}
+                    </Text>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>Number:</Text>
+                    <TextInput
+                      value={item.phone}
+                      style={[styles.detailItemInput, { width: "50%" }]}
+                      onChangeText={(txt) => updateValue("phone", index, txt)}
+                    />
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>Photo ID:</Text>
+
+                    <View
+                      style={{
+                        width: "50%",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      {photoID.localUri ? (
+                        <Image
+                          style={styles.thumbnail}
+                          source={{ uri: photoID.localUri }}
+                        />
+                      ) : (
+                        <Image
+                          style={styles.thumbnail}
+                          source={{
+                            uri:
+                              "http://topdecdecoratingapp.com/public/api/" +
+                              item.photoId,
+                          }}
+                        />
+                      )}
+
+                      <TouchableOpacity
+                        onPress={() => uploadPhotoImage("photoID")}
+                        style={{
+                          height: 30,
+                          borderRadius: 8,
+                          borderWidth: 3,
+                          borderColor: "#1073AC",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            paddingLeft: 5,
+                            paddingRight: 5,
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          Upload Image
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>CSCS Front Card:</Text>
+                    <View
+                      style={{
+                        width: "50%",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      {cscsFront.localUri ? (
+                        <Image
+                          style={styles.thumbnail}
+                          source={{ uri: cscsFront.localUri }}
+                        />
+                      ) : (
+                        <Image
+                          style={styles.thumbnail}
+                          source={{
+                            uri:
+                              "http://topdecdecoratingapp.com/public/api/" +
+                              item.front,
+                          }}
+                        />
+                      )}
+                      <TouchableOpacity
+                        onPress={() => uploadPhotoImage("cscsFront")}
+                        style={{
+                          height: 30,
+                          borderRadius: 8,
+                          borderWidth: 3,
+                          borderColor: "#1073AC",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            paddingLeft: 5,
+                            paddingRight: 5,
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          Upload Image
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>CSCS Back Card:</Text>
+                    <View
+                      style={{
+                        width: "50%",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      {cscsBack.localUri ? (
+                        <Image
+                          style={styles.thumbnail}
+                          source={{ uri: cscsBack.localUri }}
+                        />
+                      ) : (
+                        <Image
+                          style={styles.thumbnail}
+                          source={{
+                            uri:
+                              "http://topdecdecoratingapp.com/public/api/" +
+                              item.back,
+                          }}
+                        />
+                      )}
+                      <TouchableOpacity
+                        onPress={() => uploadPhotoImage("cscsBack")}
+                        style={{
+                          height: 30,
+                          borderRadius: 8,
+                          borderWidth: 3,
+                          borderColor: "#1073AC",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            paddingLeft: 5,
+                            paddingRight: 5,
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          Upload Image
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>Notes Log:</Text>
+                    <TouchableOpacity
+                      style={{
+                        marginLeft: 30,
+                        fontFamily: "poppins-regular",
+                        width: "50%",
+                        flexDirection: "row",
+                      }}
+                      onPress={() =>
+                        navigation.navigate("ViewNotes", {
+                          id: props.route.params.id,
+                        })
+                      }
+                    >
+                      <Text
+                        style={{ fontFamily: "poppins-regular", fontSize: 16 }}
+                      >
+                        View Logs
+                      </Text>
+                      <Image
+                        source={rightArrow}
+                        style={{
+                          marginLeft: 10,
+                          marginTop: 8,
+                          width: 12,
+                          height: 12,
+                          resizeMode: "center",
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>Status:</Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <View style={styles.chekboxText}>
+                        <CheckBox
+                          value={item.status === "1" ? true : false}
+
+                          // onValueChange={() => checkedValue("approved")}
+                        />
+                        <Text style={styles.checkText}>Approved</Text>
+                      </View>
+                      <View style={styles.chekboxText}>
+                        <CheckBox
+                          value={item.status === "0" ? true : false}
+                          // onValueChange={() => checkedValue("disapproved")}
+                        />
+                        <Text style={styles.checkText}>Dis-Approved</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.commonBtn}
+                    onPress={() => updateDecorator()}
+                  >
+                    <Text style={styles.commonText}>Update</Text>
+                  </TouchableOpacity>
                 </View>
-                <View style={styles.inputFieldContainer} key={index}>
-                  <Text style={styles.decoratorTitle}>Last Name:</Text>
-                  <TextInput
-                    value={item.lastname}
-                    style={[styles.detailItemInput, { width: "50%" }]}
-                    onChangeText={(txt) => updateValue("lastname", index, txt)}
+              ))}
+            </ScrollView>
+          ) : (
+            <ScrollView style={{ height: "100%", width: "100%" }}>
+              {decoratorData.map((item, index) => (
+                <View style={styles.formConatiner}>
+                  <View style={styles.inputFieldContainer} key={index}>
+                    <Text style={styles.decoratorTitle}>Name:</Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        width: "50%",
+                        justifyContent: "center",
+                        fontFamily: "poppins-regular",
+                      }}
+                    >
+                      {item.name}
+                    </Text>
+                  </View>
+                  <View style={styles.inputFieldContainer} key={index}>
+                    <Text style={styles.decoratorTitle}>Last Name:</Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        width: "50%",
+                        justifyContent: "center",
+                        fontFamily: "poppins-regular",
+                      }}
+                    >
+                      {item.lastname}
+                    </Text>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>Email:</Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        width: "50%",
+                        justifyContent: "center",
+                        fontFamily: "poppins-regular",
+                      }}
+                    >
+                      {item.email}
+                    </Text>
+                  </View>
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>Number:</Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        width: "50%",
+                        justifyContent: "center",
+                        fontFamily: "poppins-regular",
+                      }}
+                    >
+                      {item.phone}
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.inputFieldContainer,
+                      { height: 100, marginBottom: 10 },
+                    ]}
+                  >
+                    <Text style={styles.decoratorTitle}>Photo ID:</Text>
+                    <Image
+                      style={[
+                        styles.thumbnail,
+                        {
+                          width: 100,
+                          height: 100,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        },
+                      ]}
+                      source={{
+                        uri:
+                          "http://topdecdecoratingapp.com/public/api/" +
+                          item.photoId,
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      styles.inputFieldContainer,
+                      { height: 100, marginBottom: 10 },
+                    ]}
+                  >
+                    <Text style={styles.decoratorTitle}>CSCS Front Card:</Text>
+                    <Image
+                      style={[
+                        styles.thumbnail,
+                        {
+                          width: 100,
+                          height: 100,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        },
+                      ]}
+                      source={{
+                        uri:
+                          "http://topdecdecoratingapp.com/public/api/" +
+                          item.front,
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      styles.inputFieldContainer,
+                      { height: 100, marginBottom: 10 },
+                    ]}
+                  >
+                    <Text style={styles.decoratorTitle}>CSCS Back Card:</Text>
+                    <Image
+                      style={[
+                        styles.thumbnail,
+                        {
+                          width: 100,
+                          height: 100,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        },
+                      ]}
+                      source={{
+                        uri:
+                          "http://topdecdecoratingapp.com/public/api/" +
+                          item.back,
+                      }}
+                    />
+                  </View>
+                  {/* <View style={styles.inputFieldContainer}>
+                <Text style={styles.decoratorTitle}>Notes Log:</Text>
+                <TouchableOpacity
+                  style={{
+                    marginLeft: 30,
+                    fontFamily: "poppins-regular",
+                    width: "50%",
+                    flexDirection: "row",
+                  }}
+                  onPress={() => navigation.navigate("ViewNotes")}
+                >
+                  <Text
+                    style={{ fontFamily: "poppins-regular", fontSize: 16 }}
+                  >
+                    View Logs
+                  </Text>
+                  <Image
+                    source={rightArrow}
+                    style={{
+                      marginLeft: 10,
+                      marginTop: 8,
+                      width: 12,
+                      height: 12,
+                      resizeMode: "center",
+                    }}
                   />
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Email:</Text>
+                </TouchableOpacity>
+              </View> */}
+                  <View style={styles.inputFieldContainer}>
+                    <Text style={styles.decoratorTitle}>Status:</Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <View style={styles.chekboxText}>
+                        <CheckBox
+                          value={item.status === "1" ? true : false}
+                          onValueChange={() => checkedValue("approved")}
+                        />
+                        <Text style={styles.checkText}>Approved</Text>
+                      </View>
+                      <View style={styles.chekboxText}>
+                        <CheckBox
+                          value={item.status === "0" ? true : false}
+                          onValueChange={() => checkedValue("disapproved")}
+                        />
+                        <Text style={styles.checkText}>Dis-Approved</Text>
+                      </View>
+                    </View>
+                  </View>
+                    <TouchableOpacity
+                      style={styles.commonBtn}
+                      onPress={() => updateAdminDecorator()}
+                    >
+                      <Text style={styles.commonText}>Update Decorator</Text>
+                    </TouchableOpacity>
+                  <View
+                    style={{
+                      backgroundColor: "#000",
+                      width: "100%",
+                      height: ".5%",
+                      marginBottom: 20,
+                      marginTop:20
+                    }}
+                  ></View>
                   <Text
                     style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      color: "#4F4F4F",
+                      fontSize: 18,
+                      fontFamily: "poppins-semiBold",
+                    }}
+                  >
+                    Add Notes
+                  </Text>
+                  <TextInput
+                    multiline={true}
+                    numberOfLines={10}
+                    placeholder={"Please Add Missing Items"}
+                    style={{
+                      height: 52,
+                      width: "100%",
                       borderBottomWidth: 1,
                       borderBottomColor: "#96A8B2",
-                      fontSize: 16,
+                      padding: 5,
+                      fontSize: 12,
                       color: "#96A8B2",
                       fontFamily: "poppins-regular",
-                      width: "50%",
                     }}
-                  >
-                    {item.email}
-                  </Text>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Number:</Text>
-                  <TextInput
-                    value={item.phone}
-                    style={[styles.detailItemInput, { width: "50%" }]}
-                    onChangeText={(txt) => updateValue("phone", index, txt)}
+                    onChangeText={(e) => setNotes(e)}
+                    value={notes}
                   />
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Photo ID:</Text>
-                  
-                  <View
-                    style={{
-                      width: "50%",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                   {photoID.localUri ?
-                      <Image
-                        style={styles.thumbnail}
-                        source={{ uri: photoID.localUri }}
-                      />
-                      :
-                      <Image
-                      style={styles.thumbnail}
-                      source={{ uri: "http://topdecdecoratingapp.com/public/api/" + item.photoId }}
-                    />}
-                    
+                  <View style={styles.btnContainer}>
                     <TouchableOpacity
-                      onPress={() => uploadPhotoImage("photoID")}
-                      style={{
-                        height: 30,
-                        borderRadius: 8,
-                        borderWidth: 3,
-                        borderColor: "#1073AC",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
+                      style={styles.commonBtn}
+                      onPress={() => submitNotes()}
                     >
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          paddingLeft: 5,
-                          paddingRight: 5,
-                          fontFamily: "poppins-regular",
-                        }}
-                      >
-                        Upload Image
-                      </Text>
+                      <Text style={styles.commonText}>Submit Notes</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>CSCS Front Card:</Text>
-                  <View
-                    style={{
-                      width: "50%",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-
-                    {cscsFront.localUri ?
-                      <Image
-                        style={styles.thumbnail}
-                        source={{ uri: cscsFront.localUri }}
-                      />
-                      :
-                      <Image
-                      style={styles.thumbnail}
-                      source={{ uri: "http://topdecdecoratingapp.com/public/api/" + item.front }}
-                    />}
-                    <TouchableOpacity
-                      onPress={() => uploadPhotoImage("cscsFront")}
-                      style={{
-                        height: 30,
-                        borderRadius: 8,
-                        borderWidth: 3,
-                        borderColor: "#1073AC",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          paddingLeft: 5,
-                          paddingRight: 5,
-                          fontFamily: "poppins-regular",
-                        }}
-                      >
-                        Upload Image
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>CSCS Back Card:</Text>
-                  <View
-                    style={{
-                      width: "50%",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                     {cscsBack.localUri ?
-                      <Image
-                        style={styles.thumbnail}
-                        source={{ uri: cscsBack.localUri }}
-                      />
-                      :
-                      <Image
-                      style={styles.thumbnail}
-                      source={{ uri: "http://topdecdecoratingapp.com/public/api/" + item.back }}
-                    />}
-                    <TouchableOpacity
-                      onPress={() => uploadPhotoImage("cscsBack")}
-                      style={{
-                        height: 30,
-                        borderRadius: 8,
-                        borderWidth: 3,
-                        borderColor: "#1073AC",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          paddingLeft: 5,
-                          paddingRight: 5,
-                          fontFamily: "poppins-regular",
-                        }}
-                      >
-                        Upload Image
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Notes Log:</Text>
-                  <TouchableOpacity
-                    style={{
-                      marginLeft: 30,
-                      fontFamily: "poppins-regular",
-                      width: "50%",
-                      flexDirection: "row",
-                    }}
-                    onPress={() => navigation.navigate("ViewNotes")}
-                  >
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 16 }}
-                    >
-                      View Logs
-                    </Text>
-                    <Image
-                      source={rightArrow}
-                      style={{
-                        marginLeft: 10,
-                        marginTop: 8,
-                        width: 12,
-                        height: 12,
-                        resizeMode: "center",
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Status:</Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <View style={styles.chekboxText}>
-                      <CheckBox
-                        value={item.status === "1" ? true : false}
-                        onValueChange={() => checkedValue("approved")}
-                      />
-                      <Text style={styles.checkText}>Approved</Text>
-                    </View>
-                    <View style={styles.chekboxText}>
-                      <CheckBox
-                        value={item.status === "0" ? true : false}
-                        onValueChange={() => checkedValue("disapproved")}
-                      />
-                      <Text style={styles.checkText}>Dis-Approved</Text>
-                    </View>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  style={styles.commonBtn}
-                  onPress={() => updateDecorator()}
-                >
-                  <Text style={styles.commonText}>Update</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </ScrollView>
+              ))}
+            </ScrollView>
+          )
         ) : (
-          <ScrollView style={{ height: "100%", width: "100%" }}>
-            {decoratorData.map((item, index) => (
-              <View style={styles.formConatiner}>
-                <View style={styles.inputFieldContainer} key={index}>
-                  <Text style={styles.decoratorTitle}>Name:</Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      width: "50%",
-                      justifyContent: "center",
-                      fontFamily: "poppins-regular",
-                    }}
-                  >
-                    {item.name}
-                  </Text>
-                </View>
-                <View style={styles.inputFieldContainer} key={index}>
-                  <Text style={styles.decoratorTitle}>Last Name:</Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      width: "50%",
-                      justifyContent: "center",
-                      fontFamily: "poppins-regular",
-                    }}
-                  >
-                    {item.lastname}
-                  </Text>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Email:</Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      width: "50%",
-                      justifyContent: "center",
-                      fontFamily: "poppins-regular",
-                    }}
-                  >
-                    {item.email}
-                  </Text>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Number:</Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      width: "50%",
-                      justifyContent: "center",
-                      fontFamily: "poppins-regular",
-                    }}
-                  >
-                    {item.phone}
-                  </Text>
-                </View>
-                <View style={[styles.inputFieldContainer,{height:100,marginBottom:10}]}>
-                  <Text style={styles.decoratorTitle}>Photo ID:</Text>
-                  <Image style={[styles.thumbnail,{width:100,height:100,justifyContent:"center",alignItems:"center"}]} source={{uri: "http://topdecdecoratingapp.com/public/api/"+item.photoId}} />
-                </View>
-                <View style={[styles.inputFieldContainer,{height:100,marginBottom:10}]}>
-                  <Text style={styles.decoratorTitle}>CSCS Front Card:</Text>
-                  <Image style={[styles.thumbnail,{width:100,height:100,justifyContent:"center",alignItems:"center"}]} source={{uri: "http://topdecdecoratingapp.com/public/api/"+item.front}} />
-                </View>
-                <View style={[styles.inputFieldContainer,{height:100,marginBottom:10}]}>
-                  <Text style={styles.decoratorTitle}>CSCS Back Card:</Text>
-                  <Image style={[styles.thumbnail,{width:100,height:100,justifyContent:"center",alignItems:"center"}]} source={{uri: "http://topdecdecoratingapp.com/public/api/"+item.back}} />
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Notes Log:</Text>
-                  <TouchableOpacity
-                    style={{
-                      marginLeft: 30,
-                      fontFamily: "poppins-regular",
-                      width: "50%",
-                      flexDirection: "row",
-                    }}
-                    onPress={() => navigation.navigate("ViewNotes")}
-                  >
-                    <Text
-                      style={{ fontFamily: "poppins-regular", fontSize: 16 }}
-                    >
-                      View Logs
-                    </Text>
-                    <Image
-                      source={rightArrow}
-                      style={{
-                        marginLeft: 10,
-                        marginTop: 8,
-                        width: 12,
-                        height: 12,
-                        resizeMode: "center",
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Status:</Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <View style={styles.chekboxText}>
-                      <CheckBox value={item.status === "1" ? true : false} />
-                      <Text style={styles.checkText}>Approved</Text>
-                    </View>
-                    <View style={styles.chekboxText}>
-                      <CheckBox value={item.status === "0" ? true : false} />
-                      <Text style={styles.checkText}>Dis-Approved</Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "85%",
+            }}
+          >
+            <Text>Sorry No Data Found !</Text>
+          </View>
         )}
       </View>
     );
@@ -538,11 +745,40 @@ const mapStateToProps = (state) => ({
   isUpdateMsg: state.auth.isUpdateMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
-  updateDecoratorHandler: (id, email, name, lastname, number,photoID, cscsFront, cscsBack, status, token) =>
-    dispatch(updateDecorator(id, email, name, lastname, number,photoID, cscsFront, cscsBack, status, token)),
+  updateDecoratorHandler: (
+    id,
+    email,
+    name,
+    lastname,
+    number,
+    photoID,
+    cscsFront,
+    cscsBack,
+    status,
+    token
+  ) =>
+    dispatch(
+      updateDecorator(
+        id,
+        email,
+        name,
+        lastname,
+        number,
+        photoID,
+        cscsFront,
+        cscsBack,
+        status,
+        token
+      )
+    ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DecoratorDetails);
 const styles = StyleSheet.create({
+  btnContainer: {
+    width: "100%",
+    height: "15%",
+    marginBottom: 20,
+  },
   mainContainer: {
     height: "100%",
     width: "100%",

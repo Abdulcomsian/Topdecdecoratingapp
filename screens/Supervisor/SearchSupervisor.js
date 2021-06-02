@@ -38,14 +38,15 @@ const SearchSupervisor = (props) =>{
     
     return(
         <View style={styles.mainContainer}>
-            <View style={styles.dateTimeContainer}>
+            {/* <View style={styles.dateTimeContainer}>
                 <Text style={styles.refText}>Date: 12-2-2021</Text>
                 <Text style={styles.refText}>Ref  id: 10099499</Text>
-            </View>
+            </View> */}
             
             <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Search Supervisor</Text>
             </View>
+            <ScrollView>
             <View style={styles.formConatiner}>
                 <View style={styles.inputFieldContainer}>
                     <TextInput
@@ -55,14 +56,16 @@ const SearchSupervisor = (props) =>{
                         onChangeText={(e)=>setSupervisorName(e)}
                     />
                 </View>
+                <Text style={{marginBottom:20,marginTop:20,fontFamily:'poppins-semiBold'}}>OR</Text>
                 <View style={styles.inputFieldContainer}>
                     <TextInput
                         style={styles.inputField}
                         placeholder={"Enter your Supervisor ID"}
                         value={supervisorId}
-                        onChangeText={(e)=>setSupervisorId(e)}
+                        onChangeText={(e)=>setSupervisorId(e.replace(/[^0-9]/g, ""))}
                     />
                 </View>
+                <Text style={{marginBottom:20,marginTop:20,fontFamily:'poppins-semiBold'}}>OR</Text>
                 <View style={styles.inputFieldContainer}>
                     <TextInput
                         style={styles.inputField}
@@ -72,6 +75,7 @@ const SearchSupervisor = (props) =>{
                     />
                 </View>
             </View>
+            </ScrollView>
             <View style={styles.btnContainer}>
                     <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('ListSupervisor',{id:supervisorId,name:supervisorName,email:supervisorEmail})}>
                         <Text style={styles.commonText}>Search</Text>
@@ -165,9 +169,8 @@ const styles = StyleSheet.create({
     },
     btnContainer:{
         width:'100%',
-        height:"15%",
         paddingLeft:20,
         paddingRight:20,
-        paddingTop:20
+        paddingTop:20,
     },
 });

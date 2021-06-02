@@ -62,11 +62,11 @@ const PlotDetails = (props) => {
   //updating the top tab states
   const swicthTabChecked = async (key1, key2, key3, value1, value2, value3) => {
     setTab({ ...tab, [key1]: value1, [key2]: value2, [key3]: value3 });
-    const updateArray=[...miscotArray];
-      miscotArray.map((item,index)=>{
-      updateArray[index].chekecd=false;
-      })
-    setMiscotArray(updateArray)
+    // const updateArray=[...miscotArray];
+    //   miscotArray.map((item,index)=>{
+    //   updateArray[index].chekecd=false;
+    //   })
+    // setMiscotArray(updateArray)
   };
 
  
@@ -81,8 +81,6 @@ const PlotDetails = (props) => {
         preData[index].chekecd = false;
         setMiscotArray(preData);
         setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
-
-        
       } else {
         console.log("here Else")
         preData[index].chekecd = true;
@@ -126,9 +124,21 @@ const PlotDetails = (props) => {
   };
   console.log("Before Array :",miscotArray)
   React.useEffect(() => {
-    setMiscotArray(misCoat);
-    setDecoration(decorationArray);
-    setSnag(snagArray);
+     const updateMiscoatArray=[...miscotArray];
+      miscotArray.map((item,index)=>{
+        updateMiscoatArray[index].chekecd=false;
+      })
+    setMiscotArray(updateMiscoatArray)
+    const updateDecorationArray=[...decorationArray];
+    decorationArray.map((item,index)=>{
+        updateDecorationArray[index].chekecd=false;
+      })
+    setDecoration(updateDecorationArray);
+    const updateSnagArray=[...snagArray];
+      snagArray.map((item,index)=>{
+        updateSnagArray[index].chekecd=false;
+      })
+    setSnag(updateSnagArray);
   }, [misCoat, decorationArray, snagArray]);
 
   React.useEffect(() => {
@@ -193,7 +203,7 @@ const PlotDetails = (props) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
-        <Text style={styles.refText}>Ref id: 10099499</Text>
+        {/* <Text style={styles.refText}>Ref id: 10099499</Text> */}
         <TouchableOpacity style={{marginRight:50}} onPress={()=>sendEmail()}>
           <Image source={email} style={{width:30,height:30}}/>
         </TouchableOpacity>
@@ -581,7 +591,7 @@ const styles = StyleSheet.create({
     height: "10%",
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     padding: 10,
   },
   refText: {

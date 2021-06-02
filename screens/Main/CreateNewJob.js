@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
 import { createNewJobCreation } from "../../Redux/action/auth/authActionTypes";
@@ -18,32 +26,53 @@ const NewJob = (props) => {
   const [dynamicInput, setdynamicInput] = useState([]);
   const [supervisorData, setSupervisorData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState("");
   const [show, setShow] = useState(false);
   const addInput = () => {
-    setdynamicInput((oldArray) => [...oldArray, data]);
-    setData({
-      qty: "",
-      description: "",
-    });
+    // setdynamicInput((oldArray) => [...oldArray, data]);
+    // setData({
+    //   qty: "",
+    //   description: "",
+    // });
+    setdynamicInput((oldArray) => [
+      ...oldArray,
+      { qty: "",
+      description: "", },
+    ]);
   };
-  const [selectedValue, setSelectedValue] = useState();
+  const [selectedValue, setSelectedValue] = useState("");
 
   const updateValue = (key, index, value) => {
     let preData = [...dynamicInput];
     preData[index][key] = value;
     setdynamicInput(preData);
   };
+  console.log(dynamicInput)
   const newJob = async () => {
+    console.log(selectedValue);
     try {
-      if (constructorName != "" && projectName != "" && weekProject != "" && selectedValue != "" && date != "" && dynamicInput != "") {
-        await props.createNewJobHandler(constructorName, projectName, weekProject, selectedValue, date.toLocaleDateString(), dynamicInput, token);
+      if (
+        constructorName != "" &&
+        projectName != "" &&
+        weekProject != "" &&
+        selectedValue != "" &&
+        date != "" &&
+        dynamicInput.length>0
+      ) {
+        await props.createNewJobHandler(
+          constructorName,
+          projectName,
+          weekProject,
+          selectedValue,
+          date.toLocaleDateString(),
+          dynamicInput,
+          token
+        );
         props.navigation.navigate("MainScreen");
         alert("Job Saved Successfully");
       } else {
         alert("Please Enter All Missing Fields CareFully !");
       }
-     
     } catch (err) {
       alert(err.message);
     }
@@ -62,13 +91,16 @@ const NewJob = (props) => {
       const body = {};
       (async () => {
         setLoading(true);
-        const request = await axios("https://topdecdecoratingapp.com/api/admin/view/Supervisors", {
-          method: "POST",
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-          data: body,
-        });
+        const request = await axios(
+          "https://topdecdecoratingapp.com/api/admin/view/Supervisors",
+          {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+            data: body,
+          }
+        );
         const response = await request.data.data.user;
         setSupervisorData(request.data.data.user);
         setLoading(false);
@@ -100,7 +132,7 @@ const NewJob = (props) => {
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator color='#1073AC' size='small' />
+        <ActivityIndicator color="#1073AC" size="small" />
       </View>
     );
   } else {
@@ -109,18 +141,18 @@ const NewJob = (props) => {
         <DateTimePickerModal
           isVisible={show}
           date={date ? date : new Date()}
-          mode={"date"}
+          mode={Platform.OS === 'ios' ? "datetime" : "date"}
           is24Hour={true}
-          display='default'
+          display="default"
           onConfirm={(date) => onChange(date)}
           onCancel={() => setShow(false)}
-          cancelTextIOS='Cancel'
-          confirmTextIOS='Confirm'
+          cancelTextIOS="Cancel"
+          confirmTextIOS="Confirm"
         />
-        <View style={styles.dateTimeContainer}>
+        {/* <View style={styles.dateTimeContainer}>
           <Text style={styles.refText}>Date: 12-2-2021</Text>
           <Text style={styles.refText}>Ref id: 10099499</Text>
-        </View>
+        </View> */}
 
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Input job details</Text>
@@ -128,10 +160,20 @@ const NewJob = (props) => {
         <ScrollView>
           <View style={styles.formConatiner}>
             <View style={styles.inputFieldContainer}>
-              <TextInput style={styles.inputField} placeholder={"Main Contractor Name"} value={constructorName} onChangeText={(e) => setConstructorName(e)} />
+              <TextInput
+                style={styles.inputField}
+                placeholder={"Main Contractor Name"}
+                value={constructorName}
+                onChangeText={(e) => setConstructorName(e)}
+              />
             </View>
             <View style={styles.inputFieldContainer}>
-              <TextInput style={styles.inputField} placeholder={"Project Name"} value={projectName} onChangeText={(e) => setProjectName(e)} />
+              <TextInput
+                style={styles.inputField}
+                placeholder={"Project Name"}
+                value={projectName}
+                onChangeText={(e) => setProjectName(e)}
+              />
             </View>
             <View style={styles.inputFieldContainer}>
               <TextInput
@@ -143,8 +185,8 @@ const NewJob = (props) => {
             </View>
             <View style={styles.inputFieldContainer}>
               <Picker
-                mode='dropdown'
-                placeholder='Countries'
+                mode="dropdown"
+                placeholder="Countries"
                 // iosIcon={<Icon name='arrow-down' />}
                 itemTextStyle={{
                   color: "#96A8B2",
@@ -159,11 +201,22 @@ const NewJob = (props) => {
                   color: "#96A8B2",
                 }}
                 selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
-                <Picker.Item style={{ fontFamily: "poppins-regular" }} label='Select Supervisor Name' value='Select Supervisor Name' />
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedValue(itemValue)
+                }
+              >
+                <Picker.Item
+                  style={{ fontFamily: "poppins-regular" }}
+                  label="Select Supervisor Name"
+                  value="Select Supervisor Name"
+                />
                 {supervisorData &&
                   supervisorData.map((item) => (
-                    <Picker.Item style={{ fontFamily: "poppins-regular" }} label={item.name.toString()} value={item?.id.toString()} />
+                    <Picker.Item
+                      style={{ fontFamily: "poppins-regular" }}
+                      label={item.name.toString()}
+                      value={item?.id.toString()}
+                    />
                   ))}
               </Picker>
             </View>
@@ -177,42 +230,56 @@ const NewJob = (props) => {
                   fontSize: 16,
                   color: "#96A8B2",
                   fontFamily: "poppins-regular",
-                }}>
-                {new Date(date).toLocaleDateString()}
+                }}
+              >
+                {date ? new Date(date).toLocaleDateString() : "Date"}
               </Text>
             </View>
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>Job Summary</Text>
             </View>
-            <View style={{width:"100%",justifyContent:"flex-end", alignItems:"flex-end"}}>
-                <TouchableOpacity style={styles.addBtn} onPress={() => {
-                        if (
-                          dynamicInput.length > 0 &&
-                          !dynamicInput[dynamicInput.length - 1].qty &&
-                          !dynamicInput[dynamicInput.length - 1].description
-                        ) {
-                          alert(
-                            "Please Enter All Value and then move to next Item Add !"
-                          );
-                        } else {
-                          addInput();
-                        }
-                      }}>
-                  <Image style={styles.plusBtn} source={plus} />
-                </TouchableOpacity>
-              </View>
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+              }}
+            >
+              <TouchableOpacity
+                style={styles.addBtn}
+                onPress={() => {
+                  if (
+                    dynamicInput.length > 0 &&
+                    !dynamicInput[dynamicInput.length - 1].qty &&
+                    !dynamicInput[dynamicInput.length - 1].description
+                  ) {
+                    alert(
+                      "Please Enter All Value and then move to next Item Add !"
+                    );
+                  } else {
+                    addInput();
+                  }
+                }}
+              >
+                <Image style={styles.plusBtn} source={plus} />
+              </TouchableOpacity>
+            </View>
             {dynamicInput.length > 0 && (
               <View style={[styles.dynamicInput, { flexDirection: "column" }]}>
                 {dynamicInput.map((el, index) => (
                   <View style={styles.inputContainer} key={index}>
                     <TextInput
-                      onChangeText={(txt) => updateValue("qty", index, txt.replace(/[^0-9]/g, ""))}
+                      onChangeText={(txt) =>
+                        updateValue("qty", index, txt.replace(/[^0-9]/g, ""))
+                      }
                       style={styles.quantityInput}
                       value={el.qty}
                       placeholder={"Quantity"}
                     />
                     <TextInput
-                      onChangeText={(txt) => updateValue("description", index, txt)}
+                      onChangeText={(txt) =>
+                        updateValue("description", index, txt)
+                      }
                       style={styles.descriptionInput}
                       value={el.description}
                       placeholder={"Description"}
@@ -221,7 +288,7 @@ const NewJob = (props) => {
                 ))}
               </View>
             )}
-            
+
             <View style={styles.btnContainer}>
               {/* <TouchableOpacity
                 style={styles.commonBtn}
@@ -235,7 +302,10 @@ const NewJob = (props) => {
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-              <TouchableOpacity style={styles.commonBtn} onPress={() => newJob(this)}>
+              <TouchableOpacity
+                style={styles.commonBtn}
+                onPress={() => newJob(this)}
+              >
                 <Text style={styles.commonText}>Save</Text>
               </TouchableOpacity>
             </View>
@@ -252,8 +322,26 @@ const mapStateToProps = (state) => ({
   isJobId: state.auth.isJobId,
 });
 const mapDispatchToProps = (dispatch) => ({
-  createNewJobHandler: (constructorName, projectName, weekProject, assignSupervisor, date, dynamicInput, token) =>
-    dispatch(createNewJobCreation(constructorName, projectName, weekProject, assignSupervisor, date, dynamicInput, token)),
+  createNewJobHandler: (
+    constructorName,
+    projectName,
+    weekProject,
+    assignSupervisor,
+    date,
+    dynamicInput,
+    token
+  ) =>
+    dispatch(
+      createNewJobCreation(
+        constructorName,
+        projectName,
+        weekProject,
+        assignSupervisor,
+        date,
+        dynamicInput,
+        token
+      )
+    ),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(NewJob);
 const styles = StyleSheet.create({

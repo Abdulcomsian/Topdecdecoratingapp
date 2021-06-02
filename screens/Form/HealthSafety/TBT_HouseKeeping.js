@@ -98,8 +98,7 @@ const TBTHOUSE = (props) => {
         data.comments != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" &&
-        data.projectComment !=""
+        data.projectImages !="" 
       ) {
         await props.creatTbtHoseKeepingHandler(
           { ...data, task_id: jobID, tab_id: tabId },

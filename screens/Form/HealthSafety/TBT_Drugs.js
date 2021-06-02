@@ -126,8 +126,7 @@ const TBTDRUGS = (props) => {
         data.supervisor != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" &&
-        data.projectComment !=""
+        data.projectImages !=""
       ) {
         await props.creatTbtDrugsHandler(
           { ...data, task_id: jobID, tab_id: tabId },

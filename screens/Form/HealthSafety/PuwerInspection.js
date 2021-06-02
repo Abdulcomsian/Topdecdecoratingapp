@@ -236,9 +236,7 @@ const PuwerInspection = (props) => {
     },
   ]);
   const [date, setDate] = useState(new Date(1598051730000));
-  const [dateSupervisor, setDateSupervisor] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateSupervisor, setDateSupervisor] = useState("");
   const [showSupervisor, setShowSupervisor] = useState(false);
   const [contractorName, setContractorName] = useState("");
   const [projectName, setProjectName] = useState("");
@@ -413,7 +411,7 @@ const PuwerInspection = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
@@ -423,7 +421,7 @@ const PuwerInspection = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onDateSupervisorChange}
             onCancel={() => setShowSupervisor({ isVisible: false, index: -1 })}
@@ -446,7 +444,7 @@ const PuwerInspection = (props) => {
                 }}
               >
                 <Text style={styles.titleText}>
-                  PUWER Inspection Checklist / Register
+                  POWER Inspection Checklist / Register
                 </Text>
               </View>
               <ScrollView>
@@ -854,23 +852,15 @@ const PuwerInspection = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.inputFieldContainer}>
-                        <Text
-                          onPress={() => showSupervisorDatepicker()}
-                          style={{
-                            width: "90%",
+                      <TouchableOpacity   onPress={() => showSupervisorDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={dateSupervisor ? new Date(dateSupervisor).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
 
-                            paddingTop: 16,
-                            fontSize: 12,
-                            color: "#96A8B2",
-                            fontFamily: "poppins-regular",
-                            borderBottomWidth: 1,
-                            borderBottomColor: "#96A8B2",
-                            padding: 5,
-                            color: "#96A8B2",
-                          }}
-                        >
-                          {new Date(dateSupervisor).toLocaleDateString()}
-                        </Text>
                       </View>
                       <Text
                         style={{

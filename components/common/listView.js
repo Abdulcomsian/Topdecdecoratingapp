@@ -27,6 +27,7 @@ const listView = (props) => {
   return (
     <View style={styles.mainContainer}>
             <View style={{marginLeft:20,marginRight:20}}>
+              <ScrollView>
                 {props.data.map((item,index)=>(
                     <TouchableOpacity style={styles.listButton} key={index} onPress={() => navigation.navigate('DetailsJob',{searchJobData:props.data[index]})}>
                         <Text style={styles.emailText}>{item.supervisor_id}</Text>
@@ -34,6 +35,7 @@ const listView = (props) => {
                         <Image source={rightArrow} />
                     </TouchableOpacity>
                 ))}
+                </ScrollView>
             </View>
     </View>
   );

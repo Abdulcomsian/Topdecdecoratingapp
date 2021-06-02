@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from "re
 import { Text } from "native-base";
 import { connect } from "react-redux";
 import axios from "axios";
+import { ScrollView } from "react-native-gesture-handler";
 
 var rightArrow = require("../../assets/authScreen/right.png");
 var base_url = "https://topdecdecoratingapp.com/api/";
@@ -68,26 +69,28 @@ const AssignedJobsList = (props) => {
   } else {
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.dateTimeContainer}>
+      {/* <View style={styles.dateTimeContainer}>
         <Text style={styles.refText}>Date: 12-2-2021</Text>
         <Text style={styles.refText}>Ref id: 10099499</Text>
-      </View>
+      </View> */}
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Assigned Jobs</Text>
       </View>
       {show==true ?
-      <View style={{ height: "70%", width: "100%" }}>
-        <View style={{ paddingTop: 30, paddingLeft: 20, paddingRight: 20 }}>
-            {jobData.map((item,index)=>(
-              <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate("TotalSummary",{isJobId:item.id})} key={index}>
-                <Text style={styles.commonText}>{item.project}</Text>
-                <Image source={rightArrow} />
-              </TouchableOpacity>
-            ))}
-          
+      <ScrollView>
+        <View style={{ height: "70%", width: "100%" }}>
+          <View style={{ paddingTop: 30, paddingLeft: 20, paddingRight: 20 }}>
+              {jobData.map((item,index)=>(
+                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate("TotalSummary",{isJobId:item.id})} key={index}>
+                  <Text style={styles.commonText}>{item.project}</Text>
+                  <Image source={rightArrow} />
+                </TouchableOpacity>
+              ))}
+            
 
+          </View>
         </View>
-      </View>
+      </ScrollView>
       : 
       <View
             style={{

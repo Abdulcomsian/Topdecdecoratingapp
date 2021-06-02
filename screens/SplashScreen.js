@@ -3,6 +3,7 @@ import { View,StyleSheet,Image} from 'react-native';
 import {Text} from 'native-base';
 import { connect } from 'react-redux'
 import { resetLoginFlag } from '../Redux/action/auth/authActionTypes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var logo=require('../assets/authScreen/logo.jpeg');
 const SplashScreen = ( props ) =>{
@@ -14,15 +15,29 @@ const SplashScreen = ( props ) =>{
     //     return () => clearTimeout(timer);
     // }, []);
     React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            props.resetLoginFlag()
-            setTimeout(()=>{
-                        navigation.navigate('LoginScreen');
-                     },5000);
-        });
-    
-        // Return the function to unsubscribe from the event so it gets removed on unmount
-        return unsubscribe;
+        (async()=>{
+            const unsubscribe = navigation.addListener('focus', () => {
+                props.resetLoginFlag()
+                setTimeout(()=>{
+                            navigation.navigate('LoginScreen');
+                         },5000);
+            });
+        
+            // Return the function to unsubscribe from the event so it gets removed on unmount
+            // try {
+            //     let userData = await AsyncStorage.getItem("token");
+            //     let data = JSON.parse(userData);
+            //     if(data.token){
+            //         navigation.navigate('MainScreen');
+            //     } else{
+                    
+            //     }
+               
+            //   } catch (error) {
+            //     console.log("Something went wrong", error);
+            //   }
+              return unsubscribe;
+        })()
       }, [navigation]);
     return(
             <View style={styles.mainContainer}>

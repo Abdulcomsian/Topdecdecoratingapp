@@ -21,16 +21,10 @@ const WrantySannging = (props) => {
   const { plot_Id } = props.route.params;
   const jobID = plot_Id;
   const tabId = props.route.params.tabName;
-  const [dateIssue, setDateIssue] = useState(new Date().toLocaleDateString());
-  const [dateComplete, setDateComplete] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [dateSnaggingIssue, setDateSnaggingIssue] = useState(
-    new Date().toLocaleDateString()
-  );
-  const [dateSnaggingComplete, setDateSnaggingComplete] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateIssue, setDateIssue] = useState("");
+  const [dateComplete, setDateComplete] = useState("");
+  const [dateSnaggingIssue, setDateSnaggingIssue] = useState("");
+  const [dateSnaggingComplete, setDateSnaggingComplete] = useState("");
   const [showIssue, setShowIssue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
   const [showSnaggingIssue, setShowSnaggingIssue] = useState(false);
@@ -283,7 +277,7 @@ const WrantySannging = (props) => {
             isVisible={showIssue}
             testID="dateTimePicker"
             value={dateIssue}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onIssueChange}
             onCancel={() => CancelPicker("issue")}
@@ -293,7 +287,7 @@ const WrantySannging = (props) => {
             isVisible={showComplete}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onCompleteChange}
             onCancel={() => CancelPicker("complete")}
@@ -303,7 +297,7 @@ const WrantySannging = (props) => {
             isVisible={showSnaggingIssue}
             testID="dateTimePicker"
             value={dateSnaggingIssue}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onSnaggingIssueChange}
             onCancel={() => CancelPicker("dateSnaggingIssue")}
@@ -313,7 +307,7 @@ const WrantySannging = (props) => {
             isVisible={showSnaggingComplete}
             testID="dateTimePicker"
             value={dateSnaggingComplete}
-            mode={mode}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onSnaggingCompleteChange}
             onCancel={() => CancelPicker("dateSnaggingComplete")}
@@ -332,26 +326,30 @@ const WrantySannging = (props) => {
               <View style={styles.inputFieldContainer}>
                 <TextInput
                   value={plotNumber}
-                  onChangeText={(e) => setPlotNumber(e)}
+                  onChangeText={(e) => setPlotNumber(e.replace(/[^0-9]/g, ""))}
                   style={styles.inputField}
                   placeholder={"Plot No"}
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showDatepicker("DateIssue")}
-                  style={styles.inputField}
-                >
-                  {new Date(dateIssue).toLocaleDateString()}
-                </Text>
+              <TouchableOpacity  onPress={() => showDatepicker("DateIssue")}>
+                      <TextInput
+                        editable={false}
+                        value={dateIssue ? new Date(dateIssue).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date of issue"}
+                      />
+                    </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showDatepicker("CompleteDate")}
-                  style={styles.inputField}
-                >
-                  {new Date(dateComplete).toLocaleDateString()}
-                </Text>
+              <TouchableOpacity  onPress={() => showDatepicker("CompleteDate")}>
+                      <TextInput
+                        editable={false}
+                        value={dateComplete ? new Date(dateComplete).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date of completion required"}
+                      />
+                    </TouchableOpacity>
               </View>
 
               <View style={styles.titleContainer}>
@@ -378,7 +376,7 @@ const WrantySannging = (props) => {
               <View style={styles.inputFieldContainer}>
                 <TextInput
                   value={noOfPage}
-                  onChangeText={(e) => setNoOfPage(e)}
+                  onChangeText={(e) => setNoOfPage(e.replace(/[^0-9]/g, ""))}
                   style={styles.inputField}
                   placeholder={"No of page"}
                 />
@@ -447,25 +445,29 @@ const WrantySannging = (props) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showDatepicker("SnaggingIssue")}
-                  style={styles.inputField}
-                >
-                  {new Date(dateSnaggingIssue).toLocaleDateString()}
-                </Text>
+              <TouchableOpacity  onPress={() => showDatepicker("SnaggingIssue")}>
+                      <TextInput
+                        editable={false}
+                        value={dateSnaggingIssue ? new Date(dateSnaggingIssue).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Snagging issued by"}
+                      />
+                    </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
-                <Text
-                  onPress={() => showDatepicker("SnaggingCompleted")}
-                  style={styles.inputField}
-                >
-                  {new Date(dateSnaggingComplete).toLocaleDateString()}
-                </Text>
+              <TouchableOpacity   onPress={() => showDatepicker("SnaggingCompleted")}>
+                      <TextInput
+                        editable={false}
+                        value={dateSnaggingComplete ? new Date(dateSnaggingComplete).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Completed by"}
+                      />
+                    </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput
                   value={totalHours}
-                  onChangeText={(e) => setTotalHours(e)}
+                  onChangeText={(e) => setTotalHours(e.replace(/[^0-9]/g, ""))}
                   style={styles.inputField}
                   placeholder={"Hours"}
                 />

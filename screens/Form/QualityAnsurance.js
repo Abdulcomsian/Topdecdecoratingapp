@@ -25,14 +25,14 @@ const QualityInssurance = (props) => {
   const [issuranceArray, setInsuraanceArray] = useState([
     {
       title: "Inspection prior to Mist coat (Make Ready Sheet)",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
       title: "Mist Coat (1st coat)",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -40,14 +40,14 @@ const QualityInssurance = (props) => {
     {
       title:
         "Ensure all areas are mist coated properly for e.g. uneven paint application (Snag Sheet)",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
       title: "Inspect Prior to Main Decoration (Make Ready Sheet)",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -55,7 +55,7 @@ const QualityInssurance = (props) => {
     {
       title: "Apply 1st coat of Undercoat to woodworks",
       secondTitle: "Apply 2rd coat to walls and ceilings ",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -63,21 +63,21 @@ const QualityInssurance = (props) => {
     {
       title: "Apply 2nd coat to woodworks",
       secondTitle: "3rd coat to walls and ceilings",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
       title: "Hoover all dust and debris before final coat to woodworks.",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
       title: "Apply 3rd/final coat to the woodworks",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -85,7 +85,7 @@ const QualityInssurance = (props) => {
     {
       title:
         "In the event where the decorators do get paint on the fittings,furniture’s, floors or any unpainted surfaces, these should be left paint free.",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -93,7 +93,7 @@ const QualityInssurance = (props) => {
     {
       title:
         "Supervisor to issue a Snag Sheet to the decorator/s after they have completed their decoration works",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -101,7 +101,7 @@ const QualityInssurance = (props) => {
     {
       title:
         "Supervisor to ensure that items flagged on the snag sheets are all completed during the de-snag/inspection.",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -109,7 +109,7 @@ const QualityInssurance = (props) => {
     {
       title:
         "Hand over units/plots (Hand over sheets to be signed by site managers to confirm that quality is met).",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -117,14 +117,14 @@ const QualityInssurance = (props) => {
     {
       title:
         "Site Managers Snag (inspection of units by site manager by issuing supervisor with their written snag sheet/s).",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
       title: "Site Managers De-snag",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -132,21 +132,21 @@ const QualityInssurance = (props) => {
     {
       title:
         "Builders/Client Final Snag (inspection of units by issuing written snag sheet/s)",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
       title: "Builders/Client De-snag ",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
     },
     {
       title: "Hand over sheets for final visit to units/plots",
-      dateComplte: new Date().toLocaleDateString(),
+      dateComplte: "",
       keyLetter: "",
       comment: "",
       managerSign: "",
@@ -163,20 +163,20 @@ const QualityInssurance = (props) => {
     { keys: "O = ", keyDetails: "Others" },
   ]);
   const [activityArray, setActivityArray] = useState([
-    { activity: "Mist Coat", date: new Date().toLocaleDateString(), sign: "" },
+    { activity: "Mist Coat", date: "", sign: "" },
     {
       activity: "Main Decoration",
-      date: new Date().toLocaleDateString(),
+      date: "",
       sign: "",
     },
     {
       activity: "Site Managers Snag",
-      date: new Date().toLocaleDateString(),
+      date: "",
       sign: "",
     },
     {
       activity: "Builders/Client Snag ",
-      date: new Date().toLocaleDateString(),
+      date: "",
       sign: "",
     },
   ]);
@@ -249,7 +249,7 @@ const QualityInssurance = (props) => {
         activitySign != "" &&
         projectImagesComment != "" &&
         commentImages != "" &&
-        overallComment !=""
+        overallComment != ""
       ) {
         await props.createAnsuranceHandler(
           projectName,
@@ -409,7 +409,7 @@ const QualityInssurance = (props) => {
           <DateTimePickerModal
             isVisible={show.isVisible}
             date={date ? date : new Date()}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             is24Hour={true}
             display="default"
             onConfirm={(date) => onChange(date)}
@@ -420,7 +420,7 @@ const QualityInssurance = (props) => {
           <DateTimePickerModal
             isVisible={showActivity.isVisible}
             date={date ? date : new Date()}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             is24Hour={true}
             display="default"
             onConfirm={(date) => onActivityChange(date)}
@@ -507,7 +507,9 @@ const QualityInssurance = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={unitPlot}
-                      onChangeText={(e) => setUnitPlot(e)}
+                      onChangeText={(e) =>
+                        setUnitPlot(e.replace(/[^0-9]/g, ""))
+                      }
                       style={styles.inputField}
                       placeholder={"Unit/Plot"}
                     />
@@ -560,21 +562,22 @@ const QualityInssurance = (props) => {
                           </View>
                           <View style={styles.tableBody}>
                             <View style={styles.inputBodyContainer}>
-                              <Text
+                              <TouchableOpacity
                                 onPress={() => showDatepicker(index)}
-                                style={{
-                                  width: "100%",
-
-                                  paddingTop: 10,
-                                  fontSize: 12,
-                                  color: "#96A8B2",
-                                  fontFamily: "poppins-regular",
-                                }}
                               >
-                                {new Date(
-                                  item.dateComplte
-                                ).toLocaleDateString()}
-                              </Text>
+                                <TextInput
+                                  editable={false}
+                                  value={
+                                    item.dateComplte
+                                      ? new Date(
+                                          item.dateComplte
+                                        ).toLocaleDateString()
+                                      : ""
+                                  }
+                                  style={styles.inputField}
+                                  placeholder={"Date Completed "}
+                                />
+                              </TouchableOpacity>
                             </View>
                             <View style={styles.inputBodyContainer}>
                               <TextInput
@@ -659,12 +662,12 @@ const QualityInssurance = (props) => {
                       Overall comments once all the above is completed:{" "}
                     </Text>
                   </View>
-                  <View style={[styles.inputBodyContainer,{width:"100%"}]}>
+                  <View style={[styles.inputBodyContainer, { width: "100%" }]}>
                     <TextInput
-                      style={[styles.bodyTextInput,{width:"100%"}]}
+                      style={[styles.bodyTextInput, { width: "100%" }]}
                       placeholder={"Overall Comments"}
-                        value={overallComment}
-                        onChangeText={(e) => setOverAllComments(e)}
+                      value={overallComment}
+                      onChangeText={(e) => setOverAllComments(e)}
                     />
                   </View>
                   <View style={styles.tableHeader}>
@@ -743,24 +746,24 @@ const QualityInssurance = (props) => {
                                   <View
                                     style={{ width: "50%", marginRight: 5 }}
                                   >
-                                    <Text
+                                    <TouchableOpacity
                                       onPress={() =>
                                         showActivityDatepicker(index)
                                       }
-                                      style={{
-                                        width: "100%",
-                                        paddingTop: 18,
-                                        fontSize: 12,
-                                        color: "#96A8B2",
-                                        fontFamily: "poppins-regular",
-                                        borderBottomWidth: 1,
-                                        borderBottomColor: "#96A8B2",
-                                        padding: 5,
-                                        color: "#96A8B2",
-                                      }}
                                     >
-                                      {new Date(item.date).toLocaleDateString()}
-                                    </Text>
+                                      <TextInput
+                                        editable={false}
+                                        value={
+                                          item.date
+                                            ? new Date(
+                                                item.date
+                                              ).toLocaleDateString()
+                                            : ""
+                                        }
+                                        style={styles.inputField}
+                                        placeholder={"Date"}
+                                      />
+                                    </TouchableOpacity>
                                   </View>
                                 </View>
                               ))}
@@ -794,9 +797,11 @@ const QualityInssurance = (props) => {
                         <Image
                           source={{ uri: signature.activitySign.uri }}
                           style={{
-                            height: 20,
-                            width: 20,
+                            height: 100,
+                            width: 100,
                             backgroundColor: "gray",
+                            marginLeft:10,
+                            marginTop:10
                           }}
                         />
                       ) : (
@@ -1295,7 +1300,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   inputField: {
-    height: 52,
+    height: 40,
     width: "100%",
     borderBottomWidth: 1,
     borderBottomColor: "#96A8B2",

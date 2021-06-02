@@ -76,8 +76,7 @@ const TBTVOLIENCE = (props) => {
         data.supervisor != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" &&
-        data.projectComment !=""
+        data.projectImages !=""
       ) {
         await props.creatTbtVolienceHandler(
           { ...data, task_id: jobID, tab_id: tabId },

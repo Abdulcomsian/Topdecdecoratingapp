@@ -110,8 +110,7 @@ const TBTWORKING = (props) => {
         data.comments != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" &&
-        data.projectComment !=""
+        data.projectImages !=""
       ) {
         await props.creatTbtWorkingHandler(
           { ...data, task_id: jobID, tab_id: tabId },

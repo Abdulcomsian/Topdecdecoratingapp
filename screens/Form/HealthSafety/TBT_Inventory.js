@@ -93,9 +93,7 @@ const TBTINVENTORY = (props) => {
 
   const [date, setDate] = useState(new Date(1598051730000));
   const [dateActivity, setDateActivity] = useState(new Date(1598051730000));
-  const [dateSupervisor, setDateSupervisor] = useState(
-    new Date().toLocaleDateString()
-  );
+  const [dateSupervisor, setDateSupervisor] = useState("");
   const [showSupervisor, setSupervisorShow] = useState(false);
   const [supervisorSignature, setSupervisorSignature] = useState(false);
   const [mainContractor, setMainContractor] = useState("");
@@ -282,7 +280,7 @@ const TBTINVENTORY = (props) => {
           <DateTimePickerModal
             isVisible={show.isVisible}
             date={date ? date : new Date()}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             is24Hour={true}
             display="default"
             onConfirm={(date) => onChange(date)}
@@ -293,7 +291,7 @@ const TBTINVENTORY = (props) => {
           <DateTimePickerModal
             isVisible={showDueDate.isVisible}
             date={date ? date : new Date()}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             is24Hour={true}
             display="default"
             onConfirm={(date) => onInspectionDueDateChange(date)}
@@ -305,7 +303,7 @@ const TBTINVENTORY = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={"date"}
+            mode={Platform.OS === 'ios' ? "datetime" : "date"}
             display="default"
             onConfirm={onSupervisorDateChange}
             onCancel={() => setSupervisorShow(false)}
@@ -387,12 +385,14 @@ const TBTINVENTORY = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <Text
-                      onPress={() => showSupervisorDatepicker()}
-                      style={[styles.inputField, { paddingTop: 15 }]}
-                    >
-                      {new Date(dateSupervisor).toLocaleDateString()}
-                    </Text>
+                  <TouchableOpacity onPress={() => showSupervisorDatepicker()}>
+                      <TextInput
+                        editable={false}
+                        value={dateSupervisor ? new Date(dateSupervisor).toLocaleDateString() : ""}
+                        style={styles.inputField}
+                        placeholder={"Date"}
+                      />
+                    </TouchableOpacity>
                   </View>
 
                   <View style={styles.tableViewContainer}>

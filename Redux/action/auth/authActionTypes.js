@@ -118,7 +118,7 @@ export const createNewJobCreation = (
 ) => {
   return async (dispatch, getState) => {
     try {
-      // console.log(contractor)
+      console.log(jobSummary)
       // console.log()
       const body = {
         contractor,
@@ -128,6 +128,7 @@ export const createNewJobCreation = (
         start_date,
         jobSummary,
       };
+      
       const request = await axios(base_url + "admin/create/job", {
         method: "POST",
         headers: {
@@ -146,6 +147,7 @@ export const createNewJobCreation = (
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -401,17 +403,22 @@ export const updateDecorator = (
       formData.append("lastname", lastname);
       formData.append("status", status);
 
-      photoID.localUri &&
-        formData.append("photoID", {
-          // file: photoID,
-          uri:
-            Platform.OS === "android"
-              ? photoID.localUri
-              : photoID.localUri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: "image/png", // it may be necessary in Android.
-        });
-
+      if(photoID!=""){
+        photoID.localUri &&
+          formData.append("photoID", {
+            // file: photoID,
+            uri:
+              Platform.OS === "android"
+                ? photoID.localUri
+                : photoID.localUri.replace("file://", ""),
+            name: Math.random(0, 1000).toString(),
+            type: "image/png", // it may be necessary in Android.
+          });
+      }
+      else{
+        formData.append("photoID", photoID);
+      }
+      if(cscsFront!=""){
       cscsFront.localUri &&
         formData.append("cscsFront", {
           // file: cscsFront,
@@ -422,7 +429,10 @@ export const updateDecorator = (
           name: Math.random(0, 1000).toString(),
           type: "image/png", // it may be necessary in Android.
         });
-
+      } else{
+        formData.append("cscsFront", cscsFront);
+      }
+      if(cscsBack!=""){
       cscsBack.localUri &&
         formData.append("cscsBack", {
           // file: cscsBack,
@@ -433,9 +443,12 @@ export const updateDecorator = (
           name: Math.random(0, 1000).toString(),
           type: "image/png", // it may be necessary in Android.
         });
+      } else{
+        formData.append("cscsBack", cscsBack);
+      }
 
       console.log(formData);
-      //const body = { id, firstname, email, phone, lastname, status };
+      const body = { id, firstname, email, phone, lastname, status };
       const request = await axios(base_url + "admin/edit/editDecorator", {
         method: "POST",
         headers: {
@@ -1199,7 +1212,7 @@ export const insertRemedialForm = (
       //   dynamicInput,
       //   totalHours,
       // };
-
+      console.log(formData)
       const request = await axios(
         base_url + "supervisor/insert/workflow/RemendialSheet",
         {
@@ -4114,6 +4127,8 @@ export const insertTbtSilicaDust = (data, token, index) => {
         formData.append(`commentImages[]`, JSON.stringify([item]));
       });
 
+      console.log(formData)
+
       const request = await axios(
         base_url + "supervisor/insert/healthAndSecurity/SilicaDust",
         {
@@ -4138,9 +4153,11 @@ export const insertTbtSilicaDust = (data, token, index) => {
         //   type: Actions.INSERT_ON_SITE_DECORATION_FORM_FAIL,
         //   payload: response,
         // });
+        console.log(response?.response?.request);
         throw new Error(response.message);
       }
     } catch (err) {
+      console.log(err?.response?.request);
       throw new Error(err.message);
     }
   };
@@ -4697,10 +4714,10 @@ export const updateWorkFlowTopTabs = (plot_id, token) => {
         dispatch({
           type: Actions.UPDATE_SNAG_WORKFLOW,
           // payload: _returnUpdatedArray(getState().summary.snagArray,null)
-          payload: response?.data?.user.find((el) => el.tab_id === "Sang")
+          payload: response?.data?.user.find((el) => el.tab_id === "Snag")
             ? _returnUpdatedArray(
                 getState().summary.snagArray,
-                response?.data?.user.find((el) => el.tab_id === "Sang")
+                response?.data?.user.find((el) => el.tab_id === "Snag")
               )
             : getState().summary.snagArray,
         });
@@ -4776,10 +4793,10 @@ export const updateVerificationTopTabs = (plot_id, token) => {
         //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
         dispatch({
           type: Actions.UPDATE_SNAG_VERIFICATION,
-          payload: response?.data?.user.find((el) => el.tab_id === "Sang")
+          payload: response?.data?.user.find((el) => el.tab_id === "Snag")
             ? _returnUpdatedArray(
                 getState().summary.verificationSngInfo,
-                response?.data?.user.find((el) => el.tab_id === "Sang")
+                response?.data?.user.find((el) => el.tab_id === "Snag")
               )
             : getState().summary.verificationSngInfo,
         });
@@ -4860,10 +4877,10 @@ export const updateHealthTopTabs = (plot_id, token) => {
         //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
         dispatch({
           type: Actions.UPDATE_SNAG_HEALTH,
-          payload: response?.data?.user.find((el) => el.tab_id === "Sang")
+          payload: response?.data?.user.find((el) => el.tab_id === "Snag")
             ? _returnUpdatedArray(
                 getState().summary.healthAndSafetySnag,
-                response?.data?.user.find((el) => el.tab_id === "Sang")
+                response?.data?.user.find((el) => el.tab_id === "Snag")
               )
             : getState().summary.healthAndSafetySnag,
         });
@@ -4901,8 +4918,9 @@ export const updateHealthTopTabs = (plot_id, token) => {
 };
 
 const _returnUpdatedArray = (oldArr, updated) => {
+  console.log("here")
   let copyData = [...oldArr];
-
+  console.log("Copy Data :",copyData)
   oldArr.forEach((el, index) => {
     if (updated?.hasOwnProperty(el?.url)) {
       copyData[index].tickSign = updated[el.url] === "1" ? true : false;

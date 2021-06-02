@@ -50,7 +50,7 @@ const VerificationDetails = (props) => {
     } else {
       _ref.current.setPage(2);
       setIsLeft(2);
-      setActiveTab("Sang");
+      setActiveTab("Snag");
     }
   };
   //updating the top tab states
@@ -61,7 +61,7 @@ const VerificationDetails = (props) => {
   const [miscotArray, setMiscotArray] = useState(verificationMiscoatInfo);
   const [decorationArray, setDecorationArray] = useState(verificationDecorationInfo);
   const [snagArray, setSnagArray] = useState(verificationSngInfo);
-
+  console.log("Snag Array :",verificationSngInfo)
   const checkedForm = (index, type) => {
     if (type == "Miscoat") {
       const preData = [...miscotArray];
@@ -81,7 +81,7 @@ const VerificationDetails = (props) => {
         ]);
       }
     } else if (type == "Decoration") {
-      const preData = [...decoration];
+      const preData = [...decorationArray];
       const flag = preData[index].chekecd;
       if (flag) {
         preData[index].chekecd = false;
@@ -96,7 +96,7 @@ const VerificationDetails = (props) => {
         ]);
       }
     } else {
-      const preData = [...snag];
+      const preData = [...snagArray];
       const flag = preData[index].chekecd;
       if (flag) {
         preData[index].chekecd = false;
@@ -113,9 +113,22 @@ const VerificationDetails = (props) => {
     }
   };
   React.useEffect(() => {
-    setMiscotArray(verificationMiscoatInfo);
-    setDecorationArray(verificationDecorationInfo);
-    setSnagArray(verificationSngInfo);
+
+    const updateMiscoatArray=[...verificationMiscoatInfo];
+      verificationMiscoatInfo.map((item,index)=>{
+        updateMiscoatArray[index].chekecd=false;
+      })
+    setMiscotArray(updateMiscoatArray)
+    const updateDecorationArray=[...verificationDecorationInfo];
+      verificationDecorationInfo.map((item,index)=>{
+        updateDecorationArray[index].chekecd=false;
+      })
+      setDecorationArray(updateDecorationArray);
+    const updateSnagArray=[...verificationSngInfo];
+      verificationSngInfo.map((item,index)=>{
+        updateSnagArray[index].chekecd=false;
+      })
+      setSnagArray(updateSnagArray);
   }, [
     verificationMiscoatInfo,
     verificationDecorationInfo,
@@ -178,6 +191,8 @@ const VerificationDetails = (props) => {
       alert(err.message)
     }
   }
+
+  console.log("JobSummaty :",jobSummary)
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
