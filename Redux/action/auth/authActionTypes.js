@@ -1,7 +1,7 @@
 import * as Actions from "../../actionTypes";
 import axios from "axios";
 import { Platform } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 var base_url = "https://topdecdecoratingapp.com/api/";
 
 export const resetLoginFlag = () => {
@@ -19,7 +19,9 @@ export const adminLogin = (email, password) => {
 
       const response = request.data;
       // console.log("Role :",response.user.role)
-      if (response.success == true) {
+      if (response.success == true) {//ya ly kr dia set token ab aur bta
+        await AsyncStorage.setItem('user', JSON.stringify({...response}))//yahi response aye ga na??
+      //ak min mouse chor
         dispatch({
           type: Actions.LOGIN_SUCCESS,
           payload: response,
@@ -1239,6 +1241,7 @@ export const insertRemedialForm = (
         //   type: Actions.CREATE_REMEDIAL_WORK_SHEET_FAIL,
         //   payload: response,
         // });
+        console.log(response?.response?.request);
         throw new Error(response.message);
       }
     } catch (err) {
@@ -1268,7 +1271,7 @@ export const insertScopeForm = (
       // console.log("Signature :", signature);
       // console.log("Plot Number :", plotNumber);
       // console.log("Type :", type);
-      // console.log("Date :", date);
+      //console.log("Date :", date);
       // console.log("Job ID :", task_id);
       // console.log("Tab Name :", tab_id);
       // console.log("Token :", token);
@@ -4669,9 +4672,10 @@ export const insertTbtInventory = (
 };
 
 export const updateWorkFlowTopTabs = (plot_id, token) => {
-  //return console.log({plot_id, tab_id, token })
+  
   return async (dispatch, getState) => {
     try {
+      console.log(plot_id, token)
       const body = {
         plot_id,
       };
@@ -4714,10 +4718,10 @@ export const updateWorkFlowTopTabs = (plot_id, token) => {
         dispatch({
           type: Actions.UPDATE_SNAG_WORKFLOW,
           // payload: _returnUpdatedArray(getState().summary.snagArray,null)
-          payload: response?.data?.user.find((el) => el.tab_id === "Snag")
+          payload: response?.data?.user.find((el) => el.tab_id === "Sang")
             ? _returnUpdatedArray(
                 getState().summary.snagArray,
-                response?.data?.user.find((el) => el.tab_id === "Snag")
+                response?.data?.user.find((el) => el.tab_id === "Sang")
               )
             : getState().summary.snagArray,
         });
@@ -4749,9 +4753,10 @@ export const updateWorkFlowTopTabs = (plot_id, token) => {
   };
 };
 export const updateVerificationTopTabs = (plot_id, token) => {
-  //return console.log({plot_id, tab_id, token })
+ 
   return async (dispatch, getState) => {
     try {
+      console.log("Verification Plot Id :",plot_id)
       const body = {
         plot_id,
       };
@@ -4877,10 +4882,10 @@ export const updateHealthTopTabs = (plot_id, token) => {
         //  } else if(response?.data?.user.find(el=>el.tab_id==='Snag')){
         dispatch({
           type: Actions.UPDATE_SNAG_HEALTH,
-          payload: response?.data?.user.find((el) => el.tab_id === "Snag")
+          payload: response?.data?.user.find((el) => el.tab_id === "Sang")
             ? _returnUpdatedArray(
                 getState().summary.healthAndSafetySnag,
-                response?.data?.user.find((el) => el.tab_id === "Snag")
+                response?.data?.user.find((el) => el.tab_id === "Sang")
               )
             : getState().summary.healthAndSafetySnag,
         });
@@ -4916,7 +4921,6 @@ export const updateHealthTopTabs = (plot_id, token) => {
     }
   };
 };
-
 const _returnUpdatedArray = (oldArr, updated) => {
   console.log("here")
   let copyData = [...oldArr];

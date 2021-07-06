@@ -23,7 +23,7 @@ const TBTForm = (props) => {
     addToolBox,
     isVoilence = false,
     setTBTGlobalSign,
-    projectImageUpload
+    projectImageUpload,
   } = props;
   // console.log(data);
   const {
@@ -45,7 +45,7 @@ const TBTForm = (props) => {
         isVisible={openData.bool}
         testID="dateTimePicker"
         value={date ? date : new Date()}
-        mode={Platform.OS === 'ios' ? "datetime" : "date"}
+        mode={Platform.OS === "ios" ? "date" : "date"}
         display="default"
         onConfirm={(txt) => {
           setOpenDate({ ...openData, bool: false, index: -1 });
@@ -88,13 +88,28 @@ const TBTForm = (props) => {
           </View>
           <TouchableOpacity
             onPress={() => setOpenDate({ ...openData, bool: true, index: -1 })}
-            style={styles.inputFieldContainer}
+            style={{
+              height: 52,
+              width: "100%",
+              borderBottomWidth: 1,
+              borderBottomColor: "#96A8B2",
+              padding: 5,
+              fontSize: 12,
+              color: "#96A8B2",
+              fontFamily: "poppins-regular",
+              paddingTop: 15,
+            }}
           >
-            <TextInput
-              editable={false}
-              style={styles.inputField}
-              placeholder={date ? new Date(date).toLocaleDateString() : "Date"}
-            />
+            <Text
+              style={{
+                width: "100%",
+                fontSize: 12,
+                color: "#96A8B2",
+                fontFamily: "poppins-regular",
+              }}
+            >
+              {date ? date : "Date"}
+            </Text>
           </TouchableOpacity>
           <View style={styles.inputFieldContainer}>
             <TextInput
@@ -161,20 +176,35 @@ const TBTForm = (props) => {
           </View>
           <TouchableOpacity
             onPress={() => setOpenDate({ ...openData, bool: true, index: -1 })}
-            style={styles.inputFieldContainer}
+            style={{
+              height: 52,
+              width: "100%",
+              borderBottomWidth: 1,
+              borderBottomColor: "#96A8B2",
+              padding: 5,
+              fontSize: 12,
+              color: "#96A8B2",
+              fontFamily: "poppins-regular",
+              paddingTop: 15,
+            }}
           >
-            <TextInput
-              editable={false}
-              style={styles.inputField}
-              placeholder={date ? new Date(date).toLocaleDateString() : "Date"}
-            />
+            <Text
+              style={{
+                width: "100%",
+                fontSize: 12,
+                color: "#96A8B2",
+                fontFamily: "poppins-regular",
+              }}
+            >
+              {date ? date : "Date"}
+            </Text>
           </TouchableOpacity>
         </>
       )}
 
       {isDrugs || isVoilence ? (
         <>
-          <Text style={{ fontFamily: "poppins-bold", fontSize: 10 }}>
+          <Text style={{ fontFamily: "poppins-bold", fontSize: 10,marginTop:20 }}>
             I confirm that I have received the above tool box talk
           </Text>
           <View style={styles.tableViewContainer}>
@@ -255,18 +285,26 @@ const TBTForm = (props) => {
                   onPress={() =>
                     setOpenDate({ ...openData, bool: true, index })
                   }
-                  style={styles.inputHazrdBodyContainer}
+                  style={{
+                    width: "50%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                  }}
                 >
-                  <TextInput
-                    editable={false}
-                    value={
-                      item.date
-                        ? new Date(item.date).toLocaleDateString().toString()
-                        : ""
-                    }
-                    style={styles.bodyTextInput}
-                    placeholder={"Date"}
-                  />
+                  <Text
+                    style={{
+                      width: "100%",
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                    }}
+                  >
+                    {item.date ? item.date : "Date"}
+                  </Text>
                 </TouchableOpacity>
               </View>
             ))}

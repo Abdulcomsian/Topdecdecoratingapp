@@ -4,13 +4,15 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  CheckBox,
+  Linking
 } from "react-native";
 import { Text } from "native-base";
 import ViewPager from "@react-native-community/viewpager";
 import { connect } from "react-redux";
 import { updateWorkFlowTopTabs } from "../../Redux/action/auth/authActionTypes";
 import axios from "axios";
+import { CheckBox } from 'react-native-elements'
+
 
 var tick = require("../../assets/authScreen/check.png");
 var disableTick = require("../../assets/authScreen/disable.png");
@@ -29,7 +31,7 @@ const PlotDetails = (props) => {
     isUserID
   } = props;
   const { plot_id, plotName } = props.route.params;
-
+  console.log("Ploat Id :",plot_id)
   // console.log("Plot ID :",misCoat)
   const [tab, setTab] = useState({
     miscoat: true,
@@ -122,7 +124,6 @@ const PlotDetails = (props) => {
       }
     }
   };
-  console.log("Before Array :",miscotArray)
   React.useEffect(() => {
      const updateMiscoatArray=[...miscotArray];
       miscotArray.map((item,index)=>{
@@ -139,6 +140,7 @@ const PlotDetails = (props) => {
         updateSnagArray[index].chekecd=false;
       })
     setSnag(updateSnagArray);
+    setJobSummary([])
   }, [misCoat, decorationArray, snagArray]);
 
   React.useEffect(() => {
@@ -147,13 +149,11 @@ const PlotDetails = (props) => {
     });
     return unsubscribe;
   }, [navigation]);
-  console.log("Send Data :", token);
  
   console.log("Send Mail :",jobSummary)
-  const sendEmail = () =>{
+  const sendEmail = async () =>{
     try{
       if(jobSummary!==""){
-        
         const body = {jobSummary};
         (async () => {
           const request = await axios(
@@ -168,36 +168,57 @@ const PlotDetails = (props) => {
           );
           const response = await request.data;
           console.log("Insert Response :",response)
-          if(response=="nothing"){
-              alert("Email Not Send !")
-          }
-          else{
-            alert("Email Send SuccessFully !")
-            const updateArray=[...miscotArray];
-            miscotArray.map((item,index)=>{
-                updateArray[index].chekecd=false;
-            })
-            setMiscotArray(updateArray)
+          const subject = "PDF On Demand"
+          const message = response;
+          Linking.openURL(`mailto:?subject=${subject}&body=${message}`);
+          setJobSummary([])
+          const updateMiscoatArray=[...miscotArray];
+          miscotArray.map((item,index)=>{
+            updateMiscoatArray[index].chekecd=false;
+          })
+        setMiscotArray(updateMiscoatArray)
+        const updateDecorationArray=[...decorationArray];
+        decorationArray.map((item,index)=>{
+            updateDecorationArray[index].chekecd=false;
+          })
+        setDecoration(updateDecorationArray);
+        const updateSnagArray=[...snagArray];
+          snagArray.map((item,index)=>{
+            updateSnagArray[index].chekecd=false;
+          })
+        setSnag(updateSnagArray);
+       
+          // if(response=="nothing"){
+          //     alert("Email Not Send !")
+          // }
+          // else{
+          //   alert("Email Send SuccessFully !")
+          //   const updateArray=[...miscotArray];
+          //   miscotArray.map((item,index)=>{
+          //       updateArray[index].chekecd=false;
+          //   })
+          //   setMiscotArray(updateArray)
 
-            const updateDecorationArray=[...decorationArray];
-            decorationArray.map((item,index)=>{
-                updateArray[index].chekecd=false;
-            })
-            setDecoration(updateDecorationArray)
+          //   const updateDecorationArray=[...decorationArray];
+          //   decorationArray.map((item,index)=>{
+          //       updateArray[index].chekecd=false;
+          //   })
+          //   setDecoration(updateDecorationArray)
             
-            const updateSnagArray=[...snagArray];
-            snagArray.map((item,index)=>{
-                updateArray[index].chekecd=false;
-            })
-            setSnag(updateSnagArray)
-            setJobSummary([])
-          }
+          //   const updateSnagArray=[...snagArray];
+          //   snagArray.map((item,index)=>{
+          //       updateArray[index].chekecd=false;
+          //   })
+          //   setSnag(updateSnagArray)
+          //   setJobSummary([])
+          // }
         })();
       }
     } catch(err){
       console.log(err?.response?.request);
       alert(err.message)
     }
+    // navigation.navigate('EmailSend')
   }
 
   return (
@@ -315,9 +336,9 @@ const PlotDetails = (props) => {
                       </View>
                       <View style={styles.checkBoxTueView}>
                         <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() => checkedForm(index, "Miscoat")}
-                          style={styles.checkbox}
+                          checked={item.chekecd}
+                          onPress={() => checkedForm(index, "Miscoat")}
+                          size={22}
                         />
                       </View>
                     </View>
@@ -357,11 +378,11 @@ const PlotDetails = (props) => {
                       </View>
                       <View style={styles.checkBoxView}>
                         <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() =>
+                          checked={item.chekecd}
+                          onPress={() =>
                             item.tickSign ? checkedForm(index, "Miscoat") : {}
                           }
-                          style={styles.checkbox}
+                          size={22}
                         />
                       </View>
                     </View>
@@ -406,9 +427,9 @@ const PlotDetails = (props) => {
                       </View>
                       <View style={styles.checkBoxTueView}>
                         <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() => checkedForm(index, "Decoration")}
-                          style={styles.checkbox}
+                          checked={item.chekecd}
+                          onPress={() => checkedForm(index, "Decoration")}
+                          size={22}
                         />
                       </View>
                     </View>
@@ -448,13 +469,13 @@ const PlotDetails = (props) => {
                       </View>
                       <View style={styles.checkBoxView}>
                         <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() =>
+                          checked={item.chekecd}
+                          onPress={() =>
                             item.tickSign
                               ? checkedForm(index, "Decoration")
                               : {}
                           }
-                          style={styles.checkbox}
+                          size={22}
                         />
                       </View>
                     </View>
@@ -498,10 +519,10 @@ const PlotDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() => checkedForm(index, "Snag")}
-                          style={styles.checkbox}
+                         <CheckBox
+                          checked={item.chekecd}
+                          onPress={() => checkedForm(index, "Snag")}
+                          size={22}
                         />
                       </View>
                     </View>
@@ -541,11 +562,11 @@ const PlotDetails = (props) => {
                       </View>
                       <View style={styles.checkBoxView}>
                         <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() =>
+                          checked={item.chekecd}
+                          onPress={() =>
                             item.tickSign ? checkedForm(index, "Snag") : {}
                           }
-                          style={styles.checkbox}
+                          size={22}
                         />
                       </View>
                     </View>
@@ -615,7 +636,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
   },
   titleText: {
     color: "#4F4F4F",

@@ -5,7 +5,6 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  CheckBox,
 } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
@@ -16,8 +15,9 @@ import { connect } from "react-redux";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
+import { CheckBox } from "react-native-elements";
 
-var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
+var mainImage = require("../../../assets/authScreen/logo.jpeg");
 var plus = require("../../../assets/authScreen/plus.png");
 const LadderCheckList = (props) => {
   const { navigation, token, isSuccessMsg, isSuccess } = props;
@@ -359,7 +359,7 @@ const LadderCheckList = (props) => {
         dateTimeComplete != "" &&
         nextDateInspection != "" &&
         furtherComments != "" &&
-        ladderArrayList !="" &&
+        ladderArrayList != "" &&
         projectImagesComment != "" &&
         commentImages != ""
       ) {
@@ -489,7 +489,7 @@ const LadderCheckList = (props) => {
             isVisible={showDateTimeComplete}
             testID="dateTimePicker"
             value={dateTimeComplete}
-            mode={Platform.OS === 'ios' ? "datetime" : "datetime"}
+            mode={Platform.OS === "ios" ? "datetime" : "datetime"}
             display="default"
             onConfirm={onDateCompleteChange}
             onCancel={() => setShowDateTimeComplete(false)}
@@ -499,7 +499,7 @@ const LadderCheckList = (props) => {
             isVisible={showNextDateInspection}
             testID="dateTimePicker"
             value={nextDateInspection}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onNextDateInspectionChange}
             onCancel={() => setShowNextDateInspection(false)}
@@ -581,24 +581,61 @@ const LadderCheckList = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity  onPress={() => showDateCompletePicker()}>
-                      <TextInput
-                        editable={false}
-                        value={dateTimeComplete ? new Date(dateTimeComplete).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date and Time completed"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showDateCompletePicker()}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateTimeComplete
+                          ? dateTimeComplete
+                          : "Date and Time completed"}
+                      </Text>
                     </TouchableOpacity>
-                    
                   </View>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity  onPress={() => showNextDateInspectionPicker()}>
-                      <TextInput
-                        editable={false}
-                        value={nextDateInspection ? new Date(nextDateInspection).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Next Inspection date"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showNextDateInspectionPicker()}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {nextDateInspection
+                          ? nextDateInspection
+                          : "Next Inspection date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={styles.tableCheckListViewContainer}>
@@ -642,22 +679,23 @@ const LadderCheckList = (props) => {
                           <View style={styles.tableBody}>
                             <View style={styles.inputLadderBodyContainer}>
                               <CheckBox
-                                value={item.yes}
-                                onValueChange={() => checkedValue(index, "yes")}
+                                checked={item.yes}
+                                onPress={() => checkedValue(index, "yes")}
+                                size={22}
                               />
                             </View>
                             <View style={styles.inputLadderBodyContainer}>
                               <CheckBox
-                                value={item.no}
-                                onValueChange={() => checkedValue(index, "no")}
+                                checked={item.no}
+                                onPress={() => checkedValue(index, "no")}
+                                size={22}
                               />
                             </View>
                             <View style={styles.inputLadderBodyContainer}>
                               <CheckBox
-                                value={item.other}
-                                onValueChange={() =>
-                                  checkedValue(index, "other")
-                                }
+                                checked={item.other}
+                                onPress={() => checkedValue(index, "other")}
+                                size={22}
                               />
                             </View>
                           </View>
@@ -677,22 +715,23 @@ const LadderCheckList = (props) => {
                           <View style={styles.tableBody}>
                             <View style={styles.inputLadderBodyContainer}>
                               <CheckBox
-                                value={item.yes}
-                                onValueChange={() => checkedValue(index, "yes")}
+                                checked={item.yes}
+                                onPress={() => checkedValue(index, "yes")}
+                                size={22}
                               />
                             </View>
                             <View style={styles.inputLadderBodyContainer}>
                               <CheckBox
-                                value={item.no}
-                                onValueChange={() => checkedValue(index, "no")}
+                                checked={item.no}
+                                onPress={() => checkedValue(index, "no")}
+                                size={22}
                               />
                             </View>
                             <View style={styles.inputLadderBodyContainer}>
                               <CheckBox
-                                value={item.other}
-                                onValueChange={() =>
-                                  checkedValue(index, "other")
-                                }
+                                checked={item.other}
+                                onPress={() => checkedValue(index, "other")}
+                                size={22}
                               />
                             </View>
                           </View>

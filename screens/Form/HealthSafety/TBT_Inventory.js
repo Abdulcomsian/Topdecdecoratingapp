@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  KeyboardAvoidingView
 } from "react-native";
 import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
@@ -32,11 +33,11 @@ const TBTINVENTORY = (props) => {
     {
       title: "Hop Ups",
       equipment: "",
-      date_1: new Date().toLocaleDateString(),
+      date_1: "",
       tagged: "",
       stock: "",
       location: "",
-      due_date: new Date().toLocaleDateString(),
+      due_date: "",
       condition: "",
       needs: "",
       comment: "",
@@ -44,11 +45,11 @@ const TBTINVENTORY = (props) => {
     {
       title: "Step Ladders",
       equipment: "",
-      date_1: new Date().toLocaleDateString(),
+      date_1: "",
       tagged: "",
       stock: "",
       location: "",
-      due_date: new Date().toLocaleDateString(),
+      due_date: "",
       condition: "",
       needs: "",
       comment: "",
@@ -56,11 +57,11 @@ const TBTINVENTORY = (props) => {
     {
       title: "Ladders",
       equipment: "",
-      date_1: new Date().toLocaleDateString(),
+      date_1: "",
       tagged: "",
       stock: "",
       location: "",
-      due_date: new Date().toLocaleDateString(),
+      due_date: "",
       condition: "",
       needs: "",
       comment: "",
@@ -68,11 +69,11 @@ const TBTINVENTORY = (props) => {
     {
       title: "Staircase Podium",
       equipment: "",
-      date_1: new Date().toLocaleDateString(),
+      date_1: "",
       tagged: "",
       stock: "",
       location: "",
-      due_date: new Date().toLocaleDateString(),
+      due_date: "",
       condition: "",
       needs: "",
       comment: "",
@@ -80,11 +81,11 @@ const TBTINVENTORY = (props) => {
     {
       title: "Mobile Towers",
       equipment: "",
-      date_1: new Date().toLocaleDateString(),
+      date_1: "",
       tagged: "",
       stock: "",
       location: "",
-      due_date: new Date().toLocaleDateString(),
+      due_date: "",
       condition: "",
       needs: "",
       comment: "",
@@ -232,6 +233,10 @@ const TBTINVENTORY = (props) => {
     setCommentImages(commentData);
   };
   return (
+    <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    style={styles.container}
+  >
     <View style={styles.mainContainer}>
       {isShow ? (
         <View style={{ flex: 1 }}>
@@ -280,7 +285,7 @@ const TBTINVENTORY = (props) => {
           <DateTimePickerModal
             isVisible={show.isVisible}
             date={date ? date : new Date()}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "datetime" : "date"}
             is24Hour={true}
             display="default"
             onConfirm={(date) => onChange(date)}
@@ -291,7 +296,7 @@ const TBTINVENTORY = (props) => {
           <DateTimePickerModal
             isVisible={showDueDate.isVisible}
             date={date ? date : new Date()}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "datetime" : "date"}
             is24Hour={true}
             display="default"
             onConfirm={(date) => onInspectionDueDateChange(date)}
@@ -303,7 +308,7 @@ const TBTINVENTORY = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "datetime" : "date"}
             display="default"
             onConfirm={onSupervisorDateChange}
             onCancel={() => setSupervisorShow(false)}
@@ -332,6 +337,7 @@ const TBTINVENTORY = (props) => {
                   Working at Height Equipment - Inventory Control
                 </Text>
               </View>
+ 
               <ScrollView>
                 <View style={{ paddingLeft: 20, paddingRight: 20 }}>
                   <View style={styles.inputFieldContainer}>
@@ -385,17 +391,34 @@ const TBTINVENTORY = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity onPress={() => showSupervisorDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={dateSupervisor ? new Date(dateSupervisor).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showSupervisorDatepicker()}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateSupervisor ? dateSupervisor : "Date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
 
-                  <View style={styles.tableViewContainer}>
+                  <View style={[styles.tableViewContainer,{marginTop:30}]}>
                     <View style={styles.tableHeader}>
                       <View style={styles.headerEquipmentTitleView}>
                         <Text style={styles.headerTitle}>Equipments</Text>
@@ -453,22 +476,25 @@ const TBTINVENTORY = (props) => {
                               value={item.equipment}
                             />
                           </View>
-                          <View style={styles.inputInventoryBodyContainer}>
+                          <View style={[styles.inputInventoryBodyContainer,{
+                                borderBottomWidth: 1,
+                                borderBottomColor: "#96A8B2",}]}>
                             <Text
                               onPress={() => showDatepicker(index)}
                               style={{
-                                height: 39,
-                                paddingTop: 16,
                                 fontSize: 8,
                                 color: "#96A8B2",
                                 fontFamily: "poppins-regular",
-                                borderBottomWidth: 1,
-                                borderBottomColor: "#96A8B2",
                                 marginRight: 5,
                                 color: "#96A8B2",
                               }}
                             >
-                              {new Date(item.date_1).toLocaleDateString()}
+                                    {
+                          item.date_1
+                            ? item.date_1
+                            : "Date"
+                        }
+                              
                             </Text>
                           </View>
                           <View style={styles.inputInventoryBodyContainer}>
@@ -501,22 +527,24 @@ const TBTINVENTORY = (props) => {
                               value={item.location}
                             />
                           </View>
-                          <View style={styles.inputInventoryBodyContainer}>
+                          <View style={[styles.inputInventoryBodyContainer,{borderBottomWidth: 1,
+                                borderBottomColor: "#96A8B2",}]}>
                             <Text
                               onPress={() => showInspectionDueDatepicker(index)}
                               style={{
-                                height: 39,
-                                paddingTop: 16,
                                 fontSize: 8,
                                 color: "#96A8B2",
                                 fontFamily: "poppins-regular",
-                                borderBottomWidth: 1,
-                                borderBottomColor: "#96A8B2",
                                 marginRight: 5,
                                 color: "#96A8B2",
                               }}
                             >
-                              {new Date(item.due_date).toLocaleDateString()}
+                              {
+                          item.due_date
+                            ? item.due_date
+                            : "Date"
+                        }
+                              
                             </Text>
                           </View>
                           <View style={styles.inputInventoryBodyContainer}>
@@ -747,9 +775,8 @@ const TBTINVENTORY = (props) => {
                           </View>
                         ))}
                     </View>
-                    
                   </View>
-                  
+
                   <View
                     style={{
                       backgroundColor: "#000",
@@ -774,6 +801,7 @@ const TBTINVENTORY = (props) => {
         </View>
       )}
     </View>
+    </KeyboardAvoidingView>
   );
 };
 const mapStateToProps = (state) => ({

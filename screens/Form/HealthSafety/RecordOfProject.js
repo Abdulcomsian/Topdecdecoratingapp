@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  CheckBox,
 } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
@@ -14,6 +13,7 @@ import { insertRecordOfProject } from "../../../Redux/action/auth/authActionType
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
+import { CheckBox } from 'react-native-elements'
 
 var plus = require("../../../assets/authScreen/plus.png");
 const RecordOfProject = (props) => {
@@ -384,19 +384,21 @@ const RecordOfProject = (props) => {
                           ]}
                         >
                           <View style={{ width: "20%" }}>
-                            <CheckBox
-                              value={item.yes}
-                              onValueChange={() =>
-                                checkedReportValue("yes", index, "true")
-                              }
-                            />
+                             <CheckBox
+                        checked={item.yes}
+                        onPress={() =>
+                          checkedReportValue("yes", index, "true")
+                        }
+                        size={18}
+                      />
                           </View>
-                          <View style={{ width: "80%", paddingTop: 5 }}>
+                          <View style={{ width: "80%", paddingTop: 15 }}>
                             <Text
                               style={{
                                 fontSize: 12,
                                 color: "#96A8B2",
                                 fontFamily: "poppins-regular",
+                                paddingLeft:15
                               }}
                             >
                               Yes
@@ -410,19 +412,21 @@ const RecordOfProject = (props) => {
                           ]}
                         >
                           <View style={{ width: "20%" }}>
-                            <CheckBox
-                              value={item.no}
-                              onValueChange={() =>
-                                checkedReportValue("no", index, "true")
-                              }
-                            />
+                                   <CheckBox
+                        checked={item.no}
+                        onPress={() =>
+                          checkedReportValue("no", index, "true")
+                        }
+                        size={18}
+                      />
                           </View>
-                          <View style={{ width: "80%", paddingTop: 5 }}>
+                          <View style={{ width: "80%", paddingTop: 15 }}>
                             <Text
                               style={{
                                 fontSize: 12,
                                 color: "#96A8B2",
                                 fontFamily: "poppins-regular",
+                                paddingLeft:15
                               }}
                             >
                               No

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView } from "react-native";
 import { Text } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { searchJob } from "../../Redux/action/auth/authActionTypes";
@@ -59,12 +59,16 @@ const SearchJob = (props) => {
   };
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
     <View style={styles.mainContainer}>
       <DateTimePicker
         isVisible={show}
         testID='dateTimePicker'
         value={date}
-        mode={Platform.OS === 'ios' ? "datetime" : "date"}
+        mode={Platform.OS === 'ios' ? "date" : "date"}
         display='default'
         onConfirm={onChange}
         onCancel={() => {}}
@@ -97,6 +101,7 @@ const SearchJob = (props) => {
         </TouchableOpacity>
       </View>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 const mapStateToProps = (state) => ({
@@ -108,6 +113,9 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(SearchJob);
 
 const styles = StyleSheet.create({
+  container:{
+    flex: 1
+  },
   mainContainer: {
     height: "100%",
     width: "100%",

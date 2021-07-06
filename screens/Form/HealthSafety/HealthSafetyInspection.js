@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  CheckBox,
 } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
@@ -18,6 +17,7 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import { insertHealthSafetyForm } from "../../../Redux/action/auth/authActionTypes";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
+import { CheckBox } from "react-native-elements";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const HealthSafetyInspection = (props) => {
@@ -53,7 +53,7 @@ const HealthSafetyInspection = (props) => {
         actionReq: "",
         priority: "",
         action_by: "",
-        dateComplte: new Date().toLocaleDateString(),
+        dateComplte: "",
       },
     ]);
   };
@@ -334,8 +334,8 @@ const HealthSafetyInspection = (props) => {
         dynamicInput != "" &&
         inspectionName != "" &&
         inspectionFor != "" &&
-        signature != ""  &&
-        arrayDocument != ""  &&
+        signature != "" &&
+        arrayDocument != "" &&
         projectImagesComment != "" &&
         commentImages != ""
       ) {
@@ -478,7 +478,7 @@ const HealthSafetyInspection = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => setShow(false)}
             onConfirm={onChange}
@@ -488,7 +488,7 @@ const HealthSafetyInspection = (props) => {
             isVisible={showInspection}
             testID="dateTimePicker"
             value={dateInspection}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => setShowInspection(false)}
             onConfirm={onInspectionChange}
@@ -498,7 +498,7 @@ const HealthSafetyInspection = (props) => {
             isVisible={showComplete.isVisible}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => setShowComplete({ isVisible: false, index: -1 })}
             onConfirm={onDateCompleteChange}
@@ -543,13 +543,30 @@ const HealthSafetyInspection = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity  onPress={() => showDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showDatepicker()}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {date ? date : "Date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
@@ -644,7 +661,6 @@ const HealthSafetyInspection = (props) => {
                               />
                             </View>
                             <View style={styles.inputHarmFullBodyContainer}>
-                              
                               <Text
                                 onPress={() => showDateCompletepicker(index)}
                                 style={{
@@ -660,9 +676,7 @@ const HealthSafetyInspection = (props) => {
                                   color: "#96A8B2",
                                 }}
                               >
-                                {new Date(
-                                  item.dateComplte
-                                ).toLocaleDateString()}
+                                {item.dateComplte ? item.dateComplte : "Date"}
                               </Text>
                             </View>
                           </View>
@@ -726,13 +740,30 @@ const HealthSafetyInspection = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity  onPress={() => showInspectionDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={dateInspection ? new Date(dateInspection).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showInspectionDatepicker()}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateInspection ? dateInspection : "Date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
@@ -851,12 +882,16 @@ const HealthSafetyInspection = (props) => {
                             <View style={styles.checkBoxInstructionView}>
                               <View style={styles.firstInstructionCheckBoxRow}>
                                 <View style={styles.parentCheckBox}>
-                                  <View style={styles.leftCheckBox}>
+                                  <View style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 12 },
+                                  ]}>
                                     <CheckBox
-                                      value={item.yes}
-                                      onValueChange={() =>
+                                      checked={item.yes}
+                                      onPress={() =>
                                         checkArrayData("yes", index, "true")
                                       }
+                                      size={18}
                                     />
                                   </View>
                                   <View style={styles.rightCheckBox}>
@@ -864,12 +899,16 @@ const HealthSafetyInspection = (props) => {
                                   </View>
                                 </View>
                                 <View style={styles.parentCheckBox}>
-                                  <View style={styles.leftCheckBox}>
+                                  <View style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 12 },
+                                  ]}>
                                     <CheckBox
-                                      value={item.no}
-                                      onValueChange={() =>
+                                      checked={item.no}
+                                      onPress={() =>
                                         checkArrayData("no", index, "true")
                                       }
+                                      size={18}
                                     />
                                   </View>
                                   <View style={styles.rightCheckBox}>
@@ -910,28 +949,34 @@ const HealthSafetyInspection = (props) => {
                           <View style={styles.checkBoxInstructionView}>
                             <View style={styles.firstInstructionCheckBoxRow}>
                               <View style={styles.parentCheckBox}>
-                                <View style={styles.leftCheckBox}>
+                                <View style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 12 },
+                                  ]}>
                                   <CheckBox
-                                    value={item.yes}
-                                    value={item.yes}
-                                    onValueChange={() =>
-                                      checkArrayData("yes", index, "true")
-                                    }
-                                  />
+                        checked={item.yes}
+                        onPress={() =>
+                          checkArrayData("yes", index, "true")
+                        }
+                        size={18}
+                      />
                                 </View>
                                 <View style={styles.rightCheckBox}>
                                   <Text style={styles.accidentText}>Y/N</Text>
                                 </View>
                               </View>
                               <View style={styles.parentCheckBox}>
-                                <View style={styles.leftCheckBox}>
-                                  <CheckBox
-                                    value={item.no}
-                                    value={item.no}
-                                    onValueChange={() =>
-                                      checkArrayData("no", index, "true")
-                                    }
-                                  />
+                                <View style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 12 },
+                                  ]}>
+                                       <CheckBox
+                        checked={item.no}
+                        onPress={() =>
+                          checkArrayData("no", index, "true")
+                        }
+                        size={18}
+                      />
                                 </View>
                                 <View style={styles.rightCheckBox}>
                                   <Text style={styles.accidentText}>N/A</Text>

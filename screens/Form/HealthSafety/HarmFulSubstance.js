@@ -196,7 +196,7 @@ const HarmFulSubstance = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow(false)}
@@ -230,14 +230,31 @@ const HarmFulSubstance = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-              <TouchableOpacity onPress={() => showDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    height: 52,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 15,
+                  }}
+                  onPress={() => showDatepicker()}
+                >
+                  <Text
+                    style={{
+                      width: "100%",
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                    }}
+                  >
+                    {date ? date : "Date"}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={[styles.tableViewContainer, { marginTop: 30 }]}>
                 <View style={styles.tableHeader}>

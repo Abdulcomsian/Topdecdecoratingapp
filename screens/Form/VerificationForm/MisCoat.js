@@ -38,8 +38,8 @@ const MistCoat = (props) => {
         bed: "",
         price: "",
         days: "",
-        start: new Date().toLocaleDateString(),
-        complete: new Date().toLocaleDateString(),
+        start: "",
+        complete: "",
       },
     ]);
   };
@@ -217,7 +217,7 @@ const MistCoat = (props) => {
             <DateTimePickerModal
               isVisible={show.isVisible}
               date={date ? date : new Date()}
-              mode={Platform.OS === 'ios' ? "datetime" : "date"}
+              mode={Platform.OS === "ios" ? "date" : "date"}
               is24Hour={true}
               display="default"
               onConfirm={(date) => onChange(date)}
@@ -228,7 +228,7 @@ const MistCoat = (props) => {
             <DateTimePickerModal
               isVisible={showComplete.isVisible}
               date={dateComplete ? dateComplete : new Date()}
-              mode={Platform.OS === 'ios' ? "datetime" : "date"}
+              mode={Platform.OS === "ios" ? "date" : "date"}
               is24Hour={true}
               display="default"
               onConfirm={(date) => onCompleteChange(date)}
@@ -335,7 +335,11 @@ const MistCoat = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateValue("price", index, txt.replace(/[^0-9]/g, ""))
+                                updateValue(
+                                  "price",
+                                  index,
+                                  txt.replace(/[^0-9]/g, "")
+                                )
                               }
                               value={el.price}
                               style={styles.bodyTextInput}
@@ -355,7 +359,11 @@ const MistCoat = (props) => {
                           <View style={styles.inputBodyContainer}>
                             <TextInput
                               onChangeText={(txt) =>
-                                updateValue("days", index, txt.replace(/[^0-9]/g, ""))
+                                updateValue(
+                                  "days",
+                                  index,
+                                  txt.replace(/[^0-9]/g, "")
+                                )
                               }
                               value={el.days}
                               style={styles.bodyTextInput}
@@ -375,7 +383,7 @@ const MistCoat = (props) => {
                                 paddingTop: 7,
                               }}
                             >
-                              {new Date(el.start).toLocaleDateString()}
+                              {el.start ? el.start : "Date"}
                             </Text>
                           </View>
                           <View style={styles.inputBodyContainer}>
@@ -391,7 +399,7 @@ const MistCoat = (props) => {
                                 paddingTop: 7,
                               }}
                             >
-                              {new Date(el.complete).toLocaleDateString()}
+                              {el.complete ? el.complete : "Date"}
                             </Text>
                           </View>
                         </View>

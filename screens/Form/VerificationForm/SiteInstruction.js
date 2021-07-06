@@ -198,7 +198,7 @@ const DecorationRecord = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => setShow(false)}
             onConfirm={onChange}
@@ -208,7 +208,7 @@ const DecorationRecord = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => setShowSupervisor(false)}
             onConfirm={onDateSupervisorChange}
@@ -233,7 +233,9 @@ const DecorationRecord = (props) => {
                   style={styles.inputField}
                   placeholder={"Instruction No"}
                   value={instructionNo}
-                  onChangeText={(e) => setInstructionNo(e.replace(/[^0-9]/g, ""))}
+                  onChangeText={(e) =>
+                    setInstructionNo(e.replace(/[^0-9]/g, ""))
+                  }
                 />
               </View>
               <View style={styles.inputFieldContainer}>
@@ -245,14 +247,31 @@ const DecorationRecord = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-              <TouchableOpacity onPress={() => showDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    height: 52,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 15,
+                  }}
+                  onPress={() => showDatepicker()}
+                >
+                  <Text
+                    style={{
+                      width: "100%",
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                    }}
+                  >
+                    {date ? date : "Date"}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput
@@ -369,14 +388,31 @@ const DecorationRecord = (props) => {
                   </View>
                   <View style={{ width: "50%", marginRight: 5 }}>
                     <View style={styles.inputFieldContainer}>
-                    <TouchableOpacity  onPress={() => showSupervisorDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={dateSupervisor ? new Date(dateSupervisor).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
-                    </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          height: 52,
+                          width: "100%",
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          padding: 5,
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
+                        onPress={() => showSupervisorDatepicker()}
+                      >
+                        <Text
+                          style={{
+                            width: "100%",
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          {dateSupervisor ? dateSupervisor : "Date"}
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </View>

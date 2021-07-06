@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  CheckBox,
 } from "react-native";
 import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
@@ -16,6 +15,7 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import { insertDailyBreifingForm } from "../../../Redux/action/auth/authActionTypes";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
+import { CheckBox } from "react-native-elements";
 
 var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
 var work = require("../../../assets/authScreen/work.png");
@@ -307,7 +307,7 @@ const DailyBreifingForm = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow(false)}
@@ -364,18 +364,36 @@ const DailyBreifingForm = (props) => {
                       style={styles.inputField}
                       placeholder={"Method statement No"}
                       value={statementNumber}
-                      onChangeText={(e) => setStatementNumber(e.replace(/[^0-9]/g, ""))}
+                      onChangeText={(e) =>
+                        setStatementNumber(e.replace(/[^0-9]/g, ""))
+                      }
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-
-                  <TouchableOpacity onPress={() => showDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showDatepicker()}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {date ? date : "Date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
 
@@ -400,17 +418,19 @@ const DailyBreifingForm = (props) => {
                       {dailyArray.map((item, index) => (
                         <View
                           style={{
-                            width: "100%",
                             flexDirection: "row",
                             marginBottom: 10,
+                            width:"100%",
+                            justifyContent:"space-between"
                           }}
                           key={index}
                         >
-                          <View style={{ width: "90%" }}>
+                          <View>
                             <Text
                               style={{
                                 fontFamily: "poppins-semiBold",
                                 fontSize: 10,
+                                paddingTop:20
                               }}
                             >
                               {item.title}
@@ -419,15 +439,12 @@ const DailyBreifingForm = (props) => {
                           <View
                             style={{
                               width: "10%",
-                              justifyContent: "flex-end",
-                              alignItems: "flex-end",
                             }}
                           >
                             <CheckBox
-                              value={item.check}
-                              onValueChange={() =>
-                                checkedDailyValue("check", index)
-                              }
+                              checked={item.check}
+                              onPress={() => checkedDailyValue("check", index)}
+                              size={18}
                             />
                           </View>
                         </View>
@@ -441,17 +458,22 @@ const DailyBreifingForm = (props) => {
                     {berifingArray.map((item, index) => (
                       <View
                         style={{
-                          width: "100%",
                           flexDirection: "row",
-                          marginTop: 10,
+                            marginBottom: 10,
+                            width:"100%",
+                            justifyContent:"space-between"
                         }}
                       >
                         <View style={{ width: "100%", flexDirection: "row" }}>
-                          <View style={{ width: "90%" }}>
+                          <View style={{fontFamily: "poppins-semiBold",
+                                fontSize: 10,
+                                paddingTop:20,
+                                width: "90%",}}>
                             <Text
                               style={{
                                 fontFamily: "poppins-semiBold",
                                 fontSize: 10,
+                                
                               }}
                             >
                               {item.title}
@@ -460,15 +482,13 @@ const DailyBreifingForm = (props) => {
                           <View
                             style={{
                               width: "10%",
-                              justifyContent: "flex-end",
-                              alignItems: "flex-end",
                             }}
                           >
-                            <CheckBox
-                              value={item.check}
-                              onValueChange={() =>
-                                checkedBreiflyValue("check", index)
-                              }
+                    
+                             <CheckBox
+                              checked={item.check}
+                              onPress={() => checkedBreiflyValue("check", index)}
+                              size={18}
                             />
                           </View>
                         </View>
@@ -482,14 +502,14 @@ const DailyBreifingForm = (props) => {
                     {jobSafetyArray.map((item, index) => (
                       <View
                         style={{
-                          width: "100%",
                           flexDirection: "row",
                           marginTop: 10,
+                          justifyContent:"space-between"
                         }}
                         key={index}
                       >
-                        <View style={{ width: "100%", flexDirection: "row" }}>
-                          <View style={{ width: "60%" }}>
+                        <View style={{ flexDirection: "row"}}>
+                          <View style={{ width: "60%"}}>
                             <Text
                               style={{
                                 fontFamily: "poppins-semiBold",
@@ -501,31 +521,26 @@ const DailyBreifingForm = (props) => {
                           </View>
                           <View
                             style={{
-                              width: "30%",
-                              justifyContent: "flex-end",
-                              alignItems: "flex-end",
-                              paddingRight: 20,
+                              width:"30%"
                             }}
                           >
                             <Image
-                              style={{ height: 50, width: 50 }}
+                              style={{ height: 50, width: 50}}
                               source={item.image}
                             />
                           </View>
                           <View
                             style={{
-                              width: "10%",
-                              justifyContent: "flex-start",
-                              alignItems: "flex-start",
-                              paddingRight: 30,
+                              width:"10%"
                             }}
                           >
                             <CheckBox
-                              value={item.check}
-                              onValueChange={() =>
-                                checkedJobValue("check", index)
-                              }
-                            />
+                        checked={item.check}
+                        onPress={() =>
+                          checkedJobValue("check", index)
+                        }
+                        size={18}
+                      />
                           </View>
                         </View>
                       </View>

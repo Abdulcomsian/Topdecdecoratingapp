@@ -277,7 +277,7 @@ const WrantySannging = (props) => {
             isVisible={showIssue}
             testID="dateTimePicker"
             value={dateIssue}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onIssueChange}
             onCancel={() => CancelPicker("issue")}
@@ -287,7 +287,7 @@ const WrantySannging = (props) => {
             isVisible={showComplete}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onCompleteChange}
             onCancel={() => CancelPicker("complete")}
@@ -297,7 +297,7 @@ const WrantySannging = (props) => {
             isVisible={showSnaggingIssue}
             testID="dateTimePicker"
             value={dateSnaggingIssue}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onSnaggingIssueChange}
             onCancel={() => CancelPicker("dateSnaggingIssue")}
@@ -307,7 +307,7 @@ const WrantySannging = (props) => {
             isVisible={showSnaggingComplete}
             testID="dateTimePicker"
             value={dateSnaggingComplete}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onSnaggingCompleteChange}
             onCancel={() => CancelPicker("dateSnaggingComplete")}
@@ -332,24 +332,60 @@ const WrantySannging = (props) => {
                 />
               </View>
               <View style={styles.inputFieldContainer}>
-              <TouchableOpacity  onPress={() => showDatepicker("DateIssue")}>
-                      <TextInput
-                        editable={false}
-                        value={dateIssue ? new Date(dateIssue).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date of issue"}
-                      />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    height: 52,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 15,
+                  }}
+                  onPress={() => showDatepicker("DateIssue")}
+                >
+                  <Text
+                    style={{
+                      width: "100%",
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                    }}
+                  >
+                    {dateIssue ? dateIssue : "Date of issue"}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
-              <TouchableOpacity  onPress={() => showDatepicker("CompleteDate")}>
-                      <TextInput
-                        editable={false}
-                        value={dateComplete ? new Date(dateComplete).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date of completion required"}
-                      />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => showDatepicker("CompleteDate")}
+                  style={{
+                    height: 52,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 15,
+                  }}
+                >
+                  <Text
+                    style={{
+                      width: "100%",
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                    }}
+                  >
+                    {dateComplete
+                      ? dateComplete
+                      : "Date of completion required"}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.titleContainer}>
@@ -445,24 +481,62 @@ const WrantySannging = (props) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
-              <TouchableOpacity  onPress={() => showDatepicker("SnaggingIssue")}>
-                      <TextInput
-                        editable={false}
-                        value={dateSnaggingIssue ? new Date(dateSnaggingIssue).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Snagging issued by"}
-                      />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    height: 52,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 15,
+                  }}
+                  onPress={() => showDatepicker("SnaggingIssue")}
+                >
+                  <Text
+                    style={{
+                      width: "100%",
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                    }}
+                  >
+                    {dateSnaggingIssue
+                      ? dateSnaggingIssue
+                      : "Snagging issued by"}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
-              <TouchableOpacity   onPress={() => showDatepicker("SnaggingCompleted")}>
-                      <TextInput
-                        editable={false}
-                        value={dateSnaggingComplete ? new Date(dateSnaggingComplete).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Completed by"}
-                      />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    height: 52,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#96A8B2",
+                    padding: 5,
+                    fontSize: 12,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    paddingTop: 15,
+                  }}
+                  onPress={() => showDatepicker("SnaggingCompleted")}
+                >
+                  <Text
+                    style={{
+                      width: "100%",
+                      fontSize: 12,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                    }}
+                  >
+                    {dateSnaggingComplete
+                      ? dateSnaggingComplete
+                      : "Completed by"}
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.inputFieldContainer}>
                 <TextInput

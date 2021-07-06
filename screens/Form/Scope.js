@@ -58,7 +58,7 @@ const Scope = (props) => {
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
-    setDate(new Date(currentDate).toLocaleDateString());
+    setDate(new Date(currentDate));
   };
   const showMode = (currentMode) => {
     setShow(true);
@@ -66,7 +66,7 @@ const Scope = (props) => {
   };
 
   const showDatepicker = () => {
-    showMode("date");
+    setShow(true);
   };
   const [projectComment, setProjectComment] = useState("");
   const scopeFormInsert = async () => {
@@ -87,7 +87,7 @@ const Scope = (props) => {
           signature,
           plotNumber,
           type,
-          date,
+          new Date(date).toLocaleDateString(),
           projectImagesComment,
           commentImages,
           jobID,
@@ -210,13 +210,14 @@ const Scope = (props) => {
         <View style={{ flex: 1, width: "100%" }}>
           <DateTimePicker
             isVisible={show}
-            testID="dateTimePicker"
-            value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            date={date ? date : new Date()}
+            mode={Platform.OS === 'ios' ? "date" : "date"}
+            is24Hour={true}
             display="default"
-            onConfirm={onChange}
-            onCancel={() => CancelPicker()}
-            format="DD-MM-YYYY"
+            onConfirm={(date) => onChange(date)}
+            onCancel={() => setShow(false)}
+            cancelTextIOS="Cancel"
+            confirmTextIOS="Confirm"
           />
 
           {getSign ? (
@@ -491,14 +492,22 @@ const Scope = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity onPress={() => showDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
-                    </TouchableOpacity>
+                    <Text
+                        onPress={() => showDatepicker()}
+                        style={{
+                          height: 52,
+                          width: "100%",
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          padding: 5,
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
+                      >
+                        {date ? new Date(date).toLocaleDateString() : "Date"}
+                      </Text>
                     {/* <Text
                       onPress={() => showDatepicker()}
                       style={{

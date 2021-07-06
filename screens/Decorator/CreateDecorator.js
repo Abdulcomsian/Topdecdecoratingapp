@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from "react-native";
 import { Text } from "native-base";
 import { useDispatch, useSelector, connect } from "react-redux";
 import { createDecorator } from "../../Redux/action/auth/authActionTypes";
@@ -100,6 +100,10 @@ const CreateDecorataor = (props) => {
     }
   };
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
     <View style={styles.mainContainer}>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Create Decorataor</Text>
@@ -186,6 +190,7 @@ const CreateDecorataor = (props) => {
         </View>
       </ScrollView>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 const mapStateToProps = (state) => ({
@@ -200,6 +205,9 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDecorataor);
 
 const styles = StyleSheet.create({
+  container:{
+    flex: 1
+  },
   mainContainer: {
     height: "100%",
     width: "100%",

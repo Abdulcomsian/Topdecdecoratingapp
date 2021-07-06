@@ -7,6 +7,8 @@ const ViewJob = ( props ) =>{
     const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
     console.log("Role : ",props)
     console.log("User ID : ",isUserID)
+    const isid= props.route.params.isUserID;
+    console.log("User ID : ",isid)
     return(
         <View style={styles.mainContainer}>
             <View style={styles.titleContainer}>

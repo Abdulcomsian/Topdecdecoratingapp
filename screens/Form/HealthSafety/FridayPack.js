@@ -3,7 +3,6 @@ import {
   View,
   TextInput,
   ScrollView,
-  CheckBox,
   TouchableOpacity,
   Image,
 } from "react-native";
@@ -16,6 +15,7 @@ import SignatureComponent from "../../../components/SignatureComponent";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
+import { CheckBox } from "react-native-elements";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const FridayPack = (props) => {
@@ -306,7 +306,7 @@ const FridayPack = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow(false)}
@@ -376,25 +376,38 @@ const FridayPack = (props) => {
                           <View style={styles.checkBoxInstructionView}>
                             <View style={styles.firstInstructionCheckBoxRow}>
                               <View style={styles.parentCheckBox}>
-                                <View style={styles.leftCheckBox}>
+                                <View
+                                  style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 12 },
+                                  ]}
+                                >
                                   <CheckBox
-                                    value={item.no}
-                                    onValueChange={() =>
+                                    checked={item.no}
+                                    onPress={() =>
                                       checkedValue("No", index, "no")
                                     }
+                                    size={22}
                                   />
+                                   
                                 </View>
                                 <View style={styles.rightCheckBox}>
                                   <Text style={styles.accidentText}>No</Text>
                                 </View>
                               </View>
                               <View style={styles.parentCheckBox}>
-                                <View style={styles.leftCheckBox}>
+                                <View
+                                  style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 12 },
+                                  ]}
+                                >
                                   <CheckBox
-                                    value={item.yes}
-                                    onValueChange={() =>
+                                    checked={item.yes}
+                                    onPress={() =>
                                       checkedValue("Yes", index, "yes")
                                     }
+                                    size={22}
                                   />
                                 </View>
                                 <View style={styles.rightCheckBox}>
@@ -402,12 +415,16 @@ const FridayPack = (props) => {
                                 </View>
                               </View>
                               <View style={styles.parentCheckBox}>
-                                <View style={styles.leftCheckBox}>
+                                <View style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 12 },
+                                  ]}>
                                   <CheckBox
-                                    value={item.other}
-                                    onValueChange={() =>
+                                    checked={item.other}
+                                    onPress={() =>
                                       checkedValue("other", index, "other")
                                     }
+                                    size={22}
                                   />
                                 </View>
                                 <View style={styles.rightCheckBox}>
@@ -475,13 +492,30 @@ const FridayPack = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity  onPress={() => showDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showDatepicker()}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {date ? date : "Date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <Text

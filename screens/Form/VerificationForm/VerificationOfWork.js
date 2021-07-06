@@ -34,7 +34,7 @@ const VerificationOfWork = (props) => {
       {
         days: "",
         work: "",
-        date: new Date().toLocaleDateString(),
+        date: "",
         project: "",
         plot: "",
         description: "",
@@ -203,7 +203,7 @@ const VerificationOfWork = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => setShow({ isVisible: false, index: -1 })}
             onConfirm={onChange}
@@ -310,7 +310,7 @@ const VerificationOfWork = (props) => {
                           paddingTop: 10,
                         }}
                       >
-                        {new Date(el.date).toLocaleDateString()}
+                        {el.date ? el.date : "Date"}
                       </Text>
                     </View>
                     <View style={styles.inputBodyContainer}>
@@ -343,7 +343,13 @@ const VerificationOfWork = (props) => {
                     </View>
                     <View style={styles.inputBodyContainer}>
                       <TextInput
-                        onChangeText={(txt) => updateValue("price", index, txt.replace(/[^0-9]/g, ""))}
+                        onChangeText={(txt) =>
+                          updateValue(
+                            "price",
+                            index,
+                            txt.replace(/[^0-9]/g, "")
+                          )
+                        }
                         value={el.price}
                         style={styles.bodyTextInput}
                         placeholder={"Price"}
@@ -361,7 +367,9 @@ const VerificationOfWork = (props) => {
                     </View>
                     <View style={styles.inputBodyContainer}>
                       <TextInput
-                        onChangeText={(txt) => updateValue("si", index, txt.replace(/[^0-9]/g, ""))}
+                        onChangeText={(txt) =>
+                          updateValue("si", index, txt.replace(/[^0-9]/g, ""))
+                        }
                         value={el.si}
                         style={styles.bodyTextInput}
                         placeholder={"No"}

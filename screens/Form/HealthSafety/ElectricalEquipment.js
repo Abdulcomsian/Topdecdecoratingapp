@@ -38,13 +38,13 @@ const ElectricalEquipment = (props) => {
       ...oldArray,
       {
         equipment: "",
-        site_date: new Date().toLocaleDateString(),
+        site_date: "",
         serial: "",
         local: "",
         owner_if_not_dec: "",
-        last_test_date: new Date().toLocaleDateString(),
-        next_date: new Date().toLocaleDateString(),
-        offsite: new Date().toLocaleDateString(),
+        last_test_date: "",
+        next_date: "",
+        offsite: "",
         comment: "",
       },
     ]);
@@ -273,7 +273,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showDate}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === 'ios' ? "date" : "date"}
             display="default"
             onCancel={() => setShowDate(false)}
             onConfirm={onDateChange}
@@ -283,7 +283,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showDateOnSite.isVisible}
             testID="dateTimePicker"
             value={dateOnsite}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === 'ios' ? "date" : "date"}
             display="default"
             onConfirm={onDateOnSiteChange}
             onCancel={() => setShowDateOnSite({ isVisible: false, index: -1 })}
@@ -293,7 +293,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showLastTestDate.isVisible}
             testID="dateTimePicker"
             value={lastTestDate}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === 'ios' ? "date" : "date"}
             display="default"
             onConfirm={onLastTestDateChange}
             onCancel={() =>
@@ -305,7 +305,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showTestDueDate.isVisible}
             testID="dateTimePicker"
             value={testDueDate}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === 'ios' ? "date" : "date"}
             display="default"
             onConfirm={onNextTestDateChange}
             onCancel={() => setShowTestDueDate({ isVisible: false, index: -1 })}
@@ -315,7 +315,7 @@ const ElectricalEquipment = (props) => {
             isVisible={showDateOfSite.isVisible}
             testID="dateTimePicker"
             value={dateOffSite}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === 'ios' ? "date" : "date"}
             display="default"
             onConfirm={onDateOfSiteChange}
             onCancel={() => setShowDateOfSite({ isVisible: false, index: -1 })}
@@ -397,13 +397,29 @@ const ElectricalEquipment = (props) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity onPress={() => showDatepicker("Date")}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                  <TouchableOpacity style={{height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,}} onPress={() => showDatepicker("Date")}>
+                          
+  <Text  style={{
+                        width: "100%",
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                      }}>
+                        {
+                          date
+                            ? date
+                            : "Date"
+                        }
+                      </Text>
+                      
                     </TouchableOpacity>
                   </View>
                   <Text
@@ -484,7 +500,12 @@ const ElectricalEquipment = (props) => {
                                   paddingTop: 12,
                                 }}
                               >
-                                {new Date(el.site_date).toLocaleDateString()}
+                                {
+                          el.site_date
+                            ? el.site_date
+                            : "Date"
+                        }
+                                
                               </Text>
                             </View>
                             <View style={styles.inputEquipmentBodyContainer}>
@@ -531,9 +552,12 @@ const ElectricalEquipment = (props) => {
                                   paddingTop: 12,
                                 }}
                               >
-                                {new Date(
-                                  el.last_test_date
-                                ).toLocaleDateString()}
+                                {
+                          el.last_test_date
+                            ? el.last_test_date
+                            : "Date"
+                        }
+                                
                               </Text>
                             </View>
                             <View style={styles.inputEquipmentBodyContainer}>
@@ -550,7 +574,12 @@ const ElectricalEquipment = (props) => {
                                   paddingTop: 12,
                                 }}
                               >
-                                {new Date(el.next_date).toLocaleDateString()}
+                                      {
+                          el.next_date
+                            ? el.next_date
+                            : "Date"
+                        }
+                                
                               </Text>
                             </View>
                             <View style={styles.inputEquipmentBodyContainer}>
@@ -567,7 +596,12 @@ const ElectricalEquipment = (props) => {
                                   paddingTop: 12,
                                 }}
                               >
-                                {new Date(el.offsite).toLocaleDateString()}
+                                 {
+                          el.offsite
+                            ? el.offsite
+                            : "Date"
+                        }
+                               
                               </Text>
                             </View>
                             <View style={styles.inputEquipmentBodyContainer}>

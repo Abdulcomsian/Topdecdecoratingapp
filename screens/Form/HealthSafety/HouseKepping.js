@@ -4,7 +4,6 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  CheckBox,
   Image,
 } from "react-native";
 import { Text } from "native-base";
@@ -16,6 +15,7 @@ import { connect } from "react-redux";
 import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
+import { CheckBox } from "react-native-elements";
 
 var plus = require("../../../assets/authScreen/plus.png");
 const HouseKepping = (props) => {
@@ -30,7 +30,7 @@ const HouseKepping = (props) => {
   const [checkListArray, setCheckListArray] = useState([
     {
       item: "Are all empty paint container/s removed from the unit/s.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -39,7 +39,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Are all empty paint cans / leftovers collected from site by the paint supplier? ",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -48,7 +48,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Are all protection, abrasives, masking tape and other sundries or general waste cleared away by the decorator and placed in the appropriate site bin. ",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -57,7 +57,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Proper waste bins for general waste, recyclable waste, hazardous waste, are provided to facilitate responsible disposal.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -66,7 +66,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Are all working at height equipments i.e. hop ups, ladders, stepladders etc inspected and tagged.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -75,7 +75,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Are all working at height equipment packed away in a secure storage.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -84,7 +84,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Storage areas are clean, tidy and organised.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -93,7 +93,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Work area is clean, tidy, and clutter-free.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -102,7 +102,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "There are no unnecessary items in the work area.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -111,7 +111,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Aisles, walkways, stairways, and exits are unobstructed.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -120,7 +120,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Floors are dry and free from accumulated dust, broken glass and leaks or spills (e.g., oil or water).",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -129,7 +129,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Warning signs are in good condition and can be clearly seen from afar.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -138,7 +138,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Are all Electrical equipment PAT Tested and recorded.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -147,7 +147,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Task light are clean and provide adequate illumination for working.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -156,7 +156,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "ES800 Paint wash out system installed and in good working manner.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -165,7 +165,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Have the decorator’s tools been checked to ensure they are in good working order i.e. brushers, rollers etc?",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -174,7 +174,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Has adequate brush storage being provided i.e. Brush mate Trade storage boxes and brush mate fluid.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -183,7 +183,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Are all the material in the storage container labelled correctly and a COSHH datasheet available.",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -192,7 +192,7 @@ const HouseKepping = (props) => {
     },
     {
       item: "Are all flammable materials placed in the Flamstore?",
-      date: new Date().toLocaleDateString(),
+      date: "",
       block: "",
       yes: false,
       no: false,
@@ -407,7 +407,7 @@ const HouseKepping = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={dateCheck}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
@@ -417,7 +417,7 @@ const HouseKepping = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onChangeDateSupervisor}
             onCancel={() => setShowSupervisor(false)}
@@ -517,22 +517,29 @@ const HouseKepping = (props) => {
                             </View>
                             <View style={styles.inputHarmFullBodyContainer}>
                               <CheckBox
-                                value={item.yes}
-                                onValueChange={() => checkedValue(index, "yes")}
+                                checked={item.yes}
+                                onPress={() => checkedValue(index, "yes")}
+                                size={18}
                               />
                             </View>
                             <View style={styles.inputHarmFullBodyContainer}>
                               <CheckBox
-                                value={item.no}
-                                onValueChange={() => checkedValue(index, "no")}
+                                checked={item.no}
+                                onPress={() => checkedValue(index, "no")}
+                                size={18}
                               />
                             </View>
                             <View style={styles.inputHarmFullBodyContainer}>
-                              <CheckBox
+                              {/* <CheckBox
                                 value={item.other}
                                 onValueChange={() =>
                                   checkedValue(index, "other")
                                 }
+                              /> */}
+                              <CheckBox
+                                checked={item.other}
+                                onPress={() => checkedValue(index, "other")}
+                                size={18}
                               />
                             </View>
                             <View style={styles.inputHarmFullBodyContainer}>
@@ -551,7 +558,7 @@ const HouseKepping = (props) => {
                                   color: "#96A8B2",
                                 }}
                               >
-                                {new Date(item.date).toLocaleDateString()}
+                                {item.date ? item.date : "Date"}
                               </Text>
                             </View>
                             <View style={styles.inputHarmFullBodyContainer}>
@@ -603,14 +610,31 @@ const HouseKepping = (props) => {
                       </TouchableOpacity>
                     </View>
                     <View style={styles.inputFieldContainer}>
-                    <TouchableOpacity  onPress={() => showSupervisorDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={dateSupervisor ? new Date(dateSupervisor).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
-                    </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          height: 52,
+                          width: "100%",
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          padding: 5,
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
+                        onPress={() => showSupervisorDatepicker()}
+                      >
+                        <Text
+                          style={{
+                            width: "100%",
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          {dateSupervisor ? dateSupervisor : "Date"}
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                     <Text
                       style={{

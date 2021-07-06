@@ -46,7 +46,7 @@ const CleanUp = (props) => {
         plot: "",
         area: "",
         items: "",
-        completed_date: new Date().toLocaleDateString(),
+        completed_date: "",
         comment: "",
       },
     ]);
@@ -259,7 +259,7 @@ const CleanUp = (props) => {
             isVisible={showDate}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "datetime" : "date"}
             display="default"
             onCancel={() => CancelPicker("date")}
             onConfirm={onDateChange}
@@ -269,7 +269,7 @@ const CleanUp = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => CancelPicker("dateSupervisor")}
             onConfirm={onSupervisorChange}
@@ -279,7 +279,7 @@ const CleanUp = (props) => {
             isVisible={showCompleteDate.isVisible}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() =>
               setShowCompleteDate({ isVisible: false, index: -1 })
@@ -326,13 +326,30 @@ const CleanUp = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <TouchableOpacity onPress={() => showDatepicker("Date")}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date & Time of issue"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showDatepicker("Date")}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {date ? date : "Date & Time of issue"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
 
@@ -427,9 +444,7 @@ const CleanUp = (props) => {
                                   paddingTop: 13,
                                 }}
                               >
-                                {new Date(
-                                  el.completed_date
-                                ).toLocaleDateString()}
+                                {el.completed_date ? el.completed_date : "Date"}
                               </Text>
                             </View>
                             <View style={styles.inputCleanBodyContainer}>
@@ -511,18 +526,29 @@ const CleanUp = (props) => {
                     </View>
                     <View style={styles.inputFieldContainer}>
                       <TouchableOpacity
+                        style={{
+                          height: 52,
+                          width: "100%",
+                          borderBottomWidth: 1,
+                          borderBottomColor: "#96A8B2",
+                          padding: 5,
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                          paddingTop: 15,
+                        }}
                         onPress={() => showDatepicker("DateSupervisor")}
                       >
-                        <TextInput
-                          editable={false}
-                          value={
-                            dateSupervisor
-                              ? new Date(dateSupervisor).toLocaleDateString()
-                              : ""
-                          }
-                          style={styles.inputField}
-                          placeholder={"Date"}
-                        />
+                        <Text
+                          style={{
+                            width: "100%",
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                          }}
+                        >
+                          {dateSupervisor ? dateSupervisor : "Date"}
+                        </Text>
                       </TouchableOpacity>
                     </View>
                     <View

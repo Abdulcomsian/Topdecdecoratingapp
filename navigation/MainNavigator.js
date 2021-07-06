@@ -74,6 +74,7 @@ import Tbtworking from '../screens/Form/HealthSafety/TBT_Working'
 import TbtRegister from '../screens/Form/HealthSafety/TBT_TalkRegister'
 import TbtInventory from '../screens/Form/HealthSafety/TBT_Inventory'
 import {Text, TouchableOpacity, Image, Button} from "react-native"
+import EmailSend from '../screens/EamilSend'
 
 
 const Stack = createStackNavigator();
@@ -596,6 +597,13 @@ export default function MainNavigator({ navigation, route }) {
                     headerShown: false,
                 }}
             />
+             <Stack.Screen
+                name="EmailSend"
+                component={EmailSend}
+                options={{
+                    headerShown: false,
+                }}
+            />
         </Stack.Navigator>
     );
 }
@@ -608,7 +616,15 @@ function getHeaderTitle(route) {
             return { headerShown: false };
         case 'LoginScreen':
             return { headerShown: false };
-        
+
+        case 'EmailSend':
+                return { headerShown: true,
+                        headerTintColor: '#fff',
+                         headerStyle: {
+                            backgroundColor: '#1073AC',
+                        },  
+                        headerTitleStyle: { alignSelf: 'center',fontFamily:'poppins-regular',  } 
+                    };
         case 'MainScreen':
             return { headerShown: true,
                     headerTintColor: '#fff',

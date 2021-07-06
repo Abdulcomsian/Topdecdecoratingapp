@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from "react-native";
 import { Text } from "native-base";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { adminLogin } from "../../Redux/action/auth/authActionTypes";
@@ -76,7 +76,7 @@ const LoginScreen = (props) => {
         if (isLoginMsg) {
           //alert(isLoginMsg)
           if (role == "ADMIN") {
-            await AsyncStorage.setItem('token', JSON.stringify({token:token}))
+            // await AsyncStorage.setItem('token', JSON.stringify({token:token}))
             props.navigation.dispatch(StackActions.replace("MainScreen"));
           } else if (role == "DECORATOR") {
             props.navigation.dispatch(StackActions.replace("DecoratorDetails", { roleID: "decorator", id: isUserID }));
@@ -94,48 +94,53 @@ const LoginScreen = (props) => {
   }, [isLogin, isLoginMsg]);
 
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.logoContainer}>
-        <View style={styles.logoImageContainer}>
-          <Image style={styles.logoImage} source={logo} />
-        </View>
-        <Text style={styles.mainBannerText}>
-          <Text style={styles.boldText}>Top Dec </Text> Decorating
-        </Text>
-      </View>
-      <ScrollView>
-        <View style={styles.formConatiner}>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Image style={styles.iconImg} source={user} />
-            </View>
-            <View style={styles.inputFieldContainer}>
-              <TextInput onChangeText={(e) => setEmail(e)} value={email} style={styles.inputField} placeholder={"Email"} />
-            </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <View style={styles.mainContainer}>
+        <View style={styles.logoContainer}>
+          <View style={styles.logoImageContainer}>
+            <Image style={styles.logoImage} source={logo} />
           </View>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Image style={styles.iconImg} source={lock} />
-            </View>
-            <View style={styles.inputFieldContainer}>
-              <TextInput onChangeText={(e) => setPassword(e)} value={password} style={styles.inputField} placeholder={"Password"} secureTextEntry={true} />
-            </View>
-          </View>
-          <TouchableOpacity style={styles.loginBtn} onPress={() => postSignInHandler("admin")}>
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('SelectSummary')}>
-                        <Text style={styles.loginText}>Login</Text>
-                    </TouchableOpacity> */}
-          <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
-            <Text style={styles.forgetText}>Forgot Password</Text>
-          </TouchableOpacity>
+          <Text style={styles.mainBannerText}>
+            <Text style={styles.boldText}>Top Dec </Text> Decorating
+          </Text>
         </View>
-      </ScrollView>
-      <View style={styles.lastContainer}>
-        <Text style={styles.calimText}>Excepteur sint occaecat cupidatat non proident, sunt in culpa</Text>
+        <ScrollView>
+          <View style={styles.formConatiner}>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Image style={styles.iconImg} source={user} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput onChangeText={(e) => setEmail(e)} value={email} style={styles.inputField} placeholder={"Email"} />
+              </View>
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Image style={styles.iconImg} source={lock} />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput onChangeText={(e) => setPassword(e)} value={password} style={styles.inputField} placeholder={"Password"} secureTextEntry={true} />
+              </View>
+            </View>
+            <TouchableOpacity style={styles.loginBtn} onPress={() => postSignInHandler("admin")}>
+              <Text style={styles.loginText}>Login</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('SelectSummary')}>
+                          <Text style={styles.loginText}>Login</Text>
+                      </TouchableOpacity> */}
+            <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
+              <Text style={styles.forgetText}>Forgot Password</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+        <View style={styles.lastContainer}>
+          <Text style={styles.calimText}>Excepteur sint occaecat cupidatat non proident, sunt in culpa</Text>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -153,6 +158,9 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create({
+  container:{
+    flex: 1
+  },
   mainContainer: {
     height: "100%",
     width: "100%",

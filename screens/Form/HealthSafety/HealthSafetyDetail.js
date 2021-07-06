@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  CheckBox,
   ScrollView,
 } from "react-native";
 import { Text } from "native-base";
@@ -12,6 +11,7 @@ import ViewPager from "@react-native-community/viewpager";
 import { connect } from "react-redux";
 import { updateHealthTopTabs } from "../../../Redux/action/auth/authActionTypes";
 import axios from "axios";
+import { CheckBox } from 'react-native-elements'
 
 var tick = require("../../../assets/authScreen/check.png");
 var disableTick = require("../../../assets/authScreen/disable.png");
@@ -200,7 +200,7 @@ const HealthSafetyDetails = (props) => {
   return (
     <View style={styles.mainContainer}>
        <View style={styles.dateTimeContainer}>
-        <Text style={styles.refText}>Ref id: 10099499</Text>
+        {/* <Text style={styles.refText}>Ref id: 10099499</Text> */}
         <TouchableOpacity style={{marginRight:50}} onPress={()=>sendEmail()}>
           <Image source={email} style={{width:30,height:30}}/>
         </TouchableOpacity>
@@ -310,11 +310,11 @@ const HealthSafetyDetails = (props) => {
                         </View>
                         <View style={styles.checkBoxTueView}>
                           <CheckBox
-                            value={item.chekecd}
-                            onValueChange={() =>
+                            checked={item.chekecd}
+                            onPress={() =>
                               item?.tickSign ? checkedForm(index, "Miscoat") : {}
                             }
-                            style={styles.checkbox}
+                            size={22}
                           />
                         </View>
                       </View>
@@ -353,12 +353,12 @@ const HealthSafetyDetails = (props) => {
                           </TouchableOpacity>
                         </View>
                         <View style={styles.checkBoxView}>
-                          <CheckBox
-                            value={item.chekecd}
-                            onValueChange={() =>
+                           <CheckBox
+                            checked={item.chekecd}
+                            onPress={() =>
                               item?.tickSign ? checkedForm(index, "Miscoat") : {}
                             }
-                            style={styles.checkbox}
+                            size={22}
                           />
                         </View>
                       </View>
@@ -404,13 +404,13 @@ const HealthSafetyDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                        <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() =>
-                            item?.tickSign ? checkedForm(index, "Decoration") : {}
-                          }
-                          style={styles.checkbox}
-                        />
+                         <CheckBox
+                            checked={item.chekecd}
+                            onPress={() =>
+                              item?.tickSign ? checkedForm(index, "Decoration") : {}
+                            }
+                            size={22}
+                          />
                       </View>
                     </View>
                   ) : (
@@ -449,12 +449,12 @@ const HealthSafetyDetails = (props) => {
                       </View>
                       <View style={styles.checkBoxView}>
                         <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() =>
-                            item?.tickSign ? checkedForm(index, "Decoration") : {}
-                          }
-                          style={styles.checkbox}
-                        />
+                            checked={item.chekecd}
+                            onPress={() =>
+                              item?.tickSign ? checkedForm(index, "Decoration") : {}
+                            }
+                            size={22}
+                          />
                       </View>
                     </View>
                   )}
@@ -500,12 +500,12 @@ const HealthSafetyDetails = (props) => {
                       </View>
                       <View style={styles.checkBoxTueView}>
                         <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() =>
-                            item?.tickSign ? checkedForm(index, "Snag") : {}
-                          }
-                          style={styles.checkbox}
-                        />
+                            checked={item.chekecd}
+                            onPress={() =>
+                              item?.tickSign ? checkedForm(index, "Snag") : {}
+                            }
+                            size={22}
+                          />
                       </View>
                     </View>
                   ) : (
@@ -544,12 +544,12 @@ const HealthSafetyDetails = (props) => {
                       </View>
                       <View style={styles.checkBoxView}>
                         <CheckBox
-                          value={item.chekecd}
-                          onValueChange={() =>
-                            item?.tickSign ? checkedForm(index, "Snag") : {}
-                          }
-                          style={styles.checkbox}
-                        />
+                            checked={item.chekecd}
+                            onPress={() =>
+                              item?.tickSign ? checkedForm(index, "Snag") : {}
+                            }
+                            size={22}
+                          />
                       </View>
                     </View>
                   )}
@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
     height: "10%",
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     padding: 10,
   },
   refText: {
@@ -622,7 +622,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
   },
   titleText: {
     color: "#4F4F4F",

@@ -84,11 +84,11 @@ const mapStateToProps = (state) => ({
   export default connect(mapStateToProps, mapDispatchToProps)(SelectProject);
 const styles = StyleSheet.create({
     mainContainer:{
-        height:'100%',
+        flex: 1,
         width:'100%',
     },
     titleContainer:{
-        height:"10%",
+        height:"15%",
         width:'100%',
         justifyContent:'center',
         alignItems:'center',

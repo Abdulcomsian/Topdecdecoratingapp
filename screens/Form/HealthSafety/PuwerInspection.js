@@ -33,7 +33,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -42,7 +42,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -51,7 +51,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "Ladders",
@@ -60,7 +60,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -69,7 +69,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "Hop Ups",
@@ -78,7 +78,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -87,7 +87,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -96,7 +96,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -105,7 +105,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -114,7 +114,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -123,7 +123,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "Mobile / Stair Tower",
@@ -132,7 +132,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -141,7 +141,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "Cherry picker / Scissor lift",
@@ -150,7 +150,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "Envirowash ES800",
@@ -159,7 +159,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title:
@@ -169,7 +169,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "Others (please specify)",
@@ -178,7 +178,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -187,7 +187,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -196,7 +196,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -205,7 +205,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -214,7 +214,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -223,7 +223,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
     {
       title: "",
@@ -232,7 +232,7 @@ const PuwerInspection = (props) => {
       location: "",
       inspectionname: "",
       condition: "",
-      inspectiondate: new Date().toLocaleDateString(),
+      inspectiondate: "",
     },
   ]);
   const [date, setDate] = useState(new Date(1598051730000));
@@ -411,7 +411,7 @@ const PuwerInspection = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
@@ -421,10 +421,10 @@ const PuwerInspection = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onDateSupervisorChange}
-            onCancel={() => setShowSupervisor({ isVisible: false, index: -1 })}
+            onCancel={() => setShowSupervisor(false)}
             format="DD-MM-YYYY"
           />
           {getSign ? (
@@ -702,26 +702,27 @@ const PuwerInspection = (props) => {
                               <View
                                 style={[
                                   styles.inputInspectionBodyContainer,
-                                  { width: "20%" },
+                                  {
+                                    width: "15%",
+                                    borderBottomWidth: 1,
+                                    borderBottomColor: "#96A8B2",
+                                  },
                                 ]}
                               >
                                 <Text
                                   onPress={() => showDatepicker(index)}
                                   style={{
-                                    width: "90%",
-                                    paddingTop: 16,
                                     fontSize: 8,
                                     color: "#96A8B2",
                                     fontFamily: "poppins-regular",
-                                    borderBottomWidth: 1,
-                                    borderBottomColor: "#96A8B2",
+
                                     padding: 5,
                                     color: "#96A8B2",
                                   }}
                                 >
-                                  {new Date(
-                                    item.inspectiondate
-                                  ).toLocaleDateString()}
+                                  {item.inspectiondate
+                                    ? item.inspectiondate
+                                    : "Date"}
                                 </Text>
                               </View>
                             </View>
@@ -780,25 +781,31 @@ const PuwerInspection = (props) => {
                                   value={item.condition}
                                 />
                               </View>
-                              <View style={styles.inputInspectionBodyContainer}>
+                              <View
+                                style={[
+                                  styles.inputInspectionBodyContainer,
+                                  {
+                                    width: "15%",
+                                    borderBottomWidth: 1,
+                                    borderBottomColor: "#96A8B2",
+                                  },
+                                ]}
+                              >
                                 <Text
                                   onPress={() => showDatepicker(index)}
                                   style={{
-                                    width: "90%",
-
-                                    paddingTop: 16,
                                     fontSize: 8,
                                     color: "#96A8B2",
                                     fontFamily: "poppins-regular",
-                                    borderBottomWidth: 1,
-                                    borderBottomColor: "#96A8B2",
+
                                     padding: 5,
                                     color: "#96A8B2",
                                   }}
                                 >
-                                  {new Date(
-                                    item.inspectiondate
-                                  ).toLocaleDateString()}
+                                  {" "}
+                                  {item.inspectiondate
+                                    ? item.inspectiondate
+                                    : "Date"}
                                 </Text>
                               </View>
                             </View>
@@ -852,15 +859,31 @@ const PuwerInspection = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.inputFieldContainer}>
-                      <TouchableOpacity   onPress={() => showSupervisorDatepicker()}>
-                      <TextInput
-                        editable={false}
-                        value={dateSupervisor ? new Date(dateSupervisor).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
-                    </TouchableOpacity>
-
+                        <TouchableOpacity
+                          style={{
+                            height: 52,
+                            width: "100%",
+                            borderBottomWidth: 1,
+                            borderBottomColor: "#96A8B2",
+                            padding: 5,
+                            fontSize: 12,
+                            color: "#96A8B2",
+                            fontFamily: "poppins-regular",
+                            paddingTop: 15,
+                          }}
+                          onPress={() => showSupervisorDatepicker()}
+                        >
+                          <Text
+                            style={{
+                              width: "100%",
+                              fontSize: 12,
+                              color: "#96A8B2",
+                              fontFamily: "poppins-regular",
+                            }}
+                          >
+                            {dateSupervisor ? dateSupervisor : "Date"}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                       <Text
                         style={{

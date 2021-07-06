@@ -16,7 +16,7 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
 
-var mainImage = require("../../../assets/authScreen/Accurate-daywork-sheet-docx.png");
+var mainImage = require("../../../assets/authScreen/logo.jpeg");
 var plus = require("../../../assets/authScreen/plus.png");
 const OnSiteDecoration = (props) => {
   const { navigation, token, isOnSite, isSuccessMsg, isJobId, isMethod } =
@@ -39,7 +39,7 @@ const OnSiteDecoration = (props) => {
       {
         name: "",
         Card_no: "",
-        date: new Date().toLocaleDateString(),
+        date: "",
         signature: "",
       },
     ]);
@@ -206,7 +206,7 @@ const OnSiteDecoration = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === 'ios' ? "date" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
@@ -236,6 +236,7 @@ const OnSiteDecoration = (props) => {
                     fontFamily: "poppins-regular",
                     fontSize: 12,
                     textAlign: "center",
+                    padding:30
                   }}
                 >
                   Names and CSCS card registration Nos. of painters to be used
@@ -311,23 +312,26 @@ const OnSiteDecoration = (props) => {
                             }
                           />
                         </View>
-                        <View style={styles.inputSiteBodyContainer}>
+                        <View style={[styles.inputSiteBodyContainer,{
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#96A8B2",}]}>
                           <Text
                             onPress={() => showDatepicker(index)}
                             style={{
                               width: "90%",
-                              height: 39,
-                              borderBottomWidth: 1,
-                              borderBottomColor: "#96A8B2",
                               padding: 5,
                               fontSize: 8,
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
-                              paddingTop: 12,
                               marginRight: 5,
                             }}
                           >
-                            {new Date(item.date).toLocaleDateString()}
+                            {
+                          item.date
+                            ? item.date
+                            : "Date"
+                        }
+                            
                           </Text>
                         </View>
                       </View>

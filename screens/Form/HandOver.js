@@ -279,7 +279,7 @@ const HandOverForm = (props) => {
             isVisible={show}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => {}}
             onConfirm={onChange}
@@ -289,7 +289,7 @@ const HandOverForm = (props) => {
             isVisible={showIssue}
             testID="dateTimePicker"
             value={dateIssue}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => {}}
             onConfirm={onIssueChange}
@@ -300,7 +300,7 @@ const HandOverForm = (props) => {
             isVisible={showComplete}
             testID="dateTimePicker"
             value={dateComplete}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => {}}
             onConfirm={onCompleteChange}
@@ -310,7 +310,7 @@ const HandOverForm = (props) => {
             isVisible={showToday}
             testID="dateTimePicker"
             value={todayDate}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onCancel={() => {}}
             onConfirm={onTodayDate}
@@ -378,35 +378,65 @@ const HandOverForm = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={plotNumber}
-                      onChangeText={(e) => setPlotNumber(e.replace(/[^0-9]/g, ""))}
+                      onChangeText={(e) =>
+                        setPlotNumber(e.replace(/[^0-9]/g, ""))
+                      }
                       style={styles.inputField}
                       placeholder={"Plot/Area Number"}
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <TouchableOpacity onPress={() => showDatepicker("Date")}>
-                      <TextInput
-                        editable={false}
-                        value={date ? new Date(date).toLocaleDateString() : ""}
-                        style={styles.inputField}
-                        placeholder={"Date Written"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showDatepicker("Date")}
+                    >
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {date ? date : "Date Written"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
                     <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
                       onPress={() => showDatepicker("DateIssue")}
                     >
-                      <TextInput
-                        editable={false}
-                        value={
-                          dateIssue
-                            ? new Date(dateIssue).toLocaleDateString()
-                            : ""
-                        }
-                        style={styles.inputField}
-                        placeholder={"Date Issue to Site Agent"}
-                      />
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateIssue ? dateIssue : "Date Issue to Site Agent"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <Text
@@ -469,19 +499,30 @@ const HandOverForm = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
                       onPress={() => showDatepicker("CompleteDate")}
                     >
-                      <TextInput
-                        editable={false}
-                        value={
-                          dateComplete
-                            ? new Date(dateComplete).toLocaleDateString()
-                            : ""
-                        }
-                        style={styles.inputField}
-                        placeholder={"Date Work Completed"}
-                      />
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateComplete ? dateComplete : "Date Work Completed"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -637,19 +678,30 @@ const HandOverForm = (props) => {
                     )}
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
-                  <TouchableOpacity
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
                       onPress={() => showDatepicker("TodayDate")}
                     >
-                      <TextInput
-                        editable={false}
-                        value={
-                          todayDate
-                            ? new Date(todayDate).toLocaleDateString()
-                            : ""
-                        }
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {todayDate ? todayDate : "Date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{ marginTop: 10 }}>

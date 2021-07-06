@@ -8,6 +8,7 @@ import { ScrollView } from "react-native-gesture-handler";
 var rightArrow = require("../../assets/authScreen/right.png");
 var base_url = "https://topdecdecoratingapp.com/api/";
 const AssignedJobsList = (props) => {
+  console.log(props)
   const { navigation, token, isJobId } = props;
   const { id, role } = props.route.params;
   const [jobData, setJobData] = useState([]);
@@ -48,6 +49,8 @@ const AssignedJobsList = (props) => {
               // } else {
               //   setLoading(false);
               //   setErrorMsg(request.message);
+              //   AsyncStorage.clear();
+                
               // }
             })();
         }
@@ -58,6 +61,8 @@ const AssignedJobsList = (props) => {
     } catch (err) {
       alert(err.message);
       setLoading(false);
+      AsyncStorage.clear();
+      navigation.navigate("LoginScreen");
     }
   }, []);
   if (loading) {
@@ -116,8 +121,8 @@ const mapDispatchToProps = (dispatch) => ({});
 export default connect(mapStateToProps, mapDispatchToProps)(AssignedJobsList);
 const styles = StyleSheet.create({
   mainContainer: {
-    height: "100%",
     width: "100%",
+    flex: 1
   },
   dateTimeContainer: {
     height: "10%",
@@ -132,7 +137,7 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-medium",
   },
   titleContainer: {
-    height: "5%",
+    height: "10%",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",

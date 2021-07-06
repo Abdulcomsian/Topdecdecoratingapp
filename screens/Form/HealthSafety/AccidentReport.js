@@ -3,7 +3,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  CheckBox,
   TextInput,
   ScrollView,
 } from "react-native";
@@ -17,6 +16,7 @@ import { updateHealthReport } from "../../../Redux/action/summary/Summary";
 import { TabRouter } from "react-navigation";
 import * as ImagePicker from "expo-image-picker";
 import { AssetsSelector } from "expo-images-picker";
+import { CheckBox } from "react-native-elements";
 
 var mainImage = require("../../../assets/authScreen/logo.jpeg");
 var plus = require("../../../assets/authScreen/plus.png");
@@ -204,13 +204,13 @@ const AccidentReport = (props) => {
     const currentDate = selectedDate;
     setShowIncident(false);
     setDateIncident(new Date(currentDate).toLocaleDateString());
-    setTimeIncident(new Date(currentDate).toLocaleTimeString())
+    setTimeIncident(new Date(currentDate).toLocaleTimeString());
   };
   const onInvestigationChange = (selectedDate) => {
     const currentDate = selectedDate;
     setShowInvestigation(false);
     setDateInvestigation(new Date(currentDate).toLocaleDateString());
-    setTimeInvestigation(new Date(currentDate).toLocaleTimeString())
+    setTimeInvestigation(new Date(currentDate).toLocaleTimeString());
   };
   const onSupervisorDateChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -483,17 +483,18 @@ const AccidentReport = (props) => {
             isVisible={showIncident}
             testID="dateTimePicker"
             value={dateIncident}
-            mode={Platform.OS === 'ios' ? "datetime" : "datetime"}
+            mode={Platform.OS === "ios" ? "datetime" : "datetime"}
             display="default"
             onConfirm={onIncidentChange}
             onCancel={() => CancelPicker("showIncident")}
             format="DD-MM-YYYY"
+            
           />
           <DateTimePicker
             isVisible={showInvestigation}
             testID="dateTimePicker"
             value={dateInvestigation}
-            mode={Platform.OS === 'ios' ? "datetime" : "datetime"}
+            mode={Platform.OS === "ios" ? "datetime" : "datetime"}
             display="default"
             onConfirm={onInvestigationChange}
             onCancel={() => CancelPicker("showInvestigation")}
@@ -503,7 +504,7 @@ const AccidentReport = (props) => {
             isVisible={showSupervisor}
             testID="dateTimePicker"
             value={dateSupervisor}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onSupervisorDateChange}
             onCancel={() => CancelPicker("showSupervisor")}
@@ -513,7 +514,7 @@ const AccidentReport = (props) => {
             isVisible={showReport}
             testID="dateTimePicker"
             value={dateReport}
-            mode={Platform.OS === 'ios' ? "datetime" : "datetime"}
+            mode={Platform.OS === "ios" ? "datetime" : "datetime"}
             display="default"
             onConfirm={onReportDateChange}
             onCancel={() => CancelPicker("showReport")}
@@ -523,7 +524,7 @@ const AccidentReport = (props) => {
             isVisible={showManager}
             testID="dateTimePicker"
             value={dateManager}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onManagerDateChange}
             onCancel={() => CancelPicker("showManager")}
@@ -580,17 +581,33 @@ const AccidentReport = (props) => {
                     />
                   </View>
                   <View style={styles.inputFieldContainer}>
-                    <TouchableOpacity onPress={() => showDatepicker("Date")}>
-                      <TextInput
-                        editable={false}
-                        value={
-                          dateIncident
-                            ? dateIncident  + " " + timeIncident
-                            : ""
-                        }
-                        style={styles.inputField}
-                        placeholder={"Date and Time of Incident"}
-                      />
+                    <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
+                      onPress={() => showDatepicker("Date")}
+                    >
+                      <Text
+                        onPress={() => showDatepicker("Date")}
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateIncident
+                          ? dateIncident + " " + timeIncident
+                          : "Date and Time of Incident"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
@@ -603,18 +620,31 @@ const AccidentReport = (props) => {
                   </View>
                   <View style={styles.inputFieldContainer}>
                     <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
                       onPress={() => showDatepicker("DateInvestigation")}
                     >
-                      <TextInput
-                        editable={false}
-                        value={
-                          dateInvestigation
-                            ? dateInvestigation + " " + timeInvestigation
-                            : ""
-                        }
-                        style={styles.inputField}
-                        placeholder={"Date and Time Investigation commenced"}
-                      />
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateInvestigation
+                          ? dateInvestigation + " " + timeInvestigation
+                          : "Date and Time Investigation commenced"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{ paddingTop: 20, paddingBottom: 20 }}>
@@ -637,11 +667,18 @@ const AccidentReport = (props) => {
                       {incidentArray.map((item, index) => (
                         <View style={styles.parentCheckBox}>
                           <View style={styles.leftCheckBox}>
-                            <CheckBox
+                            {/* <CheckBox
                               value={item.check}
                               onValueChange={() =>
                                 checkedIncidentValue("check", index, true)
                               }
+                            /> */}
+                            <CheckBox
+                              checked={item.check}
+                              onPress={() =>
+                                checkedIncidentValue("check", index, true)
+                              }
+                              size={18}
                             />
                           </View>
                           <View style={styles.rightCheckBox}>
@@ -695,10 +732,11 @@ const AccidentReport = (props) => {
                         <View style={styles.parentCheckBox}>
                           <View style={styles.leftCheckBox}>
                             <CheckBox
-                              value={item.check}
-                              onValueChange={() =>
+                              checked={item.check}
+                              onPress={() =>
                                 checkedEmployeeValue("check", index, true)
                               }
+                              size={18}
                             />
                           </View>
                           <View style={styles.rightCheckBox}>
@@ -763,12 +801,18 @@ const AccidentReport = (props) => {
                           <View style={styles.checkBoxView}>
                             <View style={styles.firstCheckBoxRow}>
                               <View style={styles.parentCheckBox}>
-                                <View style={styles.leftCheckBox}>
+                                <View
+                                  style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 10 },
+                                  ]}
+                                >
                                   <CheckBox
-                                    value={item.no}
-                                    onValueChange={() =>
+                                    checked={item.no}
+                                    onPress={() =>
                                       checkedAmbulanceValue("no", index, "true")
                                     }
+                                    size={18}
                                   />
                                 </View>
                                 <View style={styles.rightCheckBox}>
@@ -776,16 +820,22 @@ const AccidentReport = (props) => {
                                 </View>
                               </View>
                               <View style={styles.parentCheckBox}>
-                                <View style={styles.leftCheckBox}>
+                                <View
+                                  style={[
+                                    styles.leftCheckBox,
+                                    { marginRight: 10 },
+                                  ]}
+                                >
                                   <CheckBox
-                                    value={item.yes}
-                                    onValueChange={() =>
+                                    checked={item.yes}
+                                    onPress={() =>
                                       checkedAmbulanceValue(
                                         "yes",
                                         index,
                                         "true"
                                       )
                                     }
+                                    size={18}
                                   />
                                 </View>
                                 <View style={styles.rightCheckBox}>
@@ -997,20 +1047,29 @@ const AccidentReport = (props) => {
                         </View>
                         <View style={styles.inputFieldContainer}>
                           <TouchableOpacity
+                            style={{
+                              height: 52,
+                              width: "100%",
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#96A8B2",
+                              padding: 5,
+                              fontSize: 12,
+                              color: "#96A8B2",
+                              fontFamily: "poppins-regular",
+                              paddingTop: 15,
+                            }}
                             onPress={() => showDatepicker("DateSupervisor")}
                           >
-                            <TextInput
-                              editable={false}
-                              value={
-                                dateSupervisor
-                                  ? new Date(
-                                      dateSupervisor
-                                    ).toLocaleDateString()
-                                  : ""
-                              }
-                              style={styles.inputField}
-                              placeholder={"Date"}
-                            />
+                            <Text
+                              style={{
+                                width: "100%",
+                                fontSize: 12,
+                                color: "#96A8B2",
+                                fontFamily: "poppins-regular",
+                              }}
+                            >
+                              {dateSupervisor ? dateSupervisor : "Date"}
+                            </Text>
                           </TouchableOpacity>
                         </View>
                         <View
@@ -1042,18 +1101,31 @@ const AccidentReport = (props) => {
                         </View>
                         <View style={styles.inputFieldContainer}>
                           <TouchableOpacity
+                            style={{
+                              height: 52,
+                              width: "100%",
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#96A8B2",
+                              padding: 5,
+                              fontSize: 12,
+                              color: "#96A8B2",
+                              fontFamily: "poppins-regular",
+                              paddingTop: 15,
+                            }}
                             onPress={() => showDatepicker("DateReport")}
                           >
-                            <TextInput
-                              editable={false}
-                              value={
-                                dateReport
-                                  ? dateReport + " " + timeReport
-                                  : ""
-                              }
-                              style={styles.inputField}
-                              placeholder={"Date and Time accident reported"}
-                            />
+                            <Text
+                              style={{
+                                width: "100%",
+                                fontSize: 12,
+                                color: "#96A8B2",
+                                fontFamily: "poppins-regular",
+                              }}
+                            >
+                              {dateReport
+                                ? dateReport + " " + timeReport
+                                : "Date and Time accident reported"}
+                            </Text>
                           </TouchableOpacity>
                         </View>
                         <View style={styles.inputFieldContainer}>
@@ -1106,12 +1178,18 @@ const AccidentReport = (props) => {
                               <View style={styles.checkBoxManagmentView}>
                                 <View style={styles.firstCheckBoxRow}>
                                   <View style={styles.parentCheckBox}>
-                                    <View style={styles.leftCheckBox}>
+                                    <View
+                                      style={[
+                                        styles.leftCheckBox,
+                                        { marginRight: 10 },
+                                      ]}
+                                    >
                                       <CheckBox
-                                        value={item.no}
-                                        onValueChange={() =>
+                                        checked={item.no}
+                                        onPress={() =>
                                           calendarDayChange("no", index, "true")
                                         }
+                                        size={18}
                                       />
                                     </View>
                                     <View style={styles.rightCheckBox}>
@@ -1121,16 +1199,22 @@ const AccidentReport = (props) => {
                                     </View>
                                   </View>
                                   <View style={styles.parentCheckBox}>
-                                    <View style={styles.leftCheckBox}>
+                                    <View
+                                      style={[
+                                        styles.leftCheckBox,
+                                        { marginRight: 10 },
+                                      ]}
+                                    >
                                       <CheckBox
-                                        value={item.yes}
-                                        onValueChange={() =>
+                                        checked={item.yes}
+                                        onPress={() =>
                                           calendarDayChange(
                                             "yes",
                                             index,
                                             "true"
                                           )
                                         }
+                                        size={18}
                                       />
                                     </View>
                                     <View style={styles.rightCheckBox}>
@@ -1199,18 +1283,29 @@ const AccidentReport = (props) => {
                         </View>
                         <View style={styles.inputFieldContainer}>
                           <TouchableOpacity
+                            style={{
+                              height: 52,
+                              width: "100%",
+                              borderBottomWidth: 1,
+                              borderBottomColor: "#96A8B2",
+                              padding: 5,
+                              fontSize: 12,
+                              color: "#96A8B2",
+                              fontFamily: "poppins-regular",
+                              paddingTop: 15,
+                            }}
                             onPress={() => showDatepicker("DateManager")}
                           >
-                            <TextInput
-                              editable={false}
-                              value={
-                                dateManager
-                                  ? new Date(dateManager).toLocaleDateString()
-                                  : ""
-                              }
-                              style={styles.inputField}
-                              placeholder={"Date"}
-                            />
+                            <Text
+                              style={{
+                                width: "100%",
+                                fontSize: 12,
+                                color: "#96A8B2",
+                                fontFamily: "poppins-regular",
+                              }}
+                            >
+                              {dateManager ? dateManager : "Date"}
+                            </Text>
                           </TouchableOpacity>
                         </View>
                         <View style={{ marginTop: 10 }}>

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
@@ -34,11 +35,7 @@ const NewJob = (props) => {
     //   qty: "",
     //   description: "",
     // });
-    setdynamicInput((oldArray) => [
-      ...oldArray,
-      { qty: "",
-      description: "", },
-    ]);
+    setdynamicInput((oldArray) => [...oldArray, { qty: "", description: "" }]);
   };
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -47,7 +44,7 @@ const NewJob = (props) => {
     preData[index][key] = value;
     setdynamicInput(preData);
   };
-  console.log(dynamicInput)
+  console.log(dynamicInput);
   const newJob = async () => {
     console.log(selectedValue);
     try {
@@ -57,7 +54,7 @@ const NewJob = (props) => {
         weekProject != "" &&
         selectedValue != "" &&
         date != "" &&
-        dynamicInput.length>0
+        dynamicInput.length > 0
       ) {
         await props.createNewJobHandler(
           constructorName,
@@ -110,25 +107,6 @@ const NewJob = (props) => {
       setLoading(false);
     }
   }, []);
-  // useEffect(() => {
-  //   if(isJob){
-  //     if(isJobMsg){
-  //       console.log(isJobId)
-  //         props.navigation.navigate('TotalSummary',{jobID: isJobId})
-  //     }
-  //     }
-  //     else{
-  //         if(isJobMsg){
-  //             alert(isJobMsg)
-  //             return false;
-  //         }
-  //     }
-  // },[isJob,isJobMsg])
-  // React.useEffect(() => {
-  //   if (isJob) {
-  //     props.navigation.navigate("TotalSummary", { jobID: isJobId });
-  //   }
-  // }, [isJob]);
   if (loading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -137,181 +115,197 @@ const NewJob = (props) => {
     );
   } else {
     return (
-      <View style={styles.mainContainer}>
-        <DateTimePickerModal
-          isVisible={show}
-          date={date ? date : new Date()}
-          mode={Platform.OS === 'ios' ? "datetime" : "date"}
-          is24Hour={true}
-          display="default"
-          onConfirm={(date) => onChange(date)}
-          onCancel={() => setShow(false)}
-          cancelTextIOS="Cancel"
-          confirmTextIOS="Confirm"
-        />
-        {/* <View style={styles.dateTimeContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <View style={styles.mainContainer}>
+          <DateTimePickerModal
+            isVisible={show}
+            date={date ? date : new Date()}
+            mode={Platform.OS === "ios" ? "date" : "date"}
+            is24Hour={true}
+            display="default"
+            onConfirm={(date) => onChange(date)}
+            onCancel={() => setShow(false)}
+            cancelTextIOS="Cancel"
+            confirmTextIOS="Confirm"
+          />
+          {/* <View style={styles.dateTimeContainer}>
           <Text style={styles.refText}>Date: 12-2-2021</Text>
           <Text style={styles.refText}>Ref id: 10099499</Text>
         </View> */}
 
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Input job details</Text>
-        </View>
-        <ScrollView>
-          <View style={styles.formConatiner}>
-            <View style={styles.inputFieldContainer}>
-              <TextInput
-                style={styles.inputField}
-                placeholder={"Main Contractor Name"}
-                value={constructorName}
-                onChangeText={(e) => setConstructorName(e)}
-              />
-            </View>
-            <View style={styles.inputFieldContainer}>
-              <TextInput
-                style={styles.inputField}
-                placeholder={"Project Name"}
-                value={projectName}
-                onChangeText={(e) => setProjectName(e)}
-              />
-            </View>
-            <View style={styles.inputFieldContainer}>
-              <TextInput
-                style={styles.inputField}
-                placeholder={"Number of weeks for project"}
-                value={weekProject}
-                onChangeText={(e) => setWeekProject(e.replace(/[^0-9]/g, ""))}
-              />
-            </View>
-            <View style={styles.inputFieldContainer}>
-              <Picker
-                mode="dropdown"
-                placeholder="Countries"
-                // iosIcon={<Icon name='arrow-down' />}
-                itemTextStyle={{
-                  color: "#96A8B2",
-                  fontFamily: "poppins-regular",
-                }}
-                textStyle={{
-                  color: "#96A8B2",
-                  fontSize: 16,
-                  fontFamily: "poppins-regular",
-                }}
-                style={{
-                  color: "#96A8B2",
-                }}
-                selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedValue(itemValue)
-                }
-              >
-                <Picker.Item
-                  style={{ fontFamily: "poppins-regular" }}
-                  label="Select Supervisor Name"
-                  value="Select Supervisor Name"
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>Input job details</Text>
+          </View>
+          <ScrollView>
+            <View style={styles.formConatiner}>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Main Contractor Name"}
+                  value={constructorName}
+                  onChangeText={(e) => setConstructorName(e)}
                 />
-                {supervisorData &&
-                  supervisorData.map((item) => (
-                    <Picker.Item
-                      style={{ fontFamily: "poppins-regular" }}
-                      label={item.name.toString()}
-                      value={item?.id.toString()}
-                    />
-                  ))}
-              </Picker>
-            </View>
-            <View style={styles.inputFieldContainer}>
-              <Text
-                onPress={() => showDatepicker()}
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Project Name"}
+                  value={projectName}
+                  onChangeText={(e) => setProjectName(e)}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <TextInput
+                  style={styles.inputField}
+                  placeholder={"Number of weeks for project"}
+                  value={weekProject}
+                  onChangeText={(e) => setWeekProject(e.replace(/[^0-9]/g, ""))}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Picker
+                  mode="dropdown"
+                  placeholder="Select Supervisor Name"
+                  // iosIcon={<Icon name='arrow-down' />}
+                  itemTextStyle={{
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                    padding:0,
+                    margin:0,
+                  
+                  }}
+                  textStyle={{
+                    color: "#96A8B2",
+                    fontSize: 16,
+                    fontFamily: "poppins-regular",
+                    padding:0,
+                    margin:0
+                  }}
+                  style={{
+                    color: "#96A8B2",
+                    padding:0,
+                    margin:0,
+                  }}
+                  selectedValue={selectedValue}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedValue(itemValue)
+                  }
+                >
+                  <Picker.Item
+                    style={{ fontFamily: "poppins-regular",padding:0,
+                    margin:0}}
+                    label="Select Supervisor Name"
+                    value="Select Supervisor Name"
+                  />
+                  {supervisorData &&
+                    supervisorData.map((item) => (
+                      <Picker.Item
+                        style={{ fontFamily: "poppins-regular",padding:0,
+                        margin:0 }}
+                        label={item.name.toString()}
+                        value={item?.id.toString()}
+                      />
+                    ))}
+                </Picker>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text
+                  onPress={() => showDatepicker()}
+                  style={{
+                    width: "100%",
+                    height: 60,
+                    paddingTop: 20,
+                    fontSize: 16,
+                    color: "#96A8B2",
+                    fontFamily: "poppins-regular",
+                  }}
+                >
+                  {date ? new Date(date).toLocaleDateString() : "Date"}
+                </Text>
+              </View>
+              <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>Job Summary</Text>
+              </View>
+              <View
                 style={{
                   width: "100%",
-                  height: 60,
-                  paddingTop: 20,
-                  fontSize: 16,
-                  color: "#96A8B2",
-                  fontFamily: "poppins-regular",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
                 }}
               >
-                {date ? new Date(date).toLocaleDateString() : "Date"}
-              </Text>
-            </View>
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>Job Summary</Text>
-            </View>
-            <View
-              style={{
-                width: "100%",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-              }}
-            >
-              <TouchableOpacity
-                style={styles.addBtn}
-                onPress={() => {
-                  if (
-                    dynamicInput.length > 0 &&
-                    !dynamicInput[dynamicInput.length - 1].qty &&
-                    !dynamicInput[dynamicInput.length - 1].description
-                  ) {
-                    alert(
-                      "Please Enter All Value and then move to next Item Add !"
-                    );
-                  } else {
-                    addInput();
-                  }
-                }}
-              >
-                <Image style={styles.plusBtn} source={plus} />
-              </TouchableOpacity>
-            </View>
-            {dynamicInput.length > 0 && (
-              <View style={[styles.dynamicInput, { flexDirection: "column" }]}>
-                {dynamicInput.map((el, index) => (
-                  <View style={styles.inputContainer} key={index}>
-                    <TextInput
-                      onChangeText={(txt) =>
-                        updateValue("qty", index, txt.replace(/[^0-9]/g, ""))
-                      }
-                      style={styles.quantityInput}
-                      value={el.qty}
-                      placeholder={"Quantity"}
-                    />
-                    <TextInput
-                      onChangeText={(txt) =>
-                        updateValue("description", index, txt)
-                      }
-                      style={styles.descriptionInput}
-                      value={el.description}
-                      placeholder={"Description"}
-                    />
-                  </View>
-                ))}
+                <TouchableOpacity
+                  style={styles.addBtn}
+                  onPress={() => {
+                    if (
+                      dynamicInput.length > 0 &&
+                      !dynamicInput[dynamicInput.length - 1].qty &&
+                      !dynamicInput[dynamicInput.length - 1].description
+                    ) {
+                      alert(
+                        "Please Enter All Value and then move to next Item Add !"
+                      );
+                    } else {
+                      addInput();
+                    }
+                  }}
+                >
+                  <Image style={styles.plusBtn} source={plus} />
+                </TouchableOpacity>
               </View>
-            )}
+              {dynamicInput.length > 0 && (
+                <View
+                  style={[styles.dynamicInput, { flexDirection: "column" }]}
+                >
+                  {dynamicInput.map((el, index) => (
+                    <View style={styles.inputContainer} key={index}>
+                      <TextInput
+                        onChangeText={(txt) =>
+                          updateValue("qty", index, txt.replace(/[^0-9]/g, ""))
+                        }
+                        style={styles.quantityInput}
+                        value={el.qty}
+                        placeholder={"Quantity"}
+                      />
+                      <TextInput
+                        onChangeText={(txt) =>
+                          updateValue("description", index, txt)
+                        }
+                        style={styles.descriptionInput}
+                        value={el.description}
+                        placeholder={"Description"}
+                      />
+                    </View>
+                  ))}
+                </View>
+              )}
 
-            <View style={styles.btnContainer}>
-              {/* <TouchableOpacity
+              <View style={styles.btnContainer}>
+                {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("TotalSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-              {/* <TouchableOpacity
+                {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-              <TouchableOpacity
-                style={styles.commonBtn}
-                onPress={() => newJob(this)}
-              >
-                <Text style={styles.commonText}>Save</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={() => newJob(this)}
+                >
+                  <Text style={styles.commonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 };
@@ -345,6 +339,9 @@ const mapDispatchToProps = (dispatch) => ({
 });
 export default connect(mapStateToProps, mapDispatchToProps)(NewJob);
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   mainContainer: {
     height: "100%",
     width: "100%",
@@ -419,8 +416,8 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     width: "15%",
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    justifyContent:"center",
+    alignItems:"center",
     position: "relative",
     backgroundColor: "#F6F9FB",
     borderWidth: 1,

@@ -43,7 +43,7 @@ const MethodStatement = (props) => {
         name: "",
         signature: "",
         comapany: "",
-        date: new Date().toLocaleDateString(),
+        date: "",
         translation: "",
         translatore: "",
       },
@@ -227,7 +227,7 @@ const MethodStatement = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
@@ -386,7 +386,7 @@ const MethodStatement = (props) => {
                               marginRight: 5,
                             }}
                           >
-                            {new Date(item.date).toLocaleDateString()}
+                            {item.date ? item.date : "Date"}
                           </Text>
                         </View>
                         <View style={styles.inputHarmFullBodyContainer}>

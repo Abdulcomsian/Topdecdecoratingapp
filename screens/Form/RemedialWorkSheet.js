@@ -67,19 +67,19 @@ const RemedialWork = (props) => {
   const onIssueChange = (selectedDate) => {
     const currentDate = selectedDate;
     setIssueShow(false);
-    setIssueDate(new Date(currentDate).toLocaleDateString());
+    setIssueDate(new Date(currentDate));
   };
   /**Supervisor Date */
   const onSupervisorDateChange = (selectedDate) => {
     const currentDate = selectedDate;
     setSupervisorShow(false);
-    setSupervisorDate(new Date(currentDate).toLocaleDateString());
+    setSupervisorDate(new Date(currentDate));
   };
   /**Manager Date */
   const onManagerDateChange = (selectedDate) => {
     const currentDate = selectedDate;
     setManagerShow(false);
-    setManagerDate(new Date(currentDate).toLocaleDateString());
+    setManagerDate(new Date(currentDate));
   };
   const showMode = (currentMode, type) => {
     if (type == "IssueDate") {
@@ -96,11 +96,11 @@ const RemedialWork = (props) => {
   const showDatepicker = (type) => {
     console.log(type);
     if (type == "DateIssue") {
-      showMode("date", "IssueDate");
+      setIssueShow(true);
     } else if (type == "SupervisorDate") {
-      showMode("date", "SupervisorDate");
+      setSupervisorShow(true);
     } else {
-      showMode("date", "ManagerDate");
+      setManagerShow(true);
     }
   };
   const addRow = () => {
@@ -144,17 +144,17 @@ const RemedialWork = (props) => {
           pageSecond,
           block,
           plotNumber,
-          dateIssue,
+          new Date(dateIssue).toLocaleDateString(),
           instructionNumber,
           reasonWork,
           dynamicInput,
           totalHours,
           supervisorName,
           supervisorSignature,
-          dateSupervisor,
+          new Date(dateSupervisor).toLocaleDateString(),
           managerName,
           managerSignature,
-          dateManager,
+          new Date(dateManager).toLocaleDateString(),
           projectImagesComment,
           commentImages,
           jobID,
@@ -179,7 +179,7 @@ const RemedialWork = (props) => {
       setIssueShow(false);
     } else if (type == "supervisorDate") {
       setSupervisorShow(false);
-    } else setShowComplete(false);
+    } else setManagerShow(false);
   };
   const [projectImages, setProjectImages] = useState([]);
   const [isShow, setIsShow] = useState(false);
@@ -281,34 +281,31 @@ const RemedialWork = (props) => {
           <DateTimePicker
             isVisible={showIssue}
             testID="dateTimePicker"
-            value={dateIssue}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            date={dateIssue ? dateIssue : new Date()}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onIssueChange}
             onCancel={() => CancelPicker("issue")}
-            format="DD-MM-YYYY"
           />
 
           <DateTimePicker
             isVisible={showSupervisor}
             testID="dateTimePicker"
-            value={dateSupervisor}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            date={dateSupervisor ? dateSupervisor : new Date()}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onSupervisorDateChange}
             onCancel={() => CancelPicker("supervisorDate")}
-            format="DD-MM-YYYY"
           />
 
           <DateTimePicker
             isVisible={showManager}
             testID="dateTimePicker"
-            value={dateManager}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            date={dateManager ? dateManager : new Date()}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onManagerDateChange}
             onCancel={() => CancelPicker("managerDate")}
-            format="DD-MM-YYYY"
           />
           {signature.bool ? (
             <SignatureComponent
@@ -429,18 +426,31 @@ const RemedialWork = (props) => {
                   </View>
                   <View style={styles.inputFieldContainer}>
                     <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
                       onPress={() => showDatepicker("DateIssue")}
                     >
-                      <TextInput
-                        editable={false}
-                        value={
-                          dateIssue
-                            ? new Date(dateIssue).toLocaleDateString()
-                            : ""
-                        }
-                        style={styles.inputField}
-                        placeholder={"Date Issue to Site team"}
-                      />
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateIssue
+                          ? new Date(dateIssue).toLocaleDateString()
+                          : "Date Issue to Site Team"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={styles.inputFieldContainer}>
@@ -618,17 +628,30 @@ const RemedialWork = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TouchableOpacity
                       onPress={() => showDatepicker("SupervisorDate")}
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
                     >
-                      <TextInput
-                        editable={false}
-                        value={
-                          dateSupervisor
-                            ? new Date(dateSupervisor).toLocaleDateString()
-                            : ""
-                        }
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateSupervisor
+                          ? new Date(dateSupervisor).toLocaleDateString()
+                          : "Date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <Text
@@ -691,18 +714,31 @@ const RemedialWork = (props) => {
                   </TouchableOpacity>
                   <View style={styles.inputFieldContainer}>
                     <TouchableOpacity
+                      style={{
+                        height: 52,
+                        width: "100%",
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#96A8B2",
+                        padding: 5,
+                        fontSize: 12,
+                        color: "#96A8B2",
+                        fontFamily: "poppins-regular",
+                        paddingTop: 15,
+                      }}
                       onPress={() => showDatepicker("ManagerDate")}
                     >
-                      <TextInput
-                        editable={false}
-                        value={
-                          dateManager
-                            ? new Date(dateManager).toLocaleDateString()
-                            : ""
-                        }
-                        style={styles.inputField}
-                        placeholder={"Date"}
-                      />
+                      <Text
+                        style={{
+                          width: "100%",
+                          fontSize: 12,
+                          color: "#96A8B2",
+                          fontFamily: "poppins-regular",
+                        }}
+                      >
+                        {dateManager
+                          ? new Date(dateManager).toLocaleDateString()
+                          : "Date"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={{ marginTop: 10 }}>

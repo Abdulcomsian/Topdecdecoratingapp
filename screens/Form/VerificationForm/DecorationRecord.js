@@ -37,8 +37,8 @@ const DecorationRecord = (props) => {
         price: "",
         plot: "",
         days: "",
-        start: new Date().toLocaleDateString(),
-        complete: new Date().toLocaleDateString(),
+        start: "",
+        complete: "",
       },
     ]);
   };
@@ -52,8 +52,8 @@ const DecorationRecord = (props) => {
         bed: "",
         price: "",
         plot: "",
-        start: new Date().toLocaleDateString(),
-        complete: new Date().toLocaleDateString(),
+        start: "",
+        complete: "",
       },
     ]);
   };
@@ -278,51 +278,45 @@ const DecorationRecord = (props) => {
           <View style={{ flex: 1 }}>
             <DateTimePickerModal
               isVisible={show.isVisible}
-              date={date ? date : new Date()}
-              mode={Platform.OS === 'ios' ? "datetime" : "date"}
-              is24Hour={true}
+              testID="dateTimePicker"
+              value={date}
+              mode={Platform.OS === "ios" ? "date" : "date"}
               display="default"
-              onConfirm={(date) => onChange(date)}
               onCancel={() => setShow({ isVisible: false, index: -1 })}
-              cancelTextIOS="Cancel"
-              confirmTextIOS="Confirm"
+              onConfirm={(date) => onChange(date)}
+              format="DD-MM-YYYY"
             />
             <DateTimePickerModal
               isVisible={showComplete.isVisible}
-              date={dateComplete ? dateComplete : new Date()}
-              mode={Platform.OS === 'ios' ? "datetime" : "date"}
-              is24Hour={true}
+              testID="dateTimePicker"
+              value={dateComplete}
+              mode={Platform.OS === "ios" ? "date" : "date"}
               display="default"
-              onConfirm={(date) => onCompleteChange(date)}
               onCancel={() => setShowComplete({ isVisible: false, index: -1 })}
-              cancelTextIOS="Cancel"
-              confirmTextIOS="Confirm"
+              onConfirm={(date) => onCompleteChange(date)}
+              format="DD-MM-YYYY"
             />
             <DateTimePickerModal
               isVisible={showDateSecond.isVisible}
-              date={dateSecond ? dateSecond : new Date()}
-              mode={Platform.OS === 'ios' ? "datetime" : "date"}
-              is24Hour={true}
+              testID="dateTimePicker"
+              value={dateSecond}
+              mode={Platform.OS === "ios" ? "date" : "date"}
               display="default"
-              onConfirm={(date) => onDateSecondChange(date)}
               onCancel={() =>
-                setShowDateSecond({ isVisible: false, index: -1 })
-              }
-              cancelTextIOS="Cancel"
-              confirmTextIOS="Confirm"
+                setShowDateSecond({ isVisible: false, index: -1 })}
+              onConfirm={(date) => onDateSecondChange(date)}
+              format="DD-MM-YYYY"
             />
             <DateTimePickerModal
               isVisible={showCompleteDateSecond.isVisible}
-              date={dateSecondComplete ? dateSecondComplete : new Date()}
-              mode={Platform.OS === 'ios' ? "datetime" : "date"}
-              is24Hour={true}
+              testID="dateTimePicker"
+              value={dateSecondComplete}
+              mode={Platform.OS === "ios" ? "date" : "date"}
               display="default"
-              onConfirm={(date) => onDateCompleteSecondChange(date)}
               onCancel={() =>
-                setShowCompleteDateSecond({ isVisible: false, index: -1 })
-              }
-              cancelTextIOS="Cancel"
-              confirmTextIOS="Confirm"
+                setShowCompleteDateSecond({ isVisible: false, index: -1 })}
+              onConfirm={(date) => onDateCompleteSecondChange(date)}
+              format="DD-MM-YYYY"
             />
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>Decoration Record</Text>
@@ -442,12 +436,16 @@ const DecorationRecord = (props) => {
                               style={{
                                 borderBottomWidth: 1,
                                 borderBottomColor: "#96A8B2",
-                                fontSize: 12,
+                                fontSize: 10,
                                 color: "#96A8B2",
                                 fontFamily: "poppins-regular",
                               }}
                             >
-                              {new Date(el.start).toLocaleDateString()}
+                              {
+                          el.start
+                            ? el.start
+                            : "Date"
+                        }
                             </Text>
                           </View>
                           <View style={styles.inputBodyContainer}>
@@ -461,7 +459,11 @@ const DecorationRecord = (props) => {
                                 fontFamily: "poppins-regular",
                               }}
                             >
-                              {new Date(el.complete).toLocaleDateString()}
+                              {
+                         el.complete
+                            ? el.complete
+                            : "Date"
+                        }
                             </Text>
                           </View>
                         </View>
@@ -612,7 +614,11 @@ const DecorationRecord = (props) => {
                                 fontFamily: "poppins-regular",
                               }}
                             >
-                              {new Date(el.start).toLocaleDateString()}
+                              {
+                         el.start
+                            ? el.start
+                            : "Date"
+                        }
                             </Text>
                           </View>
                           <View style={styles.inputSecondBodyContainer}>
@@ -628,7 +634,11 @@ const DecorationRecord = (props) => {
                                 fontFamily: "poppins-regular",
                               }}
                             >
-                              {new Date(el.complete).toLocaleDateString()}
+                              {
+                         el.complete
+                            ? el.complete
+                            : "Date"
+                        }
                             </Text>
                           </View>
                         </View>

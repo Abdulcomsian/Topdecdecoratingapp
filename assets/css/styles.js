@@ -2,10 +2,13 @@ import { StyleSheet } from 'react-native'
 
 export default StyleSheet.create({
 mainContainer:{
-    height:'100%',
+    flex:1,
     width:'100%',
     paddingBottom:50
 },
+container:{
+    flex: 1
+  },
 button: {
     borderRadius: 5,
     padding: 10,

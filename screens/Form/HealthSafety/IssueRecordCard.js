@@ -40,7 +40,7 @@ const IssueCard = (props) => {
         item: "",
         no: "",
         type: "",
-        date: new Date().toLocaleDateString(),
+        date: "",
         supervisor: "",
         signature: "",
       },
@@ -211,7 +211,7 @@ const IssueCard = (props) => {
             isVisible={show.isVisible}
             testID="dateTimePicker"
             value={date}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
             onConfirm={onChange}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
@@ -409,23 +409,22 @@ const IssueCard = (props) => {
                             value={item.type}
                           />
                         </View>
-                        <View style={styles.inputHarmFullBodyContainer}>
+                        <View style={[styles.inputHarmFullBodyContainer,{ borderBottomWidth: 1,
+                              borderBottomColor: "#96A8B2",  marginRight: 5,}]}>
                           <Text
                             onPress={() => showDatepicker(index)}
                             style={{
                               width: "90%",
-                              height: 39,
                               borderBottomWidth: 1,
                               borderBottomColor: "#96A8B2",
                               padding: 5,
                               fontSize: 8,
                               color: "#96A8B2",
                               fontFamily: "poppins-regular",
-                              paddingTop: 12,
-                              marginRight: 5,
+                            
                             }}
                           >
-                            {new Date(item.date).toLocaleDateString()}
+                            {item.date ? item.date : "Date"}
                           </Text>
                         </View>
                         <View style={styles.inputHarmFullBodyContainer}>

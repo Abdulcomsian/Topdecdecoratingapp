@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-medium",
   },
   titleContainer: {
-    height: "5%",
+    height: "10%",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",

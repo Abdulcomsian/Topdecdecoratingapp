@@ -408,25 +408,23 @@ const QualityInssurance = (props) => {
         <View style={{ flex: 1 }}>
           <DateTimePickerModal
             isVisible={show.isVisible}
-            date={date ? date : new Date()}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
-            is24Hour={true}
+            testID="dateTimePicker"
+            value={date}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
-            onConfirm={(date) => onChange(date)}
             onCancel={() => setShow({ isVisible: false, index: -1 })}
-            cancelTextIOS="Cancel"
-            confirmTextIOS="Confirm"
+            onConfirm={(date) => onChange(date)}
+            format="DD-MM-YYYY"
           />
           <DateTimePickerModal
             isVisible={showActivity.isVisible}
-            date={date ? date : new Date()}
-            mode={Platform.OS === 'ios' ? "datetime" : "date"}
-            is24Hour={true}
+            testID="dateTimePicker"
+            value={date}
+            mode={Platform.OS === "ios" ? "date" : "date"}
             display="default"
-            onConfirm={(date) => onActivityChange(date)}
             onCancel={() => setShowActivity({ isVisible: false, index: -1 })}
-            cancelTextIOS="Cancel"
-            confirmTextIOS="Confirm"
+            onConfirm={(date) => onActivityChange(date)}
+            format="DD-MM-YYYY"
           />
           {signature.bool ? (
             <SignatureComponent
@@ -563,20 +561,31 @@ const QualityInssurance = (props) => {
                           <View style={styles.tableBody}>
                             <View style={styles.inputBodyContainer}>
                               <TouchableOpacity
+                                style={{
+                                  height: 52,
+                                  width: "100%",
+                                  borderBottomWidth: 1,
+                                  borderBottomColor: "#96A8B2",
+                                  padding: 5,
+                                  fontSize: 8,
+                                  color: "#96A8B2",
+                                  fontFamily: "poppins-regular",
+                                  paddingTop: 15,
+                                }}
                                 onPress={() => showDatepicker(index)}
                               >
-                                <TextInput
-                                  editable={false}
-                                  value={
-                                    item.dateComplte
-                                      ? new Date(
-                                          item.dateComplte
-                                        ).toLocaleDateString()
-                                      : ""
-                                  }
-                                  style={styles.inputField}
-                                  placeholder={"Date Completed "}
-                                />
+                                <Text
+                                  style={{
+                                    width: "100%",
+                                    fontSize: 8,
+                                    color: "#96A8B2",
+                                    fontFamily: "poppins-regular",
+                                  }}
+                                >
+                                  {item.dateComplte
+                                    ? item.dateComplte
+                                    : "Date Completed "}
+                                </Text>
                               </TouchableOpacity>
                             </View>
                             <View style={styles.inputBodyContainer}>
@@ -747,22 +756,30 @@ const QualityInssurance = (props) => {
                                     style={{ width: "50%", marginRight: 5 }}
                                   >
                                     <TouchableOpacity
+                                      style={{
+                                        width: "100%",
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: "#96A8B2",
+                                        padding: 5,
+                                        fontSize: 12,
+                                        color: "#96A8B2",
+                                        fontFamily: "poppins-regular",
+                                        paddingTop: 15,
+                                      }}
                                       onPress={() =>
                                         showActivityDatepicker(index)
                                       }
                                     >
-                                      <TextInput
-                                        editable={false}
-                                        value={
-                                          item.date
-                                            ? new Date(
-                                                item.date
-                                              ).toLocaleDateString()
-                                            : ""
-                                        }
-                                        style={styles.inputField}
-                                        placeholder={"Date"}
-                                      />
+                                      <Text
+                                        style={{
+                                          width: "100%",
+                                          fontSize: 12,
+                                          color: "#96A8B2",
+                                          fontFamily: "poppins-regular",
+                                        }}
+                                      >
+                                        {item.date ? item.date : "Date"}
+                                      </Text>
                                     </TouchableOpacity>
                                   </View>
                                 </View>
@@ -800,8 +817,8 @@ const QualityInssurance = (props) => {
                             height: 100,
                             width: 100,
                             backgroundColor: "gray",
-                            marginLeft:10,
-                            marginTop:10
+                            marginLeft: 10,
+                            marginTop: 10,
                           }}
                         />
                       ) : (

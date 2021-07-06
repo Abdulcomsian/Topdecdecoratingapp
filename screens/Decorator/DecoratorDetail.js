@@ -3,17 +3,20 @@ import {
   View,
   StyleSheet,
   Image,
-  CheckBox,
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Pressable
 } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 import { Button, Text } from "native-base";
 import { TextInput } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { connect } from "react-redux";
 import { updateDecorator } from "../../Redux/action/auth/authActionTypes";
+import { CheckBox } from 'react-native-elements'
 
 var rightArrow = require("../../assets/authScreen/right.png");
 const DecoratorDetails = (props) => {
@@ -24,7 +27,7 @@ const DecoratorDetails = (props) => {
     approved: true,
     disApproved: false,
   });
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [decoratorName, setDecoratorName] = useState("");
   const [decoratorEmail, setDecoratorEmail] = useState("");
@@ -154,22 +157,38 @@ const DecoratorDetails = (props) => {
     }
   };
   const updateAdminDecorator = async () => {
-    console.log("Decorator Array :", decoratorData);
     try {
-      await props.updateDecoratorHandler(
-        decoratorData[0].id,
-        decoratorData[0].email,
-        decoratorData[0].name,
-        decoratorData[0].lastname,
-        decoratorData[0].number,
-        decoratorData[0].photoId,
-        decoratorData[0].front,
-        decoratorData[0].back,
-        status,
-        token
-      );
-      // props.navigation.pop();
-      alert("Profile Updated SuccessFully !");
+     if(status!==null){
+        await props.updateDecoratorHandler(
+          decoratorData[0].id,
+          decoratorData[0].email,
+          decoratorData[0].name,
+          decoratorData[0].lastname,
+          decoratorData[0].number,
+          decoratorData[0].photoId,
+          decoratorData[0].front,
+          decoratorData[0].back,
+         status,
+          token
+        );
+        // props.navigation.pop();
+        alert("Profile Updated SuccessFully !");
+     } else{
+        await props.updateDecoratorHandler(
+              decoratorData[0].id,
+              decoratorData[0].email,
+              decoratorData[0].name,
+              decoratorData[0].lastname,
+              decoratorData[0].number,
+              decoratorData[0].photoId,
+              decoratorData[0].front,
+              decoratorData[0].back,
+              decoratorData[0].status,
+              token
+            );
+            // props.navigation.pop();
+            alert("Profile Updated SuccessFully !");
+     }
     } catch (err) {
       alert(err.message);
     }
@@ -218,6 +237,10 @@ const DecoratorDetails = (props) => {
   } else {
     console.log("decorator Array :", decoratorData);
     return (
+      <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <View style={styles.mainContainer}>
         {/* <View style={styles.dateTimeContainer}>
           <Text style={styles.refText}>Date: 12-2-2021</Text>
@@ -463,17 +486,18 @@ const DecoratorDetails = (props) => {
                       }}
                     >
                       <View style={styles.chekboxText}>
-                        <CheckBox
-                          value={item.status === "1" ? true : false}
-
-                          // onValueChange={() => checkedValue("approved")}
-                        />
+                      <CheckBox
+                        checked={item.status === "1" ? true : false}
+                        onPress={() => checkedValue("approved")}
+                        size={18}
+                      />
                         <Text style={styles.checkText}>Approved</Text>
                       </View>
                       <View style={styles.chekboxText}>
                         <CheckBox
-                          value={item.status === "0" ? true : false}
-                          // onValueChange={() => checkedValue("disapproved")}
+                          checked={item.status === "0" ? true : false}
+                          onPress={() => checkedValue("disapproved")}
+                          size={18}
                         />
                         <Text style={styles.checkText}>Dis-Approved</Text>
                       </View>
@@ -644,27 +668,29 @@ const DecoratorDetails = (props) => {
                   />
                 </TouchableOpacity>
               </View> */}
-                  <View style={styles.inputFieldContainer}>
+                  <View style={[styles.inputFieldContainer,{alignItems:"flex-start"}]}>
                     <Text style={styles.decoratorTitle}>Status:</Text>
                     <View
                       style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
+                        flexDirection: "row"
                       }}
                     >
                       <View style={styles.chekboxText}>
-                        <CheckBox
-                          value={item.status === "1" ? true : false}
-                          onValueChange={() => checkedValue("approved")}
-                        />
-                        <Text style={styles.checkText}>Approved</Text>
+                      <CheckBox
+                        center
+                        checked={item.status === "1" ? true : false}
+                        onPress={() => checkedValue("approved")}
+                        size={18}
+                      />
+                      <Text style={{fontFamily: "poppins-medium",fontSize:12}}>Approved</Text>
                       </View>
                       <View style={styles.chekboxText}>
-                        <CheckBox
-                          value={item.status === "0" ? true : false}
-                          onValueChange={() => checkedValue("disapproved")}
-                        />
-                        <Text style={styles.checkText}>Dis-Approved</Text>
+                      <CheckBox
+                        checked={item.status === "0" ? true : false}
+                        onPress={() => checkedValue("disapproved")}
+                        size={18}
+                      />
+                      <Text style={{fontFamily: "poppins-medium",fontSize:12}}>Dis-Approved</Text>
                       </View>
                     </View>
                   </View>
@@ -736,6 +762,7 @@ const DecoratorDetails = (props) => {
           </View>
         )}
       </View>
+      </KeyboardAvoidingView>
     );
   }
 };
@@ -774,6 +801,9 @@ const mapDispatchToProps = (dispatch) => ({
 });
 export default connect(mapStateToProps, mapDispatchToProps)(DecoratorDetails);
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   btnContainer: {
     width: "100%",
     height: "15%",
