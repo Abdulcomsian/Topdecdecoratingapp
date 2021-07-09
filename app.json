@@ -2,7 +2,7 @@
   "expo": {
     "name": "Top Dec Decorating",
     "slug": "topdecdecorating",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/iconx.png",
     "splash": {
@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "0.0.6",
+      "buildNumber": "0.0.7",
       "bundleIdentifier": "com.accrualgroup.topdecdecorating",
       "infoPlist": {
       "NSPhotoLibraryUsageDescription": "Top dec Decortaing need you access your gallery to upload your images for Create Decorator",

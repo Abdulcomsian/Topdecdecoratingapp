@@ -17,7 +17,7 @@ const SplashScreen = (props) => {
   // }, []);
   useEffect(() => {
     // (async()=>{
-   AsyncStorage.clear();
+   //AsyncStorage.clear();
     const unsubscribe = navigation.addListener("focus", async () => {
       props.resetLoginFlag();
       const authUser = await AsyncStorage.getItem("user");
