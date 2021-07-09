@@ -1,56 +1,67 @@
-import React,{useState,useEffect} from "react";
-import { View,StyleSheet,Image,TouchableOpacity,ScrollView} from 'react-native';
-import {Text} from 'native-base';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { Text } from "native-base";
 import { connect } from "react-redux";
 
 var rightArrow = require("../../assets/authScreen/right.png");
 
 const listView = (props) => {
-  const { navigation,token } = props;
-  const [searchJob,setSeachJob] = useState([])
-  const [typeData,setDataType] = useState("")
-  
-  console.log("Navigation :",props)
+  const { navigation, token } = props;
+  const [searchJob, setSeachJob] = useState([]);
+  const [typeData, setDataType] = useState("");
+
+  console.log("Navigation :", props);
 
   useEffect(() => {
-        if(props.data){
-            setSeachJob(props.data)
-            setDataType(props.data)
-            console.log("after Fill :",searchJob)
-        }
-        else{
-            setDataType(props.screenType)
-            console.log("after Fill Type:",typeData)
-        }
-    },[props])
+    if (props.data) {
+      setSeachJob(props.data);
+      setDataType(props.data);
+      console.log("after Fill :", searchJob);
+    } else {
+      setDataType(props.screenType);
+      console.log("after Fill Type:", typeData);
+    }
+  }, [props]);
 
   return (
     <View style={styles.mainContainer}>
-            <View style={{marginLeft:20,marginRight:20}}>
-              <ScrollView>
-                {props.data.map((item,index)=>(
-                    <TouchableOpacity style={styles.listButton} key={index} onPress={() => navigation.navigate('DetailsJob',{searchJobData:props.data[index]})}>
-                        <Text style={styles.emailText}>{item.supervisor_id}</Text>
-                        <Text style={styles.emailText}>{item.project}</Text>
-                        <Image source={rightArrow} />
-                    </TouchableOpacity>
-                ))}
-                </ScrollView>
-            </View>
+      <View style={{ marginLeft: 20, marginRight: 20 }}>
+        <ScrollView>
+          {props.data.map((item, index) => (
+            <TouchableOpacity
+              style={styles.listButton}
+              key={index}
+              onPress={() =>
+                navigation.navigate("DetailsJob", {
+                  searchJobData: props.data[index],
+                })
+              }
+            >
+              <Text style={styles.emailText}>{item.supervisor_id}</Text>
+              <Text style={styles.emailText}>{item.project}</Text>
+              <Image source={rightArrow} />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
     </View>
   );
 };
 const mapStateToProps = (state) => ({
-  token : state.auth.token
+  token: state.auth.token,
 });
-const mapDispatchToProps = (dispatch) => ({
-});
+const mapDispatchToProps = (dispatch) => ({});
 export default connect(mapStateToProps, mapDispatchToProps)(listView);
 
 const styles = StyleSheet.create({
   mainContainer: {
-    height: "100%",
-    width: "100%",
+   flex:1
   },
   dateTimeContainer: {
     height: "5%",

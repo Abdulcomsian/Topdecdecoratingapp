@@ -114,10 +114,10 @@ const SupervisorDetails = (props) => {
           <Text style={styles.refText}>Date: 12-2-2021</Text>
           <Text style={styles.refText}>Ref id: 10099499</Text>
         </View> */}
-
+{/* 
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Supervisor Detail</Text>
-        </View>
+        </View> */}
         {role == "supervisor" ? (
           <ScrollView style={{ width: "100%" }}>
             {supervisorData.map((item, index) => (
@@ -232,6 +232,12 @@ const SupervisorDetails = (props) => {
             </View>
           </ScrollView>
         )}
+        <TouchableOpacity
+          style={styles.commonBtn}
+          onPress={() => searchJob(this)}
+        >
+          <Text style={styles.commonText}>Back</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -335,7 +341,9 @@ const styles = StyleSheet.create({
   },
   commonBtn: {
     height: 50,
-    width: "100%",
+    width: "90%",
+    alignSelf:'center',
+    marginBottom:20,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 14,

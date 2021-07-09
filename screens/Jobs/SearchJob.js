@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Text } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { searchJob } from "../../Redux/action/auth/authActionTypes";
@@ -39,22 +45,36 @@ const SearchJob = (props) => {
       if (changeDate) {
         console.log("Changed Date with Ref ID");
         setBasedText("Changed Date with Ref ID");
-        props.navigation.navigate("AllJobs", { selectedDate: date, refernceNum: refID, basedText: basedText, token: token });
+        props.navigation.navigate("AllJobs", {
+          selectedDate: date,
+          refernceNum: refID,
+          basedText: basedText,
+          token: token,
+        });
         //props.searchJobHandler(refID,date,token)
       } else {
         setBasedText("Just Ref ID");
-        props.navigation.navigate("AllJobs", { selectedDate: "", refernceNum: refID, basedText: basedText, token: token });
+        props.navigation.navigate("AllJobs", {
+          selectedDate: "",
+          refernceNum: refID,
+          basedText: basedText,
+          token: token,
+        });
         //props.searchJobHandler(refID,date,token)
         setDate(new Date());
       }
-    } else if(changeDate){
-        console.log("Just Date");
-        setBasedText("Just Date");
-        props.navigation.navigate("AllJobs", { selectedDate: date, refernceNum: refID, basedText: basedText, token: token });
-        // props.searchJobHandler(refID,date,token)
-    }
-    else{
-      alert("Please Enter Refernce ID Or Date Select !")
+    } else if (changeDate) {
+      console.log("Just Date");
+      setBasedText("Just Date");
+      props.navigation.navigate("AllJobs", {
+        selectedDate: date,
+        refernceNum: refID,
+        basedText: basedText,
+        token: token,
+      });
+      // props.searchJobHandler(refID,date,token)
+    } else {
+      alert("Please Enter Refernce ID Or Date Select !");
     }
   };
 
@@ -63,58 +83,84 @@ const SearchJob = (props) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-    <View style={styles.mainContainer}>
-      <DateTimePicker
-        isVisible={show}
-        testID='dateTimePicker'
-        value={date}
-        mode={Platform.OS === 'ios' ? "date" : "date"}
-        display='default'
-        onConfirm={onChange}
-        onCancel={() => {}}
-        format='DD-MM-YYYY'
-        placeholder='Select Date'
-      />
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Search Jobs</Text>
-        <Text style={{ textAlign: "center", fontFamily: "poppins-regular", fontSize: 14 }}>Search a job by either reference ID or Date job created</Text>
-      </View>
-      <View style={styles.searchByView}>
-        <View style={styles.inputFieldContainer}>
-          <TextInput style={styles.inputField} placeholder={"Enter Ref ID"} value={refID} onChangeText={(e) => setRefID(e.replace(/[^0-9]/g, ""))} />
+      <View style={styles.mainContainer}>
+        <DateTimePicker
+          isVisible={show}
+          testID="dateTimePicker"
+          value={date}
+          mode={Platform.OS === "ios" ? "date" : "date"}
+          display="default"
+          onConfirm={onChange}
+          onCancel={() => {}}
+          format="DD-MM-YYYY"
+          placeholder="Select Date"
+        />
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Search Jobs</Text>
+          <Text
+            style={{
+              textAlign: "center",
+              fontFamily: "poppins-regular",
+              fontSize: 14,
+            }}
+          >
+            Search a job by either reference ID or Date job created
+          </Text>
         </View>
-        <Text style={{ justifyContent: "center", textAlign: "center", fontFamily: "poppins-medium", marginTop: 20 }}>OR</Text>
-        <View style={styles.inputFieldContainer}>
+        <View style={styles.searchByView}>
           <View style={styles.inputFieldContainer}>
-            <Text onPress={() => showDatepicker()} style={styles.inputField}>
-              {new Date(date).toLocaleDateString()}
-            </Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder={"Enter Ref ID"}
+              value={refID}
+              onChangeText={(e) => setRefID(e.replace(/[^0-9]/g, ""))}
+            />
+          </View>
+          <Text
+            style={{
+              justifyContent: "center",
+              textAlign: "center",
+              fontFamily: "poppins-medium",
+              marginTop: 20,
+            }}
+          >
+            OR
+          </Text>
+          <View style={styles.inputFieldContainer}>
+            <View style={styles.inputFieldContainer}>
+              <Text onPress={() => showDatepicker()} style={styles.inputField}>
+                {new Date(date).toLocaleDateString()}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.footerBtnView}>
-        {/* <TouchableOpacity style={styles.commonBtn}  onPress={() => navigation.navigate('DetailJob',{date:date,referenceId:refID})}>
+        <View style={styles.footerBtnView}>
+          {/* <TouchableOpacity style={styles.commonBtn}  onPress={() => navigation.navigate('DetailJob',{date:date,referenceId:refID})}>
                     <Text style={styles.commonText}>Search</Text>
                 </TouchableOpacity> */}
-        <TouchableOpacity style={styles.commonBtn} onPress={() => searchJob(this)}>
-          <Text style={styles.commonText}>Search</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.commonBtn}
+            onPress={() => searchJob(this)}
+          >
+            <Text style={styles.commonText}>Search</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
     </KeyboardAvoidingView>
   );
 };
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
+const mapStateToProps = ({auth}) => ({
+  token: auth.token,
 });
 const mapDispatchToProps = (dispatch) => ({
-  searchJobHandler: (refID, date, token) => dispatch(searchJob(refID, date, token)),
+  searchJobHandler: (refID, date, token) =>
+    dispatch(searchJob(refID, date, token)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SearchJob);
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1
+  container: {
+    flex: 1,
   },
   mainContainer: {
     height: "100%",
