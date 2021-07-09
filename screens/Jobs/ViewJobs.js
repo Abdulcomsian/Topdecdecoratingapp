@@ -7,7 +7,7 @@ const ViewJob = ( props ) =>{
     const {navigation, isLogin, isLoginMsg, role, isUserID}=props;
     console.log("Role : ",props)
     console.log("User ID : ",isUserID)
-    const isid= props.route.params.isUserID;
+    const isid= isUserID;
     console.log("User ID : ",isid)
     return(
         <View style={styles.mainContainer}>
@@ -33,9 +33,9 @@ const ViewJob = ( props ) =>{
         </View>
     )
 }
-const mapStateToProps = state => ({
-    role: state.auth.role,
-    isUserID: state.auth.isUserID
+const mapStateToProps =({auth}) => ({
+    role: auth.role,
+    isUserID:auth.isUserID
   });
   const mapDispatchToProps=dispatch=>({
   })

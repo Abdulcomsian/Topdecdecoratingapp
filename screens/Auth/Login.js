@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from "react-native";
+import { View, StyleSheet, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { Text } from "native-base";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { adminLogin } from "../../Redux/action/auth/authActionTypes";
-import { useDispatch, useSelector, connect } from "react-redux";
-import AwesomeAlert from "react-native-awesome-alerts";
+import { connect } from "react-redux";
 import { StackActions } from "@react-navigation/native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-var logo = require("../../assets/authScreen/logo.jpeg");
-var user = require("../../assets/authScreen/icon.png");
-var lock = require("../../assets/authScreen/lock.png");
+const logo = require("../../assets/authScreen/logo.jpeg");
+const user = require("../../assets/authScreen/icon.png");
+const lock = require("../../assets/authScreen/lock.png");
 
 const LoginScreen = (props) => {
   const { navigation, isLogin, isLoginMsg, role, isUserID, token } = props;
   // const dispatch = useDispatch()
   // const [email, setEmail] = useState("Waqas@gmail.com");
   // const [password, setPassword] = useState("Waqas@123");
-
   const [email, setEmail] = useState("");
+  const [emailErr, setEmailErr] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordErr, setPasswordErr] = useState("");
   const postSignInHandler = async (type) => {
     try {
       if (type == "admin") {
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (email != "" && password != "") {
           if (regEmail.test(email) === false) {
-            alert("Email is Not Correct");
+            setEmailErr("Email is Not Correct");
             setEmail(email);
             return false;
           } else {
@@ -35,25 +33,29 @@ const LoginScreen = (props) => {
             try {
               await props.loginHandler(email, password);
             } catch (err) {
-              alert(err.message);
+              setEmailErr("Email is wrong or");
+              setPasswordErr("Password is wrong");
+              //alert(err.message);
             }
           }
         } else {
-          alert("Please Enter Login Credential Carefully !");
+          setEmailErr("Email is empty");
+          setPasswordErr("Password is empty");
+         // alert("Please Enter Login Credential Carefully !");
         }
       } else {
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
         if (email != "" && password != "") {
           if (regEmail.test(email) === false) {
-            alert("Email is Not Correct");
+            setEmailErr("Email is Not Correct");
             setEmail(email);
             return false;
           } else {
             setEmail(email);
             //alert("Email is Correct");
             if (regPass.test(password) === false) {
-              alert("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
+              setPasswordErr("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
               setPassword(password);
               return false;
             } else {
@@ -62,14 +64,16 @@ const LoginScreen = (props) => {
             }
           }
         } else {
-          alert("Please Enter Login Credential Carefully !");
+          setEmailErr("Email is wrong or");
+          setPasswordErr("Password is wrong");
+          //alert("Please Enter Login Credential Carefully !");
         }
       }
     } catch (err) {
       // alert(err.message)
     }
   };
-  console.log("Login Role :", role);
+ // console.log("Login Role :", role);
   useEffect(() => {
     (async()=>{
       if (isLogin) {
@@ -94,62 +98,64 @@ const LoginScreen = (props) => {
   }, [isLogin, isLoginMsg]);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <View style={styles.mainContainer}>
         <View style={styles.logoContainer}>
           <View style={styles.logoImageContainer}>
             <Image style={styles.logoImage} source={logo} />
           </View>
           <Text style={styles.mainBannerText}>
-            <Text style={styles.boldText}>Top Dec </Text> Decorating
+            <Text style={styles.boldText}>Top Dec</Text> Decorating
           </Text>
         </View>
-        <ScrollView>
-          <View style={styles.formConatiner}>
+        <KeyboardAvoidingView  style={styles.formConatiner}  behavior={Platform.OS === "ios" ? "position" : "height"} 
+           contentContainerStyle={{backgroundColor:'#f2f2f2',alignItems:'center'}}>
             <View style={styles.inputContainer}>
               <View style={styles.iconContainer}>
                 <Image style={styles.iconImg} source={user} />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput onChangeText={(e) => setEmail(e)} value={email} style={styles.inputField} placeholder={"Email"} />
+                <TextInput onChangeText={(e)=>{
+                  setEmail(e);
+                  emailErr&&setEmailErr('')
+                }} value={email} style={emailErr?{...styles.inputField,borderBottomColor:'red',marginBottom:0}:styles.inputField} placeholder={"Email"} />
               </View>
             </View>
+            {emailErr!==''&&<Text style={{color:'red',marginBottom:25}}>{emailErr}</Text>}
             <View style={styles.inputContainer}>
               <View style={styles.iconContainer}>
                 <Image style={styles.iconImg} source={lock} />
               </View>
               <View style={styles.inputFieldContainer}>
-                <TextInput onChangeText={(e) => setPassword(e)} value={password} style={styles.inputField} placeholder={"Password"} secureTextEntry={true} />
+                <TextInput onChangeText={(e)=>{
+                  setPassword(e);
+                  passwordErr&&setPasswordErr('')
+                }} value={password} style={passwordErr?{...styles.inputField,borderBottomColor:'red',marginBottom:0}:styles.inputField} placeholder={"Password"}
+                secureTextEntry={true} />
               </View>
             </View>
+            {passwordErr!==''&&<Text style={{color:'red',marginBottom:25}}>{passwordErr}</Text>}
             <TouchableOpacity style={styles.loginBtn} onPress={() => postSignInHandler("admin")}>
               <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.navigate('SelectSummary')}>
-                          <Text style={styles.loginText}>Login</Text>
-                      </TouchableOpacity> */}
             <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
               <Text style={styles.forgetText}>Forgot Password</Text>
             </TouchableOpacity>
-          </View>
-        </ScrollView>
+        </KeyboardAvoidingView>
         <View style={styles.lastContainer}>
           <Text style={styles.calimText}>Excepteur sint occaecat cupidatat non proident, sunt in culpa</Text>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
-const mapStateToProps = (state) => ({
-  isLogin: state.auth.isLogin,
-  isLoginMsg: state.auth.isLoginMsg,
-  token: state.auth.token,
-  role: state.auth.role,
-  isUserID: state.auth.isUserID,
+const mapStateToProps = ({auth}) => ({
+  isLogin: auth.isLogin,
+  isLoginMsg: auth.isLoginMsg,
+  token: auth.token,
+  role: auth.role,
+  isUserID: auth.isUserID,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -185,10 +191,11 @@ const styles = StyleSheet.create({
     resizeMode:"center"
   },
   formConatiner: {
-    width: "100%",
+    //width: "90%",
     padding: 30,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor:'#f2f2f2'
   },
   inputContainer: {
     height: 60,
@@ -248,6 +255,7 @@ const styles = StyleSheet.create({
     color: "#1073AC",
     fontSize: 18,
     fontFamily: "poppins-bold",
+    marginHorizontal:70
   },
   forgetText: {
     color: "#1073AC",

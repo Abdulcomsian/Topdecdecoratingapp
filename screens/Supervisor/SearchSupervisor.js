@@ -12,12 +12,12 @@ import { Text } from "native-base";
 import { searchSupervisor } from "../../Redux/action/auth/authActionTypes";
 import { useDispatch, useSelector, connect } from "react-redux";
 
-const SearchSupervisor = (props) => {
-  const { navigation } = props;
+const SearchSupervisor = ({navigation,token}) => {
+
   const [supervisorName, setSupervisorName] = useState("");
   const [supervisorId, setSupervisorId] = useState("");
   const [supervisorEmail, setSupervisorEmail] = useState("");
-  const [token, setToken] = useState(props.token);
+  console.log('Token',token)
 
   const searchSupervisor = () => {
     try {

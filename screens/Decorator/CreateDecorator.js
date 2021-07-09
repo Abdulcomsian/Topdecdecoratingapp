@@ -11,24 +11,31 @@ const CreateDecorataor = (props) => {
   const [cscsFront, setCscsFront] = useState(null);
   const [cscsBack, setCscsBack] = useState(null);
   const [name, setName] = useState("");
+  const [nameErr, setNameErr] = useState("");
   const [lastName, setLastName] = useState("");
+  const [lastNameErr, setlastNameErr] = useState("");
   const [email, setEmail] = useState("");
+  const [emailErr, setEmailErr] = useState("");
+  const [passwordErr, setPasswordErr] = useState("");
   const [number, setNumber] = useState("");
+  const [numberErr, setNumberErr] = useState("");
   const [password, setPassword] = useState("");
   const postCreateDecortor = async () => {
     try {
-      if ((name != "", lastName != "", email != "", number != "", password != "")) {
+      if ((name != ""&& lastName != ""&& email != ""&& number != ""&& password != "")) {
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
         if (regEmail.test(email) === false) {
-          alert("Email is Not Correct");
+         // alert("Email is Not Correct");
+          setEmailErr("Email is Not Correct")
           setEmail(email);
           return false;
         } else {
           setEmail(email);
           console.log("Email is Correct");
           if (regPass.test(password) === false) {
-            alert("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
+            //alert("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
+            setPasswordErr("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password")
             setPassword(password);
             return false;
           } else {
@@ -38,18 +45,25 @@ const CreateDecorataor = (props) => {
             // console.log("phone :", number);
             // console.log("password :", password);
             // console.log("Token :", token);
-            if(name!="", lastName!="", email!="", number!="", password!="")
+            if(name!=""&& lastName!=""&& email!=""&& number!=""&& password!="")
             {
               await props.createDecoratorHandler(name, lastName, email, number, password, token, photoID, cscsBack, cscsFront);
               alert("Create Decorator SuccessFully !")
               props.navigation.pop();
             } else{
-              alert("Please CareFully Enter Details !")
+              //alert("Please CareFully Enter Details !")
+              setPasswordErr("Password is Not Correct")
+              setEmailErr("Email is Not Correct or")
             }
           }
         }
       } else {
-        alert("Please Insert All Fields CareFully !");
+              setPasswordErr("Password required")
+              setEmailErr("Email is required")
+              setNameErr('First name is required')
+              setlastNameErr('Last name is required')
+              setNumberErr('Number is required')
+       // alert("Please Insert All Fields CareFully !");
       }
     } catch (err) {
       alert(err.message)
@@ -105,17 +119,19 @@ const CreateDecorataor = (props) => {
       style={styles.container}
     >
     <View style={styles.mainContainer}>
-      <View style={styles.titleContainer}>
+      {/* <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Create Decorataor</Text>
-      </View>
-      <ScrollView>
+      </View> */}
+      <ScrollView >
         <View style={styles.formConatiner}>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Name"} value={name} onChangeText={(e) => setName(e)} />
+          <View style={nameErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+            <TextInput style={styles.inputField} placeholder={"Name"} value={name} onChangeText={(e) => {setName(e);numberErr&&setNameErr('')}} />
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Last Name"} value={lastName} onChangeText={(e) => setLastName(e)} />
+          {nameErr!==''&&<Text style={{color:'red',marginBottom:15}}>{nameErr}</Text>}
+          <View  style={lastNameErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+            <TextInput style={nameErr!==''?{...styles.inputField,borderBottomColor:'red'}:styles.inputField} placeholder={"Last Name"} value={lastName} onChangeText={(e) => {setLastName(e);lastNameErr&& setlastNameErr('')}} />
           </View>
+          {lastNameErr!==''&&<Text style={{color:'red',marginBottom:15}}>{lastNameErr}</Text>}
           <View style={styles.inputFieldContainer}>
             <View
               style={{
@@ -170,15 +186,18 @@ const CreateDecorataor = (props) => {
               )}
             </View>
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Email"} value={email} onChangeText={(e) => setEmail(e)} />
+          <View style={emailErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+            <TextInput style={emailErr!==''?{...styles.inputField,borderBottomColor:'red'}:styles.inputField} placeholder={"Email"} value={email} onChangeText={(e) =>{setEmail(e);emailErr&&setEmailErr('')} } />
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Password"} value={password} onChangeText={(e) => setPassword(e)} secureTextEntry={true} />
+          {emailErr!==''&&<Text style={{color:'red',marginBottom:15}}>{emailErr}</Text>}
+          <View style={passwordErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+            <TextInput style={passwordErr!==''?{...styles.inputField,borderBottomColor:'red'}:styles.inputField} placeholder={"Password"} value={password} onChangeText={(e) => {setPassword(e);passwordErr&&setPasswordErr('')}} secureTextEntry={true} />
           </View>
-          <View style={styles.inputFieldContainer}>
-            <TextInput style={styles.inputField} placeholder={"Contact Number"} value={number} onChangeText={(e) => setNumber(e.replace(/[^0-9]/g, ""))} />
+          {passwordErr!==''&&<Text style={{color:'red',marginBottom:15}}>{passwordErr}</Text>}
+          <View style={numberErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+            <TextInput style={numberErr!==''?{...styles.inputField,borderBottomColor:'red'}:styles.inputField} placeholder={"Contact Number"} value={number} onChangeText={(e) =>{ setNumber(e.replace(/[^0-9]/g, ""));numberErr&&setNumberErr('')}} />
           </View>
+          {numberErr!==''&&<Text style={{color:'red',marginBottom:15}}>{numberErr}</Text>}
           <View style={styles.btnContainer}>
             {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('DecoratorProfile')}>
                                 <Text style={styles.commonText}>Save</Text>
@@ -193,10 +212,10 @@ const CreateDecorataor = (props) => {
     </KeyboardAvoidingView>
   );
 };
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
-  createDecorator: state.auth.createDecorator,
-  createDecoratorMsg: state.auth.createDecoratorMsg,
+const mapStateToProps = ({auth}) => ({
+  token: auth.token,
+  createDecorator: auth.createDecorator,
+  createDecoratorMsg: auth.createDecoratorMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
   createDecoratorHandler: (name, lastName, email, number, password, token, photoID, cscsBack, cscsFront) =>

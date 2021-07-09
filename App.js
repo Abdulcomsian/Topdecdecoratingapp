@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React,{useEffect} from "react";
+import { StyleSheet, View, Text,StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MainNavigator from "./navigation/MainNavigator";
@@ -10,19 +10,20 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
 import SignatureComponent from "./components/SignatureComponent";
 import * as SplashScreen from "expo-splash-screen";
-
+import Store from './Redux'
 const composeEnhancers = window.REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 const Stack = createStackNavigator();
-export default function App() {
+const App=()=> {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
-  React.useEffect(() => {
+  useEffect(() => {
+    StatusBar.setBarStyle('dark-content')
     async function loadResourcesAndDataAsync() {
       try {
         await loadAsync({
-          Roboto: require("native-base/Fonts/Roboto.ttf"),
-          Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+          //Roboto: require("native-base/Fonts/Roboto.ttf"),
+          //Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
           "poppins-semiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
           "poppins-regular": require("./assets/fonts/Poppins-Regular.ttf"),
           "poppins-medium": require("./assets/fonts/Poppins-Medium.ttf"),
@@ -40,31 +41,18 @@ export default function App() {
     }
     loadResourcesAndDataAsync();
   }, []);
-  if (!isLoadingComplete) {
-    return (
-      <View style={{ flex: 1 }}>
-      </View>
-    );
-  } else {
-    return (
-      // <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Provider store={store}>
+
+    return (!isLoadingComplete?
+    <View style={{ flex: 1 }}/>:
+      <Provider store={Store}>
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name='Main' component={MainNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
-      // </View>
     );
-  }
+  
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App

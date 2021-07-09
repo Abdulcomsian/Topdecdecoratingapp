@@ -1,6 +1,6 @@
 import * as Actions from "../../actionTypes";
 import axios from "axios";
-import { Platform } from "react-native";
+import { Platform, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 var base_url = "https://topdecdecoratingapp.com/api/";
 
@@ -19,9 +19,10 @@ export const adminLogin = (email, password) => {
 
       const response = request.data;
       // console.log("Role :",response.user.role)
-      if (response.success == true) {//ya ly kr dia set token ab aur bta
-        await AsyncStorage.setItem('user', JSON.stringify({...response}))//yahi response aye ga na??
-      //ak min mouse chor
+      if (response.success == true) {
+        //ya ly kr dia set token ab aur bta
+        await AsyncStorage.setItem("user", JSON.stringify({ ...response })); //yahi response aye ga na??
+        //ak min mouse chor
         dispatch({
           type: Actions.LOGIN_SUCCESS,
           payload: response,
@@ -36,8 +37,15 @@ export const adminLogin = (email, password) => {
     }
   };
 };
+export const JustLoginInternally = (payload) => (dispatch) => {
+  dispatch({
+    type: Actions.LOGIN_SUCCESS,
+    payload,
+  });
+};
 export const emailLink = (email) => {
   return async (dispatch, getState) => {
+    let message = null;
     try {
       console.log("Action Email :", email);
       const body = { email };
@@ -53,13 +61,16 @@ export const emailLink = (email) => {
           payload: response,
         });
       } else {
+        message = response;
         console.log(response?.response?.request);
-        throw new Error(response.message);
+        //throw new Error(response.message);
       }
     } catch (err) {
+      message = err;
       console.log(err?.response?.request);
-      throw new Error(err.message);
+      //throw new Error(err.message);
     }
+    return message;
   };
 };
 export const codeValidate = (code) => {
@@ -72,11 +83,12 @@ export const codeValidate = (code) => {
         data: body,
       });
       const response = request.data;
-      console.log(response.data.user[0].id);
+      console.log("DATA", response.data);
+      console.log(response.data.user);
       if (response.success == true) {
         dispatch({
           type: Actions.CODE_VALIDATE_SUCCESS,
-          payload: response.data.user[0].id,
+          payload: response.data.user,
         });
       } else {
         throw new Error(response.message);
@@ -86,7 +98,7 @@ export const codeValidate = (code) => {
     }
   };
 };
-export const resetPassword = (id, password) => {
+export const resetPassword = (id, password, navigation) => {
   return async (dispatch, getState) => {
     try {
       const body = { id, password };
@@ -101,6 +113,8 @@ export const resetPassword = (id, password) => {
           type: Actions.RESET_PASSWORD_SUCCESS,
           payload: response,
         });
+        Alert.alert("Success!", "Password reset");
+        navigation.navigate("LoginScreen");
       } else {
         throw new Error(response.message);
       }
@@ -120,7 +134,7 @@ export const createNewJobCreation = (
 ) => {
   return async (dispatch, getState) => {
     try {
-      console.log(jobSummary)
+      console.log(jobSummary);
       // console.log()
       const body = {
         contractor,
@@ -130,7 +144,7 @@ export const createNewJobCreation = (
         start_date,
         jobSummary,
       };
-      
+
       const request = await axios(base_url + "admin/create/job", {
         method: "POST",
         headers: {
@@ -405,7 +419,7 @@ export const updateDecorator = (
       formData.append("lastname", lastname);
       formData.append("status", status);
 
-      if(photoID!=""){
+      if (photoID != "") {
         photoID.localUri &&
           formData.append("photoID", {
             // file: photoID,
@@ -416,36 +430,35 @@ export const updateDecorator = (
             name: Math.random(0, 1000).toString(),
             type: "image/png", // it may be necessary in Android.
           });
-      }
-      else{
+      } else {
         formData.append("photoID", photoID);
       }
-      if(cscsFront!=""){
-      cscsFront.localUri &&
-        formData.append("cscsFront", {
-          // file: cscsFront,
-          uri:
-            Platform.OS === "android"
-              ? cscsFront.localUri
-              : cscsFront.localUri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: "image/png", // it may be necessary in Android.
-        });
-      } else{
+      if (cscsFront != "") {
+        cscsFront.localUri &&
+          formData.append("cscsFront", {
+            // file: cscsFront,
+            uri:
+              Platform.OS === "android"
+                ? cscsFront.localUri
+                : cscsFront.localUri.replace("file://", ""),
+            name: Math.random(0, 1000).toString(),
+            type: "image/png", // it may be necessary in Android.
+          });
+      } else {
         formData.append("cscsFront", cscsFront);
       }
-      if(cscsBack!=""){
-      cscsBack.localUri &&
-        formData.append("cscsBack", {
-          // file: cscsBack,
-          uri:
-            Platform.OS === "android"
-              ? cscsBack.localUri
-              : cscsBack.localUri.replace("file://", ""),
-          name: Math.random(0, 1000).toString(),
-          type: "image/png", // it may be necessary in Android.
-        });
-      } else{
+      if (cscsBack != "") {
+        cscsBack.localUri &&
+          formData.append("cscsBack", {
+            // file: cscsBack,
+            uri:
+              Platform.OS === "android"
+                ? cscsBack.localUri
+                : cscsBack.localUri.replace("file://", ""),
+            name: Math.random(0, 1000).toString(),
+            type: "image/png", // it may be necessary in Android.
+          });
+      } else {
         formData.append("cscsBack", cscsBack);
       }
 
@@ -1214,7 +1227,7 @@ export const insertRemedialForm = (
       //   dynamicInput,
       //   totalHours,
       // };
-      console.log(formData)
+      console.log(formData);
       const request = await axios(
         base_url + "supervisor/insert/workflow/RemendialSheet",
         {
@@ -4130,7 +4143,7 @@ export const insertTbtSilicaDust = (data, token, index) => {
         formData.append(`commentImages[]`, JSON.stringify([item]));
       });
 
-      console.log(formData)
+      console.log(formData);
 
       const request = await axios(
         base_url + "supervisor/insert/healthAndSecurity/SilicaDust",
@@ -4672,10 +4685,9 @@ export const insertTbtInventory = (
 };
 
 export const updateWorkFlowTopTabs = (plot_id, token) => {
-  
   return async (dispatch, getState) => {
     try {
-      console.log(plot_id, token)
+      console.log(plot_id, token);
       const body = {
         plot_id,
       };
@@ -4753,10 +4765,9 @@ export const updateWorkFlowTopTabs = (plot_id, token) => {
   };
 };
 export const updateVerificationTopTabs = (plot_id, token) => {
- 
   return async (dispatch, getState) => {
     try {
-      console.log("Verification Plot Id :",plot_id)
+      console.log("Verification Plot Id :", plot_id);
       const body = {
         plot_id,
       };
@@ -4922,9 +4933,9 @@ export const updateHealthTopTabs = (plot_id, token) => {
   };
 };
 const _returnUpdatedArray = (oldArr, updated) => {
-  console.log("here")
+  console.log("here");
   let copyData = [...oldArr];
-  console.log("Copy Data :",copyData)
+  console.log("Copy Data :", copyData);
   oldArr.forEach((el, index) => {
     if (updated?.hasOwnProperty(el?.url)) {
       copyData[index].tickSign = updated[el.url] === "1" ? true : false;

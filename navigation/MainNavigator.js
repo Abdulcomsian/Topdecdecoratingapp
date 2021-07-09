@@ -73,7 +73,7 @@ import Tbtvolience from '../screens/Form/HealthSafety/TBT_Volience'
 import Tbtworking from '../screens/Form/HealthSafety/TBT_Working'
 import TbtRegister from '../screens/Form/HealthSafety/TBT_TalkRegister'
 import TbtInventory from '../screens/Form/HealthSafety/TBT_Inventory'
-import {Text, TouchableOpacity, Image, Button} from "react-native"
+import {Text,} from "react-native"
 import EmailSend from '../screens/EamilSend'
 
 

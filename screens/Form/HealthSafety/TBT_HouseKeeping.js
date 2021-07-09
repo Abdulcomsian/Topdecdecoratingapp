@@ -3,12 +3,10 @@ import {
   View,
   Image,
   TouchableOpacity,
-  TextInput,
   ScrollView,
 } from "react-native";
-import { CheckBox, Text } from "native-base";
+import { Text } from "native-base";
 import styles from "../../../assets/css/styles";
-import { check } from "react-native-vector-icons";
 import TBTForm from "../../../components/common/TBTForm";
 import SignatureComponent from "../../../components/SignatureComponent";
 import { connect } from "react-redux";

@@ -15,19 +15,24 @@ import { createNewJobCreation } from "../../Redux/action/auth/authActionTypes";
 import axios from "axios";
 import { Picker } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Fragment } from "react";
 
 var plus = require("../../assets/authScreen/plus.png");
 const NewJob = (props) => {
-  const { navigation, isJobId, isJob, isJobMsg } = props;
-  const [token, setToken] = useState(props.token);
-  const [data, setData] = useState([]);
+  const { navigation, isJobId, isJob, isJobMsg,token } = props;
   const [constructorName, setConstructorName] = useState("");
+  const [constructorNameErr, setConstructorNameErr] = useState("");
   const [projectName, setProjectName] = useState("");
+  const [projectNameErr, setProjectNameErr] = useState("");
   const [weekProject, setWeekProject] = useState("");
+  const [weekProjectErr, setWeekProjectErr] = useState("");
   const [dynamicInput, setdynamicInput] = useState([]);
+  const [dynamicInputErr, setdynamicInputErr] = useState('');
   const [supervisorData, setSupervisorData] = useState([]);
+  const [supervisorDataErr, setSupervisorDataErr] = useState('');
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState("");
+  const [dateErr, setDateErr] = useState("");
   const [show, setShow] = useState(false);
   const addInput = () => {
     // setdynamicInput((oldArray) => [...oldArray, data]);
@@ -68,7 +73,13 @@ const NewJob = (props) => {
         props.navigation.navigate("MainScreen");
         alert("Job Saved Successfully");
       } else {
-        alert("Please Enter All Missing Fields CareFully !");
+        constructorName ==="" &&setConstructorNameErr('Contractor Name is required')
+        selectedValue ===""&& setSupervisorDataErr('Supervisor is required')
+        weekProject===""&& setWeekProjectErr('Number of weeks is required')
+        projectName==='' &&setProjectNameErr('Project Name is required')
+        date===''&& setDateErr('Date is required')
+        dynamicInput.length===0&& setdynamicInputErr('Job Summary required')
+        //alert("Please Enter All Missing Fields CareFully !");
       }
     } catch (err) {
       alert(err.message);
@@ -76,7 +87,9 @@ const NewJob = (props) => {
   };
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
+    
     setShow(false);
+    dateErr&&setDateErr('')
     setDate(new Date(currentDate));
   };
   const showDatepicker = () => {
@@ -88,6 +101,7 @@ const NewJob = (props) => {
       const body = {};
       (async () => {
         setLoading(true);
+        console.log('Tokn',token)
         const request = await axios(
           "https://topdecdecoratingapp.com/api/admin/view/Supervisors",
           {
@@ -123,7 +137,7 @@ const NewJob = (props) => {
           <DateTimePickerModal
             isVisible={show}
             date={date ? date : new Date()}
-            mode={Platform.OS === "ios" ? "date" : "date"}
+            mode={"date"}
             is24Hour={true}
             display="default"
             onConfirm={(date) => onChange(date)}
@@ -141,31 +155,47 @@ const NewJob = (props) => {
           </View>
           <ScrollView>
             <View style={styles.formConatiner}>
-              <View style={styles.inputFieldContainer}>
+              <View style={constructorNameErr ?{...styles.inputFieldContainer,borderBottomColor:'red'}:styles.inputFieldContainer}
+               >
                 <TextInput
                   style={styles.inputField}
                   placeholder={"Main Contractor Name"}
                   value={constructorName}
-                  onChangeText={(e) => setConstructorName(e)}
+                  onChangeText={(e) => {setConstructorName(e);constructorNameErr&&setConstructorNameErr('')}}
                 />
               </View>
-              <View style={styles.inputFieldContainer}>
+              
+              {constructorNameErr!==''&&<Text style={styles.err}>{constructorNameErr}</Text>}
+              
+              <View 
+              style={projectNameErr?{...styles.inputFieldContainer,borderBottomColor:'red'}:styles.inputFieldContainer}
+                >
                 <TextInput
                   style={styles.inputField}
+                  
                   placeholder={"Project Name"}
                   value={projectName}
-                  onChangeText={(e) => setProjectName(e)}
+                  onChangeText={(e) => {setProjectName(e);
+                  projectNameErr&&setProjectNameErr('')}}
                 />
               </View>
-              <View style={styles.inputFieldContainer}>
+              {projectNameErr!==''&&<Text style={styles.err}>{projectNameErr}</Text>}
+              
+              <View style={weekProjectErr?{...styles.inputFieldContainer,borderBottomColor:'red'}:styles.inputFieldContainer}
+              >
                 <TextInput
                   style={styles.inputField}
                   placeholder={"Number of weeks for project"}
                   value={weekProject}
-                  onChangeText={(e) => setWeekProject(e.replace(/[^0-9]/g, ""))}
+                  onChangeText={(e) => {setWeekProject(e.replace(/[^0-9]/g, ""));
+                  weekProjectErr&&setWeekProjectErr('')}}
                 />
               </View>
-              <View style={styles.inputFieldContainer}>
+
+              {weekProjectErr!==''&&<Text style={styles.err}>{weekProjectErr}</Text>}
+              
+              <View style={supervisorDataErr?{...styles.inputFieldContainer,borderBottomColor:'red'}:styles.inputFieldContainer}
+             >
                 <Picker
                   mode="dropdown"
                   placeholder="Select Supervisor Name"
@@ -190,8 +220,10 @@ const NewJob = (props) => {
                     margin:0,
                   }}
                   selectedValue={selectedValue}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedValue(itemValue)
+                  onValueChange={(itemValue, itemIndex) =>{
+                    supervisorDataErr&&setSupervisorDataErr('')
+                    setSelectedValue(itemValue)}
+                    
                   }
                 >
                   <Picker.Item
@@ -201,8 +233,9 @@ const NewJob = (props) => {
                     value="Select Supervisor Name"
                   />
                   {supervisorData &&
-                    supervisorData.map((item) => (
+                    supervisorData.map((item,index) => (
                       <Picker.Item
+                        key={'PickItem'+index}
                         style={{ fontFamily: "poppins-regular",padding:0,
                         margin:0 }}
                         label={item.name.toString()}
@@ -211,9 +244,12 @@ const NewJob = (props) => {
                     ))}
                 </Picker>
               </View>
-              <View style={styles.inputFieldContainer}>
+
+              {supervisorDataErr!==''&&<Text style={styles.err}>{supervisorDataErr}</Text>}
+              <View style={dateErr ?{...styles.inputFieldContainer,borderBottomColor:'red'}:styles.inputFieldContainer}
+             >
                 <Text
-                  onPress={() => showDatepicker()}
+                  onPress={showDatepicker}
                   style={{
                     width: "100%",
                     height: 60,
@@ -226,6 +262,8 @@ const NewJob = (props) => {
                   {date ? new Date(date).toLocaleDateString() : "Date"}
                 </Text>
               </View>
+
+              {dateErr!==''&&<Text style={styles.err}>{dateErr}</Text>}
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>Job Summary</Text>
               </View>
@@ -244,9 +282,10 @@ const NewJob = (props) => {
                       !dynamicInput[dynamicInput.length - 1].qty &&
                       !dynamicInput[dynamicInput.length - 1].description
                     ) {
-                      alert(
-                        "Please Enter All Value and then move to next Item Add !"
-                      );
+                      // alert(
+                      //   );
+                      setdynamicInputErr("Please Enter All Value and then move to next Item Add !"
+                      )
                     } else {
                       addInput();
                     }
@@ -255,32 +294,41 @@ const NewJob = (props) => {
                   <Image style={styles.plusBtn} source={plus} />
                 </TouchableOpacity>
               </View>
+
+                  
               {dynamicInput.length > 0 && (
                 <View
                   style={[styles.dynamicInput, { flexDirection: "column" }]}
                 >
                   {dynamicInput.map((el, index) => (
-                    <View style={styles.inputContainer} key={index}>
+                    <Fragment key={'dynamicInput'+index}>
+                    <View style={styles.inputContainer} >
                       <TextInput
-                        onChangeText={(txt) =>
-                          updateValue("qty", index, txt.replace(/[^0-9]/g, ""))
+                        onChangeText={(txt) =>{
+                          updateValue("qty", index, txt.replace(/[^0-9]/g, ""));
+                          dynamicInputErr&& setdynamicInputErr('')}
                         }
                         style={styles.quantityInput}
                         value={el.qty}
                         placeholder={"Quantity"}
                       />
                       <TextInput
-                        onChangeText={(txt) =>
+                        onChangeText={(txt) =>{
                           updateValue("description", index, txt)
+                          dynamicInputErr&& setdynamicInputErr('')}
                         }
                         style={styles.descriptionInput}
                         value={el.description}
                         placeholder={"Description"}
                       />
                     </View>
+                    </Fragment>
                   ))}
+
                 </View>
               )}
+              {dynamicInputErr!==''&&<Text style={styles.err}>{dynamicInputErr}</Text>}
+                    
 
               <View style={styles.btnContainer}>
                 {/* <TouchableOpacity
@@ -297,7 +345,7 @@ const NewJob = (props) => {
             </TouchableOpacity> */}
                 <TouchableOpacity
                   style={styles.commonBtn}
-                  onPress={() => newJob(this)}
+                  onPress={newJob}
                 >
                   <Text style={styles.commonText}>Save</Text>
                 </TouchableOpacity>
@@ -395,6 +443,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
+  err:{color:'red'},
   quantityInput: {
     width: "50%",
     height: 52,

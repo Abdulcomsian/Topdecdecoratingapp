@@ -1,5 +1,4 @@
 import * as Actions from "../actionTypes";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
     // token: localStorage.getItem("token"),

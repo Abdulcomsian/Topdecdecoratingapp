@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
-import { resetLoginFlag } from "../Redux/action/auth/authActionTypes";
+import { resetLoginFlag ,JustLoginInternally} from "../Redux/action/auth/authActionTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackActions } from "@react-navigation/routers";
 
@@ -15,21 +15,21 @@ const SplashScreen = (props) => {
   //     },5000);
   //     return () => clearTimeout(timer);
   // }, []);
-  React.useEffect(() => {
+  useEffect(() => {
     // (async()=>{
-    AsyncStorage.clear();
+   AsyncStorage.clear();
     const unsubscribe = navigation.addListener("focus", async () => {
       props.resetLoginFlag();
       const authUser = await AsyncStorage.getItem("user");
       let user = JSON.parse(authUser);
-     
-      let token = user?.user?.role;
+      //let token = user?.user?.role;
       console.log("Splash Screen Token :",user)
       if (user) {
+          props.JustLoginInternally(user)
         if (user?.user?.role === "ADMIN") {
           setTimeout(() => {
             props.navigation.dispatch(StackActions.replace("MainScreen"));
-          }, 5000);
+          }, 1000);
         } else if (user?.user?.role === "DECORATOR") {
           setTimeout(() => {
             props.navigation.dispatch(
@@ -38,7 +38,7 @@ const SplashScreen = (props) => {
                 id: user?.user?.id,
               })
             );
-          }, 5000);
+          }, 1000);
         } else {
           setTimeout(() => {
             props.navigation.dispatch(
@@ -47,12 +47,10 @@ const SplashScreen = (props) => {
                 isUserID: user?.user?.id,
               })
             );
-          }, 5000);
+          }, 1000);
         }
       } else {
-        setTimeout(() => {
           navigation.navigate("LoginScreen");
-        }, 5000);
       }
     });
 
@@ -92,6 +90,7 @@ const SplashScreen = (props) => {
 };
 const mapDispatchToProps = (dispatch) => ({
   resetLoginFlag: () => dispatch(resetLoginFlag()),
+  JustLoginInternally: (payload) => dispatch(JustLoginInternally(payload)),
 });
 export default connect(null, mapDispatchToProps)(SplashScreen);
 

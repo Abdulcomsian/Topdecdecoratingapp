@@ -3,9 +3,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import Signature from "react-native-signature-canvas";
 import * as FileSystem from "expo-file-system";
 
-const SignatureComponent = (props) => {
-  const { returnImage } = props;
-  const [img, setImg] = React.useState("");
+const SignatureComponent = ({returnImage}) => {
   const handleSignature = (signature) => {
     const path = FileSystem.cacheDirectory + `${Math.random(0, 199)}.jpeg`;
     FileSystem.writeAsStringAsync(path, signature.replace("data:image/jpeg;base64,", ""), { encoding: FileSystem.EncodingType.Base64 })
@@ -22,7 +20,6 @@ const SignatureComponent = (props) => {
       });
   };
   return (
-    <>
       <Signature
         // handle when you click save button
         boolean
@@ -43,10 +40,7 @@ const SignatureComponent = (props) => {
         autoClear={true}
         imageType={"image/jpeg"}
       />
-    </>
   );
 };
 
 export default SignatureComponent;
-
-const styles = StyleSheet.create({});

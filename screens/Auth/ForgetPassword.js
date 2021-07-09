@@ -6,10 +6,16 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Text } from "native-base";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { emailLink,resetPassword,codeValidate } from "../../Redux/action/auth/authActionTypes";
+import {
+  emailLink,
+  resetPassword,
+  codeValidate,
+} from "../../Redux/action/auth/authActionTypes";
 import { useDispatch, useSelector, connect } from "react-redux";
 
 var logo = require("../../assets/authScreen/logo.jpeg");
@@ -17,39 +23,55 @@ var user = require("../../assets/authScreen/icon.png");
 var lock = require("../../assets/authScreen/lock.png");
 
 const ForgotPassword = (props) => {
-  const { navigation, token, isCode, isSuccess, isSuccessMsg, isValidateUserID, isResetSucces, isResetMsg } = props;
+  const {
+    navigation,
+    token,
+    isCode,
+    isSuccess,
+    isSuccessMsg,
+    isValidateUserID,
+    isResetSucces,
+    isResetMsg,
+  } = props;
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
+  const [emailErr, setEmailErr] = useState("");
   const [code, setCode] = useState("");
+  const [codeErr, setCodeErr] = useState("");
   const [userCode, setUserCode] = useState("");
+  const [userCodeErr, setUserCodeErr] = useState("");
   const [show, setShow] = useState(false);
   const [showEmail, setEmailShow] = useState(false);
   const [reset, setReset] = useState(false);
   const [password, setPassword] = useState("");
+  const [passwordErr, setPasswordErr] = useState("");
   const [resetPassword, setResetPassword] = useState("");
 
   console.log("Code :", isCode);
   console.log("Validate Code :", isValidateUserID);
   const postEmailLink = async () => {
     try {
-        let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if(email!=""){
-            if (regEmail.test(email) === false) {
-                alert("Email is Not Correct");
-                setEmail(email);
-            }
-            else {
-                setEmail(email);
-                alert("Email is Correct");
-                await props.postEmailLink(email);
-                console.log("EMail Code :", isCode)
-                setCode(isCode)
-                setReset(false)
-            }
+      let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (email != "") {
+        if (regEmail.test(email) === false) {
+          // alert("Email is Not Correct");
+          setEmailErr("Email is Not Correct");
+          setEmail(email);
+        } else {
+          setEmail(email);
+          const elIC = await props.postEmailLink(email);
+          console.log("whatsss :", elIC);
+          if (elIC) {
+            setEmailErr(elIC.message);
+          } else {
+            setCode(isCode);
+            setReset(false);
+          }
         }
-        else{
-          alert("Please Enter Emial Carefully !");
-        }
+      } else {
+        setEmailErr("Email is empty");
+        //alert("Please Enter Email Carefully !");
+      }
     } catch (err) {
       console.log(err.message);
     }
@@ -58,54 +80,68 @@ const ForgotPassword = (props) => {
     console.log("Use Code :", userCode);
     if (userCode.length >= 5) {
       if (userCode == isCode) {
-        alert("Code Match !");
+        //alert("Code Match !");
         props.postCodeValidate(userCode);
-        setReset(true)
+        setReset(true);
       }
     } else {
-      alert("Please Enter Valid Code");
+      //alert("Please Enter Valid Code");
+      setCodeErr("Please Enter Valid Code");
     }
   };
-  const checkPassword = async () =>{
-    let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    console.log("Password",password,regPass.test(password) === false)
-      console.log("Reset Password",resetPassword,regPass.test(resetPassword) === false)
-      if(password !="" && resetPassword!=""){
-    if (regPass.test(password) === false || regPass.test(resetPassword) === false) {
-      alert("Password / Reset Passsword is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
+  const checkPassword = async () => {
+    let regPass =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    console.log("Password", password, regPass.test(password) === false);
+    console.log(
+      "Reset Password",
+      resetPassword,
+      regPass.test(resetPassword) === false
+    );
+    if (password != "" && resetPassword != "") {
+      if (
+        regPass.test(password) === false ||
+        regPass.test(resetPassword) === false
+      ) {
+        //alert("Password / Reset Passsword is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
+        setPasswordErr(
+          "Password / Reset Password is Not Correct ! Please Enter At least One Capital Letter One Special Character and minimum 8 length of Password"
+        );
         setPassword(password);
-        setResetPassword(resetPassword)
+        setResetPassword(resetPassword);
         return false;
-    } 
-    else{
-        if(password==resetPassword){
-          await props.postResetPasswordHandler(isValidateUserID,password);
+      } else {
+        if (password == resetPassword) {
+          await props.postResetPasswordHandler(
+            isValidateUserID,
+            password,
+            navigation
+          );
           // setCode(isCode);
           setShow(true);
-        }
-        else{
-          alert("Your Password Not Match");
-          setPassword(password)
-          setResetPassword(resetPassword)
+        } else {
+          passwordErr("Your Password Not Match");
+          //alert("Your Password Not Match");
+          setPassword(password);
+          setResetPassword(resetPassword);
           return false;
         }
+      }
+    } else {
+      //alert("Password don't match")
+      passwordErr("Please don't leave password fields empty");
     }
-  }
-  else{
-    alert("Please Enter Password & Reset Password CareFully !")
-  }
-  }
+  };
   /* Email Send & recive Code */
 
   /* Check Validate Code User Exsit or Not */
-  useEffect(()=>{
-    if(isValidateUserID){
-      setReset(true)
-    }
-    else{
+  useEffect(() => {
+    if (isValidateUserID) {
+      setReset(true);
+    } else {
       /* If User Not Exist Alert Show */
     }
-  },[isValidateUserID]);
+  }, [isValidateUserID]);
   /* Reset Password Success Or Not */
   // useEffect(() => {
   //   if(isResetSucces){
@@ -132,8 +168,12 @@ const ForgotPassword = (props) => {
         </Text>
       </View>
 
-      <KeyboardAwareScrollView style={{ height: "100%", width: "100%" }}>
-        <View style={styles.formConatiner}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={"position"}
+        enabled={Platform.OS === "ios"}
+      >
+        <View style={{ ...styles.formConatiner, backgroundColor: "#F2F2F2" }}>
           {code == "" ? (
             <View style={{ width: "100%" }}>
               <View style={styles.inputContainer}>
@@ -142,84 +182,113 @@ const ForgotPassword = (props) => {
                 </View>
                 <View style={styles.inputFieldContainer}>
                   <TextInput
-                    onChangeText={(e) => setEmail(e)}
+                    onChangeText={(e) => {
+                      setEmail(e);
+                      emailErr && setEmailErr("");
+                    }}
                     value={email}
-                    style={styles.inputField}
+                    style={
+                      emailErr
+                        ? { ...styles.inputField, borderBottomColor: "red" }
+                        : styles.inputField
+                    }
                     placeholder={"Email"}
                   />
                 </View>
               </View>
-              <TouchableOpacity
-                style={styles.loginBtn}
-                onPress={() => postEmailLink()}
-              >
+              {emailErr !== "" && (
+                <Text style={{ color: "red", marginBottom: 10 }}>
+                  {emailErr}
+                </Text>
+              )}
+              <TouchableOpacity style={styles.loginBtn} onPress={postEmailLink}>
                 <Text style={styles.loginText}>Send Email</Text>
               </TouchableOpacity>
             </View>
+          ) : reset == true ? (
+            <View style={{ width: "100%" }}>
+              <View style={styles.inputContainer}>
+                <View style={styles.iconContainer}>
+                  <Image style={styles.iconImg} source={lock} />
+                </View>
+                <View style={styles.inputFieldContainer}>
+                  <TextInput
+                    value={password}
+                    onChangeText={(e) => {
+                      passwordErr && setPasswordErr("");
+                      setPassword(e);
+                    }}
+                    style={styles.inputField}
+                    placeholder={"Enter New Password"}
+                    secureTextEntry={true}
+                  />
+                </View>
+              </View>
+              <View style={styles.inputContainer}>
+                <View style={styles.iconContainer}>
+                  <Image style={styles.iconImg} source={lock} />
+                </View>
+                <View style={styles.inputFieldContainer}>
+                  <TextInput
+                    value={resetPassword}
+                    onChangeText={(e) => {
+                      passwordErr && setPasswordErr("");
+                      setResetPassword(e);
+                    }}
+                    style={styles.inputField}
+                    placeholder={"Re-Enter New Password"}
+                    secureTextEntry={true}
+                  />
+                </View>
+              </View>
+              {passwordErr !== "" && (
+                <Text style={{ color: "red", marginBottom: 10 }}>
+                  {passwordErr}
+                </Text>
+              )}
+              <TouchableOpacity
+                style={[styles.loginBtn, { marginTop: 20 }]}
+                onPress={checkPassword}
+              >
+                <Text style={styles.loginText}>Reset Password</Text>
+              </TouchableOpacity>
+            </View>
           ) : (
-              reset==true ?
-                <View style={{ width: "100%" }}>
-                    <View style={styles.inputContainer}>
-                        <View style={styles.iconContainer}>
-                        <Image style={styles.iconImg} source={lock} />
-                        </View>
-                        <View style={styles.inputFieldContainer}>
-                        <TextInput
-                            onChangeText={(e) => setPassword(e)}
-                            style={styles.inputField}
-                            placeholder={"Enter New Password"}
-                            secureTextEntry={true}
-                        />
-                        </View>
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <View style={styles.iconContainer}>
-                        <Image style={styles.iconImg} source={lock} />
-                        </View>
-                        <View style={styles.inputFieldContainer}>
-                        <TextInput
-                            onChangeText={(e) => setResetPassword(e)}
-                            style={styles.inputField}
-                            placeholder={"Re-Enter New Password"}
-                            secureTextEntry={true}
-                        />
-                        </View>
-                    </View>
-                    <TouchableOpacity
-                        style={[styles.loginBtn, { marginTop: 20 }]}
-                        onPress={() => checkPassword()}
-                    >
-                        <Text style={styles.loginText}>Reset Password</Text>
-                    </TouchableOpacity>
+            <View style={{ width: "100%" }}>
+              <View style={styles.inputContainer}>
+                <View style={styles.iconContainer}>
+                  <Image style={styles.iconImg} source={lock} />
                 </View>
-                :
-                <View style={{ width: "100%" }}>
-                    <View style={styles.inputContainer}>
-                        <View style={styles.iconContainer}>
-                        <Image style={styles.iconImg} source={lock} />
-                        </View>
-                        <View style={styles.inputFieldContainer}>
-                        <TextInput
-                            onChangeText={(e) => setUserCode(e)}
-                            style={styles.inputField}
-                            placeholder={"Enter Your Code"}
-                        />
-                        </View>
-                    </View>
-                    <TouchableOpacity
-                        style={[styles.loginBtn, { marginTop: 20 }]}
-                        onPress={() => checkCode()}
-                    >
-                        <Text style={styles.loginText}>Send Code</Text>
-                    </TouchableOpacity>
+                <View style={styles.inputFieldContainer}>
+                  <TextInput
+                    onChangeText={(e) => {
+                      setUserCode(e);
+                      codeErr && setCodeErr("");
+                    }}
+                    style={styles.inputField}
+                    placeholder={"Enter Your Code"}
+                  />
                 </View>
+              </View>
+              {codeErr !== "" && (
+                <Text style={{ color: "red", marginBottom: 10 }}>
+                  {codeErr}
+                </Text>
+              )}
+              <TouchableOpacity
+                style={[styles.loginBtn, { marginTop: 20 }]}
+                onPress={checkCode}
+              >
+                <Text style={styles.loginText}>Send Code</Text>
+              </TouchableOpacity>
+            </View>
           )}
 
           <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
             <Text style={styles.forgetText}>Back to Login</Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
       <View style={styles.lastContainer}>
         <Text style={styles.calimText}>
           Excepteur sint occaecat cupidatat non proident, sunt in culpa
@@ -236,12 +305,13 @@ const mapStateToProps = (state) => ({
   isCode: state.auth.isCode,
   isValidateUserID: state.auth.isValidateUserID,
   isResetSucces: state.auth.isResetSucces,
-  isResetMsg: state.auth.isResetMsg
+  isResetMsg: state.auth.isResetMsg,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   postEmailLink: (email) => dispatch(emailLink(email)),
-  postResetPasswordHandler: (isValidateUserID,password) => dispatch(resetPassword(isValidateUserID,password)),
+  postResetPasswordHandler: (isValidateUserID, password, navigation) =>
+    dispatch(resetPassword(isValidateUserID, password, navigation)),
   postCodeValidate: (userCode) => dispatch(codeValidate(userCode)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);
@@ -268,9 +338,9 @@ const styles = StyleSheet.create({
   },
   logoImage: {
     justifyContent: "center",
-    width:450,
-    height:150,
-    resizeMode:"center"
+    width: 450,
+    height: 150,
+    resizeMode: "center",
   },
   formConatiner: {
     width: "100%",
