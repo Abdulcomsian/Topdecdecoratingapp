@@ -32,7 +32,7 @@
         "backgroundColor": "#000000" 
       },
       "package": "com.accrualgroup.topdecdecorating",
-      "versionCode": 2,
+      "versionCode": 3,
       "permissions": ["CAMERA", "CAMERA_ROLL", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
