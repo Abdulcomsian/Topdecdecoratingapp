@@ -144,7 +144,7 @@ const LoginScreen = (props) => {
               <TextInput
                 onChangeText={(e) => {
                   setEmail(e);
-                  emailErr && setEmailErr("");
+                  emailErr && setEmailErr('');
                 }}
                 value={email}
                 style={
