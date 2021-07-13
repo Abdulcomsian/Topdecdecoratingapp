@@ -170,15 +170,16 @@ export const createNewJobCreation = (
         data,
       });
       const response = request.data;
-      //console.log(response);
-      if (response.success == true) {
-        dispatch({
-          type: Actions.CREATE_NEW_JOB_SUCCESS,
-          payload: response,
-        });
-      } else {
-        throw new Error(response.message);
-      }
+      console.log("DataXXXX",response);
+
+      // if (response.success == true) {
+      //   dispatch({
+      //     type: Actions.CREATE_NEW_JOB_SUCCESS,
+      //     payload: response,
+      //   });
+      // } else {
+      //   throw new Error(response.message);
+      // }
     } catch (err) {
       console.log(err?.response?.request);
       throw new Error(err.message);

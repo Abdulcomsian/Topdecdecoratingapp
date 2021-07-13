@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,Fragment } from "react";
 import {
   View,
   StyleSheet,
@@ -10,7 +10,6 @@ import {
 import { Text } from "native-base";
 import axios from "axios";
 import ListView from "../../components/common/listView";
-import { Fragment } from "react";
 
 const AllJobs = (props) => {
   const { navigation } = props;
@@ -45,12 +44,14 @@ const AllJobs = (props) => {
           }
         );
         const response = await request.data;
-        console.log("Insert Response :", response);
+        console.log("Insert Response :", request);
         if (response.success) {
           setJobData(response.data.user);
+          setShowView(true);
+        } else {
+          setShowView(false);
         }
         setLoading(false);
-        setShowView(false);
       })();
     } catch (err) {
       console.log("Error");

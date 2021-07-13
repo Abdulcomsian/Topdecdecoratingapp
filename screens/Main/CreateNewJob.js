@@ -61,23 +61,13 @@ const NewJob = (props) => {
         date != "" &&
         dynamicInput.length > 0
       ) {
-        const tDate = new Date(date);
-        const day = tDate.getDate();
-        const month = tDate.getMonth() + 1;
-        const year = tDate.getFullYear();
-        const newDate =
-          (day < 10 ? "0" + day : day) +
-          "/" +
-          (month < 10 ? "0" + month : month) +
-          "/" +
-          year;
-        console.log("Date", newDate);
+      
         await props.createNewJobHandler(
           constructorName,
           projectName,
           weekProject,
           selectedValue,
-          newDate,
+          getCustomData(date),
           dynamicInput,
           token
         );
