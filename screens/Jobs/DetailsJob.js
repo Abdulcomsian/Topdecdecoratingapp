@@ -17,7 +17,7 @@ const DetailsJob = (props) => {
   const date = props.route.params.selectedDate;
   const reference_number = props.route.params.refernceNum;
   const token = props.route.params.token;
-  const [contractorName, setConstructorName] = useState(
+  const [contractorName] = useState(
     props.route.params.searchJobData.contractor
   );
   const [projectName] = useState(props.route.params.searchJobData.project);
@@ -42,7 +42,7 @@ const DetailsJob = (props) => {
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Job Details</Text>
       </View>
-      <ScrollView style={{width: "100%" }}>
+      <ScrollView style={{ width: "100%" }}>
         <View style={styles.formConatiner}>
           <View style={styles.inputFieldContainer}>
             <Text style={styles.decoratorTitle}>Contructor Name:</Text>
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-medium",
   },
   titleContainer: {
-    padding:'5%',
+    padding: "5%",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",

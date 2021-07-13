@@ -18,11 +18,11 @@ const AllJobs = (props) => {
   const date = props.route.params.selectedDate;
   const reference_number = props.route.params.refernceNum;
   const token = props.route.params.token;
-  const [contractorName, setConstructorName] = useState("");
-  const [projectName, setProjectName] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [supervisorID, setSupervisorID] = useState("");
-  const [weeks, setWeeks] = useState("");
+  // const [contractorName, setConstructorName] = useState("");
+  // const [projectName, setProjectName] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [supervisorID, setSupervisorID] = useState("");
+  // const [weeks, setWeeks] = useState("");
   const [jobData, setJobData] = useState([]);
   const [showView, setShowView] = useState(false);
 
@@ -31,7 +31,7 @@ const AllJobs = (props) => {
 
   useEffect(() => {
     try {
-      const body = { reference_number, date, token };
+      const data = { reference_number, date, token };
       (async () => {
         setLoading(true);
         const request = await axios(
@@ -41,19 +41,16 @@ const AllJobs = (props) => {
             headers: {
               authorization: "Bearer " + token,
             },
-            data: body,
+            data,
           }
         );
         const response = await request.data;
         console.log("Insert Response :", response);
         if (response.success) {
           setJobData(response.data.user);
-          setLoading(false);
-          setShowView(true);
-        } else {
-          setLoading(false);
-          setShowView(false);
         }
+        setLoading(false);
+        setShowView(false);
       })();
     } catch (err) {
       console.log("Error");

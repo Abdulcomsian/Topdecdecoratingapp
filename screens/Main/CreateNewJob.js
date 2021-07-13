@@ -16,7 +16,7 @@ import axios from "axios";
 import { Picker } from "native-base";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Fragment } from "react";
-
+import { getCustomData } from "../../lib/utils";
 var plus = require("../../assets/authScreen/plus.png");
 const NewJob = (props) => {
   const { navigation, isJobId, isJob, isJobMsg, token } = props;
@@ -61,12 +61,23 @@ const NewJob = (props) => {
         date != "" &&
         dynamicInput.length > 0
       ) {
+        const tDate = new Date(date);
+        const day = tDate.getDate();
+        const month = tDate.getMonth() + 1;
+        const year = tDate.getFullYear();
+        const newDate =
+          (day < 10 ? "0" + day : day) +
+          "/" +
+          (month < 10 ? "0" + month : month) +
+          "/" +
+          year;
+        console.log("Date", newDate);
         await props.createNewJobHandler(
           constructorName,
           projectName,
           weekProject,
           selectedValue,
-          date.toLocaleDateString(),
+          newDate,
           dynamicInput,
           token
         );
@@ -91,6 +102,7 @@ const NewJob = (props) => {
 
     setShow(false);
     dateErr && setDateErr("");
+    
     setDate(new Date(currentDate));
   };
   const showDatepicker = () => {
@@ -130,289 +142,291 @@ const NewJob = (props) => {
     );
   } else {
     return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <View style={styles.mainContainer}>
-          <DateTimePickerModal
-            isVisible={show}
-            date={date ? date : new Date()}
-            mode={"date"}
-            is24Hour={true}
-            display="default"
-            onConfirm={(date) => onChange(date)}
-            onCancel={() => setShow(false)}
-            cancelTextIOS="Cancel"
-            confirmTextIOS="Confirm"
-          />
-          {/* <View style={styles.dateTimeContainer}>
+      <Fragment>
+        <DateTimePickerModal
+          isVisible={show}
+          date={date ? date : new Date()}
+          mode={"date"}
+          is24Hour={true}
+          display="default"
+          onConfirm={(date) => onChange(date)}
+          onCancel={() => setShow(false)}
+          cancelTextIOS="Cancel"
+          confirmTextIOS="Confirm"
+        />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+        >
+          <View style={styles.mainContainer}>
+            {/* <View style={styles.dateTimeContainer}>
           <Text style={styles.refText}>Date: 12-2-2021</Text>
           <Text style={styles.refText}>Ref id: 10099499</Text>
         </View> */}
 
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Input job details</Text>
-          </View>
-          <ScrollView>
-            <View style={styles.formConatiner}>
-              <View
-                style={
-                  constructorNameErr
-                    ? {
-                        ...styles.inputFieldContainer,
-                        borderBottomColor: "red",
-                      }
-                    : styles.inputFieldContainer
-                }
-              >
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Main Contractor Name"}
-                  value={constructorName}
-                  onChangeText={(e) => {
-                    setConstructorName(e);
-                    constructorNameErr && setConstructorNameErr("");
-                  }}
-                />
-              </View>
-
-              {constructorNameErr !== "" && (
-                <Text style={styles.err}>{constructorNameErr}</Text>
-              )}
-
-              <View
-                style={
-                  projectNameErr
-                    ? {
-                        ...styles.inputFieldContainer,
-                        borderBottomColor: "red",
-                      }
-                    : styles.inputFieldContainer
-                }
-              >
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Project Name"}
-                  value={projectName}
-                  onChangeText={(e) => {
-                    setProjectName(e);
-                    projectNameErr && setProjectNameErr("");
-                  }}
-                />
-              </View>
-              {projectNameErr !== "" && (
-                <Text style={styles.err}>{projectNameErr}</Text>
-              )}
-
-              <View
-                style={
-                  weekProjectErr
-                    ? {
-                        ...styles.inputFieldContainer,
-                        borderBottomColor: "red",
-                      }
-                    : styles.inputFieldContainer
-                }
-              >
-                <TextInput
-                  style={styles.inputField}
-                  placeholder={"Number of weeks for project"}
-                  value={weekProject}
-                  onChangeText={(e) => {
-                    setWeekProject(e.replace(/[^0-9]/g, ""));
-                    weekProjectErr && setWeekProjectErr("");
-                  }}
-                />
-              </View>
-
-              {weekProjectErr !== "" && (
-                <Text style={styles.err}>{weekProjectErr}</Text>
-              )}
-
-              <View
-                style={
-                  supervisorDataErr
-                    ? {
-                        ...styles.inputFieldContainer,
-                        borderBottomColor: "red",
-                      }
-                    : styles.inputFieldContainer
-                }
-              >
-                <Picker
-                  mode="dropdown"
-                  placeholder="Select Supervisor Name"
-                  // iosIcon={<Icon name='arrow-down' />}
-                  itemTextStyle={{
-                    color: "#96A8B2",
-                    fontFamily: "poppins-regular",
-                    padding: 0,
-                    margin: 0,
-                  }}
-                  textStyle={{
-                    color: "#96A8B2",
-                    fontSize: 16,
-                    fontFamily: "poppins-regular",
-                    padding: 0,
-                    margin: 0,
-                  }}
-                  style={{
-                    color: "#96A8B2",
-                    padding: 0,
-                    margin: 0,
-                  }}
-                  selectedValue={selectedValue}
-                  onValueChange={(itemValue, itemIndex) => {
-                    supervisorDataErr && setSupervisorDataErr("");
-                    setSelectedValue(itemValue);
-                  }}
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Input job details</Text>
+            </View>
+            <ScrollView>
+              <View style={styles.formConatiner}>
+                <View
+                  style={
+                    constructorNameErr
+                      ? {
+                          ...styles.inputFieldContainer,
+                          borderBottomColor: "red",
+                        }
+                      : styles.inputFieldContainer
+                  }
                 >
-                  <Picker.Item
-                    style={{
+                  <TextInput
+                    style={styles.inputField}
+                    placeholder={"Main Contractor Name"}
+                    value={constructorName}
+                    onChangeText={(e) => {
+                      setConstructorName(e);
+                      constructorNameErr && setConstructorNameErr("");
+                    }}
+                  />
+                </View>
+
+                {constructorNameErr !== "" && (
+                  <Text style={styles.err}>{constructorNameErr}</Text>
+                )}
+
+                <View
+                  style={
+                    projectNameErr
+                      ? {
+                          ...styles.inputFieldContainer,
+                          borderBottomColor: "red",
+                        }
+                      : styles.inputFieldContainer
+                  }
+                >
+                  <TextInput
+                    style={styles.inputField}
+                    placeholder={"Project Name"}
+                    value={projectName}
+                    onChangeText={(e) => {
+                      setProjectName(e);
+                      projectNameErr && setProjectNameErr("");
+                    }}
+                  />
+                </View>
+                {projectNameErr !== "" && (
+                  <Text style={styles.err}>{projectNameErr}</Text>
+                )}
+
+                <View
+                  style={
+                    weekProjectErr
+                      ? {
+                          ...styles.inputFieldContainer,
+                          borderBottomColor: "red",
+                        }
+                      : styles.inputFieldContainer
+                  }
+                >
+                  <TextInput
+                    style={styles.inputField}
+                    placeholder={"Number of weeks for project"}
+                    value={weekProject}
+                    onChangeText={(e) => {
+                      setWeekProject(e.replace(/[^0-9]/g, ""));
+                      weekProjectErr && setWeekProjectErr("");
+                    }}
+                  />
+                </View>
+
+                {weekProjectErr !== "" && (
+                  <Text style={styles.err}>{weekProjectErr}</Text>
+                )}
+
+                <View
+                  style={
+                    supervisorDataErr
+                      ? {
+                          ...styles.inputFieldContainer,
+                          borderBottomColor: "red",
+                        }
+                      : styles.inputFieldContainer
+                  }
+                >
+                  <Picker
+                    mode="dropdown"
+                    placeholder="Select Supervisor Name"
+                    // iosIcon={<Icon name='arrow-down' />}
+                    itemTextStyle={{
+                      color: "#96A8B2",
                       fontFamily: "poppins-regular",
                       padding: 0,
                       margin: 0,
                     }}
-                    label="Select Supervisor Name"
-                    value="Select Supervisor Name"
-                  />
-                  {supervisorData &&
-                    supervisorData.map((item, index) => (
-                      <Picker.Item
-                        key={"PickItem" + index}
-                        style={{
-                          fontFamily: "poppins-regular",
-                          padding: 0,
-                          margin: 0,
-                        }}
-                        label={item.name.toString()}
-                        value={item?.id.toString()}
-                      />
-                    ))}
-                </Picker>
-              </View>
+                    textStyle={{
+                      color: "#96A8B2",
+                      fontSize: 16,
+                      fontFamily: "poppins-regular",
+                      padding: 0,
+                      margin: 0,
+                    }}
+                    style={{
+                      color: "#96A8B2",
+                      padding: 0,
+                      margin: 0,
+                    }}
+                    selectedValue={selectedValue}
+                    onValueChange={(itemValue, itemIndex) => {
+                      supervisorDataErr && setSupervisorDataErr("");
+                      setSelectedValue(itemValue);
+                    }}
+                  >
+                    <Picker.Item
+                      style={{
+                        fontFamily: "poppins-regular",
+                        padding: 0,
+                        margin: 0,
+                      }}
+                      label="Select Supervisor Name"
+                      value="Select Supervisor Name"
+                    />
+                    {supervisorData &&
+                      supervisorData.map((item, index) => (
+                        <Picker.Item
+                          key={"PickItem" + index}
+                          style={{
+                            fontFamily: "poppins-regular",
+                            padding: 0,
+                            margin: 0,
+                          }}
+                          label={item.name.toString()}
+                          value={item?.id.toString()}
+                        />
+                      ))}
+                  </Picker>
+                </View>
 
-              {supervisorDataErr !== "" && (
-                <Text style={styles.err}>{supervisorDataErr}</Text>
-              )}
-              <View
-                style={
-                  dateErr
-                    ? {
-                        ...styles.inputFieldContainer,
-                        borderBottomColor: "red",
-                      }
-                    : styles.inputFieldContainer
-                }
-              >
-                <Text
-                  onPress={showDatepicker}
+                {supervisorDataErr !== "" && (
+                  <Text style={styles.err}>{supervisorDataErr}</Text>
+                )}
+                <View
+                  style={
+                    dateErr
+                      ? {
+                          ...styles.inputFieldContainer,
+                          borderBottomColor: "red",
+                        }
+                      : styles.inputFieldContainer
+                  }
+                >
+                  <Text
+                    onPress={showDatepicker}
+                    style={{
+                      width: "100%",
+                      height: 60,
+                      paddingTop: 20,
+                      fontSize: 16,
+                      color: "#96A8B2",
+                      fontFamily: "poppins-regular",
+                    }}
+                  >
+                    {date ? getCustomData(date) : "Date"}
+                  </Text>
+                </View>
+
+                {dateErr !== "" && <Text style={styles.err}>{dateErr}</Text>}
+                <View style={styles.titleContainer}>
+                  <Text style={styles.titleText}>Job Summary</Text>
+                </View>
+                <View
                   style={{
                     width: "100%",
-                    height: 60,
-                    paddingTop: 20,
-                    fontSize: 16,
-                    color: "#96A8B2",
-                    fontFamily: "poppins-regular",
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
                   }}
                 >
-                  {date ? new Date(date).toLocaleDateString() : "Date"}
-                </Text>
-              </View>
-
-              {dateErr !== "" && <Text style={styles.err}>{dateErr}</Text>}
-              <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Job Summary</Text>
-              </View>
-              <View
-                style={{
-                  width: "100%",
-                  justifyContent: "flex-end",
-                  alignItems: "flex-end",
-                }}
-              >
-                <TouchableOpacity
-                  style={styles.addBtn}
-                  onPress={() => {
-                    if (
-                      dynamicInput.length > 0 &&
-                      !dynamicInput[dynamicInput.length - 1].qty &&
-                      !dynamicInput[dynamicInput.length - 1].description
-                    ) {
-                      // alert(
-                      //   );
-                      setdynamicInputErr(
-                        "Please Enter All Value and then move to next Item Add !"
-                      );
-                    } else {
-                      addInput();
-                    }
-                  }}
-                >
-                  <Image style={styles.plusBtn} source={plus} />
-                </TouchableOpacity>
-              </View>
-
-              {dynamicInput.length > 0 && (
-                <View
-                  style={[styles.dynamicInput, { flexDirection: "column" }]}
-                >
-                  {dynamicInput.map((el, index) => (
-                    <Fragment key={"dynamicInput" + index}>
-                      <View style={styles.inputContainer}>
-                        <TextInput
-                          onChangeText={(txt) => {
-                            updateValue(
-                              "qty",
-                              index,
-                              txt.replace(/[^0-9]/g, "")
-                            );
-                            dynamicInputErr && setdynamicInputErr("");
-                          }}
-                          style={styles.quantityInput}
-                          value={el.qty}
-                          placeholder={"Quantity"}
-                        />
-                        <TextInput
-                          onChangeText={(txt) => {
-                            updateValue("description", index, txt);
-                            dynamicInputErr && setdynamicInputErr("");
-                          }}
-                          style={styles.descriptionInput}
-                          value={el.description}
-                          placeholder={"Description"}
-                        />
-                      </View>
-                    </Fragment>
-                  ))}
+                  <TouchableOpacity
+                    style={styles.addBtn}
+                    onPress={() => {
+                      if (
+                        dynamicInput.length > 0 &&
+                        !dynamicInput[dynamicInput.length - 1].qty &&
+                        !dynamicInput[dynamicInput.length - 1].description
+                      ) {
+                        // alert(
+                        //   );
+                        setdynamicInputErr(
+                          "Please Enter All Value and then move to next Item Add !"
+                        );
+                      } else {
+                        addInput();
+                      }
+                    }}
+                  >
+                    <Image style={styles.plusBtn} source={plus} />
+                  </TouchableOpacity>
                 </View>
-              )}
-              {dynamicInputErr !== "" && (
-                <Text style={styles.err}>{dynamicInputErr}</Text>
-              )}
 
-              <View style={styles.btnContainer}>
-                {/* <TouchableOpacity
+                {dynamicInput.length > 0 && (
+                  <View
+                    style={[styles.dynamicInput, { flexDirection: "column" }]}
+                  >
+                    {dynamicInput.map((el, index) => (
+                      <Fragment key={"dynamicInput" + index}>
+                        <View style={styles.inputContainer}>
+                          <TextInput
+                            onChangeText={(txt) => {
+                              updateValue(
+                                "qty",
+                                index,
+                                txt.replace(/[^0-9]/g, "")
+                              );
+                              dynamicInputErr && setdynamicInputErr("");
+                            }}
+                            style={styles.quantityInput}
+                            value={el.qty}
+                            placeholder={"Quantity"}
+                          />
+                          <TextInput
+                            onChangeText={(txt) => {
+                              updateValue("description", index, txt);
+                              dynamicInputErr && setdynamicInputErr("");
+                            }}
+                            style={styles.descriptionInput}
+                            value={el.description}
+                            placeholder={"Description"}
+                          />
+                        </View>
+                      </Fragment>
+                    ))}
+                  </View>
+                )}
+                {dynamicInputErr !== "" && (
+                  <Text style={styles.err}>{dynamicInputErr}</Text>
+                )}
+
+                <View style={styles.btnContainer}>
+                  {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("TotalSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-                {/* <TouchableOpacity
+                  {/* <TouchableOpacity
                 style={styles.commonBtn}
                 onPress={() => navigation.navigate("SelectSummary")}
             >
                 <Text style={styles.commonText}>Save</Text>
             </TouchableOpacity> */}
-                <TouchableOpacity style={styles.commonBtn} onPress={newJob}>
-                  <Text style={styles.commonText}>Save</Text>
-                </TouchableOpacity>
+                  <TouchableOpacity style={styles.commonBtn} onPress={newJob}>
+                    <Text style={styles.commonText}>Save</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </ScrollView>
-        </View>
-      </KeyboardAvoidingView>
+            </ScrollView>
+          </View>
+        </KeyboardAvoidingView>
+      </Fragment>
     );
   }
 };

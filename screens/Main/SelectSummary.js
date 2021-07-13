@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
 
-var rightArrow = require("../../assets/authScreen/right.png");
+const rightArrow = require("../../assets/authScreen/right.png");
 const SelectSummary = (props) => {
   const { navigation, token, isJobId, summary } = props;
   const { plot_id, plotName } = props.route.params;
@@ -14,19 +14,20 @@ const SelectSummary = (props) => {
       {/* <View style={styles.dateTimeContainer}>
         <Text style={styles.refText}>Date: 12-2-2021</Text>
         <Text style={styles.refText}>Ref id: 10099499</Text>
-      </View> */}
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Select Summary</Text>
       </View>
+       <View style={styles.titleContainer}>
+        <Text style={styles.titleText}>Select Summary</Text>
+      </View> */}
       <View style={{ height: "70%", width: "100%" }}>
         <View style={{ paddingTop: 30, paddingLeft: 20, paddingRight: 20 }}>
           {summary.map((item, index) => (
             <TouchableOpacity
+              key={"_Summary_" + index}
               style={styles.commonBtn}
               onPress={() =>
                 navigation.navigate(item.url, {
-                  plot_id: plot_id,
-                  plotName: plotName,
+                  plot_id,
+                  plotName,
                 })
               }
             >
@@ -44,10 +45,10 @@ const SelectSummary = (props) => {
     </View>
   );
 };
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
-  isJobId: state.auth.isJobId,
-  summary: state.summary.summaryReport,
+const mapStateToProps = ({auth,summary}) => ({
+  token: auth.token,
+  isJobId: auth.isJobId,
+  summary: summary.summaryReport,
 });
 const mapDispatchToProps = (dispatch) => ({});
 export default connect(mapStateToProps, mapDispatchToProps)(SelectSummary);

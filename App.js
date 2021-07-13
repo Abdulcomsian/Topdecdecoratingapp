@@ -5,6 +5,7 @@ import MainNavigator from "./navigation/MainNavigator";
 import { loadAsync } from "expo-font";
 import { Provider } from "react-redux";
 import * as SplashScreen from "expo-splash-screen";
+import { enableScreens } from 'react-native-screens';
 import Store from "./Redux";
 import { navigationRef } from "./navigation/RootNavigation";
 //import rootReducer from "./Redux/rootReducer";
@@ -18,6 +19,7 @@ import { navigationRef } from "./navigation/RootNavigation";
 //   composeEnhancers(applyMiddleware(thunk))
 // );
 //const Stack = createStackNavigator();
+enableScreens(true);
 const App = () => {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   useEffect(() => {

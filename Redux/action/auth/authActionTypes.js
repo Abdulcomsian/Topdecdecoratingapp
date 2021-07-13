@@ -153,7 +153,7 @@ export const createNewJobCreation = (
     try {
       console.log(jobSummary);
       // console.log()
-      const body = {
+      const data = {
         contractor,
         project,
         weeks,
@@ -167,7 +167,7 @@ export const createNewJobCreation = (
         headers: {
           authorization: "Bearer " + token,
         },
-        data: body,
+        data,
       });
       const response = request.data;
       //console.log(response);
@@ -189,16 +189,16 @@ export const searchJob = (reference_number, date, token) => {
   return async (dispatch, getState) => {
     try {
       console.log(date);
-      const body = { reference_number, date };
+      const data = { reference_number, date };
       const request = await axios(base_url + "admin/search/job/refid", {
         method: "POST",
         headers: {
           authorization: "Bearer " + token,
         },
-        data: body,
+        data,
       });
       const response = request.data;
-      console.log(response);
+      console.log("Here Is the res",response);
     } catch (err) {
       throw new Error(err.message);
     }

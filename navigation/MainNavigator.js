@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Text } from "react-native";
+import { Button, Text, Platform } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { logout } from "../Redux/action/auth/authActionTypes";
 //import { useNavigation } from "@react-navigation/native";
@@ -480,6 +480,7 @@ const getHeaderCommonSetting = () => {
     headerStyle: {
       backgroundColor: "#1073AC",
     },
+    headerTitleAlign: 'center' ,
     headerBackTitleVisible: false,
     headerTitleStyle: {
       alignSelf: "center",
@@ -489,7 +490,7 @@ const getHeaderCommonSetting = () => {
       <Button
         onPress={() => Store.dispatch(logout())}
         title="Logout"
-        color="#fff"
+        color={Platform.OS === "ios" ? "#fff" : "#1073AC"}
       />
     ),
   };
@@ -796,7 +797,7 @@ const getHeaderTitle = (routeName) => {
     case "DetailsJob":
       return {
         ...getHeaderCommonSetting(),
-        headerTitle: "Detail Job",
+        headerTitle: "Job Details",
       };
     case "TotalSummary":
       return {

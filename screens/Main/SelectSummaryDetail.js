@@ -11,13 +11,13 @@ const SelectSummaryDetail = ({ props, navigation }) => {
   ]);
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.dateTimeContainer}>
+      {/* <View style={styles.dateTimeContainer}>
         <Text style={styles.refText}>Date: 12-2-2021</Text>
         <Text style={styles.refText}>Ref id: 10099499</Text>
       </View>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>Select Summary Details</Text>
-      </View>
+      </View> */}
       <View style={{ height: "70%", width: "100%" }}>
         <View style={{ paddingTop: 30, paddingLeft: 20, paddingRight: 20 }}>
           {plotArray.map((item, index) => (

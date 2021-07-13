@@ -10,15 +10,13 @@ import { Text } from "native-base";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { searchJob } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
-
-const SearchJob = (props) => {
-  const { navigation } = props;
-  const [date, setDate] = useState(new Date());
+import { getCustomData } from "../../lib/utils";
+const SearchJob = ({ navigation, token }) => {
+  const [date, setDate] = useState(new Date().toLocaleDateString());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [refID, setRefID] = useState("");
   const [changeDate, setChnageDate] = useState(false);
-  const [token, setToken] = useState(props.token);
   const [basedText, setBasedText] = useState("");
   const onChange = (selectedDate) => {
     const currentDate = selectedDate;
@@ -45,34 +43,34 @@ const SearchJob = (props) => {
       if (changeDate) {
         console.log("Changed Date with Ref ID");
         setBasedText("Changed Date with Ref ID");
-        props.navigation.navigate("AllJobs", {
+        navigation.navigate("AllJobs", {
           selectedDate: date,
           refernceNum: refID,
           basedText: basedText,
           token: token,
         });
-        //props.searchJobHandler(refID,date,token)
+        //searchJobHandler(refID,date,token)
       } else {
         setBasedText("Just Ref ID");
-        props.navigation.navigate("AllJobs", {
+        navigation.navigate("AllJobs", {
           selectedDate: "",
           refernceNum: refID,
           basedText: basedText,
           token: token,
         });
-        //props.searchJobHandler(refID,date,token)
+        //searchJobHandler(refID,date,token)
         setDate(new Date());
       }
     } else if (changeDate) {
       console.log("Just Date");
       setBasedText("Just Date");
-      props.navigation.navigate("AllJobs", {
-        selectedDate: date,
+      navigation.navigate("AllJobs", {
+        selectedDate: getCustomData(date),
         refernceNum: refID,
         basedText: basedText,
         token: token,
       });
-      // props.searchJobHandler(refID,date,token)
+      // searchJobHandler(refID,date,token)
     } else {
       alert("Please Enter Refernce ID Or Date Select !");
     }
@@ -88,10 +86,12 @@ const SearchJob = (props) => {
           isVisible={show}
           testID="dateTimePicker"
           value={date}
-          mode={Platform.OS === "ios" ? "date" : "date"}
+          mode={"date"}
           display="default"
           onConfirm={onChange}
-          onCancel={() => {}}
+          onCancel={() => {
+            setShow(false);
+          }}
           format="DD-MM-YYYY"
           placeholder="Select Date"
         />
@@ -128,20 +128,14 @@ const SearchJob = (props) => {
           </Text>
           <View style={styles.inputFieldContainer}>
             <View style={styles.inputFieldContainer}>
-              <Text onPress={() => showDatepicker()} style={styles.inputField}>
-                {new Date(date).toLocaleDateString()}
+              <Text onPress={showDatepicker} style={styles.inputField}>
+                {getCustomData(date)}
               </Text>
             </View>
           </View>
         </View>
         <View style={styles.footerBtnView}>
-          {/* <TouchableOpacity style={styles.commonBtn}  onPress={() => navigation.navigate('DetailJob',{date:date,referenceId:refID})}>
-                    <Text style={styles.commonText}>Search</Text>
-                </TouchableOpacity> */}
-          <TouchableOpacity
-            style={styles.commonBtn}
-            onPress={() => searchJob(this)}
-          >
+          <TouchableOpacity style={styles.commonBtn} onPress={searchJob}>
             <Text style={styles.commonText}>Search</Text>
           </TouchableOpacity>
         </View>
@@ -149,7 +143,7 @@ const SearchJob = (props) => {
     </KeyboardAvoidingView>
   );
 };
-const mapStateToProps = ({auth}) => ({
+const mapStateToProps = ({ auth }) => ({
   token: auth.token,
 });
 const mapDispatchToProps = (dispatch) => ({

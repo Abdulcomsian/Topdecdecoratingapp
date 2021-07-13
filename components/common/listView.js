@@ -16,13 +16,14 @@ const listView = (props) => {
   const [searchJob, setSeachJob] = useState([]);
   const [typeData, setDataType] = useState("");
 
-  console.log("Navigation :", props);
+ // console.log("Navigation :", props);
 
   useEffect(() => {
     if (props.data) {
       setSeachJob(props.data);
       setDataType(props.data);
       console.log("after Fill :", searchJob);
+      console.log('Job',props.data)
     } else {
       setDataType(props.screenType);
       console.log("after Fill Type:", typeData);
@@ -39,7 +40,7 @@ const listView = (props) => {
               key={index}
               onPress={() =>
                 navigation.navigate("DetailsJob", {
-                  searchJobData: props.data[index],
+                  searchJobData: item,
                 })
               }
             >
@@ -53,15 +54,15 @@ const listView = (props) => {
     </View>
   );
 };
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
+const mapStateToProps = ({ auth }) => ({
+  token: auth.token,
 });
 const mapDispatchToProps = (dispatch) => ({});
 export default connect(mapStateToProps, mapDispatchToProps)(listView);
 
 const styles = StyleSheet.create({
   mainContainer: {
-   flex:1
+    flex: 1,
   },
   dateTimeContainer: {
     height: "5%",
