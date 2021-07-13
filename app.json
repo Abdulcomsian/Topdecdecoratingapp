@@ -2,7 +2,7 @@
   "expo": {
     "name": "Top Dec Decorating",
     "slug": "topdecdecorating",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/iconx.png",
     "splash": {
@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "0.0.7",
+      "buildNumber": "0.0.8",
       "bundleIdentifier": "com.accrualgroup.topdecdecorating",
       "infoPlist": {
       "NSPhotoLibraryUsageDescription": "Top dec Decortaing need you access your gallery to upload your images for Create Decorator",
@@ -32,7 +32,7 @@
         "backgroundColor": "#000000" 
       },
       "package": "com.accrualgroup.topdecdecorating",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": ["CAMERA", "CAMERA_ROLL", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
