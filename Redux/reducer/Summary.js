@@ -605,36 +605,36 @@ export default (state = INITIAL_STATE, action) => {
         snagArray: action.payload,
       };
 
-      case actions.UPDATE_MISCOT_VERIFICATION:
-        return {
-          ...state,
-          verificationMiscoatInfo: action.payload,
-        };
-      case actions.UPDATE_DECORATION_VERIFICATION:
-        return {
-          ...state,
-          verificationDecorationInfo: action.payload,
-        };
-      case actions.UPDATE_SNAG_VERIFICATION:
-        return {
-          ...state,
-          verificationSngInfo: action.payload,
-        };
-        case actions.UPDATE_MISCOT_HEALTH:
-          return {
-            ...state,
-            healthAndSafetyMisCoat: action.payload,
-          };
-        case actions.UPDATE_DECORATION_HEALTH:
-          return {
-            ...state,
-            healthAndSafetyDecoration: action.payload,
-          };
-        case actions.UPDATE_SNAG_HEALTH:
-          return {
-            ...state,
-            healthAndSafetySnag: action.payload,
-          };
+    case actions.UPDATE_MISCOT_VERIFICATION:
+      return {
+        ...state,
+        verificationMiscoatInfo: action.payload,
+      };
+    case actions.UPDATE_DECORATION_VERIFICATION:
+      return {
+        ...state,
+        verificationDecorationInfo: action.payload,
+      };
+    case actions.UPDATE_SNAG_VERIFICATION:
+      return {
+        ...state,
+        verificationSngInfo: action.payload,
+      };
+    case actions.UPDATE_MISCOT_HEALTH:
+      return {
+        ...state,
+        healthAndSafetyMisCoat: action.payload,
+      };
+    case actions.UPDATE_DECORATION_HEALTH:
+      return {
+        ...state,
+        healthAndSafetyDecoration: action.payload,
+      };
+    case actions.UPDATE_SNAG_HEALTH:
+      return {
+        ...state,
+        healthAndSafetySnag: action.payload,
+      };
     default:
       return state;
   }

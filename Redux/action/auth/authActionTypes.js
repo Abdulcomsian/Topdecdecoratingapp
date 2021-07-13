@@ -2,7 +2,9 @@ import * as Actions from "../../actionTypes";
 import axios from "axios";
 import { Platform, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-var base_url = "https://topdecdecoratingapp.com/api/";
+import { CommonActions } from "@react-navigation/native";
+import * as RootNavigation from "../../../navigation/RootNavigation";
+const base_url = "https://topdecdecoratingapp.com/api/";
 
 export const resetLoginFlag = () => {
   return { type: Actions.RESET_LOGIN_FLAG };
@@ -41,6 +43,21 @@ export const JustLoginInternally = (payload) => (dispatch) => {
   dispatch({
     type: Actions.LOGIN_SUCCESS,
     payload,
+  });
+};
+export const logout = () => (dispatch) => {
+  AsyncStorage.clear().then(() => {
+    dispatch({
+      type: Actions.LOGOUT,
+    });
+    setTimeout(() => {
+      RootNavigation.navigationRef.current?.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Splash" }],
+        })
+      );
+    }, 800);
   });
 };
 export const emailLink = (email) => {

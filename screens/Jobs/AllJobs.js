@@ -10,6 +10,7 @@ import {
 import { Text } from "native-base";
 import axios from "axios";
 import ListView from "../../components/common/listView";
+import { Fragment } from "react";
 
 const AllJobs = (props) => {
   const { navigation } = props;
@@ -80,23 +81,25 @@ const AllJobs = (props) => {
         {showView ? (
           <ListView data={jobData} {...props} />
         ) : (
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              height: "85%",
-            }}
-          >
-            <Text>Sorry No Data Found !</Text>
-          </View>
+          <Fragment>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "85%",
+              }}
+            >
+              <Text>Sorry No Data Found !</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.commonBtn}
+              onPress={props.navigation.goBack}
+            >
+              <Text style={styles.commonText}>Go Back</Text>
+            </TouchableOpacity>
+          </Fragment>
         )}
-        <TouchableOpacity
-          style={styles.commonBtn}
-          onPress={props.navigation.goBack}
-        >
-          <Text style={styles.commonText}>Go Back</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -105,8 +108,8 @@ export default AllJobs;
 
 const styles = StyleSheet.create({
   mainContainer: {
-   flex:1,
-   paddingTop:20
+    flex: 1,
+    paddingTop: 20,
   },
   dateTimeContainer: {
     height: "5%",
@@ -193,9 +196,9 @@ const styles = StyleSheet.create({
   commonBtn: {
     height: 50,
     width: "90%",
-    alignSelf:'center',
+    alignSelf: "center",
     justifyContent: "center",
-    marginBottom:20,
+    marginBottom: 20,
     alignItems: "center",
     borderRadius: 14,
     borderWidth: 3,

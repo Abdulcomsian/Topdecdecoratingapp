@@ -12,13 +12,9 @@ import { connect } from "react-redux";
 import { updateSupervisor } from "../../Redux/action/auth/authActionTypes";
 import axios from "axios";
 import { CheckBox } from "react-native-elements";
-
-var rightArrow = require("../../assets/authScreen/right.png");
 const SupervisorDetails = (props) => {
-  const { navigation, token, isUpdate, isUpdateMsg } = props;
+  const { navigation, token, isUpdate, isUpdateMsg, role } = props;
   const { id, userData } = props.route.params;
-  const [role, setRole] = useState(props.route.params.role);
-  const [password, setPassword] = useState("");
   const [supervisorData, setSupervisorData] = useState([]);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,11 +24,11 @@ const SupervisorDetails = (props) => {
   });
   const userID = id;
   const LoginToken = token;
-
+  console.log("Role-->", role);
   useEffect(() => {
     try {
       if (role) {
-        const body = { id };
+        const data = { id: userData.id };
         (async () => {
           setLoading(true);
           const request = await axios(
@@ -42,23 +38,32 @@ const SupervisorDetails = (props) => {
               headers: {
                 authorization: "Bearer " + token,
               },
-              data: body,
+              data,
             }
           );
           const response = await request.data;
           console.log(response);
           if (response.success == true) {
             console.log(response);
-            setSupervisorData(response.data.user);
-            setLoading(false);
+            setSupervisorData(
+              Array.isArray(response.data.user)
+                ? response.data.user
+                : [response.data.user]
+            );
+            setStatus(
+              Array.isArray(response.data.user)
+                ? response.data.user[0].status
+                : response.data.user.status
+            );
           } else {
-            setLoading(false);
             setErrorMsg(request.message);
           }
+          setLoading(false);
         })();
       } else {
         console.log("else !");
-        setSupervisorData(userData);
+        setSupervisorData(Array.isArray(userData) ? userData : [userData]);
+        setStatus(userData.status);
       }
     } catch (err) {
       console.log("Error");
@@ -86,7 +91,7 @@ const SupervisorDetails = (props) => {
         supervisorData[0].id,
         supervisorData[0].email,
         supervisorData[0].name,
-        supervisorData[0].number,
+        supervisorData[0].phone,
         status,
         token
       );
@@ -114,75 +119,79 @@ const SupervisorDetails = (props) => {
           <Text style={styles.refText}>Date: 12-2-2021</Text>
           <Text style={styles.refText}>Ref id: 10099499</Text>
         </View> */}
-{/* 
+        {/*
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Supervisor Detail</Text>
         </View> */}
-        {role == "supervisor" ? (
-          <ScrollView style={{ width: "100%" }}>
-            {supervisorData.map((item, index) => (
-              <View style={styles.formConatiner}>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Name:</Text>
-                  <TextInput
-                    style={styles.detailItemInput}
-                    value={item.name}
-                    onChangeText={(txt) => updateValue("name", index, txt)}
-                  />
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Email:</Text>
-                  <Text style={styles.detailItemInput}>{item.email}</Text>
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Number:</Text>
-                  <TextInput
-                    value={item.phone}
-                    style={styles.detailItemInput}
-                    onChangeText={(txt) => updateValue("phone", index, txt)}
-                  />
-                </View>
-                <View style={styles.inputFieldContainer}>
-                  <Text style={styles.decoratorTitle}>Status:</Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <View style={styles.chekboxText}>
-                      <CheckBox
-                        checked={item.status === "1" ? true : false}
-                        onPress={() => checkedValue("approved")}
-                        size={18}
-                      />
-                      <Text style={styles.checkText}>Approved</Text>
-                    </View>
-                    <View style={styles.chekboxText}>
-                      <CheckBox
-                        checked={item.status === "0" ? true : false}
-                        onPress={() => checkedValue("approved")}
-                        size={18}
-                      />
-                      <Text style={styles.checkText}>Dis-Approved</Text>
-                    </View>
+
+        <ScrollView style={{ width: "100%" }}>
+          {supervisorData.map((item, index) => (
+            <View style={styles.formConatiner} key={"Deatil_" + index}>
+              <View style={styles.inputFieldContainer}>
+                <Text style={styles.decoratorTitle}>Name:</Text>
+                <TextInput
+                  editable={role === "SUPERVISOR"}
+                  style={styles.detailItemInput}
+                  value={item.name}
+                  onChangeText={(txt) => updateValue("name", index, txt)}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text style={styles.decoratorTitle}>Email:</Text>
+                <Text style={styles.detailItemInput}>{item.email}</Text>
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text style={styles.decoratorTitle}>Number:</Text>
+                <TextInput
+                  editable={role === "SUPERVISOR"}
+                  value={item.phone}
+                  style={styles.detailItemInput}
+                  onChangeText={(txt) => updateValue("phone", index, txt)}
+                />
+              </View>
+              <View style={styles.inputFieldContainer}>
+                <Text style={styles.decoratorTitle}>Status:</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={styles.chekboxText}>
+                    <CheckBox
+                      disabled={role === "SUPERVISOR"}
+                      checked={item.status === "1"}
+                      onPress={() => checkedValue("approved")}
+                      size={18}
+                    />
+                    <Text style={styles.checkText}>Approved</Text>
+                  </View>
+                  <View style={styles.chekboxText}>
+                    <CheckBox
+                      disabled={role === "SUPERVISOR"}
+                      checked={item.status === "0" || item.status === ""}
+                      onPress={() => checkedValue("disapproved")}
+                      size={18}
+                    />
+                    <Text style={styles.checkText}>Dis-Approved</Text>
                   </View>
                 </View>
-                <View style={styles.btnContainer}>
-                  {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
+              </View>
+              <View style={styles.btnContainer}>
+                {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('SearchSupervisor')}>
                           <Text style={styles.commonText}>Update</Text>
                       </TouchableOpacity>  */}
-                  <TouchableOpacity
-                    style={styles.commonBtn}
-                    onPress={() => updateSupervisor()}
-                  >
-                    <Text style={styles.commonText}>Update</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={styles.commonBtn}
+                  onPress={updateSupervisor}
+                >
+                  <Text style={styles.commonText}>Update</Text>
+                </TouchableOpacity>
               </View>
-            ))}
-          </ScrollView>
-        ) : (
+            </View>
+          ))}
+        </ScrollView>
+        {/* ) : (
           <ScrollView style={{ width: "100%" }}>
             <View style={styles.formConatiner}>
               <View style={styles.inputFieldContainer}>
@@ -207,7 +216,7 @@ const SupervisorDetails = (props) => {
               </View>
               <View style={styles.inputFieldContainer}>
                 <Text style={styles.decoratorTitle}>Status:</Text>
-                <View
+                {/* <View
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
@@ -228,24 +237,47 @@ const SupervisorDetails = (props) => {
                     <Text style={styles.checkText}>Dis-Approved</Text>
                   </View>
                 </View>
+                <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View style={styles.chekboxText}>
+                      <CheckBox
+                        checked={item.status === "1" ? true : false}
+                        onPress={() => checkedValue("approved")}
+                        size={18}
+                      />
+                      <Text style={styles.checkText}>Approved</Text>
+                    </View>
+                    <View style={styles.chekboxText}>
+                      <CheckBox
+                        checked={item.status === "0" ? true : false}
+                        onPress={() => checkedValue("approved")}
+                        size={18}
+                      />
+                      <Text style={styles.checkText}>Dis-Approved</Text>
+                    </View>
+                  </View>
               </View>
             </View>
           </ScrollView>
-        )}
-        <TouchableOpacity
+        )} <TouchableOpacity
           style={styles.commonBtn}
           onPress={() => searchJob(this)}
         >
           <Text style={styles.commonText}>Back</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     );
   }
 };
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
-  isUpdate: state.auth.isUpdate,
-  isUpdateMsg: state.auth.isUpdateMsg,
+const mapStateToProps = ({ auth }) => ({
+  token: auth.token,
+  role: auth.role,
+  isUpdate: auth.isUpdate,
+  isUpdateMsg: auth.isUpdateMsg,
 });
 const mapDispatchToProps = (dispatch) => ({
   updateSupervisorHandler: (id, email, name, number, status, token) =>
@@ -342,8 +374,8 @@ const styles = StyleSheet.create({
   commonBtn: {
     height: 50,
     width: "90%",
-    alignSelf:'center',
-    marginBottom:20,
+    alignSelf: "center",
+    marginBottom: 20,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 14,

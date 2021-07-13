@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { CheckBox, Text } from "native-base";
 import styles from "../../../assets/css/styles";
-import { color } from "react-native-reanimated";
 import TBTForm from "../../../components/common/TBTForm";
 import SignatureComponent from "../../../components/SignatureComponent";
 import { connect } from "react-redux";
@@ -146,7 +145,7 @@ const TBTFire = (props) => {
         data.comments != "" &&
         data.tbtSign != "" &&
         data.jobSummary != "" &&
-        data.projectImages !="" 
+        data.projectImages != ""
       ) {
         await props.creatTbtFireHandler(
           { ...data, task_id: jobID, tab_id: tabId },
@@ -171,7 +170,7 @@ const TBTFire = (props) => {
   const onDone = (dataImage) => {
     let copydata = [...data.projectImagesComment];
     copydata[signature.index].image = dataImage[0].uri;
-    console.log(copydata)
+    console.log(copydata);
     setData({
       ...data,
       projectImagesComment: [...copydata],

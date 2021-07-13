@@ -1,24 +1,27 @@
-import React,{useEffect} from "react";
-import { StyleSheet, View, Text,StatusBar } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, View, Text, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import MainNavigator from "./navigation/MainNavigator";
 import { loadAsync } from "expo-font";
-import rootReducer from "./Redux/rootReducer";
-import thunk from "redux-thunk";
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware, compose } from "redux";
-import SignatureComponent from "./components/SignatureComponent";
 import * as SplashScreen from "expo-splash-screen";
-import Store from './Redux'
-const composeEnhancers = window.REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
-
-const Stack = createStackNavigator();
-const App=()=> {
+import Store from "./Redux";
+import { navigationRef } from "./navigation/RootNavigation";
+//import rootReducer from "./Redux/rootReducer";
+//import thunk from "redux-thunk";
+//import { createStackNavigator } from "@react-navigation/stack";
+//import { createStore, applyMiddleware, compose } from "redux";
+//import SignatureComponent from "./components/SignatureComponent";
+//const composeEnhancers = window.REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
+// const store = createStore(
+//   rootReducer,
+//   composeEnhancers(applyMiddleware(thunk))
+// );
+//const Stack = createStackNavigator();
+const App = () => {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   useEffect(() => {
-    StatusBar.setBarStyle('dark-content')
+    StatusBar.setBarStyle("dark-content");
     async function loadResourcesAndDataAsync() {
       try {
         await loadAsync({
@@ -42,17 +45,18 @@ const App=()=> {
     loadResourcesAndDataAsync();
   }, []);
 
-    return (!isLoadingComplete?
-    <View style={{ flex: 1 }}/>:
-      <Provider store={Store}>
-        <NavigationContainer>
-          <Stack.Navigator>
+  return !isLoadingComplete ? (
+    <View style={{ flex: 1 }} />
+  ) : (
+    <Provider store={Store}>
+      <NavigationContainer ref={navigationRef}>
+        {/*  <Stack.Navigator>
             <Stack.Screen name='Main' component={MainNavigator} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
-    );
-  
-}
+          </Stack.Navigator>*/}
+        <MainNavigator />
+      </NavigationContainer>
+    </Provider>
+  );
+};
 
-export default App
+export default App;

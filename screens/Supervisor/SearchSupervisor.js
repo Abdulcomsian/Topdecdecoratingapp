@@ -6,18 +6,17 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from "react-native";
 import { Text } from "native-base";
 import { searchSupervisor } from "../../Redux/action/auth/authActionTypes";
 import { useDispatch, useSelector, connect } from "react-redux";
 
-const SearchSupervisor = ({navigation,token}) => {
-
+const SearchSupervisor = ({ navigation, token }) => {
   const [supervisorName, setSupervisorName] = useState("");
   const [supervisorId, setSupervisorId] = useState("");
   const [supervisorEmail, setSupervisorEmail] = useState("");
-  console.log('Token',token)
+  console.log("Token", token);
 
   const searchSupervisor = () => {
     try {
@@ -62,11 +61,10 @@ const SearchSupervisor = ({navigation,token}) => {
         {/* <View style={styles.dateTimeContainer}>
                 <Text style={styles.refText}>Date: 12-2-2021</Text>
                 <Text style={styles.refText}>Ref  id: 10099499</Text>
-            </View> */}
-
+            </View> 
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>Search Supervisor</Text>
-        </View>
+        </View>*/}
         <ScrollView>
           <View style={styles.formConatiner}>
             <View style={styles.inputFieldContainer}>
@@ -134,8 +132,8 @@ const SearchSupervisor = ({navigation,token}) => {
     </KeyboardAvoidingView>
   );
 };
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
+const mapStateToProps = ({auth}) => ({
+  token: auth.token,
 });
 const mapDispatchToProps = (dispatch) => ({
   searchSupervisorHandler: (

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
 import axios from "axios";
@@ -8,56 +14,56 @@ import { ScrollView } from "react-native-gesture-handler";
 var rightArrow = require("../../assets/authScreen/right.png");
 var base_url = "https://topdecdecoratingapp.com/api/";
 const AssignedJobsList = (props) => {
-  console.log(props)
+  console.log(props);
   const { navigation, token, isJobId } = props;
   const { id, role } = props.route.params;
   const [jobData, setJobData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
 
-  const supervisor_id=id;
-  console.log("Assigned Job",supervisor_id)
+  const supervisor_id = id;
+  console.log("Assigned Job", supervisor_id);
   useEffect(() => {
     try {
-        if(role){
-            const body = { supervisor_id };
-            (async () => {
-              setLoading(true);
-              const request = await axios(base_url + "supervisor/search/job/assigned", {
-                method: "POST",
-                headers: {
-                  authorization: "Bearer " + token,
-                },
-                data: body,
-              });
-              const response = await request.data;
-              console.log("fetch",response);
-              if (response.success == true) {
-                setJobData(response.data.user)
-                setLoading(false);
-                setShow(true)
-              }
-              else {
-                setLoading(false);
-                alert(request.message);
-                setShow(false)
-              }
-              // if (response.success == true) {
-              //   console.log(response);
-              //   setSupervisorData(response.data.user);
-              //   setLoading(false);
-              // } else {
-              //   setLoading(false);
-              //   setErrorMsg(request.message);
-              //   AsyncStorage.clear();
-                
-              // }
-            })();
-        }
-      else{
-          alert("Role Not Found !")
+      if (role) {
+        const body = { supervisor_id };
+        (async () => {
+          setLoading(true);
+          const request = await axios(
+            base_url + "supervisor/search/job/assigned",
+            {
+              method: "POST",
+              headers: {
+                authorization: "Bearer " + token,
+              },
+              data: body,
+            }
+          );
+          const response = await request.data;
+          console.log("fetch", response);
+          if (response.success == true) {
+            setJobData(response.data.user);
+            setLoading(false);
+            setShow(true);
+          } else {
+            setLoading(false);
+            alert(request.message);
+            setShow(false);
+          }
+          // if (response.success == true) {
+          //   console.log(response);
+          //   setSupervisorData(response.data.user);
+          //   setLoading(false);
+          // } else {
+          //   setLoading(false);
+          //   setErrorMsg(request.message);
+          //   AsyncStorage.clear();
+
+          // }
+        })();
+      } else {
+        alert("Role Not Found !");
       }
-      
     } catch (err) {
       alert(err.message);
       setLoading(false);
@@ -72,44 +78,50 @@ const AssignedJobsList = (props) => {
       </View>
     );
   } else {
-  return (
-    <View style={styles.mainContainer}>
-      {/* <View style={styles.dateTimeContainer}>
+    return (
+      <View style={styles.mainContainer}>
+        {/* <View style={styles.dateTimeContainer}>
         <Text style={styles.refText}>Date: 12-2-2021</Text>
         <Text style={styles.refText}>Ref id: 10099499</Text>
       </View> */}
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Assigned Jobs</Text>
-      </View>
-      {show==true ?
-      <ScrollView>
-        <View style={{ height: "70%", width: "100%" }}>
-          <View style={{ paddingTop: 30, paddingLeft: 20, paddingRight: 20 }}>
-              {jobData.map((item,index)=>(
-                <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate("TotalSummary",{isJobId:item.id})} key={index}>
-                  <Text style={styles.commonText}>{item.project}</Text>
-                  <Image source={rightArrow} />
-                </TouchableOpacity>
-              ))}
-            
-
-          </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>Assigned Jobs</Text>
         </View>
-      </ScrollView>
-      : 
-      <View
+        {show == true ? (
+          <ScrollView>
+            <View style={{ height: "70%", width: "100%" }}>
+              <View
+                style={{ paddingTop: 30, paddingLeft: 20, paddingRight: 20 }}
+              >
+                {jobData.map((item, index) => (
+                  <TouchableOpacity
+                    style={styles.commonBtn}
+                    onPress={() =>
+                      navigation.navigate("TotalSummary", { isJobId: item.id })
+                    }
+                    key={index}
+                  >
+                    <Text style={styles.commonText}>{item.project}</Text>
+                    <Image source={rightArrow} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </ScrollView>
+        ) : (
+          <View
             style={{
               justifyContent: "center",
               alignItems: "center",
               width: "100%",
-              height:"85%"
+              height: "85%",
             }}
           >
             <Text>Sorry No Job Found !</Text>
           </View>
-  }
-    </View>
-  );
+        )}
+      </View>
+    );
   }
 };
 const mapStateToProps = (state) => ({
@@ -122,7 +134,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(AssignedJobsList);
 const styles = StyleSheet.create({
   mainContainer: {
     width: "100%",
-    flex: 1
+    flex: 1,
   },
   dateTimeContainer: {
     height: "10%",

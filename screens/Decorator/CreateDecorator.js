@@ -124,11 +124,11 @@ const CreateDecorataor = (props) => {
       </View> */}
       <ScrollView >
         <View style={styles.formConatiner}>
-          <View style={nameErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+          <View style={nameErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputFieldContainer}>
             <TextInput style={styles.inputField} placeholder={"Name"} value={name} onChangeText={(e) => {setName(e);numberErr&&setNameErr('')}} />
           </View>
           {nameErr!==''&&<Text style={{color:'red',marginBottom:15}}>{nameErr}</Text>}
-          <View  style={lastNameErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+          <View  style={lastNameErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputFieldContainer}>
             <TextInput style={nameErr!==''?{...styles.inputField,borderBottomColor:'red'}:styles.inputField} placeholder={"Last Name"} value={lastName} onChangeText={(e) => {setLastName(e);lastNameErr&& setlastNameErr('')}} />
           </View>
           {lastNameErr!==''&&<Text style={{color:'red',marginBottom:15}}>{lastNameErr}</Text>}
@@ -186,15 +186,15 @@ const CreateDecorataor = (props) => {
               )}
             </View>
           </View>
-          <View style={emailErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+          <View style={emailErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputFieldContainer}>
             <TextInput style={emailErr!==''?{...styles.inputField,borderBottomColor:'red'}:styles.inputField} placeholder={"Email"} value={email} onChangeText={(e) =>{setEmail(e);emailErr&&setEmailErr('')} } />
           </View>
           {emailErr!==''&&<Text style={{color:'red',marginBottom:15}}>{emailErr}</Text>}
-          <View style={passwordErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+          <View style={passwordErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputFieldContainer}>
             <TextInput style={passwordErr!==''?{...styles.inputField,borderBottomColor:'red'}:styles.inputField} placeholder={"Password"} value={password} onChangeText={(e) => {setPassword(e);passwordErr&&setPasswordErr('')}} secureTextEntry={true} />
           </View>
           {passwordErr!==''&&<Text style={{color:'red',marginBottom:15}}>{passwordErr}</Text>}
-          <View style={numberErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputContainer}>
+          <View style={numberErr!==''?{...styles.inputFieldContainer,height:60}:styles.inputFieldContainer}>
             <TextInput style={numberErr!==''?{...styles.inputField,borderBottomColor:'red'}:styles.inputField} placeholder={"Contact Number"} value={number} onChangeText={(e) =>{ setNumber(e.replace(/[^0-9]/g, ""));numberErr&&setNumberErr('')}} />
           </View>
           {numberErr!==''&&<Text style={{color:'red',marginBottom:15}}>{numberErr}</Text>}
@@ -247,6 +247,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 30,
     alignItems: "center",
+    //backgroundColor:'#666'
   },
   inputFieldContainer: {
     width: "100%",

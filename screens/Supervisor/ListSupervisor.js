@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View,StyleSheet,Image,CheckBox,TouchableOpacity,ScrollView,ActivityIndicator,Dimensions} from 'react-native';
-import {Text} from 'native-base';
+import {
+  View,
+  StyleSheet,
+  Image,
+  CheckBox,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Dimensions,
+} from "react-native";
+import { Text } from "native-base";
 import { connect } from "react-redux";
 import axios from "axios";
 
 var rightArrow = require("../../assets/authScreen/right.png");
 
 const ListSupervisor = (props) => {
-  const { navigation,token } = props;
+  const { navigation, token } = props;
   const { name, email, id } = props.route.params;
-  const [supervisorData,setSupervisorData] = useState([])
-  const [showView,setShowView] = useState(false)
+  const [supervisorData, setSupervisorData] = useState([]);
+  const [showView, setShowView] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,7 +39,8 @@ const ListSupervisor = (props) => {
         );
         const response = await request.data;
         if (response.success) {
-          console.log("supervisor Data :",response.data.user)
+          console.log("supervisor Data :", response.data.user);
+
           setSupervisorData(response.data.user);
           setLoading(false);
           setShowView(true);
@@ -51,47 +61,58 @@ const ListSupervisor = (props) => {
         <ActivityIndicator color="#1073AC" size="small" />
       </View>
     );
-  }
-  else{
-  return (
-    <View style={styles.mainContainer}>
-      {/* <View style={styles.dateTimeContainer}>
+  } else {
+    return (
+      <View style={styles.mainContainer}>
+        {/* <View style={styles.dateTimeContainer}>
         <Text style={styles.refText}>Date: 12-2-2021</Text>
         <Text style={styles.refText}>Ref id: 10099499</Text>
-      </View> */}
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>List Of Supervisor</Text>
-      </View>
-      {showView ?
-       <ScrollView contentContainerStyle={{ width: "100%" }}>
-        <View style={styles.formConatiner}>
-          {supervisorData.map((item,index)=>(
-            <TouchableOpacity style={styles.listButton} key={index} onPress={() => navigation.navigate('DetailSupervisor',{userData:supervisorData[index]})}>
-              <Text style={styles.emailText}>{item.id}</Text>
-              <Text style={styles.emailText}>{item.name}</Text>
-              <Image source={rightArrow} />
-            </TouchableOpacity>
-          ))}
+      </View> 
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>List Of Supervisor</Text>
         </View>
-      </ScrollView> 
-     :
-      <View style={{justifyContent:"center",alignItems:"center",width:"100%",height:"85%"}}>
-        <Text>Sorry No Supervisor Found !</Text>
+        */}
+        {showView ? (
+          <ScrollView contentContainerStyle={{ width: "100%" }}>
+            <View style={styles.formConatiner}>
+              {supervisorData.map((item, index) => (
+                <TouchableOpacity
+                  style={styles.listButton}
+                  key={index}
+                  onPress={() =>
+                    navigation.navigate("DetailSupervisor", {
+                      userData: item,
+                    })
+                  }
+                >
+                  <Text style={styles.emailText}>{item.id}</Text>
+                  <Text style={styles.emailText}>{item.name}</Text>
+                  <Image source={rightArrow} />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        ) : (
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              height: "85%",
+            }}
+          >
+            <Text>Sorry No Supervisor Found !</Text>
+          </View>
+        )}
       </View>
-     }
-     
-    </View>
-  );
+    );
   }
 };
 const mapStateToProps = (state) => ({
-  token : state.auth.token
+  token: state.auth.token,
 });
 const mapDispatchToProps = (dispatch) => ({
-  searchSupervisorHandler: () =>
-    dispatch(
-      searchSupervisor()
-    ),
+  searchSupervisorHandler: () => dispatch(searchSupervisor()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ListSupervisor);
 

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Text } from "native-base";
 import { adminLogin } from "../../Redux/action/auth/authActionTypes";
 import { connect } from "react-redux";
@@ -41,11 +48,12 @@ const LoginScreen = (props) => {
         } else {
           setEmailErr("Email is empty");
           setPasswordErr("Password is empty");
-         // alert("Please Enter Login Credential Carefully !");
+          // alert("Please Enter Login Credential Carefully !");
         }
       } else {
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        let regPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        let regPass =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
         if (email != "" && password != "") {
           if (regEmail.test(email) === false) {
             setEmailErr("Email is Not Correct");
@@ -55,7 +63,9 @@ const LoginScreen = (props) => {
             setEmail(email);
             //alert("Email is Correct");
             if (regPass.test(password) === false) {
-              setPasswordErr("Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password");
+              setPasswordErr(
+                "Password is Not Correct ! Please Enter Atleast One Capital Letter One Specail Character and minimum 8 length of Password"
+              );
               setPassword(password);
               return false;
             } else {
@@ -73,9 +83,9 @@ const LoginScreen = (props) => {
       // alert(err.message)
     }
   };
- // console.log("Login Role :", role);
+  // console.log("Login Role :", role);
   useEffect(() => {
-    (async()=>{
+    (async () => {
       if (isLogin) {
         if (isLoginMsg) {
           //alert(isLoginMsg)
@@ -83,10 +93,20 @@ const LoginScreen = (props) => {
             // await AsyncStorage.setItem('token', JSON.stringify({token:token}))
             props.navigation.dispatch(StackActions.replace("MainScreen"));
           } else if (role == "DECORATOR") {
-            props.navigation.dispatch(StackActions.replace("DecoratorDetails", { roleID: "decorator", id: isUserID }));
+            props.navigation.dispatch(
+              StackActions.replace("DecoratorDetails", {
+                roleID: "decorator",
+                id: isUserID,
+              })
+            );
           } else {
             // props.navigation.dispatch(StackActions.replace('DetailSupervisor',{role:"supervisor",id: isUserID}))
-            props.navigation.dispatch(StackActions.replace("ViewJob", { role: "supervisor", id: isUserID }));
+            props.navigation.dispatch(
+              StackActions.replace("ViewJob", {
+                role: "supervisor",
+                id: isUserID,
+              })
+            );
           }
         }
       } else {
@@ -94,7 +114,7 @@ const LoginScreen = (props) => {
           //alert(isLoginMsg)
         }
       }
-    })()
+    })();
   }, [isLogin, isLoginMsg]);
 
   return (
@@ -108,49 +128,94 @@ const LoginScreen = (props) => {
             <Text style={styles.boldText}>Top Dec</Text> Decorating
           </Text>
         </View>
-        <KeyboardAvoidingView  style={styles.formConatiner}  behavior={Platform.OS === "ios" ? "position" : "height"} 
-           contentContainerStyle={{backgroundColor:'#f2f2f2',alignItems:'center'}}>
-            <View style={styles.inputContainer}>
-              <View style={styles.iconContainer}>
-                <Image style={styles.iconImg} source={user} />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput onChangeText={(e)=>{
+        <KeyboardAvoidingView
+          style={styles.formConatiner}
+          behavior={Platform.OS === "ios" ? "position" : "height"}
+          contentContainerStyle={{
+            backgroundColor: "#fff",
+            alignItems: "center",
+          }}
+        >
+          <View style={styles.inputContainer}>
+            <View style={styles.iconContainer}>
+              <Image style={styles.iconImg} source={user} />
+            </View>
+            <View style={styles.inputFieldContainer}>
+              <TextInput
+                onChangeText={(e) => {
                   setEmail(e);
-                  emailErr&&setEmailErr('')
-                }} value={email} style={emailErr?{...styles.inputField,borderBottomColor:'red',marginBottom:0}:styles.inputField} placeholder={"Email"} />
-              </View>
+                  emailErr && setEmailErr("");
+                }}
+                value={email}
+                style={
+                  emailErr
+                    ? {
+                        ...styles.inputField,
+                        borderBottomColor: "red",
+                        marginBottom: 0,
+                      }
+                    : styles.inputField
+                }
+                placeholder={"Email"}
+              />
             </View>
-            {emailErr!==''&&<Text style={{color:'red',marginBottom:25}}>{emailErr}</Text>}
-            <View style={styles.inputContainer}>
-              <View style={styles.iconContainer}>
-                <Image style={styles.iconImg} source={lock} />
-              </View>
-              <View style={styles.inputFieldContainer}>
-                <TextInput onChangeText={(e)=>{
+          </View>
+          {emailErr !== "" && (
+            <Text style={{ color: "red", marginBottom: 25 }}>{emailErr}</Text>
+          )}
+          <View style={styles.inputContainer}>
+            <View style={styles.iconContainer}>
+              <Image style={styles.iconImg} source={lock} />
+            </View>
+            <View style={styles.inputFieldContainer}>
+              <TextInput
+                onChangeText={(e) => {
                   setPassword(e);
-                  passwordErr&&setPasswordErr('')
-                }} value={password} style={passwordErr?{...styles.inputField,borderBottomColor:'red',marginBottom:0}:styles.inputField} placeholder={"Password"}
-                secureTextEntry={true} />
-              </View>
+                  passwordErr && setPasswordErr("");
+                }}
+                value={password}
+                style={
+                  passwordErr
+                    ? {
+                        ...styles.inputField,
+                        borderBottomColor: "red",
+                        marginBottom: 0,
+                      }
+                    : styles.inputField
+                }
+                placeholder={"Password"}
+                secureTextEntry={true}
+              />
             </View>
-            {passwordErr!==''&&<Text style={{color:'red',marginBottom:25}}>{passwordErr}</Text>}
-            <TouchableOpacity style={styles.loginBtn} onPress={() => postSignInHandler("admin")}>
-              <Text style={styles.loginText}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate("ForgetPassword")}>
-              <Text style={styles.forgetText}>Forgot Password</Text>
-            </TouchableOpacity>
+          </View>
+          {passwordErr !== "" && (
+            <Text style={{ color: "red", marginBottom: 25 }}>
+              {passwordErr}
+            </Text>
+          )}
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={() => postSignInHandler("admin")}
+          >
+            <Text style={styles.loginText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("ForgetPassword")}
+          >
+            <Text style={styles.forgetText}>Forgot Password</Text>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
         <View style={styles.lastContainer}>
-          <Text style={styles.calimText}>Excepteur sint occaecat cupidatat non proident, sunt in culpa</Text>
+          <Text style={styles.calimText}>
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa
+          </Text>
         </View>
       </View>
     </View>
   );
 };
 
-const mapStateToProps = ({auth}) => ({
+const mapStateToProps = ({ auth }) => ({
   isLogin: auth.isLogin,
   isLoginMsg: auth.isLoginMsg,
   token: auth.token,
@@ -164,8 +229,9 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
   mainContainer: {
     height: "100%",
@@ -186,16 +252,16 @@ const styles = StyleSheet.create({
   },
   logoImage: {
     justifyContent: "center",
-    width:450,
-    height:150,
-    resizeMode:"center"
+    width: 450,
+    height: 150,
+    resizeMode: "center",
   },
   formConatiner: {
     //width: "90%",
     padding: 30,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor:'#f2f2f2'
+    backgroundColor: "#fff",
   },
   inputContainer: {
     height: 60,
@@ -255,7 +321,7 @@ const styles = StyleSheet.create({
     color: "#1073AC",
     fontSize: 18,
     fontFamily: "poppins-bold",
-    marginHorizontal:70
+    marginHorizontal: 70,
   },
   forgetText: {
     color: "#1073AC",

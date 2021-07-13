@@ -4,15 +4,14 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Linking
+  Linking,
 } from "react-native";
 import { Text } from "native-base";
 import ViewPager from "@react-native-community/viewpager";
 import { connect } from "react-redux";
 import { updateWorkFlowTopTabs } from "../../Redux/action/auth/authActionTypes";
 import axios from "axios";
-import { CheckBox } from 'react-native-elements'
-
+import { CheckBox } from "react-native-elements";
 
 var tick = require("../../assets/authScreen/check.png");
 var disableTick = require("../../assets/authScreen/disable.png");
@@ -28,10 +27,10 @@ const PlotDetails = (props) => {
     decorationArray,
     snagArray,
     updateWorkFlowTopTabs,
-    isUserID
+    isUserID,
   } = props;
   const { plot_id, plotName } = props.route.params;
-  console.log("Ploat Id :",plot_id)
+  console.log("Ploat Id :", plot_id);
   // console.log("Plot ID :",misCoat)
   const [tab, setTab] = useState({
     miscoat: true,
@@ -59,7 +58,7 @@ const PlotDetails = (props) => {
       setActiveTab("Sang");
     }
   };
- 
+
   let newArray;
   //updating the top tab states
   const swicthTabChecked = async (key1, key2, key3, value1, value2, value3) => {
@@ -71,7 +70,6 @@ const PlotDetails = (props) => {
     // setMiscotArray(updateArray)
   };
 
- 
   const checkedForm = (index, type) => {
     if (type == "Miscoat") {
       const preData = [...miscotArray];
@@ -79,17 +77,24 @@ const PlotDetails = (props) => {
       const tilte_name = "";
 
       if (flag) {
-        console.log("here IF")
+        console.log("here IF");
         preData[index].chekecd = false;
         setMiscotArray(preData);
-        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
+        setJobSummary((state) => [
+          ...state.filter((el) => el.title !== preData[index].text),
+        ]);
       } else {
-        console.log("here Else")
+        console.log("here Else");
         preData[index].chekecd = true;
         setMiscotArray(preData);
         setJobSummary((oldArray) => [
           ...oldArray,
-          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+          {
+            title: preData[index].text,
+            tab_name: activeTab,
+            project_id: plot_id,
+            user_id: isUserID,
+          },
         ]);
       }
     } else if (type == "Decoration") {
@@ -98,13 +103,20 @@ const PlotDetails = (props) => {
       if (flag) {
         preData[index].chekecd = false;
         setDecoration(preData);
-        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
+        setJobSummary((state) => [
+          ...state.filter((el) => el.title !== preData[index].text),
+        ]);
       } else {
         preData[index].chekecd = true;
         setDecoration(preData);
         setJobSummary((oldArray) => [
           ...oldArray,
-          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+          {
+            title: preData[index].text,
+            tab_name: activeTab,
+            project_id: plot_id,
+            user_id: isUserID,
+          },
         ]);
       }
     } else {
@@ -113,48 +125,55 @@ const PlotDetails = (props) => {
       if (flag) {
         preData[index].chekecd = false;
         setSnag(preData);
-        setJobSummary(state=>[...state.filter(el=>el.title!==preData[index].text)])
+        setJobSummary((state) => [
+          ...state.filter((el) => el.title !== preData[index].text),
+        ]);
       } else {
         preData[index].chekecd = true;
         setSnag(preData);
         setJobSummary((oldArray) => [
           ...oldArray,
-          { title: preData[index].text, tab_name: activeTab, project_id: plot_id, user_id: isUserID},
+          {
+            title: preData[index].text,
+            tab_name: activeTab,
+            project_id: plot_id,
+            user_id: isUserID,
+          },
         ]);
       }
     }
   };
   React.useEffect(() => {
-     const updateMiscoatArray=[...miscotArray];
-      miscotArray.map((item,index)=>{
-        updateMiscoatArray[index].chekecd=false;
-      })
-    setMiscotArray(updateMiscoatArray)
-    const updateDecorationArray=[...decorationArray];
-    decorationArray.map((item,index)=>{
-        updateDecorationArray[index].chekecd=false;
-      })
+    const updateMiscoatArray = [...miscotArray];
+    miscotArray.map((item, index) => {
+      updateMiscoatArray[index].chekecd = false;
+    });
+    setMiscotArray(updateMiscoatArray);
+    const updateDecorationArray = [...decorationArray];
+    decorationArray.map((item, index) => {
+      updateDecorationArray[index].chekecd = false;
+    });
     setDecoration(updateDecorationArray);
-    const updateSnagArray=[...snagArray];
-      snagArray.map((item,index)=>{
-        updateSnagArray[index].chekecd=false;
-      })
+    const updateSnagArray = [...snagArray];
+    snagArray.map((item, index) => {
+      updateSnagArray[index].chekecd = false;
+    });
     setSnag(updateSnagArray);
-    setJobSummary([])
+    setJobSummary([]);
   }, [misCoat, decorationArray, snagArray]);
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', async () => {
-      await updateWorkFlowTopTabs(plot_id,  token);
+    const unsubscribe = navigation.addListener("focus", async () => {
+      await updateWorkFlowTopTabs(plot_id, token);
     });
     return unsubscribe;
   }, [navigation]);
- 
-  console.log("Send Mail :",jobSummary)
-  const sendEmail = async () =>{
-    try{
-      if(jobSummary!==""){
-        const body = {jobSummary};
+
+  console.log("Send Mail :", jobSummary);
+  const sendEmail = async () => {
+    try {
+      if (jobSummary !== "") {
+        const body = { jobSummary };
         (async () => {
           const request = await axios(
             "https://topdecdecoratingapp.com/api/supervisor/send_mail",
@@ -167,27 +186,27 @@ const PlotDetails = (props) => {
             }
           );
           const response = await request.data;
-          console.log("Insert Response :",response)
-          const subject = "PDF On Demand"
+          console.log("Insert Response :", response);
+          const subject = "PDF On Demand";
           const message = response;
           Linking.openURL(`mailto:?subject=${subject}&body=${message}`);
-          setJobSummary([])
-          const updateMiscoatArray=[...miscotArray];
-          miscotArray.map((item,index)=>{
-            updateMiscoatArray[index].chekecd=false;
-          })
-        setMiscotArray(updateMiscoatArray)
-        const updateDecorationArray=[...decorationArray];
-        decorationArray.map((item,index)=>{
-            updateDecorationArray[index].chekecd=false;
-          })
-        setDecoration(updateDecorationArray);
-        const updateSnagArray=[...snagArray];
-          snagArray.map((item,index)=>{
-            updateSnagArray[index].chekecd=false;
-          })
-        setSnag(updateSnagArray);
-       
+          setJobSummary([]);
+          const updateMiscoatArray = [...miscotArray];
+          miscotArray.map((item, index) => {
+            updateMiscoatArray[index].chekecd = false;
+          });
+          setMiscotArray(updateMiscoatArray);
+          const updateDecorationArray = [...decorationArray];
+          decorationArray.map((item, index) => {
+            updateDecorationArray[index].chekecd = false;
+          });
+          setDecoration(updateDecorationArray);
+          const updateSnagArray = [...snagArray];
+          snagArray.map((item, index) => {
+            updateSnagArray[index].chekecd = false;
+          });
+          setSnag(updateSnagArray);
+
           // if(response=="nothing"){
           //     alert("Email Not Send !")
           // }
@@ -204,7 +223,7 @@ const PlotDetails = (props) => {
           //       updateArray[index].chekecd=false;
           //   })
           //   setDecoration(updateDecorationArray)
-            
+
           //   const updateSnagArray=[...snagArray];
           //   snagArray.map((item,index)=>{
           //       updateArray[index].chekecd=false;
@@ -214,24 +233,31 @@ const PlotDetails = (props) => {
           // }
         })();
       }
-    } catch(err){
+    } catch (err) {
       console.log(err?.response?.request);
-      alert(err.message)
+      alert(err.message);
     }
     // navigation.navigate('EmailSend')
-  }
+  };
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.dateTimeContainer}>
         {/* <Text style={styles.refText}>Ref id: 10099499</Text> */}
-        <TouchableOpacity style={{marginRight:50}} onPress={()=>sendEmail()}>
-          <Image source={email} style={{width:30,height:30}}/>
+        <TouchableOpacity
+          style={{ marginRight: 50 }}
+          onPress={() => sendEmail()}
+        >
+          <Image source={email} style={{ width: 30, height: 30 }} />
         </TouchableOpacity>
       </View>
-      <View style={{justifyContent:"flex-end",alignItems:"flex-end",marginRight:50}}>
-        
-      </View>
+      <View
+        style={{
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+          marginRight: 50,
+        }}
+      ></View>
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>{plotName}</Text>
       </View>
@@ -519,7 +545,7 @@ const PlotDetails = (props) => {
                         </TouchableOpacity>
                       </View>
                       <View style={styles.checkBoxTueView}>
-                         <CheckBox
+                        <CheckBox
                           checked={item.chekecd}
                           onPress={() => checkedForm(index, "Snag")}
                           size={22}

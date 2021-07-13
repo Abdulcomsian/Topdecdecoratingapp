@@ -13,7 +13,7 @@ import { useDispatch, useSelector, connect } from "react-redux";
 import { createSupervisor } from "../../Redux/action/auth/authActionTypes";
 
 const CreateSupervisor = (props) => {
-  const { navigation,token } = props;
+  const { navigation, token } = props;
   const [name, setName] = useState("");
   const [nameErr, setNameErr] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,20 +26,21 @@ const CreateSupervisor = (props) => {
 
   const postCreateSupervisor = async () => {
     try {
-      if ((name != ""&& email != ""&& password != ""&& phone != "")) {
+      if (name != "" && email != "" && password != "" && phone != "") {
         let regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         let regPass =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
         if (regEmail.test(email) === false) {
-         setEmailErr('Email is not Correct')
+          setEmailErr("Email is not Correct");
           setEmail(email);
           return false;
         } else {
           setEmail(email);
           console.log("Email is Correct");
           if (regPass.test(password) === false) {
-            setPasswordErr("Password is Not Correct ! Please Enter At least One Capital Letter One Special Character and minimum 8 length of Password"
-            )
+            setPasswordErr(
+              "Password is Not Correct ! Please Enter At least One Capital Letter One Special Character and minimum 8 length of Password"
+            );
             setPassword(password);
             return false;
           } else {
@@ -56,10 +57,10 @@ const CreateSupervisor = (props) => {
           }
         }
       } else {
-   email===''&&setEmailErr('Email is required')
-      password===''&& setPasswordErr('Password is required')
-     phone==='' && setPhoneErr('Phone is required')
-     name===''&&  setNameErr('Supervisor name is required')
+        email === "" && setEmailErr("Email is required");
+        password === "" && setPasswordErr("Password is required");
+        phone === "" && setPhoneErr("Phone is required");
+        name === "" && setNameErr("Supervisor name is required");
       }
     } catch (err) {
       alert(err.message);
@@ -75,43 +76,71 @@ const CreateSupervisor = (props) => {
           <Text style={styles.titleText}>Create Supervisor</Text>
         </View> */}
         <ScrollView contentContainerStyle={styles.formConatiner}>
-            <View style={styles.inputFieldContainer}>
-              <TextInput
-                onChangeText={(e) =>{setName(e);nameErr&& setNameErr('')} }
-                style={nameErr ?{...styles.inputField,borderBottomColor:'red'}:styles.inputField}
-                placeholder={"Supervisor Name"}
-                value={name}
-              />
-            </View>
-            {nameErr!==''&&<Text style={styles.err}>{nameErr}</Text>}
-            <View style={styles.inputFieldContainer}>
-              <TextInput
-                onChangeText={(e) =>{setPhone(e.replace(/[^0-9]/g, ""));phoneErr&& setPhoneErr('')} }
-                style={phoneErr?{...styles.inputField,borderBottomColor:'red'}:styles.inputField}
-                placeholder={"Contact Number"}
-                value={phone}
-              />
-            </View>
-            {phoneErr!==''&&<Text style={styles.err}>{phoneErr}</Text>}
-            <View style={styles.inputFieldContainer}>
-              <TextInput
-                onChangeText={(e) => {setEmail(e); emailErr&& setEmailErr('')}}
-                style={emailErr?{...styles.inputField,borderBottomColor:'red'}:styles.inputField}
-                placeholder={"Email"}
-                value={email}
-              />
-            </View>
-            {emailErr!==''&&<Text style={styles.err}>{emailErr}</Text>}
-            <View style={styles.inputFieldContainer}>
-              <TextInput
-                onChangeText={(e) =>{setPassword(e);passwordErr&&setPasswordErr('')} }
-                style={passwordErr?{...styles.inputField,borderBottomColor:'red'}:styles.inputField}
-                placeholder={"Password"}
-                secureTextEntry={true}
-                value={password}
-              />
-            </View>
-            {passwordErr!==''&&<Text style={styles.err}>{passwordErr}</Text>}
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              onChangeText={(e) => {
+                setName(e);
+                nameErr && setNameErr("");
+              }}
+              style={
+                nameErr
+                  ? { ...styles.inputField, borderBottomColor: "red" }
+                  : styles.inputField
+              }
+              placeholder={"Supervisor Name"}
+              value={name}
+            />
+          </View>
+          {nameErr !== "" && <Text style={styles.err}>{nameErr}</Text>}
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              onChangeText={(e) => {
+                setPhone(e.replace(/[^0-9]/g, ""));
+                phoneErr && setPhoneErr("");
+              }}
+              style={
+                phoneErr
+                  ? { ...styles.inputField, borderBottomColor: "red" }
+                  : styles.inputField
+              }
+              placeholder={"Contact Number"}
+              value={phone}
+            />
+          </View>
+          {phoneErr !== "" && <Text style={styles.err}>{phoneErr}</Text>}
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              onChangeText={(e) => {
+                setEmail(e);
+                emailErr && setEmailErr("");
+              }}
+              style={
+                emailErr
+                  ? { ...styles.inputField, borderBottomColor: "red" }
+                  : styles.inputField
+              }
+              placeholder={"Email"}
+              value={email}
+            />
+          </View>
+          {emailErr !== "" && <Text style={styles.err}>{emailErr}</Text>}
+          <View style={styles.inputFieldContainer}>
+            <TextInput
+              onChangeText={(e) => {
+                setPassword(e);
+                passwordErr && setPasswordErr("");
+              }}
+              style={
+                passwordErr
+                  ? { ...styles.inputField, borderBottomColor: "red" }
+                  : styles.inputField
+              }
+              placeholder={"Password"}
+              secureTextEntry={true}
+              value={password}
+            />
+          </View>
+          {passwordErr !== "" && <Text style={styles.err}>{passwordErr}</Text>}
         </ScrollView>
         <View style={styles.btnContainer}>
           {/* <TouchableOpacity style={styles.commonBtn} onPress={() => navigation.navigate('MainScreen')}>
@@ -143,7 +172,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  err:{color:'red',textAlign:'left',marginTop:5},
+  err: { color: "red", textAlign: "left", marginTop: 5 },
   mainContainer: {
     width: "100%",
     flex: 1,

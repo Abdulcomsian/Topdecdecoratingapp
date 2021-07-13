@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
-import { resetLoginFlag ,JustLoginInternally} from "../Redux/action/auth/authActionTypes";
+import {
+  resetLoginFlag,
+  JustLoginInternally,
+} from "../Redux/action/auth/authActionTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackActions } from "@react-navigation/routers";
 
@@ -17,19 +20,19 @@ const SplashScreen = (props) => {
   // }, []);
   useEffect(() => {
     // (async()=>{
-   //AsyncStorage.clear();
+    //AsyncStorage.clear();
     const unsubscribe = navigation.addListener("focus", async () => {
       props.resetLoginFlag();
       const authUser = await AsyncStorage.getItem("user");
       let user = JSON.parse(authUser);
       //let token = user?.user?.role;
-      console.log("Splash Screen Token :",user)
+      console.log("Splash Screen Token :", user);
       if (user) {
-          props.JustLoginInternally(user)
+        props.JustLoginInternally(user);
         if (user?.user?.role === "ADMIN") {
           setTimeout(() => {
             props.navigation.dispatch(StackActions.replace("MainScreen"));
-          }, 1000);
+          }, 700);
         } else if (user?.user?.role === "DECORATOR") {
           setTimeout(() => {
             props.navigation.dispatch(
@@ -38,7 +41,7 @@ const SplashScreen = (props) => {
                 id: user?.user?.id,
               })
             );
-          }, 1000);
+          }, 700);
         } else {
           setTimeout(() => {
             props.navigation.dispatch(
@@ -47,10 +50,10 @@ const SplashScreen = (props) => {
                 isUserID: user?.user?.id,
               })
             );
-          }, 1000);
+          }, 700);
         }
       } else {
-          navigation.navigate("LoginScreen");
+        props.navigation.dispatch(StackActions.replace("LoginScreen"));
       }
     });
 

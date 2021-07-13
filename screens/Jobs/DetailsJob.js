@@ -80,12 +80,12 @@ const DetailsJob = (props) => {
             <Text style={styles.decoratorTitle}>No of Weeks:</Text>
             <Text style={{ width: "50%", textAlign: "center" }}>{weeks}</Text>
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.commonBtn}
             onPress={() => props.navigation.goBack()}
           >
             <Text style={styles.commonText}>Go Back</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
     </View>
