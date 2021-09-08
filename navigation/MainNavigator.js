@@ -480,7 +480,7 @@ const getHeaderCommonSetting = () => {
     headerStyle: {
       backgroundColor: "#1073AC",
     },
-    headerTitleAlign: 'center' ,
+    headerTitleAlign: "center",
     headerBackTitleVisible: false,
     headerTitleStyle: {
       alignSelf: "center",
@@ -513,6 +513,11 @@ const getHeaderTitle = (routeName) => {
       return {
         ...getHeaderCommonSetting(),
         headerTitle: "Home",
+      };
+    case "SelectSummary":
+      return {
+        ...getHeaderCommonSetting(),
+        headerTitle: "SelectSummary",
       };
     case "NewJob":
       return {

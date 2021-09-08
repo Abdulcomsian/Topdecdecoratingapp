@@ -12,7 +12,7 @@ import axios from "axios";
 
 const rightArrow = require("../../assets/authScreen/right.png");
 const TotalSummary = (props) => {
-  const { navigation, token, isJobId } = props;
+  const { navigation, token, isJobId, auth } = props;
   const [jobId, setJobId] = useState(props.route.params.isJobId);
   const [totalSummary, setTotalSummary] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,9 +20,11 @@ const TotalSummary = (props) => {
   const job_id = jobId;
   useEffect(() => {
     if (jobId) {
+      console.log("JobId", auth);
       try {
         // const job_id = isJobId;
-        const body = { job_id };
+        const body = { job_id, supervisor_id: auth.isUserID };
+        console.log("myBody", body);
         (async () => {
           setLoading(true);
           const request = await axios(
@@ -103,6 +105,7 @@ const TotalSummary = (props) => {
   }
 };
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   token: state.auth.token,
   isJobId: state.auth.isJobId,
 });

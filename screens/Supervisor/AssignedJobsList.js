@@ -26,7 +26,7 @@ const AssignedJobsList = (props) => {
   useEffect(() => {
     try {
       if (role) {
-        const body = { supervisor_id };
+        const data = { supervisor_id };
         (async () => {
           setLoading(true);
           const request = await axios(
@@ -36,7 +36,7 @@ const AssignedJobsList = (props) => {
               headers: {
                 authorization: "Bearer " + token,
               },
-              data: body,
+              data,
             }
           );
           const response = await request.data;
@@ -97,7 +97,7 @@ const AssignedJobsList = (props) => {
                   <TouchableOpacity
                     style={styles.commonBtn}
                     onPress={() =>
-                      navigation.navigate("TotalSummary", { isJobId: item.id })
+                      navigation.navigate("TotalSummary", { isJobId: item.job_id })
                     }
                     key={index}
                   >
