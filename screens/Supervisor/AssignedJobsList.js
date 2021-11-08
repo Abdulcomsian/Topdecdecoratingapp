@@ -5,11 +5,11 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { Text } from "native-base";
 import { connect } from "react-redux";
 import axios from "axios";
-import { ScrollView } from "react-native-gesture-handler";
 
 var rightArrow = require("../../assets/authScreen/right.png");
 var base_url = "https://topdecdecoratingapp.com/api/";
@@ -47,7 +47,7 @@ const AssignedJobsList = (props) => {
             setShow(true);
           } else {
             setLoading(false);
-            alert(request.message);
+            alert(response.message);
             setShow(false);
           }
           // if (response.success == true) {
@@ -65,7 +65,7 @@ const AssignedJobsList = (props) => {
         alert("Role Not Found !");
       }
     } catch (err) {
-      alert(err.message);
+      // alert(err.message);
       setLoading(false);
       AsyncStorage.clear();
       navigation.navigate("LoginScreen");
@@ -97,7 +97,9 @@ const AssignedJobsList = (props) => {
                   <TouchableOpacity
                     style={styles.commonBtn}
                     onPress={() =>
-                      navigation.navigate("TotalSummary", { isJobId: item.job_id })
+                      navigation.navigate("TotalSummary", {
+                        isJobId: item.job_id,
+                      })
                     }
                     key={index}
                   >

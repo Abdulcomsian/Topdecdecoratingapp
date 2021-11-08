@@ -387,7 +387,7 @@ const MakeReady = (props) => {
                   <View style={styles.inputFieldContainer}>
                     <TextInput
                       value={block}
-                      onChangeText={(e) => setBlock(e.replace(/[^0-9]/g, ""))}
+                      onChangeText={setBlock}
                       style={styles.inputField}
                       placeholder={"Block"}
                     />
